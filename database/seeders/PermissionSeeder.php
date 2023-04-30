@@ -472,6 +472,21 @@ class PermissionSeeder extends Seeder
         Permission::firstOrCreate([
             'name' => 'menu-fee',
         ]);
+        Permission::firstOrCreate([
+            'name' => 'certification-marks',
+        ]);
+        Permission::firstOrCreate([
+            'name' => 'marks',
+        ]);
+        Permission::firstOrCreate([
+            'name' => 'assessments',
+        ]);
+        Permission::firstOrCreate([
+            'name' => 'pricing',
+        ]);
+        Permission::firstOrCreate([
+            'name' => 'settings',
+        ]);
         /**
          * assign permissions to roles.
          */
@@ -629,6 +644,10 @@ class PermissionSeeder extends Seeder
             'delete exam record',
             'read notice',
             'check result',
+            'marks',
+            'assessments',
+            'pricing',
+            'settings',
         ]);
 
         //assign permissions to student
@@ -648,6 +667,9 @@ class PermissionSeeder extends Seeder
             'read notice',
             'read fee invoice',
             'check result',
+            'certification-marks',
+            'pricing',
+            'settings',
         ]);
 
         //assign permissions to librarian
