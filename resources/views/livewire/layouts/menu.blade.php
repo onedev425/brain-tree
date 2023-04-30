@@ -1,5 +1,5 @@
-<nav class="fixed lg:sticky inset-0 h-screen w-full lg:w-72 shadow-lg flex duration-250 text-gray-100 transition-all dark:lg:border-r dark:border-white z-40" :class="{'w-0 overflow-hidden lg:flex lg:w-20' : menuOpen == false}">
-    <aside class="w-4/6 md:w-3/6 lg:w-full bg-gray-800 dark:bg-gray-900 shadow-md shadow-black border-x border-black overflow-scroll beautify-scrollbar">
+<nav class="fixed lg:sticky inset-0 h-screen w-full lg:w-72 shadow-lg flex duration-250 text-gray-100 transition-all dark:lg:border-r dark:border-white z-40" :class="{'w-0 overflow-hidden lg:flex sidebar-w-20' : menuOpen == false}">
+    <aside class="md:w-3/6 lg:w-full bg-gray-800 dark:bg-gray-900 shadow-md shadow-black border-x border-black overflow-scroll beautify-scrollbar">
         <a href="{{route('home')}}" class="flex md:hidden items-center justify-center border-b border-gray-200 p-4">
             <img src="{{asset(config('app.logo'))  }}" alt="" class="rounded-full w-14 h-14 border border-gray-200 shadow-md">
             <h1 class="text-lg font-semibold mx-3 text-center capitalize">{{config('app.name')}}</h1>
@@ -9,7 +9,7 @@
             @isset ($menu)
                 @foreach ($menu as $menuItem)
                     @if (isset($menuItem['header']) & (!isset($menuItem['can']) || auth()->user()->can($menuItem['can'])))
-                        <p x-show="menuOpen" x-transition class="my-3">{{$menuItem['header']}}</p> 
+                        <p x-show="menuOpen" x-transition class="my-3">{{$menuItem['header']}}</p>
                     @elseif(!isset($menuItem['can']) || auth()->user()->can($menuItem['can']))
                         <div @click.outside="submenu = false" x-data="{
                             'submenu'  : {{ isset($menuItem['submenu']) && in_array(Route::currentRouteName() , array_column($menuItem['submenu']  , 'route')) ? '1' : '0'}}
@@ -39,6 +39,11 @@
                         </div>
                     @endif
                 @endforeach
+
+                <form action="{{route('logout')}}" class="w-full" method="POST">
+                    @csrf
+                    <button href="" class="text-white gap-2 px-2 mt-3 text-center flex"><i class="fa fa-power-off p-1" aria-hidden="true"></i><p x-show="menuOpen">Log out</p></button>
+                </form>
             @endif
         </div>
     </aside>
