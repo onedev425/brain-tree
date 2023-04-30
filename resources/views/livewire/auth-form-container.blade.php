@@ -4,7 +4,7 @@
             <div class="md:flex w-full py">
                 <div class="w-full md:w-full py-6">
                     <div class="flex flex-cols justify-center items-center">
-                        <a href="#"><img src="{{@asset('img/logo/auth-logo.png')}}" alt="" class="my-4"></a>
+                        <a href="#"><img src="{{@asset('images/logo/auth-logo.png')}}" alt="" class="my-4"></a>
                     </div>
                     <div class="flex mt-4">
                         <div class="w-1/2">
