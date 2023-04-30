@@ -4,7 +4,7 @@ namespace App\Http\Livewire;
 
 use Livewire\Component;
 
-class RegistrationForm extends Component
+class AuthRegistrationForm extends Component
 {
     public function render()
     {

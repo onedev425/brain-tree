@@ -4,7 +4,7 @@ namespace App\Http\Livewire;
 
 use Livewire\Component;
 
-class SigninForm extends Component
+class AuthSigninForm extends Component
 {
     public function render()
     {
