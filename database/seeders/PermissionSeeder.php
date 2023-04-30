@@ -650,27 +650,6 @@ class PermissionSeeder extends Seeder
             'check result',
         ]);
 
-        //assign permissions to parent
-        $parent = Role::where('name', 'parent')->first();
-        $parent->syncPermissions([
-            'header-academics',
-            'header-administrate',
-            'menu-syllabus',
-            'menu-timetable',
-            'menu-notice',
-            'menu-exam',
-            'menu-fee',
-            'menu-grade-system',
-            'menu-student',
-            'read student',
-            'read syllabus',
-            'read timetable',
-            'read grade system',
-            'read notice',
-            'read fee invoice',
-            'check result',
-        ]);
-
         //assign permissions to librarian
 
         //assign permissions to accountant
