@@ -8,6 +8,6 @@ class AuthSigninForm extends Component
 {
     public function render()
     {
-        return view('livewire.signin-form');
+        return view('livewire.auth-signin-form');
     }
 }

@@ -8,6 +8,6 @@ class AuthRegistrationForm extends Component
 {
     public function render()
     {
-        return view('livewire.registration-form');
+        return view('livewire.auth-registration-form');
     }
 }
