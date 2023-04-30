@@ -18,8 +18,8 @@ class SchoolSeeder extends Seeder
         School::updateOrCreate(
             ['id' => 1],
             [
-                'name'     => 'Braintree',
-                'address'  => 'braintree address',
+                'name'     => 'Default School',
+                'address'  => 'School of Computing',
                 'code'     => Str::Random(10),
                 'initials' => 'DSI',
             ]

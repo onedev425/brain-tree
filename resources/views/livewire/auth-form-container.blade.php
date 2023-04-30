@@ -21,9 +21,9 @@
 
                     <div style="margin-top: 40px">
                         @if($activeTab === 'login')
-                            <livewire:signin-form />
+                            <livewire:auth-signin-form />
                         @else
-                            <livewire:registration-form />
+                            <livewire:auth-registration-form />
                         @endif
                     </div>
 

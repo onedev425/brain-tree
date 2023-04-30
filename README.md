@@ -55,11 +55,4 @@ php artisan db:seed --class=WorldSeeder
 php artisan serve
 ```
 
-## Setup
-* Log in to the application with the following credentials
-    * Email: super@admin.com
-    * Password: password
-
-* You would be prompted to change your password, change your passsword in the profile page to continue
-
 # braintree-main
