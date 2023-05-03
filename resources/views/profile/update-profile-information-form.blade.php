@@ -1,61 +1,14 @@
 <x-partials.form-section submit="updateProfileInformation">
-    <x-slot name="title">
-        {{ __('Profile Information') }}
-    </x-slot>
-
-    <x-slot name="description">
-        {{ __('Update your account\'s profile information and email address.') }}
-    </x-slot>
-
     <x-slot name="form">
             <x-action-message on="saved">
                 {{ __('Saved.') }}
             </x-action-message>
-        <p class="text-secondary text-center lg:text-left my-2">
-            {{__('All fields marked * are required')}}
-        </p>
-         <!-- Profile Photo -->
-        @if (Laravel\Jetstream\Jetstream::managesProfilePhotos())
-            <div class="flex flex-col justify-center" x-data="{photoName: null, photoPreview: null}">
-                <!-- Profile Photo File Input -->
-                <input type="file" hidden accept="image/*" wire:model="photo" x-ref="photo"
-                    x-on:change="
-                        photoName = $refs.photo.files[0].name;
-                        const reader = new FileReader();
-                        reader.onload = (e) => {
-                            photoPreview = e.target.result;
-                        };
-                        reader.readAsDataURL($refs.photo.files[0]);
-                " />
 
-                <!-- Current Profile Photo -->
-                <div class="mt-2" x-show="! photoPreview">
-                    <img src="{{ $this->user->profile_photo_url }}" class="w-40 h-40 rounded-full profile-image mx-auto block border border-black dark:border-white shadow" height="80px" width="80px">
-                </div>
-
-                <!-- New Profile Photo Preview -->
-                <div class="mt-2" x-show="photoPreview">
-                    <img x-bind:src="photoPreview" class="w-40 h-40 rounded-full profile-image mx-auto block border border-black dark:border-white shadow"  width="80px" height="80px">
-                </div>
-                <div class="flex items-center justify-center gap-2">
-                    <x-button class="mt-2 w-6/12 place-self-center text-sm md:text-base" type="button" x-on:click.prevent="$refs.photo.click()">
-                        {{ __('New Photo') }}
-                    </x-button>
-                    
-                    @if ($this->user->profile_photo_path)
-                        <x-button type="button" class="mt-2 bg-red-600 w-6/12 place-self-center" wire:click="deleteProfilePhoto">
-                            {{ __('Remove Photo') }}
-                        </x-button>
-                    @endif
-                </div>
-                <x-jet-input-error for="photo" class="mt-2" />
-            </div>
-        @endif
         <div class="md:grid grid-cols-12 gap-4">
             <x-input label="Name" id="name" name="name" placeholder="Your Name In Order First Name, Last Name, Other names " group-class="col-span-12" wire:model="state.name"/>
             <x-input label="Email" id="email" name="email" placeholder="Your Email Address" group-class="col-span-12" wire:model="state.email"/>
             <x-input type="date" id="birthday" name="birthday" placeholder="Your birthday..." label="Birthday *" group-class="col-span-6" wire:model="state.birthday"/>
-    
+
             <x-select id="gender" name="gender" label="Gender *" group-class="col-span-6" wire:model="state.gender">
                 @php ($genders = ['Male', 'Female'])
                 @foreach ($genders as $gender)
@@ -66,7 +19,7 @@
             <div class="col-span-12">
                 @livewire('nationality-and-state-input-fields', ['nationality' => ucfirst($this->user->nationality), 'state' => ucfirst($this->user->state)])
             </div>
-            
+
             {{-- listen for change in nationality and state event and set it as the value of their respective state variable. The values of $state is passed on form submit. therefore we set the selected nationality using the browser event fired  --}}
             <script>
                 window.addEventListener('nationality-updated',event => {
