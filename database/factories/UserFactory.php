@@ -28,11 +28,7 @@ class UserFactory extends Factory
             'birthday'          => $this->faker->date(),
             'address'           => $this->faker->address(),
             'school_id'         => 1,
-            'blood_group'       => 'a+',
             'religion'          => 'christian',
-            'nationality'       => $this->faker->country(),
-            'state'             => 'wyoming',
-            'city'              => $this->faker->city(),
             'gender'            => 'male',
         ];
     }

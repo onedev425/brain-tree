@@ -37,4 +37,11 @@
         @apply md:text-lg capitalize
     }
 
+    .sidebar-expand {
+        width: 32rem;
+    }
+
+    .sidebar-collapse {
+        width: 7rem !important;
+    }
 }
