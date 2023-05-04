@@ -40,8 +40,4 @@
     .sidebar-expand {
         width: 32rem;
     }
-
-    .sidebar-collapse {
-        width: 7rem !important;
-    }
 }

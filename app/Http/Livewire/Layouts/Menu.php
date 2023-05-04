@@ -19,17 +19,6 @@ class Menu extends Component
                                 <path id="Path_45" data-name="Path 45" d="M23.333,10.167A5.667,5.667,0,1,1,17.667,4.5,5.667,5.667,0,0,1,23.333,10.167Z" transform="translate(-0.333)" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
                               </g>
                             </svg>',
-                'text'  => 'Dashboard',
-                'route' => 'dashboard',
-            ],
-            [
-                'type'  => 'menu-item',
-                'icon'  => '<svg xmlns="http://www.w3.org/2000/svg" width="24.667" height="27.5" viewBox="0 0 24.667 27.5">
-                              <g id="Icon_feather-user" data-name="Icon feather-user" transform="translate(-5 -3.5)">
-                                <path id="Path_44" data-name="Path 44" d="M28.667,31V28.167A5.667,5.667,0,0,0,23,22.5H11.667A5.667,5.667,0,0,0,6,28.167V31" transform="translate(0 -1)" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
-                                <path id="Path_45" data-name="Path 45" d="M23.333,10.167A5.667,5.667,0,1,1,17.667,4.5,5.667,5.667,0,0,1,23.333,10.167Z" transform="translate(-0.333)" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
-                              </g>
-                            </svg>',
                 'text'  => auth()->user()->hasRole('student') ? 'My Account' : 'Instructor Account',
                 'route' => 'profile.show',
             ],
@@ -42,7 +31,7 @@ class Menu extends Component
                               </g>
                             </svg>',
                 'text'  => 'Courses',
-                'route' => 'profile.show',
+                'route' => 'exams.index',
             ],
             [
                 'type'  => 'menu-item',
