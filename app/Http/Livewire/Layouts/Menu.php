@@ -93,7 +93,7 @@ class Menu extends Component
                               </g>
                             </svg>',
                 'text'  => 'Security & Settings',
-                'route' => 'profile.show',
+                'route' => 'settings.index',
                 'can' => 'settings'
             ],
 
