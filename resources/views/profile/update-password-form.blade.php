@@ -1,7 +1,7 @@
 
 <x-partials.form-section submit="updatePassword">
     <x-slot name="form">
-        <div class="grid grid-cols-2 gap-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
                 <h3 class="text-xl md:text-2xl font-bold">
                     {{ __('Password Change') }}
@@ -31,7 +31,7 @@
                 </div>
             </div>
             <!-- ... -->
-            <div class="mx-3">
+            <div class="sm:mx-3">
                 <div class="bg-gray-200 p-5 rounded-2xl">
                     Be sure to create a strong and unique password that includes a combination of letters, numbers, and symbols, and avoid using the same password for multiple accounts. If you have any trouble changing your password, don't hesitate to reach out to our support team for assistance.
                     <ul class="mx-5 mt-5 list-disc ">

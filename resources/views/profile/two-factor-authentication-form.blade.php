@@ -11,7 +11,7 @@ Each time you log in to your profile, you will be asekd to enter a uniquee code 
 
         @if ($this->enabled)
             @if ($showingQrCode)
-                <p class="mt-3">
+                <p class="mt-3 px-2">
                     {{ __('Two factor authentication is now enabled. Scan the following QR code using your phone\'s authenticator application.') }}
                 </p>
 
