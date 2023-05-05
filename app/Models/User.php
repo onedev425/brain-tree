@@ -154,16 +154,6 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
-     * The parents that belong to the User.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
-    public function parents()
-    {
-        return $this->belongsToMany(ParentRecord::class);
-    }
-
-    /**
      * Get the teacherRecord associated with the User.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
@@ -171,16 +161,6 @@ class User extends Authenticatable implements MustVerifyEmail
     public function teacherRecord()
     {
         return $this->hasOne(TeacherRecord::class);
-    }
-
-    /**
-     * Get the parent records associated with the User.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
-     */
-    public function parentRecord()
-    {
-        return $this->hasOne(ParentRecord::class);
     }
 
     /**
@@ -213,20 +193,6 @@ class User extends Authenticatable implements MustVerifyEmail
     public function getLastNameAttribute()
     {
         return $this->lastName();
-    }
-
-    //get other names
-    public function otherNames()
-    {
-        $names = array_diff_key(explode(' ', $this->name), array_flip([0, 1]));
-
-        return implode(' ', $names);
-    }
-
-    //get other names
-    public function getOtherNamesAttribute()
-    {
-        return $this->otherNames();
     }
 
     public function defaultProfilePhotoUrl()

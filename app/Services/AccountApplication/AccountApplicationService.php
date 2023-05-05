@@ -112,9 +112,6 @@ class AccountApplicationService
                     case 'student':
                         $this->studentService->createStudentRecord($applicant, $record);
                         break;
-                    case 'parent':
-                        $applicant->parentRecord()->create();
-                        break;
                     case 'teacher':
                         $applicant->teacherRecord()->create();
                         break;

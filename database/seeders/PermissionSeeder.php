@@ -138,21 +138,6 @@ class PermissionSeeder extends Seeder
         Permission::firstOrCreate([
             'name' => 'delete teacher',
         ]);
-
-        //Permission for parent
-        Permission::firstOrCreate([
-            'name' => 'create parent',
-        ]);
-        Permission::firstOrCreate([
-            'name' => 'read parent',
-        ]);
-        Permission::firstOrCreate([
-            'name' => 'update parent',
-        ]);
-        Permission::firstOrCreate([
-            'name' => 'delete parent',
-        ]);
-
         //Permission for subject
         Permission::firstOrCreate([
             'name' => 'create subject',
@@ -440,9 +425,6 @@ class PermissionSeeder extends Seeder
             'name' => 'menu-teacher',
         ]);
         Permission::firstOrCreate([
-            'name' => 'menu-parent',
-        ]);
-        Permission::firstOrCreate([
             'name' => 'menu-academic-year',
         ]);
         Permission::firstOrCreate([
@@ -508,7 +490,6 @@ class PermissionSeeder extends Seeder
             'menu-exam',
             'menu-grade-system',
             'menu-notice',
-            'menu-parent',
             'menu-account-application',
             'menu-fee',
             'manage school settings',
@@ -585,10 +566,6 @@ class PermissionSeeder extends Seeder
             'update notice',
             'delete notice',
             'check result',
-            'create parent',
-            'read parent',
-            'update parent',
-            'delete parent',
             'read applicant',
             'update applicant',
             'delete applicant',

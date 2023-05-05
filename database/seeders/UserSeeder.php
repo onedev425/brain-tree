@@ -89,22 +89,6 @@ class UserSeeder extends Seeder
 
         $student->assignRole('student');
 
-        $parent = User::create([
-            'name'              => 'John Doe',
-            'email'             => 'parent@parent.com',
-            'password'          => Hash::make('password'),
-            'school_id'         => 1,
-            'address'           => 'parent street',
-            'birthday'          => '22/04/04',
-            'email_verified_at' => now(),
-            'gender'            => 'male',
-
-        ]);
-
-        $parent->assignRole('parent');
-
-        $parent->parentRecord()->create();
-
         $accountant = User::create([
             'name'              => 'Jane Doe',
             'email'             => 'accountant@accountant.com',

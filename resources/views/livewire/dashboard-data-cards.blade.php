@@ -28,9 +28,6 @@
                 @can('read teacher')
                     <x-info-box title="{{$teachers}}" text="Teachers" icon=" text-dark" theme="orange" url="{{route('teachers.index')}}" url-text="View teachers" colour="bg-indigo-700"  text-colour="text-white"/>
                 @endcan
-                @can('read subject')
-                    <x-info-box title="{{$parents}}" text="Parents" icon=" text-dark" theme="purple" url="{{route('parents.index')}}" url-text="View Parents"  colour="bg-violet-700"  text-colour="text-white"/>
-                @endcan
             </div>
         </div>
     </div>
