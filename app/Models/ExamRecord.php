@@ -12,7 +12,6 @@ class ExamRecord extends Model
 
     protected $fillable = [
         'user_id',
-        'section_id',
         'subject_id',
         'exam_slot_id',
         'student_marks',
@@ -37,10 +36,5 @@ class ExamRecord extends Model
     public function scopeinSubject($query, $subject_id)
     {
         return $query->where('subject_id', $subject_id);
-    }
-
-    public function scopeinSection($query, $section_id)
-    {
-        return $query->where('section_id', $section_id);
     }
 }

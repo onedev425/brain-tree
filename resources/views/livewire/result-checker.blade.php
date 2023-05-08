@@ -6,25 +6,10 @@
         @if (!auth()->user()->hasRole('student'))
             <x-display-validation-errors/>
             <x-loading-spinner/>
-            {{-- form for selecting class and section to display --}}
+            {{-- form for selecting students to display --}}
             <form wire:submit.prevent="checkResult('{{$student}}')" class="">
                 <div class="md:flex gap-4 items-end">
                     @hasanyrole('super-admin|admin|teacher')
-                        <x-select id="class" name="class" label="Current Class"   wire:model="class" group-class="md:w-3/12">
-                            @isset($classes)
-                            @foreach ($classes as $item)
-                            <option value="{{$item['id']}}">{{$item['name']}}</option>
-                            @endforeach
-                            @endisset
-                            
-                        </x-select>
-                        <x-select id="section" name="section" label="Current Section" fgroup-class="col-md-2" wire:model="section" group-class="md:w-3/12">
-                            @isset($sections)
-                                @foreach ($sections as $item)
-                                    <option value="{{$item['id']}}">{{$item['name']}}</option>
-                                @endforeach
-                            @endisset
-                        </x-select>
                     @endhasanyrole
                     <x-select id="student" name="student" label="Student"  wire:model="student" group-class="md:w-3/12">
                         @isset($students)

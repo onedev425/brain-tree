@@ -6,8 +6,6 @@ use Illuminate\View\Component;
 
 class Button extends Component
 {
-    public $class;
-
     public $icon;
 
     public $label;
@@ -17,9 +15,8 @@ class Button extends Component
      *
      * @return void
      */
-    public function __construct($class = null, $icon = null, $label = null)
+    public function __construct( $icon = null, $label = null)
     {
-        $this->class = $class;
         $this->icon = $icon;
         $this->label = $label;
     }

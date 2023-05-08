@@ -57,15 +57,11 @@ class StudentTest extends TestCase
             'password'              => 'password',
             'password_confirmation' => 'password',
             'gender'                => 'male',
-            'nationality'           => 'nigeria',
             'state'                 => 'lagos',
             'city'                  => 'lagos',
-            'blood_group'           => 'a+',
             'address'               => 'test address',
             'birthday'              => '2004/04/22',
             'phone'                 => '08080808080',
-            'my_class_id'           => 1,
-            'section_id'            => 1,
             'admission_date'        => '2004/04/22',
         ])->assertForbidden();
 
@@ -88,15 +84,11 @@ class StudentTest extends TestCase
             'password'              => 'password',
             'password_confirmation' => 'password',
             'gender'                => 'male',
-            'nationality'           => 'nigeria',
             'state'                 => 'lagos',
             'city'                  => 'lagos',
-            'blood_group'           => 'a+',
             'address'               => 'test address',
             'birthday'              => '2004/04/22',
             'phone'                 => '08080808080',
-            'my_class_id'           => 1,
-            'section_id'            => 1,
             'admission_date'        => '2004/04/22', ]);
 
         $this->assertDatabaseHas('users', [
@@ -136,15 +128,11 @@ class StudentTest extends TestCase
             'password'              => 'password',
             'password_confirmation' => 'password',
             'gender'                => 'male',
-            'nationality'           => 'nigeria',
             'state'                 => 'lagos',
             'city'                  => 'lagos',
-            'blood_group'           => 'a+',
             'address'               => 'test address',
             'birthday'              => '2004/04/22',
             'phone'                 => '08080808080',
-            'my_class_id'           => 1,
-            'section_id'            => 1,
             'admission_date'        => '2004/04/22', ])
         ->assertForbidden();
 
@@ -166,10 +154,8 @@ class StudentTest extends TestCase
             'password'              => 'password',
             'password_confirmation' => 'password',
             'gender'                => 'male',
-            'nationality'           => 'nigeria',
             'state'                 => 'lagos',
             'city'                  => 'lagos',
-            'blood_group'           => 'a+',
             'address'               => 'test address',
             'birthday'              => '2004/04/22',
             'phone'                 => '08080808080',
@@ -200,105 +186,6 @@ class StudentTest extends TestCase
         $this->authorized_user(['delete student'])->delete('dashboard/students/'.$student->user->id);
 
         $this->assertModelExists($student->user) && $this->assertSoftDeleted($student->user);
-    }
-
-    //test unauthorized user annot view all promotions
-
-    public function test_unauthorized_user_cannot_view_all_promotions()
-    {
-        $this->unauthorized_user()->get('dashboard/students/promotions')->assertForbidden();
-    }
-
-    //test authorized user can view all promotions
-
-    public function test_authorized_user_can_view_all_promotions()
-    {
-        $this->authorized_user(['read promotion'])->get('dashboard/students/promotions')->assertOk();
-    }
-
-    //test unauthorized user cannot view promotion
-
-    public function test_unauthorized_user_cannot_view_promotion()
-    {
-        $promotion = Promotion::factory()->create();
-
-        $this->unauthorized_user()->get('dashboard/students/promotions/'.$promotion->id)->assertForbidden();
-    }
-
-    //test authorized user can view promotion
-
-    public function test_authorized_user_can_view_promotion()
-    {
-        $promotion = Promotion::factory()->create();
-
-        $this->authorized_user(['read promotion'])->get('dashboard/students/promotions/'.$promotion->id)->assertOk();
-    }
-
-    //tes unauthorized user cannot view promoteview
-
-    public function test_unauthorized_user_cannot_view_promoteview()
-    {
-        $this->unauthorized_user()->get('/dashboard/students/promote')->assertForbidden();
-    }
-
-    //test authorized user can view promoteview
-
-    public function test_authorized_user_can_view_promoteview()
-    {
-        $this->authorized_user(['promote student'])->get('/dashboard/students/promote')->assertOk();
-    }
-
-    //test unauthorized user cannot promote students
-
-    public function test_unauthorized_user_cannot_promote_students()
-    {
-        $student = StudentRecord::factory()->create();
-        $this->unauthorized_user()->post('/dashboard/students/promote', [
-            'student_id'     => [$student->user->id],
-            'old_class_id'   => 1,
-            'old_section_id' => 2,
-            'new_class_id'   => 1,
-            'new_section_id' => 1,
-        ])->assertForbidden();
-    }
-
-    //test authorized user can promote students
-
-    public function test_authorized_user_can_promote_students()
-    {
-        $student = StudentRecord::factory()->create();
-        $this->authorized_user(['promote student'])->post('/dashboard/students/promote', [
-            'student_id'     => [$student->user->id],
-            'old_class_id'   => 1,
-            'old_section_id' => 2,
-            'new_class_id'   => 1,
-            'new_section_id' => 1,
-        ]);
-        $promotion = Promotion::where([
-            'old_class_id'   => 1,
-            'old_section_id' => 2,
-            'new_class_id'   => 1,
-            'new_section_id' => 1,
-        ])->whereJsonContains('students', [$student->user->id])->first();
-
-        $this->assertModelExists($promotion);
-    }
-
-    //test unauthorized user cannot delete promotion
-
-    public function test_unauthorized_user_cannot_delete_promotion()
-    {
-        $this->unauthorized_user()->delete('dashboard/students/promotions/1/reset')->assertForbidden();
-    }
-
-    //test authorized user can delete promotion
-
-    public function test_authorized_user_can_delete_promotion()
-    {
-        $promotion = Promotion::factory()->create();
-        $this->authorized_user(['reset promotion'])->delete('dashboard/students/promotions/'.$promotion->id.'/reset');
-
-        $this->assertModelMissing($promotion);
     }
 
     //test unauthorized user cannot view all graduations

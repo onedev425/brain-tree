@@ -12,7 +12,7 @@ class StudentRecord extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['admission_number', 'admission_date', 'my_class_id', 'section_id', 'user_id'];
+    protected $fillable = ['admission_number', 'admission_date', 'user_id'];
 
     /**
      * The attributes that should be cast.
@@ -41,26 +41,6 @@ class StudentRecord extends Model
     public function getAdmissionDateAttribute($value)
     {
         return Carbon::parse($value)->format('Y-m-d');
-    }
-
-    /**
-     * Get the MyClass that owns the Section.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function myClass()
-    {
-        return $this->belongsTo(MyClass::class);
-    }
-
-    /**
-     * Get the section that owns the StudentRecord.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function section()
-    {
-        return $this->belongsTo(Section::class);
     }
 
     /**

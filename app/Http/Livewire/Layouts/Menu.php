@@ -148,58 +148,6 @@ class Menu extends Component
 //            ],
 //            [
 //                'type'    => 'menu-item',
-//                'text'    => 'Classes',
-//                'icon'    => 'fas fa-chalkboard',
-//                'can'     => 'menu-class',
-//                'submenu' => [
-//                    [
-//                        'type'  => 'menu-item',
-//                        'text'  => 'View Classes',
-//                        'route' => 'classes.index',
-//                        'can'   => 'read class',
-//                    ],
-//                    [
-//                        'type'  => 'menu-item',
-//                        'text'  => 'Create Class',
-//                        'route' => 'classes.create',
-//                        'can'   => 'create class',
-//                    ],
-//                    [
-//                        'type'  => 'menu-item',
-//                        'text'  => 'View Class Groups',
-//                        'route' => 'class-groups.index',
-//                        'can'   => 'read class group',
-//                    ],
-//                    [
-//                        'type'  => 'menu-item',
-//                        'text'  => 'Create Class Group',
-//                        'route' => 'class-groups.create',
-//                        'can'   => 'create class group',
-//                    ],
-//                ],
-//            ],
-//            [
-//                'type'    => 'menu-item',
-//                'text'    => 'Sections',
-//                'icon'    => 'fas fa-landmark',
-//                'can'     => 'menu-section',
-//                'submenu' => [
-//                    [
-//                        'type'  => 'menu-item',
-//                        'text'  => 'View sections',
-//                        'route' => 'sections.index',
-//                        'can'   => 'read section',
-//                    ],
-//                    [
-//                        'type'  => 'menu-item',
-//                        'text'  => 'Create section',
-//                        'route' => 'sections.create',
-//                        'can'   => 'create section',
-//                    ],
-//                ],
-//            ],
-//            [
-//                'type'    => 'menu-item',
 //                'text'    => 'Students',
 //                'icon'    => 'fas fa-user',
 //                'can'     => 'menu-student',
@@ -215,18 +163,6 @@ class Menu extends Component
 //                        'text'  => 'Create student',
 //                        'route' => 'students.create',
 //                        'can'   => 'create student',
-//                    ],
-//                    [
-//                        'type'  => 'menu-item',
-//                        'text'  => 'Promote students',
-//                        'route' => 'students.promote',
-//                        'can'   => 'promote student',
-//                    ],
-//                    [
-//                        'type'  => 'menu-item',
-//                        'text'  => 'Manage promotions',
-//                        'route' => 'students.promotions',
-//                        'can'   => 'read promotion',
 //                    ],
 //                    [
 //                        'type'  => 'menu-item',

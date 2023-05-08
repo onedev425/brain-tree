@@ -21,7 +21,6 @@ class StoreExamRecordRequest extends FormRequest
     {
         //max validation for marks is handled in service class as there is no clean way of doing this
         return [
-            'section_id'   => 'required|integer|exists:sections,id',
             'subject_id'   => 'required|integer|exists:subjects,id',
             'user_id'      => 'required|integer|exists:users,id',
             'exam_records' => 'array',

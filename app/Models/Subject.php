@@ -17,16 +17,6 @@ class Subject extends Model
     ];
 
     /**
-     * Get the class that owns the Subject.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function myClass()
-    {
-        return $this->belongsTo(MyClass::class);
-    }
-
-    /**
      * The teachers that belong to the Subject.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany

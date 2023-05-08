@@ -6,27 +6,13 @@
         <x-display-validation-errors/>
         {{-- loading spinner --}}
         <x-loading-spinner/>
-        {{-- form for selecting class and section to display --}}
-        <form wire:submit.prevent="tabulate('{{$exam}}','{{$class}}' ,'{{$section}}')" class="md:grid grid-cols-3 gap-4">
+        {{-- form for selecting exam to display --}}
+        <form wire:submit.prevent="tabulate('{{$exam}}'')" class="md:grid grid-cols-3 gap-4">
                 <x-select id="exam" name="exam_id" label="Select exam" wire:model="exam">
                     @foreach ($exams as $item)
                         <option value="{{$item['id']}}">{{$item['name']}}</option>
                     @endforeach
                 </x-select>
-                <x-select id="class" name="class" label="Select class" wire:model="class">
-                    @foreach ($classes as $item)
-                        <option value="{{$item['id']}}">{{$item['name']}}</option>
-                    @endforeach
-                </x-select>
-                <x-select id="section" name="section" label="Section" wire:model="section">
-                    @isset($sections)
-                        <option value="null">Entire Class</option>
-                        @foreach ($sections as $item)
-                            <option value="{{$item['id']}}">{{$item['name']}}</option>
-                        @endforeach
-                    @endisset
-                </x-select>
-
             <x-button label="View records" theme="primary" type="submit" class="w-full md:w-5/12"/>
         </form>
         {{-- table to display tabulation --}}

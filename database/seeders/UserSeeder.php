@@ -80,8 +80,6 @@ class UserSeeder extends Seeder
             'gender'            => 'male',
         ]);
         $student->studentRecord()->create([
-            'my_class_id'      => 1,
-            'section_id'       => 1,
             'admission_date'   => '22/04/04',
             'is_graduated'     => false,
             'admission_number' => Str::random(10),

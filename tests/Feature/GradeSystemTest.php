@@ -65,8 +65,7 @@ class GradeSystemTest extends TestCase
                 'name'           => 'test grade',
                 'remark'         => 'test remarks',
                 'grade_from'     => '0',
-                'grade_till'     => '10',
-                'class_group_id' => '1',
+                'grade_till'     => '10'
             ]);
 
         $this->assertDatabaseHas('grade_systems', [
@@ -74,7 +73,6 @@ class GradeSystemTest extends TestCase
             'remark'         => 'test remarks',
             'grade_from'     => '0',
             'grade_till'     => '10',
-            'class_group_id' => '1',
         ]);
     }
 
@@ -115,7 +113,6 @@ class GradeSystemTest extends TestCase
                 'remark'         => 'test remarks',
                 'grade_from'     => '90',
                 'grade_till'     => '100',
-                'class_group_id' => '1',
             ]);
 
         $this->assertDatabaseHas('grade_systems', [
@@ -124,7 +121,6 @@ class GradeSystemTest extends TestCase
             'remark'         => 'test remarks',
             'grade_from'     => '90',
             'grade_till'     => '100',
-            'class_group_id' => '1',
         ]);
     }
 

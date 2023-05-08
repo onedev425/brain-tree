@@ -25,7 +25,7 @@ class GradeSystemPolicy
      */
     public function view(User $user, GradeSystem $gradeSystem)
     {
-        if ($user->can('read grade system') && $user->school_id == $gradeSystem->classGroup->school_id) {
+        if ($user->can('read grade system')) {
             return true;
         }
     }
@@ -45,7 +45,7 @@ class GradeSystemPolicy
      */
     public function update(User $user, GradeSystem $gradeSystem)
     {
-        if ($user->can('update grade system') && $user->school_id == $gradeSystem->classGroup->school_id) {
+        if ($user->can('update grade system')) {
             return true;
         }
     }
@@ -55,7 +55,7 @@ class GradeSystemPolicy
      */
     public function delete(User $user, GradeSystem $gradeSystem)
     {
-        if ($user->can('delete grade system') && $user->school_id == $gradeSystem->classGroup->school_id) {
+        if ($user->can('delete grade system')) {
             return true;
         }
     }

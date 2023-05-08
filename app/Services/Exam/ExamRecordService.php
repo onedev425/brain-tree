@@ -25,25 +25,14 @@ class ExamRecordService
     }
 
     /**
-     * Get all exam records for all students in a class section.
+     * Get all exam records for all students in a class subject.
      *
      *
      * @return App\Modles\ExamRecord
      */
-    public function getAllExamRecordsInSectionAndSubject(int $section, int $subject)
+    public function getAllExamRecordsInSubject(int $subject)
     {
-        return ExamRecord::where(['section_id' => $section, 'subject_id' => $subject])->get();
-    }
-
-    /**
-     * Get all exam records in section.
-     *
-     *
-     * @return App\Models\ExamRecord
-     */
-    public function getAllExamRecordsInSection(int $section)
-    {
-        return ExamRecord::where('section_id', $section)->get();
+        return ExamRecord::where(['subject_id' => $subject])->get();
     }
 
     /**
@@ -108,7 +97,6 @@ class ExamRecordService
 
                 ExamRecord::updateOrCreate(
                     ['user_id'         => $records['user_id'],
-                        'section_id'   => $records['section_id'],
                         'subject_id'   => $records['subject_id'],
                         'exam_slot_id' => $record['exam_slot_id'],
                     ],

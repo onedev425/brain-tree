@@ -12,22 +12,16 @@ class Select extends Component
 
     public string $name;
 
-    public ?string $class;
-
-    public ?string $groupClass;
-
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($id, $name, $class = null, string $label = null, $groupClass = null)
+    public function __construct($id, $name, string $label = null)
     {
         $this->id = $id;
         $this->label = $label;
         $this->name = $name;
-        $this->class = $class;
-        $this->groupClass = $groupClass;
     }
 
     /**

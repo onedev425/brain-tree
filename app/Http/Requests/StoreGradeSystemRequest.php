@@ -18,7 +18,6 @@ class StoreGradeSystemRequest extends FormRequest
             'grade_till'     => 'required|numeric|gt:grade_from|max:100',
             'name'           => 'required|string',
             'remark'         => 'nullable|string',
-            'class_group_id' => 'required|integer|exists:class_groups,id',
         ];
     }
 }

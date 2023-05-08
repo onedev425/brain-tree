@@ -10,19 +10,11 @@ use App\Models\StudentRecord;
 use App\Models\User;
 use App\Services\MyClass\MyClassService;
 use App\Services\Print\PrintService;
-use App\Services\Section\SectionService;
 use App\Services\User\UserService;
 use Illuminate\Support\Facades\DB;
 
 class StudentService
 {
-    /**
-     *Instance of class service.
-     *
-     * @var MyClassService
-     */
-    public $myClassService;
-
     /**
      * Instance of user service.
      *
@@ -30,15 +22,8 @@ class StudentService
      */
     public $userService;
 
-    /**
-     * Instance of section service.
-     */
-    public SectionService $sectionService;
-
-    public function __construct(MyClassService $myClassService, UserService $userService, SectionService $sectionService)
+    public function __construct(UserService $userService)
     {
-        $this->myClassService = $myClassService;
-        $this->sectionService = $sectionService;
         $this->userService = $userService;
     }
 
@@ -120,16 +105,10 @@ class StudentService
     public function createStudentRecord(User $student, $record)
     {
         $record['admission_number'] || $record['admission_number'] = $this->generateAdmissionNumber();
-        $section = $this->sectionService->getSectionById($record['section_id']);
-        if (!$this->myClassService->getClassById($record['my_class_id'])->sections->contains($section)) {
-            throw new InvalidValueException('Section is not in class');
-        }
 
         $student->studentRecord()->firstOrCreate([
             'user_id' => $student->id,
         ], [
-            'my_class_id'      => $record['my_class_id'],
-            'section_id'       => $record['section_id'],
             'admission_number' => $record['admission_number'],
             'admission_date'   => $record['admission_date'],
         ]);

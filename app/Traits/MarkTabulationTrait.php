@@ -2,7 +2,6 @@
 
 namespace App\Traits;
 
-use App\Models\ClassGroup;
 use App\Models\ExamRecord;
 use App\Models\GradeSystem;
 use Illuminate\Database\Eloquent\Collection;
@@ -34,7 +33,7 @@ trait MarkTabulationTrait
      *
      * @return Collection
      */
-    public function tabulateMarks(ClassGroup $classGroup, Collection|SupportCollection $subjects, Collection|SupportCollection $students, Collection|SupportCollection $examSlots)
+    public function tabulateMarks(Collection|SupportCollection $subjects, Collection|SupportCollection $students, Collection|SupportCollection $examSlots)
     {
         //create tabulation container variable
         $tabulatedRecords = [];
@@ -42,8 +41,7 @@ trait MarkTabulationTrait
         //get all relevant exam records
         $examRecords = ExamRecord::whereIn('subject_id', $subjects->pluck('id'))->whereIn('user_id', $students->pluck('id'))->get();
 
-        //get all grades in class group
-        $grades = GradeSystem::where('class_group_id', $classGroup->id)->get();
+        $grades = GradeSystem::get();
         $totalMarksAttainableInEachSubject = $examSlots->sum(['total_marks']);
 
         //set public variables

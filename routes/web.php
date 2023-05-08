@@ -45,15 +45,6 @@ Route::middleware('auth:sanctum', 'verified', 'App\Http\Middleware\PreventLockAc
             return view('dashboard');
         })->name('dashboard')->withoutMiddleware(['App\Http\Middleware\PreventGraduatedStudent']);
 
-        //class routes
-        Route::resource('classes', MyClassController::class);
-
-        //class groups routes
-        Route::resource('class-groups', ClassGroupController::class);
-
-        //sections routes
-        Route::resource('sections', SectionController::class);
-
         Route::get('account-applications/rejected-applications', ['App\Http\Controllers\AccountApplicationController', 'rejectedApplicationsView'])->name('account-applications.rejected-applications');
 
         //account application routes. We need the applicant instead of the record

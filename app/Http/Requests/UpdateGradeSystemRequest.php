@@ -18,7 +18,6 @@ class UpdateGradeSystemRequest extends FormRequest
             'grade_till'     => 'required|numeric|gt:grade_from|max:100',
             'name'           => 'required|string|max:255',
             'remark'         => 'nullable|string|max:255',
-            'class_group_id' => 'required|integer|exists:class_groups,id',
         ];
     }
 }

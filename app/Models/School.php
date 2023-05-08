@@ -17,26 +17,10 @@ class School extends Model
     ];
 
     /**
-     * Get all the class groups in the school.
-     */
-    public function classGroups(): HasMany
-    {
-        return $this->hasMany(ClassGroup::class);
-    }
-
-    /**
      * Get all of the users for the School.
      */
     public function users(): HasMany
     {
         return $this->hasMany(User::class);
-    }
-
-    /**
-     * Get all of the MyClasses for the School.
-     */
-    public function myClasses(): HasManyThrough
-    {
-        return $this->hasManyThrough(MyClass::class, ClassGroup::class);
     }
 }

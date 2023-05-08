@@ -5,19 +5,11 @@
     <div class="card-body">
         @if (!auth()->user()->hasRole('student'))
 
-        <x-select id="class-group" label="Select a class group to see grading system" group-class="my-6 md:w-6/12" name="" wire:model="classGroup">
-            @foreach ($classGroups as $item)
-                <option value="{{$item['id']}}">{{$item['name']}}</option>
-            @endforeach
-        </x-select>
         @endif
         <x-loading-spinner/>
         <div wire:loading.remove.delay>
             @isset($classGroup)
                 <livewire:datatable :wire:key="Str::Random(10)" :model="App\Models\GradeSystem::class" 
-                :filters="[
-                ['name' => 'where', 'arguments' => ['class_group_id' , $classGroup]],
-                ]"
                 uniqueId="list-grades-table"
                 :columns="[
                     ['property' => 'name'],

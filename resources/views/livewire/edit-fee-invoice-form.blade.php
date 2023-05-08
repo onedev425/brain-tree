@@ -25,12 +25,10 @@
             <table class="w-full">
                 <th class="border p-4">Student Name</th>
                 <th class="border p-4">Student Admission Number</th>
-                <th class="border p-4">Student Class</th>
                 <tbody>
                     <tr>
                         <td class="border p-4 text-center">{{$feeInvoice->user->name}}</td>
                         <td class="border p-4 text-center">{{$feeInvoice->user->studentRecord->admission_number}}</td>
-                        <td class="border p-4 text-center">{{$feeInvoice->user->studentRecord->myClass->name}}</td>
                     </tr>
                 </tbody>
             </table>

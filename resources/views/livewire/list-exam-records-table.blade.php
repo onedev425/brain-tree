@@ -6,14 +6,9 @@
         <x-display-validation-errors/>
        
         {{-- form for selecting exam record to display --}}
-        <form wire:submit.prevent="fetchExamRecords('{{$exam}}','{{$section}}','{{$subject}}')" class="md:grid gap-4 grid-cols-4 grid-rows-1  my-3 items-end">
+        <form wire:submit.prevent="fetchExamRecords('{{$exam}}','{{$subject}}')" class="md:grid gap-4 grid-cols-4 grid-rows-1  my-3 items-end">
             <x-select id="exam-id" name="exam_id" label="Select exam" wire:model="exam">
                 @foreach ($exams as $item)
-                    <option value="{{$item['id']}}">{{$item['name']}}</option>
-                @endforeach
-            </x-select>
-            <x-select id="class" name="class" label="Select class" wire:model="class">
-                @foreach ($classes as $item)
                     <option value="{{$item['id']}}">{{$item['name']}}</option>
                 @endforeach
             </x-select>
@@ -21,13 +16,6 @@
                 @isset($subjects)
                     @foreach ($subjects as $subject)
                         <option value="{{$subject['id']}}">{{$subject['name']}}</option>
-                    @endforeach
-                @endisset
-            </x-select>
-            <x-select id="section" name="section" label="Section"  wire:model="section">
-                @isset($sections)
-                    @foreach ($sections as $item)
-                        <option value="{{$item['id']}}">{{$item['name']}}</option>
                     @endforeach
                 @endisset
             </x-select>
@@ -45,8 +33,6 @@
                 <div class="card-body">
                     <div class="md:flex justify-between ">
                         <p class="">Exam: {{$examSelected->name}}</p>
-                        <p class="">Class: {{$classSelected->name}}</p>
-                        <p class="">Section: {{$sectionSelected->name}}</p>
                         <p class="">Subject: {{$subjectSelected->name}}</p>
                     </div>
 
@@ -71,7 +57,6 @@
                                 @endforeach
                                 <input type="hidden" name="subject_id" value="{{$subjectSelected->id}}">
                                 <input type="hidden" name="user_id" value="{{$student->id}}">
-                                <input type="hidden" name="section_id" value="{{$sectionSelected->id}}">
                                 @csrf
                                 @can('update exam record')
                                     

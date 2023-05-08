@@ -4,22 +4,6 @@
     </div>
     <div class="card-body">
         <x-display-validation-errors/>
-        <form wire:submit.prevent="loadStudents" class="md:grid grid-cols-2 gap-4">
-            <x-select id="class" name="class" label="Class" wire:model="class" >
-                @foreach ($classes as $class)
-                    <option value="{{$class['id']}}">{{$class['name']}}</option>
-                @endforeach
-            </x-select>
-            <x-select id="section" name="section" label="Section" wire:init="loadInitialSections" wire:model="section" >
-                @isset($sections)
-                    @foreach ($sections as $item)
-                        <option value="{{$item['id']}}">{{$item['name']}}</option>
-                    @endforeach
-                @endisset
-            </x-select>
-           
-            <x-button label="Fetch students" icon="fas fa-paper-plane" type="submit" class="w-full md:w-6/12"/>
-        </form>
         <div wire:loading.remove.delay>
             @if (isset($students))
                 @if ($students->count() > 0)

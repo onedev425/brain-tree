@@ -21,8 +21,7 @@
                 :filters="array_merge([
                     ['name' => 'whereRelation', 'arguments' => ['user', 'school_id', auth()->user()->school_id]],
                     ['name' => 'whereYear', 'arguments' => ['due_date', $year]],
-                    ['name' => 'orderBy', 'arguments' => ['due_date', 'desc']],
-                    ['name' => 'with', 'arguments' => ['user','user.studentRecord.myClass','user.studentRecord.section']]
+                    ['name' => 'orderBy', 'arguments' => ['due_date', 'desc']]
                 ], $queryAddon)"
                 :columns="[
                     ['property' => 'name',],
@@ -46,8 +45,7 @@
                 :filters="array_merge([
                     ['name' => 'whereRelation', 'arguments' => ['user', 'id', auth()->user()->id]],
                     ['name' => 'whereYear', 'arguments' => ['due_date', $year]],
-                    ['name' => 'orderBy', 'arguments' => ['due_date', 'desc']],
-                    ['name' => 'with', 'arguments' => ['user','user.studentRecord.myClass','user.studentRecord.section']]
+                    ['name' => 'orderBy', 'arguments' => ['due_date', 'desc']]
                 ], $queryAddon)"
                 :columns="[
                     ['property' => 'name',],

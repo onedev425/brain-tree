@@ -16,7 +16,6 @@
                 <div  wire:loading.remove.delay>
                     <livewire:datatable unique_id="list-subject-table" :wire:key="Str::Random(10)" :model="App\Models\Subject::class"
                     :filters="[
-                        ['name' => 'where' ,'arguments' => ['my_class_id', $class]],
                         ['name' => 'with', 'arguments' => ['teachers']]
                     ]"
                     :columns="[
@@ -32,7 +31,7 @@
                 </div>
             @endisset
         @else
-            <p>No classes and sections created in this school</p>
+            <p>No in this school</p>
         @endif
     </div>
 </div>

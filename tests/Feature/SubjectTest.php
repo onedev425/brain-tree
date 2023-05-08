@@ -50,8 +50,6 @@ class SubjectTest extends TestCase
             ->post('/dashboard/subjects', [
                 'name'        => $name,
                 'short_name'  => 'TS',
-                'my_class_id' => 1,
-                'school_id'   => 1,
             ])
             ->assertForbidden();
 
@@ -68,8 +66,6 @@ class SubjectTest extends TestCase
              ->post('/dashboard/subjects', [
                  'name'        => $name,
                  'short_name'  => 'TS',
-                 'my_class_id' => 1,
-                 'school_id'   => 1,
              ])
              ->assertRedirect();
 
@@ -100,8 +96,6 @@ class SubjectTest extends TestCase
             ->patch("/dashboard/subjects/$subject->id", [
                 'name'        => $name,
                 'short_name'  => 'TS2',
-                'my_class_id' => 1,
-                'school_id'   => 1,
             ])
             ->assertForbidden();
 
@@ -119,8 +113,6 @@ class SubjectTest extends TestCase
             ->patch("/dashboard/subjects/$subject->id", [
                 'name'        => $name,
                 'short_name'  => 'TS2',
-                'my_class_id' => 1,
-                'school_id'   => 1,
             ])->assertRedirect();
 
         $this->assertEquals($name, $subject->fresh()->name);
