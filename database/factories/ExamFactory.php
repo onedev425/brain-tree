@@ -22,7 +22,6 @@ class ExamFactory extends Factory
         return [
             'name'                => $this->faker->word,
             'description'         => $this->faker->sentence,
-            'semester_id'         => '1',
             'start_date'          => $start,
             'stop_date'           => $stop,
             'active'              => $this->faker->boolean(),

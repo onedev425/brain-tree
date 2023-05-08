@@ -2,33 +2,15 @@
 
 namespace App\Http\Livewire;
 
-use App\Models\AcademicYear;
-use App\Models\Semester;
 use App\Models\User;
 use App\Services\MyClass\MyClassService;
 use Livewire\Component;
 
 class ResultChecker extends Component
 {
-    public $section;
-
-    public $sections;
-
-    public $classes;
-
-    public $class;
-
     public $students;
 
     public $student;
-
-    public $academicYears;
-
-    public $academicYear;
-
-    public $semesters;
-
-    public $semester;
 
     public $exams;
 
@@ -42,17 +24,8 @@ class ResultChecker extends Component
 
     public $studentName;
 
-    //rules
-    public $rules = [
-        'academicYear' => 'integer|exists:academic_years,id',
-        'semester'     => 'required|integer|exists:semesters_id',
-    ];
-
     public function mount(MyClassService $myClassService)
     {
-        $this->academicYears = auth()->user()->school->academicYears;
-        $this->academicYear = auth()->user()->school->academicYear->id;
-        $this->updatedAcademicYear();
         if (auth()->user()->hasAnyRole(['super-admin', 'admin', 'teacher'])) {
             $this->classes = $myClassService->getAllClasses();
 
@@ -61,24 +34,7 @@ class ResultChecker extends Component
             }
             $this->class = $this->classes[0]->id;
             $this->updatedClass();
-        } elseif (auth()->user()->hasRole('student')) {
-            $this->checkResult(auth()->user()->school->academicYear, auth()->user()->school->semester, auth()->user()->loadMissing('allStudentRecords'));
-        }
-    }
-
-    //updated academic year
-    public function updatedAcademicYear()
-    {
-        $academicYear = app("App\Services\AcademicYear\AcademicYearService")->getAcademicYearById($this->academicYear);
-        //get semesters in academic year
-        $this->semesters = $academicYear->semesters;
-        $this->semester = null;
-
-        if ($this->semesters->isEmpty()) {
-            return;
-        }
-
-        $this->semester = $this->semesters[0]->id;
+        } 
     }
 
     public function updatedClass()
@@ -112,50 +68,8 @@ class ResultChecker extends Component
         $this->students->count() ? $this->student = $this->students[0]->id : $this->student = null;
     }
 
-    public function checkResult(AcademicYear $academicYear, $semester, User $student)
+    public function checkResult(User $student)
     {
-        $semester = $this->semesters->find($semester);
-
-        // make sure user student isn't another role
-        if (!$student->hasRole('student')) {
-            abort(404, 'Student not found.');
-        }
-        //set name that would be used in view
-        $this->studentName = $student->name;
-        // fetch all exams, subjects and exam records for user in semester
-
-        if ($semester != null && $semester->exists()) {
-            $this->exams = $semester->exams()->where('publish_result', true)->get()->load('examSlots');
-            //fetch all students exam records in semester
-            $this->examRecords = app("App\Services\Exam\ExamRecordService")->getAllUserExamRecordInSemester($semester, $student->id);
-        } else {
-            $this->exams = $academicYear->exams()->where('publish_result', true)->get()->load('examSlots');
-            $this->examRecords = app("App\Services\Exam\ExamRecordService")->getAllUserExamRecordInAcademicYear($academicYear, $student->id);
-        }
-
-        if ($this->exams->isEmpty()) {
-            $this->status = 'There are no exams with published results for now';
-
-            return $this->preparedResults = false;
-        }
-
-        $academicYearsWithStudentRecords = $student->allStudentRecords->academicYears()->where('academic_year_id', $this->academicYear)->first();
-        if (is_null($academicYearsWithStudentRecords)) {
-            $this->status = 'No records this academic year, make sure user has been promoted this year or has not been graduated';
-            $this->preparedResults = false;
-
-            return;
-        }
-        $this->subjects = $academicYearsWithStudentRecords->studentAcademicYearBasedRecords->class->subjects;
-
-        if ($this->subjects->isEmpty()) {
-            $this->status = 'Subjects not present';
-            $this->preparedResults = false;
-
-            return;
-        }
-
-        $this->preparedResults = true;
     }
 
     public function render()

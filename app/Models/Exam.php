@@ -14,7 +14,6 @@ class Exam extends Model
     protected $fillable = [
         'name',
         'description',
-        'semester_id',
         'start_date',
         'stop_date',
         'active',
@@ -33,11 +32,6 @@ class Exam extends Model
         'active'            => 'boolean',
         'publish_result'    => 'boolean',
     ];
-
-    public function semester(): BelongsTo
-    {
-        return $this->belongsTo(Semester::class);
-    }
 
     public function examSlots(): HasMany
     {

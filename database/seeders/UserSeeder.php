@@ -88,33 +88,5 @@ class UserSeeder extends Seeder
         ]);
 
         $student->assignRole('student');
-
-        $accountant = User::create([
-            'name'              => 'Jane Doe',
-            'email'             => 'accountant@accountant.com',
-            'password'          => Hash::make('password'),
-            'school_id'         => 1,
-            'address'           => 'accountant street',
-            'birthday'          => '22/04/04',
-            'email_verified_at' => now(),
-            'gender'            => 'male',
-
-        ]);
-
-        $accountant->assignRole('accountant');
-
-        $librarian = User::create([
-            'name'              => 'John Doe',
-            'email'             => 'libratian@librarian.com',
-            'password'          => Hash::make('password'),
-            'school_id'         => 1,
-            'address'           => 'librarian street',
-            'birthday'          => '22/04/04',
-            'email_verified_at' => now(),
-            'gender'            => 'male',
-
-        ]);
-
-        $librarian->assignRole('librarian');
     }
 }

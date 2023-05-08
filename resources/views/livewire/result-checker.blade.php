@@ -7,25 +7,8 @@
             <x-display-validation-errors/>
             <x-loading-spinner/>
             {{-- form for selecting class and section to display --}}
-            <form wire:submit.prevent="checkResult('{{$academicYear}}','{{$semester}}', '{{$student}}')" class="">
+            <form wire:submit.prevent="checkResult('{{$student}}')" class="">
                 <div class="md:flex gap-4 items-end">
-                    <x-select id="academic-year" name="academic-year" label="Academic Year of exam"   wire:model="academicYear" group-class="md:w-3/12 ">
-                        @isset($academicYears)
-                            @foreach ($academicYears as $item)
-                            <option value="{{$item['id']}}"> {{$item->name
-                                }}</option>
-                            @endforeach
-                        @endisset
-                    </x-select>
-                    <x-select id="semester" name="semester" label="Semester of exam"   wire:model="semester" group-class="md:w-3/12">
-                        <option value="">Entire Academic Year</option>
-                        @isset($semesters)
-                            @foreach ($semesters as $item)
-                                <option value="{{$item['id']}}">{{$item['name']}}</option>
-                            @endforeach
-                        @endisset
-                    </x-select>
-                    {{--fields are not available to any role not in list--}}
                     @hasanyrole('super-admin|admin|teacher')
                         <x-select id="class" name="class" label="Current Class"   wire:model="class" group-class="md:w-3/12">
                             @isset($classes)

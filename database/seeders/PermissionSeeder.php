@@ -108,23 +108,6 @@ class PermissionSeeder extends Seeder
             'name' => 'delete admin',
         ]);
 
-        //Permission for academic year
-        Permission::firstOrCreate([
-            'name' => 'create academic year',
-        ]);
-        Permission::firstOrCreate([
-            'name' => 'read academic year',
-        ]);
-        Permission::firstOrCreate([
-            'name' => 'update academic year',
-        ]);
-        Permission::firstOrCreate([
-            'name' => 'delete academic year',
-        ]);
-        Permission::firstOrCreate([
-            'name' => 'set academic year',
-        ]);
-
         //Permission for teacher
         Permission::firstOrCreate([
             'name' => 'create teacher',
@@ -172,66 +155,6 @@ class PermissionSeeder extends Seeder
         ]);
         Permission::firstOrCreate([
             'name' => 'reset graduation',
-        ]);
-
-        //permission for semesters
-        Permission::firstOrCreate([
-            'name' => 'create semester',
-        ]);
-        Permission::firstOrCreate([
-            'name' => 'read semester',
-        ]);
-        Permission::firstOrCreate([
-            'name' => 'update semester',
-        ]);
-        Permission::firstOrCreate([
-            'name' => 'delete semester',
-        ]);
-
-        Permission::firstOrCreate([
-            'name' => 'set semester',
-        ]);
-
-        //permission for syllabus
-        Permission::firstOrCreate([
-            'name' => 'create syllabus',
-        ]);
-        Permission::firstOrCreate([
-            'name' => 'read syllabus',
-        ]);
-        Permission::firstOrCreate([
-            'name' => 'update syllabus',
-        ]);
-        Permission::firstOrCreate([
-            'name' => 'delete syllabus',
-        ]);
-
-        //permission for timetable
-        Permission::firstOrCreate([
-            'name' => 'create timetable',
-        ]);
-        Permission::firstOrCreate([
-            'name' => 'read timetable',
-        ]);
-        Permission::firstOrCreate([
-            'name' => 'update timetable',
-        ]);
-        Permission::firstOrCreate([
-            'name' => 'delete timetable',
-        ]);
-
-        //custom timetable item
-        Permission::firstOrCreate([
-            'name' => 'create custom timetable item',
-        ]);
-        Permission::firstOrCreate([
-            'name' => 'read custom timetable item',
-        ]);
-        Permission::firstOrCreate([
-            'name' => 'update custom timetable item',
-        ]);
-        Permission::firstOrCreate([
-            'name' => 'delete custom timetable item',
         ]);
 
         //exam permissions
@@ -410,9 +333,6 @@ class PermissionSeeder extends Seeder
             'name' => 'header-schools',
         ]);
         Permission::firstOrCreate([
-            'name' => 'header-academics',
-        ]);
-        Permission::firstOrCreate([
             'name' => 'menu-class',
         ]);
         Permission::firstOrCreate([
@@ -425,19 +345,7 @@ class PermissionSeeder extends Seeder
             'name' => 'menu-teacher',
         ]);
         Permission::firstOrCreate([
-            'name' => 'menu-academic-year',
-        ]);
-        Permission::firstOrCreate([
-            'name' => 'menu-semester',
-        ]);
-        Permission::firstOrCreate([
             'name' => 'menu-subject',
-        ]);
-        Permission::firstOrCreate([
-            'name' => 'menu-syllabus',
-        ]);
-        Permission::firstOrCreate([
-            'name' => 'menu-timetable',
         ]);
         Permission::firstOrCreate([
             'name' => 'menu-exam',
@@ -477,16 +385,11 @@ class PermissionSeeder extends Seeder
         $admin = Role::where('name', 'admin')->first();
         $admin->syncPermissions([
             'header-administrate',
-            'header-academics',
             'menu-section',
             'menu-class',
             'menu-student',
             'menu-teacher',
-            'menu-academic-year',
             'menu-subject',
-            'menu-syllabus',
-            'menu-timetable',
-            'menu-semester',
             'menu-exam',
             'menu-grade-system',
             'menu-notice',
@@ -509,11 +412,6 @@ class PermissionSeeder extends Seeder
             'read student',
             'update student',
             'delete student',
-            'create academic year',
-            'read academic year',
-            'update academic year',
-            'delete academic year',
-            'set academic year',
             'create teacher',
             'read teacher',
             'update teacher',
@@ -528,23 +426,6 @@ class PermissionSeeder extends Seeder
             'graduate student',
             'view graduations',
             'reset graduation',
-            'create semester',
-            'read semester',
-            'update semester',
-            'delete semester',
-            'set semester',
-            'create syllabus',
-            'read syllabus',
-            'update syllabus',
-            'delete syllabus',
-            'create timetable',
-            'read timetable',
-            'update timetable',
-            'delete timetable',
-            'create custom timetable item',
-            'read custom timetable item',
-            'update custom timetable item',
-            'delete custom timetable item',
             'create exam',
             'read exam',
             'update exam',
@@ -570,10 +451,6 @@ class PermissionSeeder extends Seeder
             'update applicant',
             'delete applicant',
             'change account application status',
-            'create custom timetable item',
-            'read custom timetable item',
-            'update custom timetable item',
-            'delete custom timetable item',
             'create fee',
             'read fee',
             'update fee',
@@ -595,10 +472,7 @@ class PermissionSeeder extends Seeder
         //assign permissions to teacher
         $teacher = Role::where('name', 'teacher')->first();
         $teacher->syncPermissions([
-            'header-academics',
             'header-administrate',
-            'menu-syllabus',
-            'menu-timetable',
             'menu-exam',
             'menu-notice',
             'menu-student',
@@ -607,14 +481,6 @@ class PermissionSeeder extends Seeder
             'read exam',
             'read exam slot',
             'read grade system',
-            'create syllabus',
-            'read syllabus',
-            'update syllabus',
-            'delete syllabus',
-            'create timetable',
-            'read timetable',
-            'update timetable',
-            'delete timetable',
             'create exam record',
             'read exam record',
             'update exam record',
@@ -630,16 +496,11 @@ class PermissionSeeder extends Seeder
         //assign permissions to student
         $student = Role::where('name', 'student')->first();
         $student->syncPermissions([
-            'header-academics',
             'header-administrate',
             'menu-fee',
-            'menu-syllabus',
-            'menu-timetable',
             'menu-notice',
             'menu-exam',
             'menu-grade-system',
-            'read syllabus',
-            'read timetable',
             'read grade system',
             'read notice',
             'read fee invoice',
@@ -648,9 +509,5 @@ class PermissionSeeder extends Seeder
             'pricing',
             'settings',
         ]);
-
-        //assign permissions to librarian
-
-        //assign permissions to accountant
     }
 }

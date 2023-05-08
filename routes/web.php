@@ -54,96 +54,69 @@ Route::middleware('auth:sanctum', 'verified', 'App\Http\Middleware\PreventLockAc
         //sections routes
         Route::resource('sections', SectionController::class);
 
-        Route::middleware(['App\Http\Middleware\EnsureAcademicYearIsSet'])->group(function () {
-            Route::get('account-applications/rejected-applications', ['App\Http\Controllers\AccountApplicationController', 'rejectedApplicationsView'])->name('account-applications.rejected-applications');
+        Route::get('account-applications/rejected-applications', ['App\Http\Controllers\AccountApplicationController', 'rejectedApplicationsView'])->name('account-applications.rejected-applications');
 
-            //account application routes. We need the applicant instead of the record
-            Route::resource('account-applications', AccountApplicationController::class)->parameters([
-                'account-applications' => 'applicant',
-            ]);
+        //account application routes. We need the applicant instead of the record
+        Route::resource('account-applications', AccountApplicationController::class)->parameters([
+            'account-applications' => 'applicant',
+        ]);
 
-            Route::get('account-applications/change-status/{applicant}', ['App\Http\Controllers\AccountApplicationController', 'changeStatusView'])->name('account-applications.change-status');
+        Route::get('account-applications/change-status/{applicant}', ['App\Http\Controllers\AccountApplicationController', 'changeStatusView'])->name('account-applications.change-status');
 
-            Route::post('account-applications/change-status/{applicant}', ['App\Http\Controllers\AccountApplicationController', 'changeStatus']);
+        Route::post('account-applications/change-status/{applicant}', ['App\Http\Controllers\AccountApplicationController', 'changeStatus']);
 
-            //promotion routes
-            Route::get('students/promotions', ['App\Http\Controllers\PromotionController', 'index'])->name('students.promotions');
-            Route::get('students/promote', ['App\Http\Controllers\PromotionController', 'promoteView'])->name('students.promote');
-            Route::post('students/promote', ['App\Http\Controllers\PromotionController', 'promote']);
-            Route::get('students/promotions/{promotion}', ['App\Http\Controllers\PromotionController', 'show'])->name('students.promotions.show');
-            Route::delete('students/promotions/{promotion}/reset', ['App\Http\Controllers\PromotionController', 'resetPromotion'])->name('students.promotions.reset');
+        //promotion routes
+        Route::get('students/promotions', ['App\Http\Controllers\PromotionController', 'index'])->name('students.promotions');
+        Route::get('students/promote', ['App\Http\Controllers\PromotionController', 'promoteView'])->name('students.promote');
+        Route::post('students/promote', ['App\Http\Controllers\PromotionController', 'promote']);
+        Route::get('students/promotions/{promotion}', ['App\Http\Controllers\PromotionController', 'show'])->name('students.promotions.show');
+        Route::delete('students/promotions/{promotion}/reset', ['App\Http\Controllers\PromotionController', 'resetPromotion'])->name('students.promotions.reset');
 
-            //graduation routes
-            Route::get('students/graduations', ['App\Http\Controllers\GraduationController', 'index'])->name('students.graduations');
-            Route::get('students/graduate', ['App\Http\Controllers\GraduationController', 'graduateView'])->name('students.graduate');
-            Route::post('students/graduate', ['App\Http\Controllers\GraduationController', 'graduate']);
-            Route::delete('students/graduations/{student}/reset', ['App\Http\Controllers\GraduationController', 'resetGraduation'])->name('students.graduations.reset');
+        //graduation routes
+        Route::get('students/graduations', ['App\Http\Controllers\GraduationController', 'index'])->name('students.graduations');
+        Route::get('students/graduate', ['App\Http\Controllers\GraduationController', 'graduateView'])->name('students.graduate');
+        Route::post('students/graduate', ['App\Http\Controllers\GraduationController', 'graduate']);
+        Route::delete('students/graduations/{student}/reset', ['App\Http\Controllers\GraduationController', 'resetGraduation'])->name('students.graduations.reset');
 
-            //semester routes
-            Route::resource('semesters', SemesterController::class);
-            Route::post('semesters/set', ['App\Http\Controllers\SemesterController', 'setSemester'])->name('semesters.set-semester');
+        //fee categories routes
+        Route::resource('fees/fee-categories', FeeCategoryController::class);
 
-            Route::middleware(['App\Http\Middleware\EnsureSemesterIsSet'])->group(function () {
-                //fee categories routes
-                Route::resource('fees/fee-categories', FeeCategoryController::class);
+        //fee invoice record routes
+        Route::post('fees/fee-invoices/fee-invoice-records/{fee_invoice_record}/pay', ['App\Http\Controllers\FeeInvoiceRecordController', 'pay'])->name('fee-invoices-records.pay');
+        Route::resource('fees/fee-invoices/fee-invoice-records', FeeInvoiceRecordController::class);
 
-                //fee invoice record routes
-                Route::post('fees/fee-invoices/fee-invoice-records/{fee_invoice_record}/pay', ['App\Http\Controllers\FeeInvoiceRecordController', 'pay'])->name('fee-invoices-records.pay');
-                Route::resource('fees/fee-invoices/fee-invoice-records', FeeInvoiceRecordController::class);
+        //fee incvoice routes
+        Route::get('fees/fee-invoices/{fee_invoice}/pay', ['App\Http\Controllers\FeeInvoiceController', 'payView'])->name('fee-invoices.pay');
+        Route::get('fees/fee-invoices/{fee_invoice}/print', ['App\Http\Controllers\FeeInvoiceController', 'print'])->name('fee-invoices.print');
+        Route::resource('fees/fee-invoices', FeeInvoiceController::class);
 
-                //fee incvoice routes
-                Route::get('fees/fee-invoices/{fee_invoice}/pay', ['App\Http\Controllers\FeeInvoiceController', 'payView'])->name('fee-invoices.pay');
-                Route::get('fees/fee-invoices/{fee_invoice}/print', ['App\Http\Controllers\FeeInvoiceController', 'print'])->name('fee-invoices.print');
-                Route::resource('fees/fee-invoices', FeeInvoiceController::class);
+        //fee routes
+        Route::resource('fees', FeeController::class);
 
-                //fee routes
-                Route::resource('fees', FeeController::class);
+        //set exam status
+        Route::post('exams/{exam}/set--active-status', ['App\Http\Controllers\ExamController', 'setExamActiveStatus'])->name('exams.set-active-status');
 
-                //syllabi route
-                Route::resource('syllabi', SyllabusController::class);
+        // set publish result status
+        Route::post('exams/{exam}/set-publish-result-status', ['App\Http\Controllers\ExamController', 'setPublishResultStatus'])->name('exams.set-publish-result-status');
+        //manage exam record
+        Route::resource('exams/exam-records', ExamRecordController::class);
 
-                //timetable route
-                Route::resource('timetables', TimetableController::class);
-                Route::resource('custom-timetable-items', CustomTimetableItemController::class);
+        //exam tabulation sheet
+        Route::get('exams/tabulation-sheet', ['App\Http\Controllers\ExamController', 'examTabulation'])->name('exams.tabulation');
 
-                //manage timetable
-                Route::get('timetables/{timetable}/manage', ['App\Http\Controllers\TimetableController', 'manage'])->name('timetables.manage');
-                Route::get('timetables/{timetable}/print', ['App\Http\Controllers\TimetableController', 'print'])->name('timetables.print');
+        //result checker
+        Route::get('exams/result-checker', ['App\Http\Controllers\ExamController', 'resultChecker'])->name('exams.result-checker');
 
-                //timetable-timeslot route
-                Route::resource('timetables/manage/time-slots', TimetableTimeSlotController::class);
-                Route::post('timetables/manage/time-slots/{time_slot}/record/create', ['App\Http\Controllers\TimetableTimeSlotController', 'addTimetableRecord'])->name('timetables.records.create')->scopeBindings();
+        //exam routes
+        Route::resource('exams', ExamController::class);
 
-                //set exam status
-                Route::post('exams/{exam}/set--active-status', ['App\Http\Controllers\ExamController', 'setExamActiveStatus'])->name('exams.set-active-status');
-
-                // set publish result status
-                Route::post('exams/{exam}/set-publish-result-status', ['App\Http\Controllers\ExamController', 'setPublishResultStatus'])->name('exams.set-publish-result-status');
-                //manage exam record
-                Route::resource('exams/exam-records', ExamRecordController::class);
-
-                //exam tabulation sheet
-                Route::get('exams/tabulation-sheet', ['App\Http\Controllers\ExamController', 'examTabulation'])->name('exams.tabulation');
-
-                //result tabulation sheet
-                Route::get('exams/semester-result-tabulation', ['App\Http\Controllers\ExamController', 'semesterResultTabulation'])->name('exams.semester-result-tabulation');
-                Route::get('exams/academic-year-result-tabulation', ['App\Http\Controllers\ExamController', 'academicYearResultTabulation'])->name('exams.academic-year-result-tabulation');
-
-                //result checker
-                Route::get('exams/result-checker', ['App\Http\Controllers\ExamController', 'resultChecker'])->name('exams.result-checker');
-
-                //exam routes
-                Route::resource('exams', ExamController::class);
-
-                //exam slot routes
-                Route::scopeBindings()->group(function () {
-                    Route::resource('exams/{exam}/manage/exam-slots', ExamSlotController::class);
-                });
-
-                //grade system routes
-                Route::resource('grade-systems', GradeSystemController::class);
-            });
+        //exam slot routes
+        Route::scopeBindings()->group(function () {
+            Route::resource('exams/{exam}/manage/exam-slots', ExamSlotController::class);
         });
+
+        //grade system routes
+        Route::resource('grade-systems', GradeSystemController::class);
 
         //student routes
         Route::resource('students', StudentController::class);
@@ -157,10 +130,6 @@ Route::middleware('auth:sanctum', 'verified', 'App\Http\Middleware\PreventLockAc
 
         //lock account route
         Route::post('users/lock-account/{user}', 'App\Http\Controllers\LockUserAccountController')->name('user.lock-account');
-
-        //academic year routes
-        Route::resource('academic-years', AcademicYearController::class);
-        Route::post('academic-years/set', ['App\Http\Controllers\AcademicYearController', 'setAcademicYear'])->name('academic-years.set-academic-year');
 
         //assign teachers to subject in class
         Route::get('subjects/assign-teacher', ['App\Http\Controllers\SubjectController', 'assignTeacherVIew'])->name('subjects.assign-teacher');

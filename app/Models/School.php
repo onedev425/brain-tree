@@ -39,28 +39,4 @@ class School extends Model
     {
         return $this->hasManyThrough(MyClass::class, ClassGroup::class);
     }
-
-    /**
-     * Get the AcademicYears for the School.
-     */
-    public function academicYears(): HasMany
-    {
-        return $this->hasMany(AcademicYear::class);
-    }
-
-    /**
-     * Get the academicYear associated with the School.
-     */
-    public function academicYear(): HasOne
-    {
-        return $this->hasOne(AcademicYear::class, 'id', 'academic_year_id');
-    }
-
-    /**
-     * Get the semester associated with the School.
-     */
-    public function semester(): HasOne
-    {
-        return $this->hasOne(Semester::class, 'id', 'semester_id');
-    }
 }

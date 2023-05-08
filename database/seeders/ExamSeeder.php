@@ -18,7 +18,6 @@ class ExamSeeder extends Seeder
             'id'          => 1,
             'name'        => 'Exam 1',
             'description' => 'Exam 1 description',
-            'semester_id' => '1',
             'start_date'  => '2020-01-01',
             'stop_date'   => '2020-01-31',
         ]);

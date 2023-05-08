@@ -304,46 +304,6 @@ class Menu extends Component
 //            ],
 //            [
 //                'type'    => 'menu-item',
-//                'text'    => 'Academic years',
-//                'icon'    => 'fas fa-calendar',
-//                'can'     => 'menu-academic-year',
-//                'submenu' => [
-//                    [
-//                        'type'  => 'menu-item',
-//                        'text'  => 'View academic years',
-//                        'route' => 'academic-years.index',
-//                        'can'   => 'read academic year',
-//                    ],
-//                    [
-//                        'type'  => 'menu-item',
-//                        'text'  => 'Create academic year',
-//                        'route' => 'academic-years.create',
-//                        'can'   => 'create academic year',
-//                    ],
-//                ],
-//            ],
-//            [
-//                'type'    => 'menu-item',
-//                'text'    => 'Semesters',
-//                'icon'    => 'fas fa-clock',
-//                'can'     => 'menu-semester',
-//                'submenu' => [
-//                    [
-//                        'type'  => 'menu-item',
-//                        'text'  => 'View semesters',
-//                        'route' => 'semesters.index',
-//                        'can'   => 'read semester',
-//                    ],
-//                    [
-//                        'type'  => 'menu-item',
-//                        'text'  => 'Create semester',
-//                        'route' => 'semesters.create',
-//                        'can'   => 'create semester',
-//                    ],
-//                ],
-//            ],
-//            [
-//                'type'    => 'menu-item',
 //                'text'    => 'Fees',
 //                'icon'    => 'fas fa-dollar',
 //                'can'     => 'menu-fee',
@@ -412,7 +372,6 @@ class Menu extends Component
 //                    ],
 //                ],
 //            ],
-//            ['header' => 'Academics', 'can' => 'header-academics'],
 //            [
 //                'type'    => 'menu-item',
 //                'text'    => 'Notices',
@@ -430,58 +389,6 @@ class Menu extends Component
 //                        'text'  => 'Create notice',
 //                        'route' => 'notices.create',
 //                        'can'   => 'create notice',
-//                    ],
-//                ],
-//            ],
-//            [
-//                'type'    => 'menu-item',
-//                'text'    => 'Syllabi',
-//                'icon'    => 'fas fa-list-alt',
-//                'can'     => 'menu-syllabus',
-//                'submenu' => [
-//                    [
-//                        'type'  => 'menu-item',
-//                        'text'  => 'View Syllabi',
-//                        'route' => 'syllabi.index',
-//                        'can'   => 'read syllabus',
-//                    ],
-//                    [
-//                        'type'  => 'menu-item',
-//                        'text'  => 'Create Syllabus',
-//                        'route' => 'syllabi.create',
-//                        'can'   => 'create syllabus',
-//                    ],
-//                ],
-//            ],
-//            [
-//                'type'    => 'menu-item',
-//                'text'    => 'Timetables',
-//                'icon'    => 'fas fa-tasks',
-//                'can'     => 'menu-timetable',
-//                'submenu' => [
-//                    [
-//                        'type'  => 'menu-item',
-//                        'text'  => 'View Timetables',
-//                        'route' => 'timetables.index',
-//                        'can'   => 'read timetable',
-//                    ],
-//                    [
-//                        'type'  => 'menu-item',
-//                        'text'  => 'Create Timetable',
-//                        'route' => 'timetables.create',
-//                        'can'   => 'create timetable',
-//                    ],
-//                    [
-//                        'type'  => 'menu-item',
-//                        'text'  => 'View custom items',
-//                        'route' => 'custom-timetable-items.index',
-//                        'can'   => 'read custom timetable items',
-//                    ],
-//                    [
-//                        'type'  => 'menu-item',
-//                        'text'  => 'Create Custom Items',
-//                        'route' => 'custom-timetable-items.create',
-//                        'can'   => 'create custom timetable items',
 //                    ],
 //                ],
 //            ],
@@ -513,18 +420,6 @@ class Menu extends Component
 //                        'type'  => 'menu-item',
 //                        'text'  => 'Exam tabulation sheet',
 //                        'route' => 'exams.tabulation',
-//                        'can'   => 'read exam',
-//                    ],
-//                    [
-//                        'type'  => 'menu-item',
-//                        'text'  => 'Semester Result Sheet',
-//                        'route' => 'exams.semester-result-tabulation',
-//                        'can'   => 'read exam',
-//                    ],
-//                    [
-//                        'type'  => 'menu-item',
-//                        'text'  => 'Academic Year Result Sheet',
-//                        'route' => 'exams.academic-year-result-tabulation',
 //                        'can'   => 'read exam',
 //                    ],
 //                    [

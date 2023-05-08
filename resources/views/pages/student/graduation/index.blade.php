@@ -1,7 +1,3 @@
-@php
-    $currentAcademicYear = auth()->user()->school->load('academicYear')->academicYear;
-@endphp
-
 @extends('layouts.app', ['breadcrumbs' => [
     ['href'=> route('dashboard'), 'text'=> 'Dashboard'],
     ['href'=> route('students.index'), 'text'=> 'Students'],

@@ -68,20 +68,4 @@ class MyClass extends Model
 
         return $students;
     }
-
-    /**
-     * Get all of the syllabi for the MyClass.
-     */
-    public function syllabi(): HasManyThrough
-    {
-        return $this->hasManyThrough(Syllabus::class, Subject::class);
-    }
-
-    /**
-     * Get all of the timetables for the MyClass.
-     */
-    public function timetables(): HasMany
-    {
-        return $this->hasMany(Timetable::class);
-    }
 }

@@ -17,12 +17,6 @@
                 'Phone', $school->phone
             ],
             [
-                'Current Academic Year', $school?->academicYear?->name 
-            ],
-            [
-                'Current Semester', $school?->semester?->name
-            ],
-            [
                 'School code', $school->code
             ],
         ]"/>

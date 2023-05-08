@@ -1,12 +1,9 @@
 <div class="card">
     <div class="card-header">
-        <h4 class="card-title">Exam list for semester {{ auth()->user()->school->semester->name}} </h4>
+        <h4 class="card-title">Exam list</h4>
     </div>
     <div class="card-body">
         <livewire:datatable  uniqueId="list-exams-table" :model="App\Models\Exam::class"
-        :filters="[
-            ['name' => 'where' , 'arguments' => ['semester_id' , auth()->user()->School->semester->id]]
-        ]"
         :columns="[
             ['property' => 'name'],
             ['property' => 'start_date'],

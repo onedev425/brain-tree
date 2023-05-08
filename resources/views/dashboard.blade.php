@@ -14,8 +14,6 @@
 
 @livewire('dashboard-data-cards')
 
-@livewire('set-academic-year')
-
 @if (auth()->user()->hasRole('student'))
     <a href="{{route('students.print-profile',auth()->user()->id)}}" aria-label="Download Profile">
         <div class="card bg-purple-500 dark:bg-purple-600 text-white md:text-2xl">

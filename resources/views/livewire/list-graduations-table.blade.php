@@ -1,6 +1,6 @@
 <div class="card">
     <div class="card-header">
-        <h4 class="card-title">Graduands in this academic year</h4>
+        <h4 class="card-title">Graduands in this year</h4>
     </div>
     <div class="card-body">
         <livewire:datatable :model="App\Models\User::class" uniqueId="students-list-table" 

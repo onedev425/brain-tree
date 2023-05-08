@@ -107,7 +107,6 @@ class SubjectService
      */
     public function deleteSubject(Subject $subject)
     {
-        $subject->timetableRecord()->delete();
         $subject->delete();
     }
 
