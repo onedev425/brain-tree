@@ -99,6 +99,9 @@ Route::middleware('auth:sanctum', 'verified', 'App\Http\Middleware\PreventLockAc
                 //fee routes
                 Route::resource('fees', FeeController::class);
 
+                // Pricing routes
+                Route::get('pricing', ['App\Http\Controllers\PricingController', 'index'])->name('pricing.index');
+
                 //syllabi route
                 Route::resource('syllabi', SyllabusController::class);
 
