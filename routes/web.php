@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return redirect()->route('dashboard');
+    return redirect()->route('profile.show');
 })->name('home');
 
 Route::get('/home', function () {
@@ -103,9 +103,11 @@ Route::middleware('auth:sanctum', 'verified', 'App\Http\Middleware\PreventLockAc
                 //fee routes
                 Route::resource('fees', FeeController::class);
 
-                // Pricing routes
+                //Setting routes
+                Route::get('settings', ['App\Http\Controllers\SettingController', 'index'])->name('settings.index');
+                
+                //Pricing routes
                 Route::get('pricing', ['App\Http\Controllers\PricingController', 'index'])->name('pricing.index');
-
 
                 //syllabi route
                 Route::resource('syllabi', SyllabusController::class);
