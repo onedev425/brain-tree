@@ -24,6 +24,10 @@ Route::get('/home', function () {
     return redirect()->route('dashboard');
 });
 
+//Paypal routes
+Route::get('/paypal/connect-success', ['App\Http\Controllers\PricingController', 'connectPaypalSuccess'])->name('paypal.callback');
+Route::get('/paypal/connect-cancel', ['App\Http\Controllers\PricingController', 'connectPaypalCancel'])->name('paypal.cancel');
+
 Route::middleware(['guest'])->group(function () {
     Route::get('/register', ['App\Http\Controllers\RegistrationController', 'registerView'])->name('register');
     Route::post('/register', ['App\Http\Controllers\RegistrationController', 'register']);

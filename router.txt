@@ -137,6 +137,7 @@
   GET|HEAD        dashboard/parents/{parent}/assign-student-to-parent parents.assign-student › ParentController@assig…
   POST            dashboard/parents/{parent}/assign-student-to-parent ................. ParentController@assignStudent
   GET|HEAD        dashboard/parents/{parent}/edit ............................... parents.edit › ParentController@edit
+
   GET|HEAD        dashboard/schools ........................................... schools.index › SchoolController@index
   POST            dashboard/schools ........................................... schools.store › SchoolController@store
   GET|HEAD        dashboard/schools/create .................................. schools.create › SchoolController@create
@@ -240,6 +241,7 @@
   GET|HEAD        logs/is-scan-required .......... blv.is-scan-required › Opcodes\LogViewer › IsScanRequiredController
   GET|HEAD        logs/scan-files ........................... blv.scan-files › Opcodes\LogViewer › ScanFilesController
   GET|HEAD        logs/search-progress ................ blv.search-more › Opcodes\LogViewer › SearchProgressController
+
   GET|HEAD        register ............................................ register › RegistrationController@registerView
   POST            register ........................................................... RegistrationController@register
   POST            reset-password ..................... password.update › Laravel\Fortify › NewPasswordController@store
@@ -262,5 +264,4 @@
   GET|HEAD        user/two-factor-secret-key two-factor.secret-key › Laravel\Fortify › TwoFactorSecretKeyController@s…
   POST            {locale}/livewire/message/{name} livewire.message-localized › Livewire\Controllers › HttpConnection…
 
-                                                                                                  Showing [262] routes
 

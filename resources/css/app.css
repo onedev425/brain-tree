@@ -7,6 +7,7 @@
 @layer components{
     body {
         font-family: 'Montserrat', sans-serif;
+        background-color: white !important;
     }
     .beautify-scrollbar::-webkit-scrollbar{
         width: 5px;
@@ -22,19 +23,19 @@
     }
 
     .card {
-        @apply  bg-white dark:bg-gray-800 rounded shadow border my-6
+        @apply  bg-white dark:bg-gray-800 rounded shadow border my-6 p-5 md:p-10
     }
 
     .card-header {
-        @apply px-4 md:px-7 py-2 border-b
+        @apply font-bold;
     }
 
     .card-body {
-        @apply px-4 md:px-7 py-7
+        /*@apply px-4 md:px-7 py-7*/
     }
 
     .card-title {
-        @apply md:text-lg capitalize
+        @apply md:text-xl capitalize
     }
 
     .sidebar-expand {
