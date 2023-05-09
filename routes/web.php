@@ -24,6 +24,10 @@ Route::get('/home', function () {
     return redirect()->route('dashboard');
 });
 
+//Paypal routes
+Route::get('/paypal/connect-success', ['App\Http\Controllers\PricingController', 'connectPaypalSuccess'])->name('paypal.callback');
+Route::get('/paypal/connect-cancel', ['App\Http\Controllers\PricingController', 'connectPaypalCancel'])->name('paypal.cancel');
+
 Route::middleware(['guest'])->group(function () {
     Route::get('/register', ['App\Http\Controllers\RegistrationController', 'registerView'])->name('register');
     Route::post('/register', ['App\Http\Controllers\RegistrationController', 'register']);
@@ -101,6 +105,7 @@ Route::middleware('auth:sanctum', 'verified', 'App\Http\Middleware\PreventLockAc
 
                 // Pricing routes
                 Route::get('pricing', ['App\Http\Controllers\PricingController', 'index'])->name('pricing.index');
+
 
                 //syllabi route
                 Route::resource('syllabi', SyllabusController::class);

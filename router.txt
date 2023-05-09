@@ -240,6 +240,8 @@
   GET|HEAD        logs/is-scan-required .......... blv.is-scan-required › Opcodes\LogViewer › IsScanRequiredController
   GET|HEAD        logs/scan-files ........................... blv.scan-files › Opcodes\LogViewer › ScanFilesController
   GET|HEAD        logs/search-progress ................ blv.search-more › Opcodes\LogViewer › SearchProgressController
+  GET|HEAD        paypal/connect-cancel ........................................ PricingController@connectPaypalCancel
+  GET|HEAD        paypal/connect-success ...................................... PricingController@connectPaypalSuccess
   GET|HEAD        register ............................................ register › RegistrationController@registerView
   POST            register ........................................................... RegistrationController@register
   POST            reset-password ..................... password.update › Laravel\Fortify › NewPasswordController@store
@@ -262,5 +264,5 @@
   GET|HEAD        user/two-factor-secret-key two-factor.secret-key › Laravel\Fortify › TwoFactorSecretKeyController@s…
   POST            {locale}/livewire/message/{name} livewire.message-localized › Livewire\Controllers › HttpConnection…
 
-                                                                                                  Showing [262] routes
+                                                                                                  Showing [264] routes
 
