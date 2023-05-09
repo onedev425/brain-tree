@@ -1,4 +1,4 @@
-<div class="absolute text-white border border-1 -mt-16 ml-5 py-1 rounded md:hidden">
+<div class="absolute text-white border border-1 -mt-16 ml-5 py-1 rounded md:hidden z-40">
     <button role="button" class="text-2xl mx-3 text-dark" @click="menuOpen = !menuOpen">
         <p class="sr-only">Menu</p>
         <i class="fa fa-bars" aria-hidden="true"></i>
