@@ -31,7 +31,7 @@ class Menu extends Component
                               </g>
                             </svg>',
                 'text'  => 'Courses',
-                'route' => 'exams.index',
+                'route' => 'teacher.course.index',
             ],
             [
                 'type'  => 'menu-item',
