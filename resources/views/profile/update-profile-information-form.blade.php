@@ -44,7 +44,7 @@
     </x-slot>
     <x-slot name="actions">
         <x-button class="w-6/12 lg:w-3/12">
-            {{ __('Save123') }}
+            {{ __('Save') }}
         </x-button>
     </x-slot>
 </x-partials.form-section>
