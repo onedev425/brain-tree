@@ -41,4 +41,7 @@
     .sidebar-expand {
         width: 32rem;
     }
+    .d-block {
+        display: block !important;
+    }
 }
