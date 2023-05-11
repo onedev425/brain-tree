@@ -65,15 +65,11 @@ class ExamTest extends TestCase
             ->post('/dashboard/exams', [
                 'name'        => 'test exam',
                 'description' => 'test description',
-                'start_date'  => '2020-01-01',
-                'stop_date'   => '2020-01-01',
             ]);
 
         $this->assertDatabaseHas('exams', [
             'name'        => 'test exam',
             'description' => 'test description',
-            'start_date'  => '2020-01-01',
-            'stop_date'   => '2020-01-01',
         ]);
     }
 
@@ -104,8 +100,6 @@ class ExamTest extends TestCase
             ->put("/dashboard/exams/$exam->id", [
                 'name'        => 'test',
                 'description' => 'test',
-                'start_date'  => '2018-01-01',
-                'stop_date'   => '2018-01-01',
             ])
             ->assertForbidden();
     }
@@ -119,16 +113,12 @@ class ExamTest extends TestCase
             ->put("/dashboard/exams/$exam->id", [
                 'name'        => 'test',
                 'description' => 'test',
-                'start_date'  => '2018-01-01',
-                'stop_date'   => '2018-01-02',
             ]);
 
         $this->assertDatabaseHas('exams', [
             'id'          => $exam->id,
             'name'        => 'test',
             'description' => 'test',
-            'start_date'  => '2018-01-01',
-            'stop_date'   => '2018-01-02',
         ]);
     }
 

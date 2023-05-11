@@ -6,8 +6,6 @@
         <livewire:datatable  uniqueId="list-exams-table" :model="App\Models\Exam::class"
         :columns="[
             ['property' => 'name'],
-            ['property' => 'start_date'],
-            ['property' => 'stop_date'],
             ['property' => 'active', 'type' => 'boolean-switch', 'action' => 'exams.set-active-status', 'field' => 'status', 'true-statement' => 'Active', 'false-statement' => 'Inactive',  'can' => 'update exam'],
             ['property' => 'publish_result','type' => 'boolean-switch', 'action' => 'exams.set-publish-result-status', 'field' => 'status', 'true-statement' => 'Published', 'false-statement' => 'Not published',  'can' => 'update exam'],
             ['name' => 'Actions', 'type' => 'dropdown' , 'links' => [

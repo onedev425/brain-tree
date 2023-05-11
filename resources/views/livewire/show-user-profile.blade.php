@@ -16,7 +16,6 @@
                ['state' , $user->state],
                ['City' , $user->city],
                ['Address' , $user->address],
-               ['Religion' , $user->religion],
                ['Phone' , $user->phone],
 
          ]"/>

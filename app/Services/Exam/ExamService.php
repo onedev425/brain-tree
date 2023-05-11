@@ -43,8 +43,6 @@ class ExamService
         $exam = Exam::create([
             'name'        => $records['name'],
             'description' => $records['description'],
-            'start_date'  => $records['start_date'],
-            'stop_date'   => $records['stop_date'],
         ]);
 
         return $exam;
@@ -61,8 +59,6 @@ class ExamService
     {
         $exam->name = $records['name'];
         $exam->description = $records['description'];
-        $exam->start_date = $records['start_date'];
-        $exam->stop_date = $records['stop_date'];
         $exam->save();
     }
 
