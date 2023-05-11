@@ -65,8 +65,18 @@ class TeacherCourseMainForm extends Component
         $publish_courses[] = $course;
 
 
+        $draft_courses = [];
+        $course = new \stdClass();
+        $course->title = 'AWS and Heroku';
+        $course->created_at = 'May 20, 2021 4:32 am';
+        $course->duration = '12h 30m';
+        $course->image = asset('upload/course/course-7.png');
+        $course->price = 140;
+        $draft_courses[] = $course;
+
 
         $data['publish_courses'] = $publish_courses;
+        $data['draft_courses'] = $draft_courses;
         return view('livewire.teacher-course-main-form', $data);
     }
 }
