@@ -45,7 +45,6 @@ class AdminTest extends TestCase
             'password'              => 'password',
             'password_confirmation' => 'password',
             'gender'                => 'male',
-            'nationality'           => 'nigeria',
             'state'                 => 'lagos',
             'city'                  => 'lagos',
             'address'               => 'test address',

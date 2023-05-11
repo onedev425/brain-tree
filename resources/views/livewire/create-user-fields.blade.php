@@ -31,9 +31,6 @@
             <option value="{{$religion}}"  >{{$religion}}</option>
         @endforeach
     </x-select>
-    <div class="col-span-8">
-        <livewire:nationality-and-state-input-fields />
-    </div>
     <x-input id="city" name="city" label="City *" placeholder="{{$role}}'s city" group-class="col-span-4"/>
     <script>
         function showImage() {

@@ -2,7 +2,6 @@
 
 namespace App\Traits;
 
-use App\Models\ExamRecord;
 use App\Models\GradeSystem;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Collection as SupportCollection;
@@ -38,9 +37,6 @@ trait MarkTabulationTrait
         //create tabulation container variable
         $tabulatedRecords = [];
 
-        //get all relevant exam records
-        $examRecords = ExamRecord::whereIn('subject_id', $subjects->pluck('id'))->whereIn('user_id', $students->pluck('id'))->get();
-
         $grades = GradeSystem::get();
         $totalMarksAttainableInEachSubject = $examSlots->sum(['total_marks']);
 
@@ -59,14 +55,6 @@ trait MarkTabulationTrait
             //set student name and admission number
             $tabulatedRecords[$student->id]['student_name'] = $student->name;
             $tabulatedRecords[$student->id]['admission_number'] = $student->studentRecord->admission_number;
-
-            //loop through all subjects and add all marks
-            foreach ($subjects as $subject) {
-                $tabulatedRecords[$student->id]['student_marks'][$subject->id] = $examRecords->where('user_id', $student->id)->whereIn('exam_slot_id', $examSlots->pluck('id'))->where('subject_id', $subject->id)->pluck('student_marks')->sum();
-
-                //array used for calculating total marks
-                $totalSubjectMarks[] = $tabulatedRecords[$student->id]['student_marks'][$subject->id];
-            }
 
             //turned to object
             $totalSubjectMarks = collect($totalSubjectMarks)->sum();

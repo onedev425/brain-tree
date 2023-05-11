@@ -11,11 +11,10 @@ return new class() extends Migration {
             $table->id();
             $table->string('name');
             $table->longText('description')->nullable();
-            $table->foreignId('semester_id')->references('id')->on('semesters')->onDelete('cascade')->onUpdate('cascade');
-            $table->date('start_date');
-            $table->date('stop_date');
             $table->boolean('active')->default(false);
-            $table->boolean('publish_result')->default(false);
+            $table->foreignId('subject_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignId('user_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
+            $table->enum('type', ['multiple', 'single', 'true-false']);
             $table->timestamps();
         });
     }

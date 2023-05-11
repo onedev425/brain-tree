@@ -56,13 +56,6 @@ Route::middleware('auth:sanctum', 'verified', 'App\Http\Middleware\PreventLockAc
 
         Route::post('account-applications/change-status/{applicant}', ['App\Http\Controllers\AccountApplicationController', 'changeStatus']);
 
-        //promotion routes
-        Route::get('students/promotions', ['App\Http\Controllers\PromotionController', 'index'])->name('students.promotions');
-        Route::get('students/promote', ['App\Http\Controllers\PromotionController', 'promoteView'])->name('students.promote');
-        Route::post('students/promote', ['App\Http\Controllers\PromotionController', 'promote']);
-        Route::get('students/promotions/{promotion}', ['App\Http\Controllers\PromotionController', 'show'])->name('students.promotions.show');
-        Route::delete('students/promotions/{promotion}/reset', ['App\Http\Controllers\PromotionController', 'resetPromotion'])->name('students.promotions.reset');
-
         //graduation routes
         Route::get('students/graduations', ['App\Http\Controllers\GraduationController', 'index'])->name('students.graduations');
         Route::get('students/graduate', ['App\Http\Controllers\GraduationController', 'graduateView'])->name('students.graduate');
@@ -89,8 +82,6 @@ Route::middleware('auth:sanctum', 'verified', 'App\Http\Middleware\PreventLockAc
 
         // set publish result status
         Route::post('exams/{exam}/set-publish-result-status', ['App\Http\Controllers\ExamController', 'setPublishResultStatus'])->name('exams.set-publish-result-status');
-        //manage exam record
-        Route::resource('exams/exam-records', ExamRecordController::class);
 
         //exam tabulation sheet
         Route::get('exams/tabulation-sheet', ['App\Http\Controllers\ExamController', 'examTabulation'])->name('exams.tabulation');

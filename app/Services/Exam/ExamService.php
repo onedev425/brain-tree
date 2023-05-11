@@ -11,18 +11,12 @@ use Illuminate\Database\Eloquent\Collection;
 class ExamService
 {
     /**
-     * @var ExamRecordService
-     */
-    protected $examRecordService;
-
-    /**
      * @var ExamSlotService
      */
     protected $examSlotService;
 
-    public function __construct(ExamRecordService $examRecordService, ExamSlotService $examSlotService)
+    public function __construct(ExamSlotService $examSlotService)
     {
-        $this->examRecordService = $examRecordService;
         $this->examSlotService = $examSlotService;
     }
 
@@ -127,16 +121,4 @@ class ExamService
 
         return $totalMarks;
     }
-
-    /**
-     * Calculate total marks attainale accross all subjects in an exam.
-     *
-     *
-     * @return int
-     */
-    public function calculateStudentTotalMarksInSubject(Exam $exam, User $user, Subject $subject)
-    {
-        return $this->examRecordService->getAllUserExamRecordInExamForSubject($exam, $user->id, $subject->id)->pluck('student_marks')->sum();
-    }
-
 }

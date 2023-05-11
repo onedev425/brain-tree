@@ -13,7 +13,7 @@ class Subject extends Model
     use SoftDeletes;
 
     protected $fillable = [
-        'name', 'short_name', 'school_id', 'my_class_id',
+        'name', 'short_name', 'school_id'
     ];
 
     /**
@@ -24,5 +24,15 @@ class Subject extends Model
     public function teachers()
     {
         return $this->belongsToMany(User::class, 'subject_user');
+    }
+
+    /**
+     * The course for the subject
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function course()
+    {
+        return $this->hasOne(Course::class, 'subject_course');
     }
 }

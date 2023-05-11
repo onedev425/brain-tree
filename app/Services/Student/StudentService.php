@@ -4,7 +4,6 @@ namespace App\Services\Student;
 
 use App\Exceptions\EmptyRecordsException;
 use App\Exceptions\InvalidValueException;
-use App\Models\Promotion;
 use App\Models\School;
 use App\Models\StudentRecord;
 use App\Models\User;

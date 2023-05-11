@@ -13,7 +13,6 @@ class ResultChecker extends Component
 
     public $exams;
 
-    public $examRecords;
 
     public $subjects;
 

@@ -14,10 +14,10 @@ class Exam extends Model
     protected $fillable = [
         'name',
         'description',
-        'start_date',
-        'stop_date',
+        'subject_id',
+        'type',
+        'user_id',
         'active',
-        'publish_result',
     ];
 
     /**
@@ -26,9 +26,6 @@ class Exam extends Model
      * @var array<string, string>
      */
     protected $casts = [
-        'email_verified_at' => 'datetime',
-        'start_date'        => 'date:Y-m-d',
-        'stop_date'         => 'date:Y-m-d',
         'active'            => 'boolean',
         'publish_result'    => 'boolean',
     ];
