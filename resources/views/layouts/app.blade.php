@@ -23,10 +23,10 @@
         </a>
         <div x-data="{ menuOpen: window.innerWidth >=  1024 ? $persist(false) : false }">
             <livewire:layouts.header/>
-            <div class="lg:flex lg:flex-cols text-gray-900 bg-gray-100 dark:bg-gray-700 dark:text-gray-50 min-h-screen" >
+            <div class="md:flex md:flex-cols text-gray-900 bg-gray-100 dark:bg-gray-700 dark:text-gray-50 min-h-screen" >
                 <livewire:layouts.menu />
                 <div class="w-full max-w-full overflow-scroll beautify-scrollbar">
-                    <main class="p-4" id="main">
+                    <main class="p-3 md:px-8 md:py-4" id="main">
                         @yield('content')
                     </main>
                 </div>

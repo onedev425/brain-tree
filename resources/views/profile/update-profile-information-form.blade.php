@@ -1,13 +1,21 @@
 <x-partials.form-section submit="updateProfileInformation">
+
     <x-slot name="form">
             <x-action-message on="saved">
                 {{ __('Saved.') }}
             </x-action-message>
+        <div class="absolute -mt-28 md:-mt-32 lg:-mt-36 md:-ml-10 text-center md:text-left w-10/12 md:w-auto">
+            <h1 class="text-xl md:text-3xl capitalize text-white font-semibold">{{ auth()->user()->hasRole('student') ? __('My Account') : __('Instructor Account')}}</h1>
+        </div>
+        <h3 class="text-xl md:text-2xl font-bold" group-class="col-span-12" >
+            {{ __('Account') }}
+        </h3>
         <div class="md:grid grid-cols-12 gap-4">
+
             <x-input label="Name" id="name" name="name" placeholder="Your First Name, Last Name" group-class="col-span-6" wire:model="state.name"/>
             <x-input label="Email" id="email" name="email" placeholder="Your Email Address" group-class="col-span-6" wire:model="state.email"/>
             <x-input type="date" id="birthday" name="birthday" placeholder="Your birthday..." label="Birthday *" group-class="col-span-6" wire:model="state.birthday"/>
-    
+
             <x-select id="gender" name="gender" label="Gender *" group-class="col-span-6" wire:model="state.gender">
                 @php ($genders = ['Male', 'Female'])
                 @foreach ($genders as $gender)

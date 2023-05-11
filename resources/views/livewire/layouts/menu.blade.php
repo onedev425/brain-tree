@@ -1,10 +1,20 @@
-<nav class="fixed lg:sticky inset-0 h-screen w-full lg:sidebar-expand lg:-mt-40 lg:ml-14 flex duration-250 transition-all z-40">
-    <div class="card mt-0">
+<div class="absolute text-white border border-1 -mt-16 ml-5 py-1 rounded md:hidden z-40">
+    <button role="button" class="text-2xl mx-3 text-dark" @click="menuOpen = !menuOpen">
+        <p class="sr-only">Menu</p>
+        <i class="fa fa-bars" aria-hidden="true"></i>
+    </button>
+</div>
+<nav class="hidden md:block md:sticky inset-0 h-screen w-full md:sidebar-expand md:-mt-14 lg:-mt-24 md:ml-10 lg:ml-14 flex duration-250 transition-all z-40" :class="{'d-block absolute' : menuOpen == true}">
+    <div class="card mt-0 sm:p-10 md:p-4">
         <div class="card-body">
-            <aside class="md:w-3/6 lg:w-full bg-white beautify-scrollbar text-black overflow-scroll">
+            <button role="button" class="text-2xl mx-3 text-gray-400 float-right border border-1 rounded-full px-4 py-2 shadow -mt-2 -mr-4 md:hidden" @click="menuOpen = !menuOpen">
+                <p class="sr-only">Menu</p>
+                <i class="fa fa-close" aria-hidden="true"></i>
+            </button>
+            <aside class="w-full bg-white beautify-scrollbar text-black overflow-scroll">
                 <div class="p-3">
                     <div class="text-center mb-10">
-                        <img class="w-9/12 rounded-full m-auto bg-gray-700 hidden md:block mb-5" src="{{ @asset('images/logo/avatar.png') }}" alt="avatar" >
+                        <img class="w-9/12 rounded-full m-auto bg-gray-700 hidden sm:block mb-5" src="{{ @asset('images/logo/avatar.png') }}" alt="avatar" >
                         <div class="text-4xl font-bold mb-3">{{ auth()->user()->name }}</div>
                         <div class="text-xl">{{ auth()->user()->hasRole('student') ? 'Student' : 'Teacher' }}</div>
                     </div>
