@@ -28,7 +28,7 @@
                                     }" >
                                     @if (!isset($menuItem['submenu']))
                                         <a  class="flex gap-2 p-3 px-4 my-0 rounded-xl hover:bg-red-100" href="{{route($menuItem['route'])}}"
-                                           :class="{'bg-red-700 hover:bg-red-400 hover:bg-opacity-100 text-white' : {{Route::currentRouteName() == $menuItem['route'] ? '1' : '0'}}}" aria-label="{{$menuItem['text']}}"
+                                           :class="{'bg-red-700 hover:bg-red-400 hover:bg-opacity-100 text-white' : {{Route::currentRouteName() == $menuItem['route'] || in_array(Route::currentRouteName(), $menuItem['routes']) ? '1' : '0'}}}" aria-label="{{$menuItem['text']}}"
                                             title="{{$menuItem['text']}}"
                                         >
                                         <span class="inline-block w-10">{!! $menuItem['icon'] !!}</span>
