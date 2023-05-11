@@ -20,9 +20,18 @@
                     </a>
                 </div>
 
-                <div style="margin-top: 40px">
+                <div class="mt-8 md:mt-0 md:grid md:grid-cols-2 md:gap-4 md:pt-2 lg:grid-cols-3 lg:gap-10 lg:p-4 xl:grid-cols-4 xl:gap-14 xl:p-8 ">
                     @if ($activeTab === 'publish')
-                        <livewire:teacher-course-block />
+                        @foreach($publish_courses as $course)
+                            @livewire('teacher-course-block', [
+                                'title' => $course->title,
+                                'image' => $course->image,
+                                'created_at' => $course->created_at,
+                                'duration' => $course->duration,
+                                'price' => $course->price,
+                            ])
+                        @endforeach
+
                     @else
                         <livewire:teacher-course-block />
                     @endif
