@@ -3,11 +3,11 @@
         <h1 class="text-xl md:text-3xl capitalize text-white font-semibold">{{__('Course')}}</h1>
     </div>
     <div class="block">
-        <div class="float-right">
-            <x-button class="">
+        <div class="float-right mb-2">
+            <a href="{{ route('course.create') }}" class="bg-red-600 uppercase hover:bg-opacity-90 active:bg-opacity-70 text-white py-2 px-4 border-2 rounded-lg my-3">
                 <i class="fa fa-plus" aria-hidden="true"></i>
                 {{ __('Create new course') }}
-            </x-button>
+            </a>
         </div>
         <div class="card float-left w-full mt-2">
             <div class="card-body">

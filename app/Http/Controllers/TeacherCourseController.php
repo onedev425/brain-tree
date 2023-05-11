@@ -10,4 +10,9 @@ class TeacherCourseController extends Controller
     {
         return view('pages.teacher-course.index');
     }
+
+    public function create()
+    {
+        return view('pages.teacher-course.new');
+    }
 }
