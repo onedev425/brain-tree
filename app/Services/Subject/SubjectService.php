@@ -26,7 +26,7 @@ class SubjectService
      */
     public function getAllSubjects()
     {
-        return Subject::where(['school_id' => auth()->user()->school_id])->get();
+        return Subject::get();
     }
 
     /**
@@ -51,7 +51,6 @@ class SubjectService
     {
         $subject = Subject::firstOrCreate(['name' => $data['name']], [
             'short_name'  => $data['short_name'],
-            'school_id'   => auth()->user()->school_id,
         ]);
 
         if (!$subject->wasRecentlyCreated) {

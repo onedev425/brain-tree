@@ -24,11 +24,9 @@ class UserSeeder extends Seeder
             'name'              => 'John Doe',
             'email'             => 'super@admin.com',
             'password'          => Hash::make('password'),
-            'school_id'         => 1,
             'address'           => 'super admin street',
             'birthday'          => '22/04/04',
             'email_verified_at' => now(),
-            'gender'            => 'male',
         ]);
 
         $superAdmin->assignRole('super-admin');
@@ -39,11 +37,9 @@ class UserSeeder extends Seeder
             'name'              => 'Jane Doe',
             'email'             => 'admin@admin.com',
             'password'          => Hash::make('password'),
-            'school_id'         => 1,
             'address'           => 'admin street',
             'birthday'          => '22/04/04',
             'email_verified_at' => now(),
-            'gender'            => 'male',
 
         ]);
 
@@ -54,11 +50,9 @@ class UserSeeder extends Seeder
             'name'              => 'John Doe',
             'email'             => 'teacher@teacher.com',
             'password'          => Hash::make('password'),
-            'school_id'         => 1,
             'address'           => 'teacher street',
             'birthday'          => '22/04/04',
             'email_verified_at' => now(),
-            'gender'            => 'male',
 
         ]);
 
@@ -73,11 +67,9 @@ class UserSeeder extends Seeder
             'name'              => 'Jane Doe',
             'email'             => 'student@student.com',
             'password'          => Hash::make('password'),
-            'school_id'         => 1,
             'address'           => 'student street',
             'birthday'          => '22/04/04',
             'email_verified_at' => now(),
-            'gender'            => 'male',
         ]);
         $student->studentRecord()->create([
             'admission_date'   => '22/04/04',

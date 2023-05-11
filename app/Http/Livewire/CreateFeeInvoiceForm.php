@@ -22,7 +22,7 @@ class CreateFeeInvoiceForm extends Component
     {
         $this->addedFees = collect();
         $this->addedStudents = collect();
-        $this->feeCategories = FeeCategory::where('school_id', auth()->user()->school_id)->get();
+        $this->feeCategories = FeeCategory::get();
 
         if ($this->feeCategories->isNotEmpty()) {
             $this->feeCategory = $this->feeCategories->first()->id;
@@ -55,7 +55,7 @@ class CreateFeeInvoiceForm extends Component
 
     public function addStudent($student = null)
     {
-        $student = User::students()->inSchool()->find($student);
+        $student = User::students()->find($student);
 
         if ($student != null && $student->exists()) {
             $this->addedStudents = $this->addedStudents->push($student->load('studentRecord'));
@@ -78,7 +78,7 @@ class CreateFeeInvoiceForm extends Component
     {
         $oldRecords = collect(old('records'));
         if ($oldRecords->isNotEmpty()) {
-            $fees = Fee::whereRelation('feeCategory', 'school_id', auth()->user()->school_id)->whereIn('id', $oldRecords->pluck('fee_id'))->get();
+            $fees = Fee::whereIn('id', $oldRecords->pluck('fee_id'))->get();
 
             $this->addedFees = $this->addedFees->merge($fees);
 
@@ -87,7 +87,7 @@ class CreateFeeInvoiceForm extends Component
 
         $oldStudents = collect(old('users'));
         if ($oldStudents->isNotEmpty()) {
-            $students = User::students()->inSchool()->whereIn('id', $oldStudents)->get();
+            $students = User::students()->whereIn('id', $oldStudents)->get();
 
             $this->addedStudents = $this->addedStudents->merge($students);
         }

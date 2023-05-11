@@ -28,7 +28,7 @@ class AccountApplicationService
     }
 
     /**
-     * Get all open applicants application records in the school.
+     * Get all open applicants application records.
      *
      * @return User
      */
@@ -44,7 +44,7 @@ class AccountApplicationService
     }
 
     /**
-     * Get all  applicants application records in the school.
+     * Get all  applicants application records.
      *
      * @return User
      */

@@ -3,7 +3,7 @@
         <h2 class="card-title">Students list</h2>
     </div>
     <div class="card-body">
-        <livewire:datatable :model="App\Models\User::class" uniqueId="admins-list-table" :filters="[['name' => 'role', 'arguments' => ['admin']], ['name' => 'inSchool'], ['name' => 'orderBy' , 'arguments' => ['name']]]" :columns="[
+        <livewire:datatable :model="App\Models\User::class" uniqueId="admins-list-table" :filters="[['name' => 'role', 'arguments' => ['admin']], ['name' => 'orderBy' , 'arguments' => ['name']]]" :columns="[
             ['property' => 'name'] , 
             ['property' => 'email'] ,
             ['property' => 'gender'] ,

@@ -19,13 +19,11 @@ class SubjectSeeder extends Seeder
         ], [
             'name'        => 'Maths',
             'short_name'  => 'mat',
-            'school_id'   => 1,
         ]);
 
         Subject::firstOrCreate([
             'name'        => 'English',
             'short_name'  => 'eng',
-            'school_id'   => 1,
         ]);
     }
 }

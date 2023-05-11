@@ -27,9 +27,7 @@ class UserFactory extends Factory
             'address'           => $this->faker->address(),
             'birthday'          => $this->faker->date(),
             'address'           => $this->faker->address(),
-            'school_id'         => 1,
             'religion'          => 'christian',
-            'gender'            => 'male',
         ];
     }
 

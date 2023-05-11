@@ -19,7 +19,6 @@
                 :wire:key="Str::Random(10)"
                 uniqueId="list-fee-invoices"
                 :filters="array_merge([
-                    ['name' => 'whereRelation', 'arguments' => ['user', 'school_id', auth()->user()->school_id]],
                     ['name' => 'whereYear', 'arguments' => ['due_date', $year]],
                     ['name' => 'orderBy', 'arguments' => ['due_date', 'desc']]
                 ], $queryAddon)"

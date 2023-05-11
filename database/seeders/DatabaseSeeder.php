@@ -15,7 +15,6 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             RunInProductionSeeder::class,
-            SchoolSeeder::class,
             UserSeeder::class,
             StudentSeeder::class,
             SubjectSeeder::class,

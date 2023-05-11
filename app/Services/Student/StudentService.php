@@ -4,7 +4,6 @@ namespace App\Services\Student;
 
 use App\Exceptions\EmptyRecordsException;
 use App\Exceptions\InvalidValueException;
-use App\Models\School;
 use App\Models\StudentRecord;
 use App\Models\User;
 use App\Services\MyClass\MyClassService;
@@ -27,7 +26,7 @@ class StudentService
     }
 
     /**
-     * Get all students in school.
+     * Get all students.
      *
      * @return \Illuminate\Database\Eloquent\Collection
      */
@@ -37,7 +36,7 @@ class StudentService
     }
 
     /**
-     * Get all active students in school.
+     * Get all active students.
      *
      * @return \Illuminate\Database\Eloquent\Collection
      */
@@ -51,7 +50,7 @@ class StudentService
     }
 
     /**
-     * Get all graduated students in school.
+     * Get all graduated students.
      *
      * @return \Illuminate\Database\Eloquent\Collection
      */
@@ -136,28 +135,6 @@ class StudentService
     }
 
     /**
-     * Generate admission number.
-     *
-     * @return string
-     */
-    public function generateAdmissionNumber($schoolId = null)
-    {
-        $schoolInitials = (School::find($schoolId) ?? auth()->user()->school)->initials;
-        $schoolInitials != null && $schoolInitials .= '/';
-        $currentYear = date('y');
-        do {
-            $admissionNumber = "$schoolInitials"."$currentYear/".\mt_rand('100000', '999999');
-            if (StudentRecord::where('admission_number', $admissionNumber)->count() <= 0) {
-                $uniqueAdmissionNumberFound = true;
-            } else {
-                $uniqueAdmissionNumberFound = false;
-            }
-        } while ($uniqueAdmissionNumberFound == false);
-
-        return $admissionNumber;
-    }
-
-    /**
      * Print student profile.
      *
      *
@@ -195,18 +172,5 @@ class StudentService
                 ]);
             }
         }
-    }
-
-    /**
-     * Reset Graduation.
-     *
-     *
-     * @return void
-     */
-    public function resetGraduation(User $student)
-    {
-        $student->graduatedStudentRecord()->update([
-            'is_graduated' => false,
-        ]);
     }
 }

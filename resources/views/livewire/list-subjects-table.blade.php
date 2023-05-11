@@ -31,7 +31,7 @@
                 </div>
             @endisset
         @else
-            <p>No in this school</p>
+            <p>No Students</p>
         @endif
     </div>
 </div>

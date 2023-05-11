@@ -8,10 +8,6 @@
 
 @section('content')
 
-@can('set school')
-    @livewire('set-school')
-@endcan
-
 @livewire('dashboard-data-cards')
 
 @if (auth()->user()->hasRole('student'))

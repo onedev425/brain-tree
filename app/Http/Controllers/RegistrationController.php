@@ -34,8 +34,6 @@ class RegistrationController extends Controller
 
     public function register(RegistrationRequest $request)
     {
-        $request['school_id'] = 1;
-
         $user = $this->userService->createUser($request);
 
         //assign applicant role

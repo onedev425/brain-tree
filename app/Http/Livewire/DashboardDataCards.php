@@ -2,7 +2,6 @@
 
 namespace App\Http\Livewire;
 
-use App\Models\School;
 use App\Models\User;
 use Livewire\Component;
 
@@ -14,9 +13,8 @@ class DashboardDataCards extends Component
 
     public function mount()
     {
-        $this->schools = School::count();
-        $this->students = User::inSchool()->students()->activeStudents()->count();
-        $this->teachers = User::inSchool()->role('teacher')->count();
+        $this->students = User::students()->activeStudents()->count();
+        $this->teachers = User::role('teacher')->count();
     }
 
     public function render()

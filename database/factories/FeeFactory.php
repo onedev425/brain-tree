@@ -17,7 +17,7 @@ class FeeFactory extends Factory
      */
     public function definition(): array
     {
-        $feeCategory = FeeCategory::query()->where('school_id', 1)->inRandomOrder()->first();
+        $feeCategory = FeeCategory::query()->inRandomOrder()->first();
 
         return [
             'fee_Category_id' => $feeCategory->id,

@@ -117,35 +117,6 @@ class Menu extends Component
 //                'text'  => 'User Profile',
 //                'route' => 'profile.show',
 //            ],
-//            ['header' => 'Multi Schools Management', 'can' => 'header-schools'],
-//            [
-//                'type' => 'menu-item',
-//                'text' => 'Schools',
-//                'icon' => 'fas fa-school',
-//                'can'  => 'menu-school',
-//
-//                'submenu' => [[
-//                    'type'  => 'menu-item',
-//                    'text'  => 'View Schools',
-//                    'route' => 'schools.index',
-//                    'can'   => 'read school',
-//                ],
-//                    [
-//                        'type'  => 'menu-item',
-//                        'text'  => 'Create School',
-//                        'route' => 'schools.create',
-//                        'can'   => 'create school',
-//                    ],
-//                ],
-//            ],
-//            ['header' => 'Administration', 'can' => 'header-administrate'],
-//            [
-//                'type'  => 'menu-item',
-//                'icon'  => 'fas fa-cog',
-//                'text'  => 'School Settings',
-//                'route' => 'schools.settings',
-//                'can'   => 'manage school settings',
-//            ],
 //            [
 //                'type'    => 'menu-item',
 //                'text'    => 'Students',

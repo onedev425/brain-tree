@@ -7,7 +7,7 @@
             <x-display-validation-errors/>
         </div>
         @unlessrole(['student'])
-            <livewire:datatable :model="App\Models\User::class" uniqueId="students-list-table" :filters="[['name' => 'students'], ['name' => 'inSchool'], ['name' => 'orderBy' , 'arguments' => ['name']], ['name' => 'has', 'arguments' => ['StudentRecord']]]" :columns="[
+            <livewire:datatable :model="App\Models\User::class" uniqueId="students-list-table" :filters="[['name' => 'students'], ['name' => 'orderBy' , 'arguments' => ['name']], ['name' => 'has', 'arguments' => ['StudentRecord']]]" :columns="[
                 ['property' => 'name'] , 
                 ['property' => 'email'] , 
                 ['property' => 'admission_number' ,'relation' => 'studentRecord'] , 

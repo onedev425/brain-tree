@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Traits\InSchool;
 use Carbon\Carbon;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Builder;
@@ -27,7 +26,6 @@ class User extends Authenticatable implements MustVerifyEmail
     use Notifiable;
     use TwoFactorAuthenticatable;
     use HasRoles;
-    use InSchool;
 
     /**
      * The attributes that are mass assignable.
@@ -42,8 +40,6 @@ class User extends Authenticatable implements MustVerifyEmail
         'address',
         'religion',
         'phone',
-        'gender',
-        'school_id',
     ];
 
     /**
@@ -116,14 +112,6 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
-     * Get the school that owns the User.
-     */
-    public function school(): BelongsTo
-    {
-        return $this->belongsTo(School::class);
-    }
-
-    /**
      * Get the studentRecord associated with the User.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
@@ -131,16 +119,6 @@ class User extends Authenticatable implements MustVerifyEmail
     public function studentRecord()
     {
         return $this->hasOne(StudentRecord::class);
-    }
-
-    /**
-     * Get the studentRecord of graduation associated with the User.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
-     */
-    public function graduatedStudentRecord()
-    {
-        return $this->hasOne(StudentRecord::class)->withoutGlobalScopes()->where('is_Graduated', true);
     }
 
     /**

@@ -30,7 +30,7 @@ class UserService
      */
     public function getAllUsers(): Collection|static
     {
-        return User::school()->get();
+        return User::get();
     }
 
     /**
@@ -54,7 +54,7 @@ class UserService
      */
     public function getUsersByRole($role)
     {
-        return User::Role($role)->Inschool()->get();
+        return User::Role($role)->get();
     }
 
     /**
@@ -65,13 +65,11 @@ class UserService
      */
     public function createUser($record)
     {
-        $record['school_id'] = 1;
         $user = $this->createUserAction->create([
             'name'                  => $record['user_name'],
             'email'                 => $record['email'],
             'photo'                 => null,
             'password'              => $record['password'],
-            'school_id'             => $record['school_id'],
             'password_confirmation' => $record['password_confirmation'],
         ]);
 
