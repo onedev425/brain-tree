@@ -70,7 +70,6 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
             'address'           => $input['address'],
             'state'             => $input['state'],
             'city'              => $input['city'],
-            'gender'            => $input['gender'],
             'phone'             => $input['phone'] ?? '',
         ])->save();
 

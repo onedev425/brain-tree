@@ -40,9 +40,6 @@ class RegistrationController extends Controller
         $user->assignRole('applicant');
 
         $accountApplication = $this->accountApplicationService->createAccountApplication($user->id, $request->role);
-
-        Log::info('A new request has been made to the application.'. $request);
-
         $status = 'Application Received';
         $reason = 'Application has been received, we would reach out to you for further information';
         $accountApplication->setStatus($status, $reason);

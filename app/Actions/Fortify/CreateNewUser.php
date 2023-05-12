@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
 use Laravel\Jetstream\Jetstream;
+use Illuminate\Support\Facades\Log;
 use Throwable;
 
 class CreateNewUser implements CreatesNewUsers
@@ -39,7 +40,9 @@ class CreateNewUser implements CreatesNewUsers
         }
 
         try {
-            $user->sendEmailVerificationNotification();
+            Log::info('Created the user successfully');
+
+            // $user->sendEmailVerificationNotification();
         } catch (Throwable $e) {
             report("Could not verification send email to $user->email. $e");
 

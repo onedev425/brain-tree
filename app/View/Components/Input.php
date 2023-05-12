@@ -12,6 +12,12 @@ class Input extends Component
 
     public ?string $label;
 
+    public ?string $class;
+
+    public ?string $groupClass;
+
+    public ?string $labelClass;
+
     public ?string $value;
 
     public ?string $errorBag;
@@ -21,11 +27,14 @@ class Input extends Component
      *
      * @return void
      */
-    public function __construct(string $id, string $name, $value = null, string $label = null, string $errorBag = 'default')
+    public function __construct(string $id, string $name, $value = null, string $label = null, string $class = null, string $groupClass = null, string $labelClass = null, string $errorBag = 'default')
     {
         $this->id = $id;
         $this->name = $name;
         $this->label = $label;
+        $this->class = $class;
+        $this->groupClass = $groupClass;
+        $this->labelClass = $labelClass;
         $this->value = $value;
         $this->errorBag = $errorBag;
     }
