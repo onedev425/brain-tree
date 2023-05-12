@@ -1,9 +1,9 @@
 <div>
-    <div class="absolute -mt-20 md:-mt-24 lg:-mt-28 text-center md:text-left w-11/12 md:w-auto">
+    <div class="absolute -mt-16 md:-mt-16 lg:-mt-20 text-center md:text-left w-11/12 md:w-auto">
         <h1 class="text-xl md:text-3xl capitalize text-white font-semibold">{{__('Course')}}</h1>
     </div>
     <div class="block">
-        <div class="float-right mb-2">
+        <div class="float-right my-4">
             <a href="{{ route('course.create') }}" class="bg-red-600 uppercase hover:bg-opacity-90 active:bg-opacity-70 text-white py-2 px-4 border-2 rounded-lg my-3">
                 <i class="fa fa-plus" aria-hidden="true"></i>
                 {{ __('Create new course') }}
@@ -31,7 +31,6 @@
                                 'price' => $course->price,
                             ])
                         @endforeach
-
                     @else
                         @foreach($draft_courses as $course)
                             @livewire('teacher-course-block', [
