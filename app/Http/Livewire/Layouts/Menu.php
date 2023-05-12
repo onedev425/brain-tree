@@ -21,6 +21,7 @@ class Menu extends Component
                             </svg>',
                 'text'  => auth()->user()->hasRole('student') ? 'My Account' : 'Instructor Account',
                 'route' => 'profile.show',
+                'routes' => ['profile.show'],
             ],
             [
                 'type'  => 'menu-item',
@@ -31,7 +32,8 @@ class Menu extends Component
                               </g>
                             </svg>',
                 'text'  => 'Courses',
-                'route' => 'exams.index',
+                'route' => 'course.index',
+                'routes' => ['course.index', 'course.create'],
             ],
             [
                 'type'  => 'menu-item',
@@ -40,6 +42,7 @@ class Menu extends Component
                             </svg>',
                 'text'  => 'Certifications & Marks',
                 'route' => 'profile.show',
+                'routes' => ['profile.show'],
                 'can' => 'certification-marks'
             ],
             [
@@ -52,6 +55,7 @@ class Menu extends Component
                             </svg>',
                 'text'  => 'Students',
                 'route' => 'profile.show',
+                'routes' => ['profile.show'],
                 'can'   => 'read student',
             ],
             [
@@ -64,6 +68,7 @@ class Menu extends Component
                             </svg>',
                 'text'  => 'Assessments',
                 'route' => 'profile.show',
+                'routes' => ['profile.show'],
                 'can'   => 'assessments',
             ],
             [
@@ -73,6 +78,7 @@ class Menu extends Component
                             </svg>',
                 'text'  => 'Marks',
                 'route' => 'profile.show',
+                'routes' => ['profile.show'],
                 'can'   => 'marks',
             ],
             [
@@ -82,6 +88,7 @@ class Menu extends Component
                             </svg>',
                 'text'  => 'Pricing',
                 'route' => 'pricing.index',
+                'routes' => ['pricing.index'],
                 'can' => 'pricing'
             ],
             [
@@ -94,6 +101,7 @@ class Menu extends Component
                             </svg>',
                 'text'  => 'Security & Settings',
                 'route' => 'settings.index',
+                'routes' => ['settings.index'],
                 'can' => 'settings'
             ],
 

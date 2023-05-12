@@ -105,9 +105,13 @@ Route::middleware('auth:sanctum', 'verified', 'App\Http\Middleware\PreventLockAc
 
                 //Setting routes
                 Route::get('settings', ['App\Http\Controllers\SettingController', 'index'])->name('settings.index');
-                
+
                 //Pricing routes
                 Route::get('pricing', ['App\Http\Controllers\PricingController', 'index'])->name('pricing.index');
+
+                //Pricing routes
+//                Route::get('teacher/course', ['App\Http\Controllers\TeacherCourseController', 'index'])->name('teacher.course.index');
+                Route::resource('teacher/course', TeacherCourseController::class);
 
                 //syllabi route
                 Route::resource('syllabi', SyllabusController::class);
