@@ -92,10 +92,18 @@ Route::middleware('auth:sanctum', 'verified', 'App\Http\Middleware\PreventLockAc
         Route::resource('exams/{exam}/manage/exam-slots', ExamSlotController::class);
     });
 
-    //grade system routes
-    Route::resource('grade-systems', GradeSystemController::class);
+        //Setting routes
+    Route::get('settings', ['App\Http\Controllers\SettingController', 'index'])->name('settings.index');
 
-    //student routes
+    //Pricing routes
+    Route::get('pricing', ['App\Http\Controllers\PricingController', 'index'])->name('pricing.index');
+
+    Route::resource('teacher/course', TeacherCourseController::class);
+
+    //manage exam record
+    Route::resource('exams/exam-records', ExamRecordController::class);
+
+        //student routes
     Route::resource('students', StudentController::class);
     Route::get('students/{student}/print', ['App\Http\Controllers\StudentController', 'printProfile'])->name('students.print-profile');
 
