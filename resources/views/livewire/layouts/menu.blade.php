@@ -1,10 +1,16 @@
-<div class="absolute text-white border border-1 -mt-16 ml-5 py-1 rounded md:hidden z-40">
-    <button role="button" class="text-2xl mx-3 text-dark" @click="menuOpen = !menuOpen">
-        <p class="sr-only">Menu</p>
-        <i class="fa fa-bars" aria-hidden="true"></i>
-    </button>
+<div class="w-full absolute text-center -mt-16 md:hidden">
+    <div class="w-12 text-white border border-1 py-1 rounded ml-5">
+        <button role="button" class="text-2xl mx-3 text-dark" @click="menuOpen = !menuOpen">
+            <p class="sr-only">Menu</p>
+            <i class="fa fa-bars" aria-hidden="true"></i>
+        </button>
+    </div>
+    <div class="w-full text-xl capitalize text-white font-semibold p-3 -mt-12">
+        @yield('page_heading')
+    </div>
 </div>
-<nav class="hidden md:block md:sticky inset-0 h-screen w-full md:sidebar-expand md:-mt-14 lg:-mt-24 md:ml-10 lg:ml-14 flex duration-250 transition-all z-40" :class="{'d-block absolute' : menuOpen == true}">
+
+<nav class="hidden md:block md:sticky inset-0 w-full h-full md:sidebar-expand md:-mt-14 lg:-mt-24 md:ml-10 lg:ml-14 flex duration-250 transition-all z-40" :class="{'d-block absolute' : menuOpen == true}">
     <div class="card mt-0 sm:p-10 md:p-4">
         <div class="card-body">
             <button role="button" class="text-2xl mx-3 text-gray-400 float-right border border-1 rounded-full px-4 py-2 shadow -mt-2 -mr-4 md:hidden" @click="menuOpen = !menuOpen">

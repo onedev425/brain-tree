@@ -4,9 +4,6 @@
             <x-action-message on="saved">
                 {{ __('Saved.') }}
             </x-action-message>
-        <div class="absolute -mt-28 md:-mt-32 lg:-mt-36 md:-ml-10 text-center md:text-left w-10/12 md:w-auto">
-            <h1 class="text-xl md:text-3xl capitalize text-white font-semibold">{{ auth()->user()->hasRole('student') ? __('My Account') : __('Instructor Account')}}</h1>
-        </div>
         <h3 class="text-xl md:text-2xl font-bold" group-class="col-span-12" >
             {{ __('Account') }}
         </h3>

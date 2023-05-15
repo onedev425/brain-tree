@@ -8,7 +8,7 @@
             </div>
 
             @if (isset($actions))
-                <div class="px-6 flex justify-start ">
+                <div class="flex justify-start ">
                     {{ $actions }}
                 </div>
             @endif

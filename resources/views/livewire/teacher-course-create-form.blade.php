@@ -1,7 +1,4 @@
 <div>
-    <div class="absolute -mt-16 md:-mt-16 lg:-mt-20 text-center md:text-left w-11/12 md:w-auto">
-        <h1 class="text-xl md:text-3xl capitalize text-white font-semibold">{{__('Course')}}</h1>
-    </div>
     <div class="block">
         <div class="float-right my-3">
             <button type="button" class="py-3 px-11 inline-block text-center mb-3 rounded-lg leading-5 text-red-500 bg-transparent border border-red-500 hover:text-white hover:bg-red-500 hover:ring-0 hover:border-red-500 focus:text-white focus:bg-red-500 focus:border-red-500 focus:outline-none focus:ring-0 mr-4">
