@@ -6,7 +6,7 @@
             {{$slot}}
         </div>
     </div>
-    <div class="w-11/12 text-center text-black absolute bottom-0 mb-7 text-xs md:text-base">
+    <div class="w-11/12 text-center text-black relative mt-10 md:absolute md:mt-0 bottom-0 mb-7 text-xs md:text-base">
         ©2021 BrainTreesPro Pty Ltd. Concept & Design by Kaveesha Perera
     </div>
 </div>
