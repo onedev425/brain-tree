@@ -42,5 +42,6 @@
     </body>
     <livewire:scripts />
     @vite(['resources/js/app.js'])
+    @vite(['resources/js/pristine.min.js'])<!-- form validation -->
     @stack('scripts')
 </html>

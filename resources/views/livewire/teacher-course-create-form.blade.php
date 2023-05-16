@@ -23,16 +23,16 @@
                         </div>
                         <div class="card-body">
                             <div class="mb-6">
-                                <label for="course_title" class="block mb-2 font-medium text-gray-900">{{ 'Course Title' }}</label>
+                                <label for="course_title" class="block mb-2 font-medium text-gray-900">{{ __('Course Title') }}</label>
                                 <input type="text" id="course_title" minlength="3" maxlength="255" required class="shadow-sm border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="" required>
                             </div>
                             <div class="mb-6">
-                                <label for="course_price" class="block mb-2 font-medium text-gray-900">{{ 'Pricing' }} ($)</label>
+                                <label for="course_price" class="block mb-2 font-medium text-gray-900">{{ __('Pricing') }} ($)</label>
                                 <input type="number" id="course_price" minlength="1" maxlength="10" required class="shadow-sm border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="" required>
                             </div>
                             <div class="mb-6">
-                                <label for="course_description" class="inline-block mb-2">Description</label>
-                                <textarea id="course_description" rows="8" class="course_description w-full leading-5 relative py-3 px-5 rounded-lg text-gray-800 bg-white border border-gray-300 overflow-x-auto focus:outline-none focus:border-gray-400 focus:ring-0 dark:text-gray-300 dark:bg-gray-700 dark:border-gray-700 dark:focus:border-gray-600" id="texteditor" rows="3"></textarea>
+                                <label for="course_description" class="inline-block mb-2">{{ __('Description') }}</label>
+                                <textarea id="course_description" rows="8" class="course_description w-full leading-5 relative py-3 px-5 rounded-lg text-gray-800 bg-white border border-gray-300 overflow-x-auto focus:outline-none focus:border-gray-400 focus:ring-0" id="texteditor" rows="3"></textarea>
                             </div>
                         </div>
                     </div>
@@ -97,8 +97,8 @@
                         </div>
                         <div class="card-body">
                             <div id="Accordione" x-data="{selected:0}">
-                                <div class="relative flex flex-wrap flex-col shadow mb-4 bg-white dark:bg-gray-800">
-                                    <div class="border-b border-gray-200 mb-0 bg-gray-100 dark:bg-gray-900 dark:bg-opacity-20 dark:border-gray-800 py-2 px-4" id="HeadingOnee">
+                                <div class="relative flex flex-wrap flex-col shadow mb-4 bg-white">
+                                    <div class="border-b border-gray-200 mb-0 bg-gray-100 py-2 px-4" id="HeadingOnee">
                                         <div class="d-grid mb-0">
                                             <a href="javascript:;" class="py-3 px-0 w-full rounded leading-5 font-medium flex justify-between focus:outline-none focus:ring-0"  @click="selected !== 0 ? selected = 0 : selected = null">
                                                 <div class="flex mt-2.5">
@@ -118,7 +118,7 @@
                                     </div>
                                     <div id="CollapseOnee" x-show="selected == 0">
                                         <div class="flex-1 py-4 px-7">
-                                            <x-light-button label="{{ __('Add New Lesson') }}" icon="" class="flex py-3 md:px-10 bg-white text-sm text-black font-semibold border border-red-300" >
+                                            <x-light-button label="{{ __('Add New Lesson') }}" icon="" class="open_lesson_dialog_button flex py-3 md:px-10 bg-white text-sm text-black font-semibold border border-red-300" >
                                                 <svg class="mr-3" xmlns="http://www.w3.org/2000/svg" width="20.376" height="18.538" viewBox="0 0 20.376 18.538">
                                                     <g id="Icon_feather-book-open" data-name="Icon feather-book-open" transform="translate(-2 -3.5)">
                                                         <path id="Path_64" data-name="Path 64" d="M3,4.5H8.513a3.675,3.675,0,0,1,3.675,3.675V21.038a2.756,2.756,0,0,0-2.756-2.756H3Z" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
@@ -130,8 +130,8 @@
                                     </div>
                                 </div>
 
-                                <div class="relative flex flex-wrap flex-col shadow mb-4 bg-white dark:bg-gray-800">
-                                    <div class="border-b border-gray-200 mb-0 bg-gray-100 dark:bg-gray-900 dark:bg-opacity-20 dark:border-gray-800 py-2 px-4">
+                                <div class="relative flex flex-wrap flex-col shadow mb-4 bg-white">
+                                    <div class="border-b border-gray-200 mb-0 bg-gray-100 py-2 px-4">
                                         <div class="d-grid mb-0">
                                             <a href="javascript:;" class="py-1 px-0 w-full rounded leading-5 font-medium flex justify-between focus:outline-none focus:ring-0" @click="selected !== 1 ? selected = 1 : selected = null">
                                                 <div class="flex mt-2.5">
@@ -172,7 +172,7 @@
                                             </div>
                                         </div>
                                         <div class="flex-1 py-4 px-7">
-                                            <x-light-button label="{{ __('Add New Lesson') }}" icon="" class="flex py-3 md:px-10 bg-white text-sm text-black font-semibold border border-red-300" >
+                                            <x-light-button label="{{ __('Add New Lesson') }}" icon="" class="open_lesson_dialog_button flex py-3 md:px-10 bg-white text-sm text-black font-semibold border border-red-300" >
                                                 <svg class="mr-3" xmlns="http://www.w3.org/2000/svg" width="20.376" height="18.538" viewBox="0 0 20.376 18.538">
                                                     <g id="Icon_feather-book-open" data-name="Icon feather-book-open" transform="translate(-2 -3.5)">
                                                         <path id="Path_64" data-name="Path 64" d="M3,4.5H8.513a3.675,3.675,0,0,1,3.675,3.675V21.038a2.756,2.756,0,0,0-2.756-2.756H3Z" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
@@ -234,7 +234,46 @@
         </form>
     </div>
 
+
+    <!-- Overlay element -->
+    <div id="overlay" class="fixed hidden z-40 w-screen h-screen inset-0 bg-gray-900 bg-opacity-60"></div>
+
+    <!-- The dialog -->
+    <div id="lesson_dialog" class="hidden fixed z-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full md:w-2/3 lg:w-1/2 xl:2/5 bg-white rounded-md px-8 py-6 space-y-5 drop-shadow-lg">
+        <h1 class="text-2xl font-semibold">{{ __('Lesson') }}</h1>
+        <div class="py-5">
+            <form class="valid-form flex flex-wrap flex-row -mx-4">
+                <button id="close_lesson_dialog" class="fill-current h-6 w-6 absolute right-0 top-0 m-4 text-3xl font-bold">×</button>
+                <div class="form-group flex-shrink max-w-full px-4 w-full mb-4">
+                    <label for="inputAddress" class="inline-block mb-2">{{ __('Lesson Name') }}</label>
+                    <input type="text" class="w-full leading-5 relative py-2 px-4 rounded text-gray-800 bg-white border border-gray-300 overflow-x-auto focus:outline-none focus:border-gray-400 focus:ring-0" id="inputAddress" placeholder="" required>
+                </div>
+                <div class="form-group flex-shrink max-w-full px-4 w-full mb-4">
+                    <label for="lesson_description" class="inline-block mb-2">{{ __('Lesson Content') }}</label>
+                    <textarea id="lesson_description" rows="8" class="w-full leading-5 relative py-2 px-4 rounded-lg text-gray-800 bg-white border border-gray-300 overflow-x-auto focus:outline-none focus:border-gray-400 focus:ring-0" id="texteditor"></textarea>
+                </div>
+                <div class="form-group flex-shrink max-w-full px-4 w-full md:w-1/2 mb-4">
+                    <label for="video_source" class="inline-block mb-2">{{ __('Video Source') }}</label>
+                    <select id="video_source" class="inline-block w-full leading-5 relative py-2 pl-3 pr-8 rounded text-gray-800 bg-white border border-gray-300 overflow-x-auto focus:outline-none focus:border-gray-400 focus:ring-0 select-caret appearance-none" required>
+                        <option value="">{{ __('Choose...') }}</option>
+                        <option value="youtube">{{ __('Youtube') }}</option>
+                        <option value="vimeo">{{ __('Vimeo') }}</option>
+                    </select>
+                </div>
+                <div class="form-group flex-shrink max-w-full px-4 w-full md:w-1/2 mb-4">
+                    <label for="video_url" class="inline-block mb-2">{{ __('Video URL') }}</label>
+                    <input id="video_url" type="text" class="w-full leading-5 relative py-2 px-4 rounded text-gray-800 bg-white border border-gray-300 overflow-x-auto focus:outline-none focus:border-gray-400 focus:ring-0" required>
+                </div>
+
+                <div class="form-group flex-shrink max-w-full px-4 w-full">
+                    <x-button label="{{ __('Save') }}" type="submit" icon="" class="py-3 md:px-10 bg-red-700 text-white font-semibold border-transparent" />
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script>
+        // handle the image uploading
         const imageInput = document.getElementById('course_image_input');
         const imageContainer = document.getElementById('course_image_container');
         const imageRemove = document.getElementById('course_image_remove');
@@ -259,6 +298,58 @@
             imageContainer.style.backgroundImage = 'none';
             imageContainer.parentNode.classList.add('image-input-empty');
         });
+    </script>
+
+    <script>
+        // handle the Lesson Dialog
+        var lessonDialog = document.getElementById('lesson_dialog');
+        var closeButton = document.getElementById('close_lesson_dialog');
+        var overlay = document.getElementById('overlay');
+
+        var openLessonDialog = function(event) {
+            event.preventDefault();
+            lessonDialog.classList.remove('hidden');
+            overlay.classList.remove('hidden');
+        };
+
+        // hide the overlay and the dialog
+        var closeModal = function () {
+            lessonDialog.classList.add('hidden');
+            overlay.classList.add('hidden');
+        };
+
+        var openLessonDialogButtons = document.getElementsByClassName('open_lesson_dialog_button');
+        Array.from(openLessonDialogButtons).forEach(function(openButton) {
+            openButton.addEventListener('click', openLessonDialog);
+        });
+
+        closeButton.addEventListener('click', closeModal);
+        overlay.addEventListener('click', closeModal);
+
+    </script>
+
+    <script>
+        const myValidation = function () {
+            // pristine js validation form
+            const valid_form = document.querySelectorAll(".valid-form");
+
+            if ( valid_form != null) {
+                for( let i = 0; i < valid_form.length; i++){
+                    const pristine = new Pristine(valid_form[i]);
+
+                    valid_form[i].addEventListener('submit', function (e) {
+                        e.preventDefault();
+                        // check if the form is valid
+                        const valid = pristine.validate(); // returns true or false
+                    });
+                }
+            }
+        };
+
+        window.addEventListener("load", () => {
+            myValidation();
+        });
+
     </script>
 </div>
 

@@ -45,7 +45,7 @@
         display: block !important;
     }
 
-
+    /*begin::Image upload */
     .btn.btn-icon {
         display: inline-flex;
         align-items: center;
@@ -120,4 +120,40 @@
     .image-input.image-input-empty [data-kt-image-input-action=remove], .image-input.image-input-empty [data-kt-image-input-action=cancel] {
         display: none;
     }
+    /* end::Image upload */
+
+    /* begin::Form validation*/
+    .has-success .text-help {
+        --tw-text-opacity:1;
+        color:rgba(16, 185, 129, var(--tw-text-opacity));
+    }
+    .has-success input, .has-success textarea, .has-success select, .has-success .tagify {
+        border-bottom-width:2px;
+        border-bottom-color: #10B981;
+    }
+    .has-success input.form-checkbox {
+        border-width:1px;
+        --tw-border-opacity:1;
+        border-color:rgba(16, 185, 129, var(--tw-border-opacity));
+    }
+    .has-danger .text-help {
+        --tw-text-opacity:1;
+        color:rgba(239, 68, 68, var(--tw-text-opacity));
+    }
+    .has-danger input, .has-danger textarea, .has-danger select, .has-danger .tagify {
+        border-bottom-width:2px;
+        border-bottom-color: #EF4444;
+    }
+    .has-danger input.form-checkbox {
+        border-width:1px;
+        --tw-border-opacity:1;
+        border-color:rgba(239, 68, 68, var(--tw-border-opacity));
+    }
+    .form-group .text-help {
+        padding-left:0px;
+        padding-right:0px;
+        padding-top:0.5rem;
+        padding-bottom:0.5rem;
+    }
+    /*end::Form validation*/
 }
