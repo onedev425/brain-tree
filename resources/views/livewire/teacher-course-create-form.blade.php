@@ -185,7 +185,7 @@
                                 </div>
                             </div>
 
-                            <x-button label="{{ __('Add new Topic') }}" icon="fas fa-plus" class="py-3 md:px-10 bg-red-700 text-white font-semibold border-transparent" />
+                            <x-button id="open_topic_dialog_button" label="{{ __('Add new Topic') }}" icon="fas fa-plus" class="py-3 md:px-10 bg-red-700 text-white font-semibold border-transparent" />
                             <x-light-button label="{{ __('Create quiz') }}" icon="fas fa-plus" class="py-3 md:px-10 bg-white text-black font-semibold border border-red-300" />
                         </div>
                     </div>
@@ -238,15 +238,38 @@
     <!-- Overlay element -->
     <div id="overlay" class="fixed hidden z-40 w-screen h-screen inset-0 bg-gray-900 bg-opacity-60"></div>
 
-    <!-- The dialog -->
+    <!-- Topic dialog -->
+    <div id="topic_dialog" class="hidden fixed z-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full md:w-2/3 lg:w-1/2 xl:2/5 bg-white rounded-md px-8 py-6 space-y-5 drop-shadow-lg">
+        <h1 class="text-2xl font-semibold">{{ __('Topic') }}</h1>
+        <div class="py-5">
+            <form class="valid-form flex flex-wrap flex-row -mx-4">
+                <button id="close_topic_dialog" class="fill-current h-6 w-6 absolute right-0 top-0 m-4 text-3xl font-bold">×</button>
+                <div class="form-group flex-shrink max-w-full px-4 w-full mb-4">
+                    <label for="topic_name" class="inline-block mb-2">{{ __('Topic Name') }}</label>
+                    <input id="topic_name" type="text" class="w-full leading-5 relative py-2 px-4 rounded text-gray-800 bg-white border border-gray-300 overflow-x-auto focus:outline-none focus:border-gray-400 focus:ring-0" placeholder="" required>
+                </div>
+                <div class="form-group flex-shrink max-w-full px-4 w-full mb-4">
+                    <label for="topic_summary" class="inline-block mb-2">{{ __('Topic Summary') }}</label>
+                    <textarea id="topic_summary" rows="8" class="w-full leading-5 relative py-2 px-4 rounded-lg text-gray-800 bg-white border border-gray-300 overflow-x-auto focus:outline-none focus:border-gray-400 focus:ring-0" ></textarea>
+                </div>
+
+                <div class="form-group flex-shrink max-w-full px-4 w-full">
+                    <x-button label="{{ __('Save') }}" type="submit" icon="" class="py-3 md:px-10 bg-red-700 text-white font-semibold border-transparent" />
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <!-- Lesson dialog -->
     <div id="lesson_dialog" class="hidden fixed z-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full md:w-2/3 lg:w-1/2 xl:2/5 bg-white rounded-md px-8 py-6 space-y-5 drop-shadow-lg">
         <h1 class="text-2xl font-semibold">{{ __('Lesson') }}</h1>
         <div class="py-5">
             <form class="valid-form flex flex-wrap flex-row -mx-4">
                 <button id="close_lesson_dialog" class="fill-current h-6 w-6 absolute right-0 top-0 m-4 text-3xl font-bold">×</button>
                 <div class="form-group flex-shrink max-w-full px-4 w-full mb-4">
-                    <label for="inputAddress" class="inline-block mb-2">{{ __('Lesson Name') }}</label>
-                    <input type="text" class="w-full leading-5 relative py-2 px-4 rounded text-gray-800 bg-white border border-gray-300 overflow-x-auto focus:outline-none focus:border-gray-400 focus:ring-0" id="inputAddress" placeholder="" required>
+                    <label for="lesson_name" class="inline-block mb-2">{{ __('Lesson Name') }}</label>
+                    <input id="lesson_name" type="text" class="w-full leading-5 relative py-2 px-4 rounded text-gray-800 bg-white border border-gray-300 overflow-x-auto focus:outline-none focus:border-gray-400 focus:ring-0" placeholder="" required>
                 </div>
                 <div class="form-group flex-shrink max-w-full px-4 w-full mb-4">
                     <label for="lesson_description" class="inline-block mb-2">{{ __('Lesson Content') }}</label>
@@ -325,7 +348,31 @@
 
         closeButton.addEventListener('click', closeModal);
         overlay.addEventListener('click', closeModal);
+    </script>
 
+    <script>
+        // handle the Topic Dialog
+        var openTopicDialogButton = document.getElementById('open_topic_dialog_button');
+        var topicDialog = document.getElementById('topic_dialog');
+        var closeButton = document.getElementById('close_topic_dialog');
+        var overlay = document.getElementById('overlay');
+
+
+        var openTopicDialog = function(event) {
+            event.preventDefault();
+            topicDialog.classList.remove('hidden');
+            overlay.classList.remove('hidden');
+        };
+
+        // hide the overlay and the dialog
+        var closeModal = function () {
+            topicDialog.classList.add('hidden');
+            overlay.classList.add('hidden');
+        };
+
+        openTopicDialogButton.addEventListener('click', openTopicDialog);
+        closeButton.addEventListener('click', closeModal);
+        overlay.addEventListener('click', closeModal);
     </script>
 
     <script>
