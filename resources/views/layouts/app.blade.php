@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html  lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="scroll-smooth">
+<html  lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="scroll-smooth bg-gray-100">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -23,13 +23,19 @@
         </a>
         <div x-data="{ menuOpen: window.innerWidth >=  1024 ? $persist(false) : false }">
             <livewire:layouts.header/>
-            <div class="md:flex md:flex-cols text-gray-900 bg-gray-100 dark:bg-gray-700 dark:text-gray-50 min-h-screen" >
+            <div class="md:flex md:flex-cols text-gray-900 bg-gray-100" >
                 <livewire:layouts.menu />
-                <div class="w-full max-w-full overflow-scroll beautify-scrollbar">
-                    <main class="p-3 md:px-8 md:py-4" id="main">
-                        @yield('content')
-                    </main>
+                <div class="w-full">
+                    <div class="hidden text-xl capitalize text-white font-semibold p-3 md:px-8 md:text-2xl md:-mt-16 md:block lg:text-3xl lg:-mt-20">
+                        @yield('page_heading')
+                    </div>
+                    <div class="overflow-scroll beautify-scrollbar md:mt-1 lg:mt-3">
+                        <main class="p-3 md:px-8 md:py-4" id="main">
+                            @yield('content')
+                        </main>
+                    </div>
                 </div>
+
             </div>
         </div>
     @livewire('display-status')
