@@ -96,27 +96,27 @@
                             </h3>
                         </div>
                         <div class="card-body">
-                            <div id="Accordione" x-data="{selected:0}">
+                            <div id="topic_list" x-data="{selected:0}">
                                 <div class="relative flex flex-wrap flex-col shadow mb-4 bg-white">
-                                    <div class="border-b border-gray-200 mb-0 bg-gray-100 py-2 px-4" id="HeadingOnee">
+                                    <div class="border-b border-gray-200 mb-0 bg-gray-100 py-2 px-4">
                                         <div class="d-grid mb-0">
-                                            <a href="javascript:;" class="py-3 px-0 w-full rounded leading-5 font-medium flex justify-between focus:outline-none focus:ring-0"  @click="selected !== 0 ? selected = 0 : selected = null">
+                                            <a href="javascript:;" class="py-1 px-0 w-full rounded leading-5 font-medium flex justify-between focus:outline-none focus:ring-0"  @click="selected !== 0 ? selected = 0 : selected = null">
                                                 <div class="flex mt-2.5">
                                                     <span class="mr-3">
                                                         <svg class="transform transition duration-500" :class="{ '-rotate-180': selected == 0 }" width="1rem" height="1rem" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                                                           <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 01.708 0L8 10.293l5.646-5.647a.5.5 0 01.708.708l-6 6a.5.5 0 01-.708 0l-6-6a.5.5 0 010-.708z" clip-rule="evenodd"></path>
                                                         </svg>
                                                     </span>
-                                                    How is the SEO services system at Taidash?
+                                                    <span id="topic_name_label">How is the SEO services system at Taidash?</span>
                                                 </div>
                                                 <div class="flex">
-                                                    <x-edit-icon-button />
-                                                    <x-remove-icon-button />
+                                                    <x-edit-icon-button class=""/>
+                                                    <x-remove-icon-button class=""/>
                                                 </div>
                                             </a>
                                         </div>
                                     </div>
-                                    <div id="CollapseOnee" x-show="selected == 0">
+                                    <div x-show="selected == 0">
                                         <div class="flex-1 py-4 px-7">
                                             <x-light-button label="{{ __('Add New Lesson') }}" icon="" class="open_lesson_dialog_button flex py-3 md:px-10 bg-white text-sm text-black font-semibold border border-red-300" >
                                                 <svg class="mr-3" xmlns="http://www.w3.org/2000/svg" width="20.376" height="18.538" viewBox="0 0 20.376 18.538">
@@ -143,8 +143,8 @@
                                                     How many keywords are optimized?
                                                 </div>
                                                 <div class="flex">
-                                                    <x-edit-icon-button />
-                                                    <x-remove-icon-button />
+                                                    <x-edit-icon-button class=""/>
+                                                    <x-remove-icon-button class=""/>
                                                 </div>
                                             </a>
                                         </div>
@@ -153,22 +153,22 @@
                                         <div class="flex pt-4 px-7 justify-between">
                                             <div class="pt-1.5">What Are The Principles Of Effective Web Design?</div>
                                             <div class="min-w-fit" >
-                                                <x-edit-icon-button />
-                                                <x-remove-icon-button />
+                                                <x-edit-icon-button class=""/>
+                                                <x-remove-icon-button class=""/>
                                             </div>
                                         </div>
                                         <div class="flex pt-4 px-7 justify-between">
                                             <div class="pt-1.5">How Do You Ensure That A Website Is Mobile-Friendly?</div>
                                             <div class="min-w-fit" >
-                                                <x-edit-icon-button />
-                                                <x-remove-icon-button />
+                                                <x-edit-icon-button class=""/>
+                                                <x-remove-icon-button class=""/>
                                             </div>
                                         </div>
                                         <div class="flex pt-4 px-7 justify-between">
                                             <div class="pt-1.5">What Are Some Common Mistakes To Avoid In Web Design?</div>
                                             <div class="min-w-fit" >
-                                                <x-edit-icon-button />
-                                                <x-remove-icon-button />
+                                                <x-edit-icon-button class=""/>
+                                                <x-remove-icon-button class=""/>
                                             </div>
                                         </div>
                                         <div class="flex-1 py-4 px-7">
@@ -207,22 +207,22 @@
                             <div class="flex pt-4 justify-between">
                                 <div class="pt-1.5">What Are The Principles Of Effective Web Design?</div>
                                 <div class="min-w-fit" >
-                                    <x-edit-icon-button />
-                                    <x-remove-icon-button />
+                                    <x-edit-icon-button class=""/>
+                                    <x-remove-icon-button class=""/>
                                 </div>
                             </div>
                             <div class="flex pt-4 justify-between">
                                 <div class="pt-1.5">How Do You Ensure That A Website Is Mobile-Friendly?</div>
                                 <div class="min-w-fit" >
-                                    <x-edit-icon-button />
-                                    <x-remove-icon-button />
+                                    <x-edit-icon-button class=""/>
+                                    <x-remove-icon-button class=""/>
                                 </div>
                             </div>
                             <div class="flex pt-4 justify-between">
                                 <div class="pt-1.5">What Are Some Common Mistakes To Avoid In Web Design?</div>
                                 <div class="min-w-fit" >
-                                    <x-edit-icon-button />
-                                    <x-remove-icon-button />
+                                    <x-edit-icon-button class=""/>
+                                    <x-remove-icon-button class=""/>
                                 </div>
                             </div>
                         </div>
@@ -242,7 +242,8 @@
     <div id="topic_dialog" class="hidden fixed z-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full md:w-2/3 lg:w-1/2 xl:2/5 bg-white rounded-md px-8 py-6 space-y-5 drop-shadow-lg">
         <h1 class="text-2xl font-semibold">{{ __('Topic') }}</h1>
         <div class="py-5">
-            <form class="valid-form flex flex-wrap flex-row -mx-4">
+            <form id="topic_form" class="valid-form flex flex-wrap flex-row -mx-4">
+                <input type="hidden" name="topic_edit_flag" value="new" />
                 <button id="close_topic_dialog" type="button" class="fill-current h-6 w-6 absolute right-0 top-0 m-4 text-3xl font-bold">×</button>
                 <div class="form-group flex-shrink max-w-full px-4 w-full mb-4">
                     <label for="topic_name" class="inline-block mb-2">{{ __('Topic Name') }}</label>
@@ -254,12 +255,11 @@
                 </div>
 
                 <div class="form-group flex-shrink max-w-full px-4 w-full">
-                    <x-button label="{{ __('Save') }}" type="submit" icon="" class="py-3 md:px-10 bg-red-700 text-white font-semibold border-transparent" />
+                    <x-button label="{{ __('Save') }}" type="submit" id="save_topic_button" icon="" class="py-3 md:px-10 bg-red-700 text-white font-semibold border-transparent" />
                 </div>
             </form>
         </div>
     </div>
-
 
     <!-- Lesson dialog -->
     <div id="lesson_dialog" class="hidden fixed z-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full md:w-2/3 lg:w-1/2 xl:2/5 bg-white rounded-md px-8 py-6 space-y-5 drop-shadow-lg">
@@ -295,7 +295,6 @@
         </div>
     </div>
 
-
     <!-- Quiz dialog -->
     <div id="quiz_dialog" class="hidden fixed z-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full md:w-2/3 lg:w-1/2 xl:2/5 bg-white rounded-md px-8 py-6 space-y-5 drop-shadow-lg">
         <h1 class="text-2xl font-semibold">{{ __('Quiz') }}</h1>
@@ -317,6 +316,8 @@
             </form>
         </div>
     </div>
+
+    <input name="add_new_lesson_label" value="{{ __('Add New Lesson') }}" />
 
     <script>
         // handle the image uploading
@@ -347,54 +348,79 @@
     </script>
 
     <script>
-        // handle the Lesson Dialog
-        var lessonDialog = document.getElementById('lesson_dialog');
-        var closeButton = document.getElementById('close_lesson_dialog');
-        var overlay = document.getElementById('overlay');
+        // handle the Topic Dialog
+        $(document).ready(function() {
+            $('body').on('click', '#open_topic_dialog_button', function(event) {
+                event.preventDefault();
+                $('div#topic_dialog').removeClass('hidden');
+                $('div#overlay').removeClass('hidden');
+                $('input#topic_name').val('');
+                $('textarea#topic_summary').val('');
+                $('input[name=topic_edit_flag]').val('new');
+            });
 
-        var openLessonDialog = function(event) {
-            event.preventDefault();
-            lessonDialog.classList.remove('hidden');
-            overlay.classList.remove('hidden');
-        };
+            $('body').on('click', '.edit_topic_dialog_button', function(event) {
+                event.preventDefault();
+                $('div#topic_dialog').removeClass('hidden');
+                $('div#overlay').removeClass('hidden');
 
-        // hide the overlay and the dialog
-        var closeModal = function () {
-            lessonDialog.classList.add('hidden');
-            overlay.classList.add('hidden');
-        };
+                const topicObject = $(this).parent().prev();
+                $('input#topic_name').val($(topicObject).find('span.topic_info').html());
+                $('textarea#topic_summary').val($(topicObject).find('span.topic_info').attr('data-summary'));
+                $('input[name=topic_edit_flag]').val($(topicObject).find('span.topic_info').data('uuid'));
+            });
 
-        var openLessonDialogButtons = document.getElementsByClassName('open_lesson_dialog_button');
-        Array.from(openLessonDialogButtons).forEach(function(openButton) {
-            openButton.addEventListener('click', openLessonDialog);
+            $('body').on('click', '.remove_topic_button', function(event) {
+                event.preventDefault();
+                const topicRootObject = $(this).parent().parent().parent().parent().parent();
+                $(topicRootObject).remove();
+            });
+
+            $('button#close_topic_dialog').on('click', function() {
+                closeTopicDialog();
+            });
+
+            $('div#overlay').on('click', function() {
+                closeTopicDialog();
+            });
         });
 
-        closeButton.addEventListener('click', closeModal);
-        overlay.addEventListener('click', closeModal);
+        // hide the overlay and the dialog
+        function closeTopicDialog() {
+            $('div#topic_dialog').addClass('hidden');
+            $('div#overlay').addClass('hidden');
+        };
     </script>
 
     <script>
-        // handle the Topic Dialog
-        var openTopicDialogButton = document.getElementById('open_topic_dialog_button');
-        var topicDialog = document.getElementById('topic_dialog');
-        var closeButton = document.getElementById('close_topic_dialog');
-        var overlay = document.getElementById('overlay');
+        // handle the Lesson Dialog
+        $(document).ready(function() {
+            $('body').on('click', '.open_lesson_dialog_button', function(event) {
+                event.preventDefault();
+                $('div#lesson_dialog').removeClass('hidden');
+                $('div#overlay').removeClass('hidden');
+            });
 
-        var openTopicDialog = function(event) {
-            event.preventDefault();
-            topicDialog.classList.remove('hidden');
-            overlay.classList.remove('hidden');
-        };
+            $('body').on('click', '.edit_lesson_dialog_button', function(event) {
+                event.preventDefault();
+                $('div#lesson_dialog').removeClass('hidden');
+                $('div#overlay').removeClass('hidden');
+            });
+
+            $('button#close_lesson_dialog').on('click', function() {
+                closeLessonDialog();
+            });
+
+            $('div#overlay').on('click', function() {
+                closeLessonDialog();
+            });
+        });
 
         // hide the overlay and the dialog
-        var closeModal = function () {
-            topicDialog.classList.add('hidden');
-            overlay.classList.add('hidden');
+        function closeLessonDialog() {
+            $('div#lesson_dialog').addClass('hidden');
+            $('div#overlay').addClass('hidden');
         };
-
-        openTopicDialogButton.addEventListener('click', openTopicDialog);
-        closeButton.addEventListener('click', closeModal);
-        overlay.addEventListener('click', closeModal);
     </script>
 
     <script>
@@ -411,38 +437,98 @@
         };
 
         // hide the overlay and the dialog
-        var closeModal = function () {
+        var closeQuizDialog = function () {
             quizDialog.classList.add('hidden');
             overlay.classList.add('hidden');
         };
 
         openQuizDialogButton.addEventListener('click', openQuizDialog);
-        closeButton.addEventListener('click', closeModal);
-        overlay.addEventListener('click', closeModal);
+        closeButton.addEventListener('click', closeQuizDialog);
+        overlay.addEventListener('click', closeQuizDialog);
     </script>
 
     <script>
         const myValidation = function () {
-            // pristine js validation form
-            const valid_form = document.querySelectorAll(".valid-form");
+            var topicForm = document.getElementById('topic_form');
+            var pristine = new Pristine(topicForm);
 
-            if ( valid_form != null) {
-                for( let i = 0; i < valid_form.length; i++){
-                    const pristine = new Pristine(valid_form[i]);
+            topicForm.addEventListener('submit', function(event) {
+                event.preventDefault(); // Prevent the default form submission
+                const valid = pristine.validate();
 
-                    valid_form[i].addEventListener('submit', function (e) {
-                        e.preventDefault();
-                        // check if the form is valid
-                        const valid = pristine.validate(); // returns true or false
-                    });
+                if (valid) {
+
+                    const topicName = $('input#topic_name').val();
+                    const topicSummary = $('textarea#topic_summary').val();
+
+                    if ($('input[name=topic_edit_flag]').val() == 'new') {
+                        const uuid = generateUUID();
+                        const newTopic = `
+                            <div class="border-b border-gray-200 mb-0 bg-gray-100 py-2 px-4">
+                                <div class="d-grid mb-0">
+                                    <a href="javascript:;" class="py-1 px-0 w-full rounded leading-5 font-medium flex justify-between focus:outline-none focus:ring-0" @click="selected !== '${uuid}' ? selected = '${uuid}' : selected = null">
+                                        <div class="flex mt-2.5">
+                                            <span class="mr-3">
+                                                <svg class="transform transition duration-500 -rotate-180" :class="{ '-rotate-180': selected == '${uuid}' }" width="1rem" height="1rem" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                  <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 01.708 0L8 10.293l5.646-5.647a.5.5 0 01.708.708l-6 6a.5.5 0 01-.708 0l-6-6a.5.5 0 010-.708z" clip-rule="evenodd"></path>
+                                                </svg>
+                                            </span>
+                                            <span class="topic_info" data-uuid="${uuid}" data-summary="${topicSummary}">${topicName}</span>
+                                        </div>
+                                        <div class="flex">
+                                            <x-edit-icon-button class="edit_topic_dialog_button" />
+                                            <x-remove-icon-button class="remove_topic_button" />
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                            <div x-show="selected == '${uuid}'">
+                                <div class="flex-1 py-4 px-7">
+                                    <button type="button" class="open_lesson_dialog_button flex py-3 md:px-10 bg-white text-sm text-black font-semibold border border-red-300 uppercase inline-block py-2 px-4 border-2 rounded-lg my-3 hover:bg-gray-50" icon="">
+                                        <i class="" aria-hidden="true"></i>
+                                        <svg class="mr-3" xmlns="http://www.w3.org/2000/svg" width="20.376" height="18.538" viewBox="0 0 20.376 18.538">
+                                            <g id="Icon_feather-book-open" data-name="Icon feather-book-open" transform="translate(-2 -3.5)">
+                                                <path id="Path_64" data-name="Path 64" d="M3,4.5H8.513a3.675,3.675,0,0,1,3.675,3.675V21.038a2.756,2.756,0,0,0-2.756-2.756H3Z" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                                                <path id="Path_65" data-name="Path 65" d="M27.188,4.5H21.675A3.675,3.675,0,0,0,18,8.175V21.038a2.756,2.756,0,0,1,2.756-2.756h6.431Z" transform="translate(-5.812)" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                                            </g>
+                                        </svg> ` + $('input[name=add_new_lesson_label]').val() + `
+                                    </button>
+                                </div>
+                            </div>
+                        `;
+
+                        var container = document.createElement('div');
+                        container.innerHTML = newTopic;
+                        container.classList.add('relative', 'flex', 'flex-wrap', 'flex-col', 'shadow', 'mb-4', 'bg-white');
+                        document.getElementById('topic_list').appendChild(container);
+                    }
+                    else {
+                        const uuid = $('input[name=topic_edit_flag]').val();
+                        const topicObject = $('span[data-uuid="' + uuid + '"]');
+                        $(topicObject).html(topicName);
+                        $(topicObject).attr('data-summary', topicSummary);
+                    }
+
+
+                    closeTopicDialog();
                 }
-            }
+
+            });
         };
 
         window.addEventListener("load", () => {
             myValidation();
         });
 
+    </script>
+    <script>
+        function generateUUID() {
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                var r = Math.random() * 16 | 0,
+                    v = c === 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            });
+        }
     </script>
 </div>
 

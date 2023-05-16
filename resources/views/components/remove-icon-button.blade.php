@@ -1,4 +1,4 @@
-<button class="p-2 rounded-md hover:bg-red-500 hover:text-white">
+<button @class(["$class p-2 rounded-md hover:bg-red-500 hover:text-white"] )>
     <svg xmlns="http://www.w3.org/2000/svg" width="19.294" height="21.215" viewBox="0 0 19.294 21.215">
         <g id="Icon_feather-trash-2" data-name="Icon feather-trash-2" transform="translate(1 1)">
             <path id="Path_60" data-name="Path 60" d="M4.5,9H21.794" transform="translate(-4.5 -5.157)" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
