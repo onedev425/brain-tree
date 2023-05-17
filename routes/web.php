@@ -34,6 +34,31 @@ Route::middleware(['guest'])->group(function () {
 });
 
 //user must be authenticated
+Route::middleware('auth:sanctum', 'verified', 'App\Http\Middleware\PreventLockAccountAccess', 'App\Http\Middleware\EnsureDefaultPasswordIsChanged', 'App\Http\Middleware\PreventGraduatedStudent')->namespace('App\Http\Controllers')->group(function () {
+    //Setting routes
+    Route::get('settings', ['App\Http\Controllers\SettingController', 'index'])->name('settings.index');
+
+    //Pricing routes
+    Route::get('pricing', ['App\Http\Controllers\PricingController', 'index'])->name('pricing.index');
+
+    //Teacher Courses routes
+    //Route::get('teacher/course', ['App\Http\Controllers\TeacherCourseController', 'index'])->name('teacher.course.index');
+//    Route::resource('teacher/course', TeacherCourseController::class);
+
+    Route::prefix('teacher')->group(function () {
+        Route::resource('course', TeacherCourseController::class)->names([
+            'index' => 'teacher.course.index',
+            'create' => 'teacher.course.create',
+            'store' => 'teacher.course.store',
+            'show' => 'teacher.course.show',
+            'edit' => 'teacher.course.edit',
+            'update' => 'teacher.course.update',
+            'destroy' => 'teacher.course.destroy',
+        ]);
+    });
+});
+
+//user must be authenticated
 Route::middleware('auth:sanctum', 'verified', 'App\Http\Middleware\PreventLockAccountAccess', 'App\Http\Middleware\EnsureDefaultPasswordIsChanged', 'App\Http\Middleware\PreventGraduatedStudent')->prefix('dashboard')->namespace('App\Http\Controllers')->group(function () {
     //manage school settings
     Route::get('schools/settings', ['App\Http\Controllers\SchoolController', 'settings'])->name('schools.settings')->middleware('App\Http\Middleware\EnsureSuperAdminHasSchoolId');
@@ -103,15 +128,7 @@ Route::middleware('auth:sanctum', 'verified', 'App\Http\Middleware\PreventLockAc
                 //fee routes
                 Route::resource('fees', FeeController::class);
 
-                //Setting routes
-                Route::get('settings', ['App\Http\Controllers\SettingController', 'index'])->name('settings.index');
 
-                //Pricing routes
-                Route::get('pricing', ['App\Http\Controllers\PricingController', 'index'])->name('pricing.index');
-
-                //Pricing routes
-//                Route::get('teacher/course', ['App\Http\Controllers\TeacherCourseController', 'index'])->name('teacher.course.index');
-                Route::resource('teacher/course', TeacherCourseController::class);
 
                 //syllabi route
                 Route::resource('syllabi', SyllabusController::class);
