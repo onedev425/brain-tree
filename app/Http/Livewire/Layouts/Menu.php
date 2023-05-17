@@ -19,7 +19,7 @@ class Menu extends Component
                                 <path id="Path_45" data-name="Path 45" d="M23.333,10.167A5.667,5.667,0,1,1,17.667,4.5,5.667,5.667,0,0,1,23.333,10.167Z" transform="translate(-0.333)" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
                               </g>
                             </svg>',
-                'text'  => auth()->user()->hasRole('student') ? 'My Account' : 'Instructor Account',
+                'text'  => 'Profile',
                 'route' => 'profile.show',
                 'routes' => ['profile.show'],
             ],
