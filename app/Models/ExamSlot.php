@@ -10,7 +10,7 @@ class ExamSlot extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'description', 'total_marks', 'exam_id'];
+    protected $fillable = ['user_id', 'total_marks', 'exam_id'];
 
     /**
      * Get the exam that owns the ExamSlot.
@@ -21,12 +21,14 @@ class ExamSlot extends Model
     {
         return $this->belongsTo(Exam::class);
     }
-
+    
     /**
-     * Get all of the examRecords for the ExamSlot.
+     * Get the student that owns the ExamSlot.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function examRecords(): HasMany
+    public function student()
     {
-        return $this->hasMany(ExamRecord::class);
+        return $this->belongsTo(User::class);
     }
 }

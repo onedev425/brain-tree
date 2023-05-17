@@ -13,12 +13,9 @@
                ['Email' , $user->email],
                ['Gender' , $user->gender],
                ['Birthday' , $user->birthday],
-               ['nationality' , $user->nationality],
                ['state' , $user->state],
                ['City' , $user->city],
                ['Address' , $user->address],
-               ['Religion' , $user->religion],
-               ['Blood Group' , $user->blood_group],
                ['Phone' , $user->phone],
 
          ]"/>

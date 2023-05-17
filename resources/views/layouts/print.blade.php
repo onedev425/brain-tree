@@ -73,10 +73,6 @@
         <div class="logo-wrapper">
             <img src="{{public_path().'/'.config('app.logo')}}" alt="" class="logo" >
         </div>
-        <div class="site-identity">
-            <h1 class=" ">{{auth()->user()->school->name}}</h1>
-            <h2 class="">{{auth()->user()->school->address}}</h2>
-        </div>
     </header>
     
     <main>

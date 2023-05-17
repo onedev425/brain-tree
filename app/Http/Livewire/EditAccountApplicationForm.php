@@ -14,7 +14,7 @@ class EditAccountApplicationForm extends Component
 
     public function mount()
     {
-        $this->roles = Role::whereIn('name', ['teacher', 'student', 'parent'])->get();
+        $this->roles = Role::whereIn('name', ['teacher', 'student'])->get();
     }
 
     public function render()

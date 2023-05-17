@@ -86,10 +86,8 @@ class CreateSuperAdmin extends Command
                 'password'    => Hash::make($password),
                 'address'     => 'super admin street',
                 'birthday'    => '22/04/04',
-                'nationality' => 'nigeria',
                 'state'       => 'lagos',
                 'city'        => 'lagos',
-                'blood_group' => 'A+',
                 'gender'      => 'male',
             ]);
 

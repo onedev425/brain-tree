@@ -20,7 +20,7 @@ class TeacherService
     }
 
     /**
-     * Get all teachers in school.
+     * Get all teachers.
      *
      * @return \Illuminate\Database\Eloquent\Collection
      */

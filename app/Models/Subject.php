@@ -13,18 +13,8 @@ class Subject extends Model
     use SoftDeletes;
 
     protected $fillable = [
-        'name', 'short_name', 'school_id', 'my_class_id',
+        'name', 'short_name'
     ];
-
-    /**
-     * Get the class that owns the Subject.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function myClass()
-    {
-        return $this->belongsTo(MyClass::class);
-    }
 
     /**
      * The teachers that belong to the Subject.
@@ -37,10 +27,12 @@ class Subject extends Model
     }
 
     /**
-     * Get the subjects timetable records.
+     * The course for the subject
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
-    public function timetableRecord(): MorphOne
+    public function course()
     {
-        return $this->morphOne(TimetableRecord::class, 'timetable_time_slot_weekdayable');
+        return $this->hasOne(Course::class, 'subject_course');
     }
 }

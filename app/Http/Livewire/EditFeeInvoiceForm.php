@@ -22,7 +22,7 @@ class EditFeeInvoiceForm extends Component
     public function mount()
     {
         $this->feeInvoice->loadMissing('feeInvoiceRecords', 'feeInvoiceRecords.fee');
-        $this->feeCategories = FeeCategory::inSchool()->get();
+        $this->feeCategories = FeeCategory::get();
         if ($this->feeCategories != null && $this->feeCategories->isNotEmpty()) {
             $this->feeCategory = $this->feeCategories->first();
             $this->updatedFeeCategory();

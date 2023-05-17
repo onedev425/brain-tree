@@ -18,7 +18,6 @@ class FeeCategoryService
         $feeCategory = FeeCategory::create([
             'name'         => $record['name'],
             'description'  => $record['description'] ?? null,
-            'school_id'    => $record['school_id'],
         ]);
 
         return $feeCategory;

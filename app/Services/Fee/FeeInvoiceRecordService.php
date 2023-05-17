@@ -17,8 +17,8 @@ class FeeInvoiceRecordService
      */
     public function storeFeeInvoiceRecord($records): FeeInvoiceRecord
     {
-        $fee = Fee::where('id', $records['fee_id'])->whereRelation('feeCategory', 'school_id', auth()->user()->school_id)->get();
-        $feeInvoice = FeeInvoice::where('id', $records['fee_invoice_id'])->whereRelation('user', 'school_id', auth()->user()->school_id)->get();
+        $fee = Fee::where('id', $records['fee_id'])->get();
+        $feeInvoice = FeeInvoice::where('id', $records['fee_invoice_id'])->get();
 
         if ($fee->isEmpty() || $feeInvoice->isEmpty()) {
             throw new InvalidValueException("The fee you selected doesn't exist");

@@ -2,7 +2,6 @@
 
 namespace App\Http\Livewire;
 
-use App\Services\School\SchoolService;
 use Livewire\Component;
 use Spatie\Permission\Models\Role;
 

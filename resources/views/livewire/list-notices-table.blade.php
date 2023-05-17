@@ -6,9 +6,6 @@
         @can (['update notice', 'delete notice'])
             <livewire:datatable :model="App\Models\Notice::class" 
             uniqueId="List-notice-table"
-            :filters="[
-                ['name' => 'where', 'arguments' => ['school_id' , auth()->user()->school_id]]
-            ]"
             :columns="[
                [ 'property' => 'title'],
                [ 'property' => 'start_date_for_humans', 'name' => 'Start Date', 'columnName' => 'start_date'],
@@ -21,10 +18,6 @@
             />
         @else
             <livewire:datatable :model="App\Models\Notice::class" 
-            :filters="[
-                ['name' => 'where', 'arguments' => ['school_id' , auth()->user()->school_id]],
-                ['name' => 'active']
-            ]"
             :columns="[
             [ 'property' => 'title'],
             ['name' => 'action' , 'type' => 'dropdown' , 'links' => [

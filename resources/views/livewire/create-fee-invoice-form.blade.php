@@ -16,24 +16,8 @@
         </div>
         <div class="card-body">
             <div class="md:grid md:grid-cols-3 gap-4">
-                <x-loading-spinner wire:target="class"/>
-                <x-loading-spinner wire:target="section"/>
                 <x-loading-spinner wire:target="addStudent"/>
 
-
-                <x-select id="classes" name="" label="Class" wire:model="class">
-                    @foreach ($classes as $item)
-                        <option value="{{$item->id}}">{{$item->name}}</option>
-                    @endforeach
-                </x-select>
-                <x-select id="section" name="" label="Section" wire:model="section">
-                    <option value="">All Sections</option>
-                    @isset($sections)
-                        @foreach ($sections as $item)
-                            <option value="{{$item->id}}">{{$item->name}}</option>
-                        @endforeach
-                    @endisset
-                </x-select>
                 <x-select id="student" name="" label="Student" wire:model="student">
                     <option value="">All Students</option>
                     @isset($students)
@@ -43,13 +27,6 @@
                     @endisset
                 </x-select>
                 @php
-                    $addStudentArgument = "$class";
-                    if ($section != null && $section != 0) {
-                        $addStudentArgument.=",$section";
-                    }else{
-                        $addStudentArgument.=",null";
-                    }
-
                     if ($student != null && $student != 0) {
                         $addStudentArgument.=",$student";
                     }else{
