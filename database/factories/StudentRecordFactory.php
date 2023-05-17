@@ -2,7 +2,6 @@
 
 namespace Database\Factories;
 
-use App\Models\Section;
 use App\Models\StudentRecord;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -23,14 +22,10 @@ class StudentRecordFactory extends Factory
     public function definition()
     {
         $student = User::factory()->create();
-        $section = Section::query()->offset(rand(1, 4))->whereRelation('myClass.classGroup', 'school_id', 1)->first();
-        $class = $section->myClass;
         $student->assignRole('student');
 
         return [
             'user_id'          => $student->id,
-            'my_class_id'      => $class->id,
-            'section_id'       => $class->sections->first()->id ?? null,
             'admission_date'   => $this->faker->date(),
             'is_graduated'     => false,
             'admission_number' => Str::random(10),

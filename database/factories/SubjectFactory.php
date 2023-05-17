@@ -19,8 +19,6 @@ class SubjectFactory extends Factory
         return [
             'name'        => $this->faker->name,
             'short_name'  => $this->faker->lexify('???'),
-            'my_class_id' => 1,
-            'school_id'   => 1,
         ];
     }
 }

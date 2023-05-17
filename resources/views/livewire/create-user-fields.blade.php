@@ -23,23 +23,8 @@
             <option value="{{$gender}}" >{{$gender}}</option>
         @endforeach
     </x-select>
-    <x-select id="blood-group" name="blood_group" label="Blood group *" group-class="col-span-3" >
-        @php ($bloodGroups = ['A+', 'A-', 'B+', 'B-', 'AB+', 'Ab-', 'O+', 'O-'])
-        @foreach ($bloodGroups as $bloodGroup)
-            <option value="{{$bloodGroup}}" >{{$bloodGroup}}</option>
-        @endforeach
-    </x-select>
     <x-input id="phone" name="phone" label="Phone number" placeholder="{{$role}}'s phone number" group-class="col-span-3" />
     <x-input id="address" name="address" placeholder="{{$role}}'s address" group-class="col-span-9 no-resize" label="Address *" />
-    <x-select id="religion" name="religion" label="Religion *" group-class="col-span-3" >
-        @php ($religions = ['Christianity', 'Islam', 'Hinduism', 'Buddhism', 'Other'])
-        @foreach ($religions as $religion)
-            <option value="{{$religion}}"  >{{$religion}}</option>
-        @endforeach
-    </x-select>
-    <div class="col-span-8">
-        <livewire:nationality-and-state-input-fields />
-    </div>
     <x-input id="city" name="city" label="City *" placeholder="{{$role}}'s city" group-class="col-span-4"/>
     <script>
         function showImage() {

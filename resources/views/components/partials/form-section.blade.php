@@ -8,7 +8,7 @@
             </div>
 
             @if (isset($actions))
-                <div class="border-t bg-slate-100 dark:bg-gray-800 px-3 flex justify-end ">
+                <div class="flex justify-start ">
                     {{ $actions }}
                 </div>
             @endif

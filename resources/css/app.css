@@ -7,6 +7,7 @@
 @layer components{
     body {
         font-family: 'Montserrat', sans-serif;
+        background-color: white !important;
     }
     .beautify-scrollbar::-webkit-scrollbar{
         width: 5px;
@@ -22,26 +23,137 @@
     }
 
     .card {
-        @apply  bg-white dark:bg-gray-800 rounded shadow border my-6
+        @apply  bg-white dark:bg-gray-800 rounded-xl shadow border my-6 p-5 md:p-10
     }
 
     .card-header {
-        @apply px-4 md:px-7 py-2 border-b
+        @apply font-bold;
     }
 
     .card-body {
-        @apply px-4 md:px-7 py-7
+        /*@apply px-4 md:px-7 py-7*/
     }
 
     .card-title {
-        @apply md:text-lg capitalize
+        @apply md:text-xl capitalize
     }
 
     .sidebar-expand {
         width: 32rem;
     }
-
-    .sidebar-collapse {
-        width: 7rem !important;
+    .d-block {
+        display: block !important;
     }
+
+    /*begin::Image upload */
+    .btn.btn-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+    }
+
+    .btn.btn-icon:not(.btn-outline):not(.btn-dashed):not(.border-hover):not(.border-active):not(.btn-flush) {
+        border: 0;
+    }
+
+    .image-input:not(.image-input-empty) {
+        background-image: none !important;
+    }
+    .image-input {
+        position: relative;
+        display: inline-block;
+        border-radius: 0.475rem;
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+
+    .image-input.image-input-outline .image-input-wrapper {
+        border: 3px solid white;
+        box-shadow: rgba(0, 0, 0, 0.075) 0px 6.5px 19.5px 6.5px;
+    }
+
+    .image-input .image-input-wrapper {
+        border-radius: 0.475rem;
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+
+    .image-input [data-kt-image-input-action=change] {
+        left: 100%;
+        top: 0;
+    }
+
+    .image-input [data-kt-image-input-action] {
+        cursor: pointer;
+        position: absolute;
+        transform: translate(-50%, -50%);
+    }
+
+    .image-input [data-kt-image-input-action=change] {
+        left: 100%;
+        top: 0;
+    }
+
+    .image-input [data-kt-image-input-action] {
+        cursor: pointer;
+        transform: translate(-50%, -50%);
+    }
+
+    .image-input [data-kt-image-input-action=change] input {
+        width: 0 !important;
+        height: 0 !important;
+        overflow: hidden;
+        opacity: 0;
+    }
+
+    .image-input [data-kt-image-input-action=cancel], .image-input [data-kt-image-input-action=remove] {
+        position: absolute;
+        left: 100%;
+        top: 100%;
+    }
+
+    .image-input.image-input-changed [data-kt-image-input-action=cancel] {
+        display: flex;
+    }
+
+    .image-input.image-input-empty [data-kt-image-input-action=remove], .image-input.image-input-empty [data-kt-image-input-action=cancel] {
+        display: none;
+    }
+    /* end::Image upload */
+
+    /* begin::Form validation*/
+    .has-success .text-help {
+        --tw-text-opacity:1;
+        color:rgba(16, 185, 129, var(--tw-text-opacity));
+    }
+    .has-success input, .has-success textarea, .has-success select, .has-success .tagify {
+        border-bottom-width:2px;
+        border-bottom-color: #10B981;
+    }
+    .has-success input.form-checkbox {
+        border-width:1px;
+        --tw-border-opacity:1;
+        border-color:rgba(16, 185, 129, var(--tw-border-opacity));
+    }
+    .has-danger .text-help {
+        --tw-text-opacity:1;
+        color:rgba(239, 68, 68, var(--tw-text-opacity));
+    }
+    .has-danger input, .has-danger textarea, .has-danger select, .has-danger .tagify {
+        border-bottom-width:2px;
+        border-bottom-color: #EF4444;
+    }
+    .has-danger input.form-checkbox {
+        border-width:1px;
+        --tw-border-opacity:1;
+        border-color:rgba(239, 68, 68, var(--tw-border-opacity));
+    }
+    .form-group .text-help {
+        padding-left:0px;
+        padding-right:0px;
+        padding-top:0.5rem;
+        padding-bottom:0.5rem;
+    }
+    /*end::Form validation*/
 }

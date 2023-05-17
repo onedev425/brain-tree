@@ -20,7 +20,7 @@ class PreventLockAccountAccess
             auth()->guard('web')->logout();
             session()->flush();
 
-            abort(403, "This Account Is Locked. If this is an error, contact your school's administrator.");
+            abort(403, "This Account Is Locked. If this is an error, contact the administrator.");
         }
 
         return $next($request);

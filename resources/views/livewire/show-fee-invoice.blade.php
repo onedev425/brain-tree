@@ -3,17 +3,6 @@
         <h2 class="font-bold text-center text-3xl">#{{$feeInvoice->name}}</h2>
         <div class="md:flex justify-between my-3 parent-horizontal-align">
             <div class="py-3 border-t border-b horizontal-align">
-                <h3 class="text-lg">From:</h3>
-                <p class="font-bold">{{auth()->user()->school->name}}</p>
-                <p class="">Address: {{auth()->user()->school->address}}</p>
-                @if (($phone = auth()->user()->school->phone) != null)
-                    <p class="">Phone: {{$phone}}</p>
-                @endif
-                @if (($email = auth()->user()->school->email) != null)
-                    <p class="">Email: {{$email}}</p>
-                @endif
-            </div>
-            <div class="py-3 border-t border-b horizontal-align">
                 <h3 class="text-lg">To</h3>
                 <p class="font-bold">{{$feeInvoice->user->name}}</p>
                 <p>{{$feeInvoice->name}}</p>

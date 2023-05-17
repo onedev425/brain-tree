@@ -18,8 +18,6 @@ class InfoBox extends Component
 
     public $colour;
 
-    public $class;
-
     public $textColour;
 
     /**
@@ -27,11 +25,10 @@ class InfoBox extends Component
      *
      * @return void
      */
-    public function __construct(string $title, string $text, $colour = null, $icon = null, $class = null, $url = null, $urlText = null, $textColour = null)
+    public function __construct(string $title, string $text, $colour = null, $icon = null, $url = null, $urlText = null, $textColour = null)
     {
         $this->title = $title;
         $this->icon = $icon;
-        $this->class = $class;
         $this->colour = $colour;
         $this->text = $text;
         $this->url = $url;

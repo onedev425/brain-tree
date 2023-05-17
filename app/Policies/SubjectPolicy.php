@@ -25,7 +25,7 @@ class SubjectPolicy
      */
     public function view(User $user, Subject $subject)
     {
-        if ($user->can('read subject') && $user->school_id == $subject->school_id) {
+        if ($user->can('read subject')) {
             return true;
         }
     }
@@ -45,7 +45,7 @@ class SubjectPolicy
      */
     public function update(User $user, Subject $subject)
     {
-        if ($user->can('update subject') && $user->school_id == $subject->school_id) {
+        if ($user->can('update subject')) {
             return true;
         }
     }
@@ -55,7 +55,7 @@ class SubjectPolicy
      */
     public function delete(User $user, Subject $subject)
     {
-        if ($user->can('delete subject') && $user->school_id == $subject->school_id) {
+        if ($user->can('delete subject')) {
             return true;
         }
     }

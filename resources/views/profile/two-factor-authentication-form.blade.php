@@ -1,28 +1,17 @@
 <x-partials.action-section>
-    <x-slot name="title">
-        {{ __('Two Factor Authentication') }}
-    </x-slot>
-
-    <x-slot name="description">
-        {{ __('Add additional security to your account using two factor authentication.') }}
-    </x-slot>
-
     <x-slot name="content">
         <h3 class="text-xl md:text-2xl font-bold">
-            @if ($this->enabled)
-                {{ __('You have enabled two factor authentication.') }}
-            @else
-                {{ __('You have not enabled two factor authentication.') }}
-            @endif
+            {{ __('Two Factor Authentication') }}
         </h3>
 
         <p class="mt-3">
-            {{ __('When two factor authentication is enabled, you will be prompted for a secure, random token during authentication. You may retrieve this token from your phone\'s Google Authenticator application.') }}
+            {{ __('Two-Factor Authentication adds an additional layer of security to your account.
+Each time you log in to your profile, you will be asekd to enter a uniquee code that is only available on your mobile phone. This extra protection ensures that you are the only one who wull have access to your Courses account and courses.') }}
         </p>
 
         @if ($this->enabled)
             @if ($showingQrCode)
-                <p class="mt-3">
+                <p class="mt-3 px-2">
                     {{ __('Two factor authentication is now enabled. Scan the following QR code using your phone\'s authenticator application.') }}
                 </p>
 
@@ -47,8 +36,8 @@
         <div class="mt-3">
             @if (! $this->enabled)
                 <x-confirms-password wire:then="enableTwoFactorAuthentication">
-                    <x-button type="button" wire:loading.attr="disabled" class="bg-gray-500 w-3/12">
-                        {{ __('Enable') }}
+                    <x-button type="button" wire:loading.attr="disabled" class="bg-gray-500">
+                        {{ __('Enable Two-Factor Authentication') }}
                     </x-button>
                 </x-confirms-password>
             @else

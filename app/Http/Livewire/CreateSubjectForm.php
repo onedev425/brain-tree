@@ -2,19 +2,15 @@
 
 namespace App\Http\Livewire;
 
-use App\Services\MyClass\MyClassService;
 use App\Services\Teacher\TeacherService;
 use Livewire\Component;
 
 class CreateSubjectForm extends Component
 {
-    public $classes;
-
     public $teachers;
 
-    public function mount(MyClassService $myClassService, TeacherService $teacherService)
+    public function mount(TeacherService $teacherService)
     {
-        $this->classes = $myClassService->getAllClasses();
         $this->teachers = $teacherService->getAllTeachers();
     }
 

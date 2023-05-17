@@ -18,7 +18,6 @@ class FeeCategoryFactory extends Factory
     {
         return [
             'name'         => $this->faker->name(),
-            'school_id'    => 1,
             'description'  => $this->faker->sentence(),
         ];
     }

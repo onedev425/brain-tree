@@ -22,3 +22,5 @@ yarn.lock
 /.vscode
 .htaccess
 /tmp
+#/public/upload
+router.txt

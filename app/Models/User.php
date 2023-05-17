@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Traits\InSchool;
 use Carbon\Carbon;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Builder;
@@ -27,7 +26,6 @@ class User extends Authenticatable implements MustVerifyEmail
     use Notifiable;
     use TwoFactorAuthenticatable;
     use HasRoles;
-    use InSchool;
 
     /**
      * The attributes that are mass assignable.
@@ -40,10 +38,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'password',
         'birthday',
         'address',
-        'religion',
         'phone',
-        'gender',
-        'school_id',
     ];
 
     /**
@@ -116,14 +111,6 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
-     * Get the school that owns the User.
-     */
-    public function school(): BelongsTo
-    {
-        return $this->belongsTo(School::class);
-    }
-
-    /**
      * Get the studentRecord associated with the User.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
@@ -138,29 +125,9 @@ class User extends Authenticatable implements MustVerifyEmail
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
-    public function graduatedStudentRecord()
-    {
-        return $this->hasOne(StudentRecord::class)->withoutGlobalScopes()->where('is_Graduated', true);
-    }
-
-    /**
-     * Get the studentRecord of graduation associated with the User.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
-     */
     public function allStudentRecords()
     {
         return $this->hasOne(StudentRecord::class)->withoutGlobalScopes();
-    }
-
-    /**
-     * The parents that belong to the User.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
-    public function parents()
-    {
-        return $this->belongsToMany(ParentRecord::class);
     }
 
     /**
@@ -171,16 +138,6 @@ class User extends Authenticatable implements MustVerifyEmail
     public function teacherRecord()
     {
         return $this->hasOne(TeacherRecord::class);
-    }
-
-    /**
-     * Get the parent records associated with the User.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
-     */
-    public function parentRecord()
-    {
-        return $this->hasOne(ParentRecord::class);
     }
 
     /**
@@ -215,20 +172,6 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->lastName();
     }
 
-    //get other names
-    public function otherNames()
-    {
-        $names = array_diff_key(explode(' ', $this->name), array_flip([0, 1]));
-
-        return implode(' ', $names);
-    }
-
-    //get other names
-    public function getOtherNamesAttribute()
-    {
-        return $this->otherNames();
-    }
-
     public function defaultProfilePhotoUrl()
     {
         $name = trim(collect(explode(' ', $this->name))->map(function ($segment) {
@@ -260,17 +203,6 @@ class User extends Authenticatable implements MustVerifyEmail
     public function adminlte_image()
     {
         return $this->defaultProfilePhotoUrl();
-    }
-
-    public function adminlte_desc()
-    {
-        $description = [];
-        if ($this->school) {
-            $description[] = $this->school->academicYear ? 'Academic year: '.$this->school->academicYear->name() : '';
-            $description[] = $this->school->semester ? 'Semester: '.$this->school->semester->name : '';
-        }
-
-        return $descriptionString = implode(', ', $description);
     }
 
     public function adminlte_profile_url()
