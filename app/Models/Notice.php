@@ -16,7 +16,6 @@ class Notice extends Model
         'start_date',
         'stop_date',
         'active',
-        'school_id',
     ];
 
     public function scopeActive($query)

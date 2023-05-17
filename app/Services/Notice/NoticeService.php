@@ -13,7 +13,7 @@ class NoticeService
      */
     public function getAllNotices()
     {
-        return Notice::where('school_id', auth()->user()->school_id)->get();
+        return Notice::get();
     }
 
     /**
@@ -23,8 +23,7 @@ class NoticeService
      */
     public function getPresentNotices()
     {
-        return Notice::where('school_id', auth()->user()->school_id)
-            ->whereDate('start_date', '<=', date('Y-m-d'))
+        return Notice::whereDate('start_date', '<=', date('Y-m-d'))
             ->whereDate('stop_date', '>=', date('Y-m-d'))
             ->where('active', 1)
             ->get();
@@ -48,7 +47,6 @@ class NoticeService
             'start_date' => $data['start_date'],
             'stop_date'  => $data['stop_date'],
             'attachment' => $data['attachment'],
-            'school_id'  => auth()->user()->school_id,
         ]);
 
         return $notice;

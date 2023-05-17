@@ -23,9 +23,4 @@ class Fee extends Model
     {
         return $this->belongsTo(FeeCategory::class);
     }
-
-    public function school()
-    {
-        return $this->feeCategory->school();
-    }
 }

@@ -22,7 +22,7 @@
                     <div class="text-center mb-10">
                         <img class="w-9/12 rounded-full m-auto bg-gray-700 hidden sm:block mb-5" src="{{ @asset('images/logo/avatar.png') }}" alt="avatar" >
                         <div class="text-4xl font-bold mb-3">{{ auth()->user()->name }}</div>
-                        <div class="text-xl">{{ auth()->user()->hasRole('student') ? 'Student' : 'Teacher' }}</div>
+                        <div class="text-xl capitalize">{{ auth()->user()->roles[0]->name }}</div>
                     </div>
                     @isset ($menu)
                         @foreach ($menu as $menuItem)

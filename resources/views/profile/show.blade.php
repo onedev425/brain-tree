@@ -5,9 +5,12 @@
 
 @section('title',  __('Profile'))
 
-@section('page_heading',  auth()->user()->hasRole('student') ? __('My Account') : __('Instructor Account'))
+@section('page_heading',  'Profile')
 
 @section('content')
+        @if (auth()->user()->hasRole('applicant'))
+            @livewire('application-history', ['applicant' => auth()->user()])
+        @endif
         @if (Laravel\Fortify\Features::canUpdateProfileInformation())
             @livewire('profile.update-profile-information-form')
         @endif

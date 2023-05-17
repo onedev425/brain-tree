@@ -15,7 +15,6 @@ return new class() extends Migration {
             $table->date('start_date');
             $table->date('stop_date');
             $table->boolean('active')->default(true);
-            $table->foreignId('school_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });
     }

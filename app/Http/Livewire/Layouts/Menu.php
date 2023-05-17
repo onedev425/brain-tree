@@ -19,7 +19,7 @@ class Menu extends Component
                                 <path id="Path_45" data-name="Path 45" d="M23.333,10.167A5.667,5.667,0,1,1,17.667,4.5,5.667,5.667,0,0,1,23.333,10.167Z" transform="translate(-0.333)" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
                               </g>
                             </svg>',
-                'text'  => auth()->user()->hasRole('student') ? 'My Account' : 'Instructor Account',
+                'text'  => 'Profile',
                 'route' => 'profile.show',
                 'routes' => ['profile.show'],
             ],
@@ -125,87 +125,6 @@ class Menu extends Component
 //                'text'  => 'User Profile',
 //                'route' => 'profile.show',
 //            ],
-//            ['header' => 'Multi Schools Management', 'can' => 'header-schools'],
-//            [
-//                'type' => 'menu-item',
-//                'text' => 'Schools',
-//                'icon' => 'fas fa-school',
-//                'can'  => 'menu-school',
-//
-//                'submenu' => [[
-//                    'type'  => 'menu-item',
-//                    'text'  => 'View Schools',
-//                    'route' => 'schools.index',
-//                    'can'   => 'read school',
-//                ],
-//                    [
-//                        'type'  => 'menu-item',
-//                        'text'  => 'Create School',
-//                        'route' => 'schools.create',
-//                        'can'   => 'create school',
-//                    ],
-//                ],
-//            ],
-//            ['header' => 'Administration', 'can' => 'header-administrate'],
-//            [
-//                'type'  => 'menu-item',
-//                'icon'  => 'fas fa-cog',
-//                'text'  => 'School Settings',
-//                'route' => 'schools.settings',
-//                'can'   => 'manage school settings',
-//            ],
-//            [
-//                'type'    => 'menu-item',
-//                'text'    => 'Classes',
-//                'icon'    => 'fas fa-chalkboard',
-//                'can'     => 'menu-class',
-//                'submenu' => [
-//                    [
-//                        'type'  => 'menu-item',
-//                        'text'  => 'View Classes',
-//                        'route' => 'classes.index',
-//                        'can'   => 'read class',
-//                    ],
-//                    [
-//                        'type'  => 'menu-item',
-//                        'text'  => 'Create Class',
-//                        'route' => 'classes.create',
-//                        'can'   => 'create class',
-//                    ],
-//                    [
-//                        'type'  => 'menu-item',
-//                        'text'  => 'View Class Groups',
-//                        'route' => 'class-groups.index',
-//                        'can'   => 'read class group',
-//                    ],
-//                    [
-//                        'type'  => 'menu-item',
-//                        'text'  => 'Create Class Group',
-//                        'route' => 'class-groups.create',
-//                        'can'   => 'create class group',
-//                    ],
-//                ],
-//            ],
-//            [
-//                'type'    => 'menu-item',
-//                'text'    => 'Sections',
-//                'icon'    => 'fas fa-landmark',
-//                'can'     => 'menu-section',
-//                'submenu' => [
-//                    [
-//                        'type'  => 'menu-item',
-//                        'text'  => 'View sections',
-//                        'route' => 'sections.index',
-//                        'can'   => 'read section',
-//                    ],
-//                    [
-//                        'type'  => 'menu-item',
-//                        'text'  => 'Create section',
-//                        'route' => 'sections.create',
-//                        'can'   => 'create section',
-//                    ],
-//                ],
-//            ],
 //            [
 //                'type'    => 'menu-item',
 //                'text'    => 'Students',
@@ -223,18 +142,6 @@ class Menu extends Component
 //                        'text'  => 'Create student',
 //                        'route' => 'students.create',
 //                        'can'   => 'create student',
-//                    ],
-//                    [
-//                        'type'  => 'menu-item',
-//                        'text'  => 'Promote students',
-//                        'route' => 'students.promote',
-//                        'can'   => 'promote student',
-//                    ],
-//                    [
-//                        'type'  => 'menu-item',
-//                        'text'  => 'Manage promotions',
-//                        'route' => 'students.promotions',
-//                        'can'   => 'read promotion',
 //                    ],
 //                    [
 //                        'type'  => 'menu-item',
@@ -292,26 +199,6 @@ class Menu extends Component
 //            ],
 //            [
 //                'type'    => 'menu-item',
-//                'text'    => 'Parents',
-//                'icon'    => 'fas fa-user',
-//                'can'     => 'menu-parent',
-//                'submenu' => [
-//                    [
-//                        'type'  => 'menu-item',
-//                        'text'  => 'View parents',
-//                        'route' => 'parents.index',
-//                        'can'   => 'read parent',
-//                    ],
-//                    [
-//                        'type'  => 'menu-item',
-//                        'text'  => 'Create parent',
-//                        'route' => 'parents.create',
-//                        'can'   => 'create parent',
-//                    ],
-//                ],
-//            ],
-//            [
-//                'type'    => 'menu-item',
 //                'text'    => 'Admins',
 //                'icon'    => 'fas fa-user',
 //                'can'     => 'menu-admin',
@@ -327,46 +214,6 @@ class Menu extends Component
 //                        'text'  => 'Create admin',
 //                        'route' => 'admins.create',
 //                        'can'   => 'create admin',
-//                    ],
-//                ],
-//            ],
-//            [
-//                'type'    => 'menu-item',
-//                'text'    => 'Academic years',
-//                'icon'    => 'fas fa-calendar',
-//                'can'     => 'menu-academic-year',
-//                'submenu' => [
-//                    [
-//                        'type'  => 'menu-item',
-//                        'text'  => 'View academic years',
-//                        'route' => 'academic-years.index',
-//                        'can'   => 'read academic year',
-//                    ],
-//                    [
-//                        'type'  => 'menu-item',
-//                        'text'  => 'Create academic year',
-//                        'route' => 'academic-years.create',
-//                        'can'   => 'create academic year',
-//                    ],
-//                ],
-//            ],
-//            [
-//                'type'    => 'menu-item',
-//                'text'    => 'Semesters',
-//                'icon'    => 'fas fa-clock',
-//                'can'     => 'menu-semester',
-//                'submenu' => [
-//                    [
-//                        'type'  => 'menu-item',
-//                        'text'  => 'View semesters',
-//                        'route' => 'semesters.index',
-//                        'can'   => 'read semester',
-//                    ],
-//                    [
-//                        'type'  => 'menu-item',
-//                        'text'  => 'Create semester',
-//                        'route' => 'semesters.create',
-//                        'can'   => 'create semester',
 //                    ],
 //                ],
 //            ],
@@ -440,7 +287,6 @@ class Menu extends Component
 //                    ],
 //                ],
 //            ],
-//            ['header' => 'Academics', 'can' => 'header-academics'],
 //            [
 //                'type'    => 'menu-item',
 //                'text'    => 'Notices',
@@ -458,58 +304,6 @@ class Menu extends Component
 //                        'text'  => 'Create notice',
 //                        'route' => 'notices.create',
 //                        'can'   => 'create notice',
-//                    ],
-//                ],
-//            ],
-//            [
-//                'type'    => 'menu-item',
-//                'text'    => 'Syllabi',
-//                'icon'    => 'fas fa-list-alt',
-//                'can'     => 'menu-syllabus',
-//                'submenu' => [
-//                    [
-//                        'type'  => 'menu-item',
-//                        'text'  => 'View Syllabi',
-//                        'route' => 'syllabi.index',
-//                        'can'   => 'read syllabus',
-//                    ],
-//                    [
-//                        'type'  => 'menu-item',
-//                        'text'  => 'Create Syllabus',
-//                        'route' => 'syllabi.create',
-//                        'can'   => 'create syllabus',
-//                    ],
-//                ],
-//            ],
-//            [
-//                'type'    => 'menu-item',
-//                'text'    => 'Timetables',
-//                'icon'    => 'fas fa-tasks',
-//                'can'     => 'menu-timetable',
-//                'submenu' => [
-//                    [
-//                        'type'  => 'menu-item',
-//                        'text'  => 'View Timetables',
-//                        'route' => 'timetables.index',
-//                        'can'   => 'read timetable',
-//                    ],
-//                    [
-//                        'type'  => 'menu-item',
-//                        'text'  => 'Create Timetable',
-//                        'route' => 'timetables.create',
-//                        'can'   => 'create timetable',
-//                    ],
-//                    [
-//                        'type'  => 'menu-item',
-//                        'text'  => 'View custom items',
-//                        'route' => 'custom-timetable-items.index',
-//                        'can'   => 'read custom timetable items',
-//                    ],
-//                    [
-//                        'type'  => 'menu-item',
-//                        'text'  => 'Create Custom Items',
-//                        'route' => 'custom-timetable-items.create',
-//                        'can'   => 'create custom timetable items',
 //                    ],
 //                ],
 //            ],
@@ -541,18 +335,6 @@ class Menu extends Component
 //                        'type'  => 'menu-item',
 //                        'text'  => 'Exam tabulation sheet',
 //                        'route' => 'exams.tabulation',
-//                        'can'   => 'read exam',
-//                    ],
-//                    [
-//                        'type'  => 'menu-item',
-//                        'text'  => 'Semester Result Sheet',
-//                        'route' => 'exams.semester-result-tabulation',
-//                        'can'   => 'read exam',
-//                    ],
-//                    [
-//                        'type'  => 'menu-item',
-//                        'text'  => 'Academic Year Result Sheet',
-//                        'route' => 'exams.academic-year-result-tabulation',
 //                        'can'   => 'read exam',
 //                    ],
 //                    [

@@ -24,11 +24,7 @@ class UserPolicy
      */
     public function view(User $user, User $model, $role)
     {
-        if ($user->school_id != $model->school_id) {
-            return false;
-        }
-
-        if ($user->can("read $role") && $user->school_id == $model->school_id) {
+        if ($user->can("read $role")) {
             return true;
         }
         // user can view his own profile
@@ -52,11 +48,7 @@ class UserPolicy
      */
     public function update(User $user, User $model, $role)
     {
-        if ($user->school_id != $model->school_id) {
-            return false;
-        }
-
-        if ($user->can("update $role") && $user->school_id == $model->school_id) {
+        if ($user->can("update $role")) {
             return true;
         }
     }
@@ -66,11 +58,7 @@ class UserPolicy
      */
     public function delete(User $user, User $model, $role)
     {
-        if ($user->school_id != $model->school_id) {
-            return false;
-        }
-
-        if ($user->can("delete $role") && $user->school_id == $model->school_id) {
+        if ($user->can("delete $role")) {
             return true;
         }
     }
@@ -93,7 +81,7 @@ class UserPolicy
 
     public function lockAccount(User $user, User $model)
     {
-        if ($user->can('lock user account') && $model->school_id = $user->school_id) {
+        if ($user->can('lock user account')) {
             return true;
         }
     }

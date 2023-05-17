@@ -17,7 +17,7 @@ class RegistrationRequest extends FormRequest
      */
     public function rules()
     {
-        $roles = Role::whereIn('name', ['teacher', 'student', 'parent'])->get();
+        $roles = Role::whereIn('name', ['teacher', 'student'])->get();
 
         return [
             'user_name' => [

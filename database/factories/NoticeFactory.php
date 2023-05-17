@@ -28,7 +28,6 @@ class NoticeFactory extends Factory
             'start_date' => $startDate->format('Y-m-d'),
             'stop_date'  => $stopDate->format('Y-m-d'),
             'active'     => $this->faker->boolean,
-            'school_id'  => 1,
         ];
     }
 }

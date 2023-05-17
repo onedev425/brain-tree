@@ -18,7 +18,7 @@ class FeeInvoiceFactory extends Factory
      */
     public function definition(): array
     {
-        $student = User::where('school_id', 1)->students()->activeStudents()->inRandomOrder()->first();
+        $student = User::students()->activeStudents()->inRandomOrder()->first();
         $issueDate = $this->faker->dateTimeThisYear('+2 months');
         $days = mt_rand(10, 50);
         $dueDate = Carbon::instance($issueDate)->addDays($days);

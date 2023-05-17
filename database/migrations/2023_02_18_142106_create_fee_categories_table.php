@@ -9,7 +9,6 @@ return new class() extends Migration {
     {
         Schema::create('fee_categories', static function (Blueprint $table) {
             $table->id();
-            $table->foreignId('school_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
             $table->string('name');
             $table->longText('description')->nullable();
             $table->softDeletes();

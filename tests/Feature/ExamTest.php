@@ -64,18 +64,12 @@ class ExamTest extends TestCase
         $this->authorized_user(['create exam'])
             ->post('/dashboard/exams', [
                 'name'        => 'test exam',
-                'semester_id' => '1',
                 'description' => 'test description',
-                'start_date'  => '2020-01-01',
-                'stop_date'   => '2020-01-01',
             ]);
 
         $this->assertDatabaseHas('exams', [
             'name'        => 'test exam',
-            'semester_id' => '1',
             'description' => 'test description',
-            'start_date'  => '2020-01-01',
-            'stop_date'   => '2020-01-01',
         ]);
     }
 
@@ -105,10 +99,7 @@ class ExamTest extends TestCase
         $this->unauthorized_user()
             ->put("/dashboard/exams/$exam->id", [
                 'name'        => 'test',
-                'semester_id' => '1',
                 'description' => 'test',
-                'start_date'  => '2018-01-01',
-                'stop_date'   => '2018-01-01',
             ])
             ->assertForbidden();
     }
@@ -121,19 +112,13 @@ class ExamTest extends TestCase
         $this->authorized_user(['update exam'])
             ->put("/dashboard/exams/$exam->id", [
                 'name'        => 'test',
-                'semester_id' => '1',
                 'description' => 'test',
-                'start_date'  => '2018-01-01',
-                'stop_date'   => '2018-01-02',
             ]);
 
         $this->assertDatabaseHas('exams', [
             'id'          => $exam->id,
             'name'        => 'test',
-            'semester_id' => '1',
             'description' => 'test',
-            'start_date'  => '2018-01-01',
-            'stop_date'   => '2018-01-02',
         ]);
     }
 
@@ -189,10 +174,10 @@ class ExamTest extends TestCase
 
     //test authorized user can view exam tabulation
 
-    public function test_authorized_user_can_view_semester_result_tabulation()
+    public function test_authorized_user_can_view_result_tabulation()
     {
         $this->authorized_user(['read exam'])
-            ->get('dashboard/exams/semester-result-tabulation')
+            ->get('dashboard/exams/result-tabulation')
             ->assertSuccessful();
     }
 

@@ -15,9 +15,6 @@ Your application is currently under review, you would be notified when a decisio
 		@case('rejected')
 Your application was unfortunately rejected.
 			@break
-		@case('user action required')
-Your action is currently required, if you don't see the reason why contact the school for support.
-			@break
 		@default
 This email has been sent to you because your application status has changed to {{$status}}.
 	@endswitch
