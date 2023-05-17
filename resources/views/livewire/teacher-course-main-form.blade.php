@@ -1,6 +1,6 @@
 <div class="block">
     <div class="float-right my-4">
-        <a href="{{ route('course.create') }}" class="bg-red-600 uppercase hover:bg-opacity-90 active:bg-opacity-70 text-white py-2 px-4 border-2 rounded-lg my-3">
+        <a href="{{ route('teacher.course.create') }}" class="bg-red-600 uppercase hover:bg-opacity-90 active:bg-opacity-70 text-white py-2 px-4 border-2 rounded-lg my-3">
             <i class="fa fa-plus" aria-hidden="true"></i>
             {{ __('Create new course') }}
         </a>

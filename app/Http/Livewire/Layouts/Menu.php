@@ -32,8 +32,8 @@ class Menu extends Component
                               </g>
                             </svg>',
                 'text'  => 'Courses',
-                'route' => 'course.index',
-                'routes' => ['course.index', 'course.create'],
+                'route' => auth()->user()->hasRole('student') ? 'teacher.course.index' : 'teacher.course.index',
+                'routes' => auth()->user()->hasRole('student') ? ['teacher.course.index', 'teacher.course.create'] : ['teacher.course.index', 'teacher.course.create'],
             ],
             [
                 'type'  => 'menu-item',

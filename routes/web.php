@@ -34,6 +34,28 @@ Route::middleware(['guest'])->group(function () {
 });
 
 //user must be authenticated
+Route::middleware('auth:sanctum', 'verified', 'App\Http\Middleware\PreventLockAccountAccess', 'App\Http\Middleware\EnsureDefaultPasswordIsChanged')->namespace('App\Http\Controllers')->group(function () {
+    //Setting routes
+    Route::get('settings', ['App\Http\Controllers\SettingController', 'index'])->name('settings.index');
+
+    //Pricing routes
+    Route::get('pricing', ['App\Http\Controllers\PricingController', 'index'])->name('pricing.index');
+
+    //Teacher Courses routes
+    Route::prefix('teacher')->group(function () {
+        Route::resource('course', TeacherCourseController::class)->names([
+            'index' => 'teacher.course.index',
+            'create' => 'teacher.course.create',
+            'store' => 'teacher.course.store',
+            'show' => 'teacher.course.show',
+            'edit' => 'teacher.course.edit',
+            'update' => 'teacher.course.update',
+            'destroy' => 'teacher.course.destroy',
+        ]);
+    });
+});
+
+//user must be authenticated
 Route::middleware('auth:sanctum', 'verified', 'App\Http\Middleware\PreventLockAccountAccess', 'App\Http\Middleware\EnsureDefaultPasswordIsChanged')->prefix('dashboard')->namespace('App\Http\Controllers')->group(function () {
     //dashboard route
     Route::get('/', function () {
@@ -91,14 +113,6 @@ Route::middleware('auth:sanctum', 'verified', 'App\Http\Middleware\PreventLockAc
     Route::scopeBindings()->group(function () {
         Route::resource('exams/{exam}/manage/exam-slots', ExamSlotController::class);
     });
-
-        //Setting routes
-    Route::get('settings', ['App\Http\Controllers\SettingController', 'index'])->name('settings.index');
-
-    //Pricing routes
-    Route::get('pricing', ['App\Http\Controllers\PricingController', 'index'])->name('pricing.index');
-
-    Route::resource('teacher/course', TeacherCourseController::class);
 
     //manage exam record
     Route::resource('exams/exam-records', ExamRecordController::class);
