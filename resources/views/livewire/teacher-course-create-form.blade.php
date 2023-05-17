@@ -265,7 +265,9 @@
     <div id="lesson_dialog" class="hidden fixed z-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full md:w-2/3 lg:w-1/2 xl:2/5 bg-white rounded-md px-8 py-6 space-y-5 drop-shadow-lg">
         <h1 class="text-2xl font-semibold">{{ __('Lesson') }}</h1>
         <div class="py-5">
-            <form class="valid-form flex flex-wrap flex-row -mx-4">
+            <form id="lesson_form" class="valid-form flex flex-wrap flex-row -mx-4">
+                <input type="hidden" name="lesson_edit_flag" value="new" />
+                <input type="hidden" name="topic_uuid" value="" />
                 <button id="close_lesson_dialog" type="button" class="fill-current h-6 w-6 absolute right-0 top-0 m-4 text-3xl font-bold">×</button>
                 <div class="form-group flex-shrink max-w-full px-4 w-full mb-4">
                     <label for="lesson_name" class="inline-block mb-2">{{ __('Lesson Name') }}</label>
@@ -399,12 +401,31 @@
                 event.preventDefault();
                 $('div#lesson_dialog').removeClass('hidden');
                 $('div#overlay').removeClass('hidden');
+                $('input[name=topic_uuid]').val($(this).attr('data-topic-uuid'));
+
+                $('input#lesson_name').val('');
+                $('textarea#lesson_description').val('');
+                $('select#video_source').val('');
+                $('input#video_url').val('');
             });
 
             $('body').on('click', '.edit_lesson_dialog_button', function(event) {
                 event.preventDefault();
                 $('div#lesson_dialog').removeClass('hidden');
                 $('div#overlay').removeClass('hidden');
+
+                const lessonObject = $(this).parent().prev();
+                $('input#lesson_name').val($(lessonObject).html());
+                $('textarea#lesson_description').val($(lessonObject).attr('data-description'));
+                $('select#video_source').val($(lessonObject).attr('data-video-source'));
+                $('input#video_url').val($(lessonObject).attr('data-video-url'));
+                $('input[name=lesson_edit_flag]').val($(lessonObject).data('uuid'));
+            });
+
+            $('body').on('click', '.remove_lesson_button', function(event) {
+                event.preventDefault();
+                const lessonRootObject = $(this).parent().parent();
+                $(lessonRootObject).remove();
             });
 
             $('button#close_lesson_dialog').on('click', function() {
@@ -448,7 +469,7 @@
     </script>
 
     <script>
-        const myValidation = function () {
+        const topicValidation = function () {
             var topicForm = document.getElementById('topic_form');
             var pristine = new Pristine(topicForm);
 
@@ -484,7 +505,7 @@
                             </div>
                             <div x-show="selected == '${uuid}'">
                                 <div class="flex-1 py-4 px-7">
-                                    <button type="button" class="open_lesson_dialog_button flex py-3 md:px-10 bg-white text-sm text-black font-semibold border border-red-300 uppercase inline-block py-2 px-4 border-2 rounded-lg my-3 hover:bg-gray-50" icon="">
+                                    <button type="button" data-topic-uuid="${uuid}" class="open_lesson_dialog_button flex py-3 md:px-10 bg-white text-sm text-black font-semibold border border-red-300 uppercase inline-block py-2 px-4 border-2 rounded-lg my-3 hover:bg-gray-50" icon="">
                                         <i class="" aria-hidden="true"></i>
                                         <svg class="mr-3" xmlns="http://www.w3.org/2000/svg" width="20.376" height="18.538" viewBox="0 0 20.376 18.538">
                                             <g id="Icon_feather-book-open" data-name="Icon feather-book-open" transform="translate(-2 -3.5)">
@@ -516,8 +537,55 @@
             });
         };
 
+        const lessonValidation = function () {
+            var lessonForm = document.getElementById('lesson_form');
+            var pristine = new Pristine(lessonForm);
+
+            lessonForm.addEventListener('submit', function(event) {
+                event.preventDefault(); // Prevent the default form submission
+                const valid = pristine.validate();
+
+                if (valid) {
+                    const lessonName = $('input#lesson_name').val();
+                    const lessonDescription = $('textarea#lesson_description').val();
+                    const videoSource = $('select#video_source option:selected').val();
+                    const videoURL = $('input#video_url').val();
+
+                    if ($('input[name=lesson_edit_flag]').val() == 'new') {
+                        const uuid = generateUUID();
+                        const topicUuid = $('input[name=topic_uuid]').val();
+                        const newLesson = `
+                            <div class="flex pt-4 justify-between">
+                                <div class="lesson_info pt-1.5" data-description="${lessonDescription}" data-video-source="${videoSource}" data-video-url="${videoURL}" data-uuid="${uuid}">${lessonName}</div>
+                                <div class="min-w-fit" >
+                                    <x-edit-icon-button class="edit_lesson_dialog_button"/>
+                                    <x-remove-icon-button class="remove_lesson_button"/>
+                                </div>
+                            </div>
+                        `;
+
+                        const new_lesson_button = $('button[data-topic-uuid="' + topicUuid + '"]');
+                        $(new_lesson_button).before(newLesson);
+                    }
+                    else {
+                        const uuid = $('input[name=topic_edit_flag]').val();
+                        const lessonObject = $('div.lesson_info[data-uuid="' + uuid + '"]');
+                        $(lessonObject).html(lessonName);
+                        $(lessonObject).attr('data-description', lessonDescription);
+                        $(lessonObject).attr('data-video-source', videoSource);
+                        $(lessonObject).attr('data-video-url', videoURL);
+                    }
+
+
+                    closeLessonDialog();
+                }
+
+            });
+        };
+
         window.addEventListener("load", () => {
-            myValidation();
+            topicValidation();
+            lessonValidation();
         });
 
     </script>
