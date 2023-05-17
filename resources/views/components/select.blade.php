@@ -1,9 +1,9 @@
-<div class="my-2 flex flex-col">
-    @isset($label) 
+<div @class(["$groupClass flex flex-col my-2"])>
+    @isset($label)
     <label for="{{$id}}" class="my-3 font-bold ">{{$label}}</label>
     @endisset
     @if (!$attributes->has('multiple'))
-        <select name="{{$name}}" id="{{$id}}" @class(["p-2 border rounded-md border-gray-400 focus:border-blue-500 bg-inherit dark:bg-gray-800", 'border-red-500' => $errors->has($name)]) {{$attributes}}>
+        <select name="{{$name}}" id="{{$id}}" @class(["$class p-2 border rounded-md border-gray-400 focus:border-blue-500 bg-inherit dark:bg-gray-800", 'border-red-500' => $errors->has($name)]) {{$attributes}}>
             {{$slot}}
         </select>
     @else
@@ -11,7 +11,7 @@
             <select class="hidden" id="{{$id}}">
                 {{$slot}}
             </select>
-    
+
             <div x-data="dropdown()" x-init="loadOptions()" class="">
                 <div  x-data="{ allSelected : selected }">
                     <template x-for="selected in allSelected ">

@@ -7,7 +7,7 @@
             <x-display-validation-errors/>
             <x-input id="name" name="name" label="Name" placeholder="Fee Name"/>
             <x-textarea id="description" name="description" placeholder="Fee Description" label="Description"/>
-            <x-select id="fee-category" name="fee_category_id" label="Fee Category">
+            <x-select id="fee-category" name="fee_category_id" label="Fee Category" group-class="" >
                 @foreach ($feeCategories as $feeCategory)
                     <option value="{{$feeCategory->id}}">{{$feeCategory->name}}</option>
                 @endforeach

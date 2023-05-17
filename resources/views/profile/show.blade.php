@@ -9,6 +9,10 @@
             @livewire('application-history', ['applicant' => auth()->user()])
         @endif
         @if (Laravel\Fortify\Features::canUpdateProfileInformation())
-            @livewire('profile.update-profile-information-form')
+            @if (auth()->user()->hasRole('student'))
+                @livewire('student-profile-form')
+            @else
+                @livewire('teacher-profile-form')
+            @endif
         @endif
 @endsection

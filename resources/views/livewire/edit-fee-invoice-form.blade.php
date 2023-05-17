@@ -80,12 +80,12 @@
     <form action="{{route('fee-invoice-records.store')}}" method="POST" class="card-body">
         <x-display-validation-errors error-bag="store_fee_invoice"/>
         <div class="md:grid md:grid-cols-2 gap-4">
-            <x-select name="feeCategory" id="feeCategories" wire:model="feeCategory" label="Fee Category">
+            <x-select name="feeCategory" id="feeCategories" wire:model="feeCategory" label="Fee Category" group-class="" >
                 @foreach ($feeCategories as $item)
                     <option value="{{$item->id}}">{{$item->name}}</option>
                 @endforeach
             </x-select>
-            <x-select name="fee_id" id="feeCategories" wire:model="fee" label="Fee">
+            <x-select name="fee_id" id="feeCategories" wire:model="fee" label="Fee" group-class="" >
                 @isset($fees)
                     @foreach ($fees as $item)
                         <option value="{{$item->id}}">{{$item->name}}</option>

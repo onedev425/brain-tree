@@ -1,9 +1,9 @@
 <x-partials.form-section submit="updateProfileInformation">
 
     <x-slot name="form">
-            <x-action-message on="saved">
-                {{ __('Saved.') }}
-            </x-action-message>
+        <x-action-message on="saved">
+            {{ __('Saved.') }}
+        </x-action-message>
         <h3 class="text-xl md:text-2xl font-bold" group-class="col-span-12" >
             {{ __('Account') }}
         </h3>
@@ -27,8 +27,6 @@
         </div>
     </x-slot>
     <x-slot name="actions">
-        <x-button class="w-6/12 lg:w-3/12">
-            {{ __('Save') }}
-        </x-button>
+        <x-button>{{ __('Save') }}</x-button>
     </x-slot>
 </x-partials.form-section>
