@@ -7,7 +7,7 @@
                 </div>
             @endif
             <div class="card">
-                <div class="card-header bg-blue-600 text-white">
+                <div class="card-header text-black">
                     <h4 class="card-title capitalize">{{$item->name}}</h4>
                 </div>
                 @if ($item->reason != null)

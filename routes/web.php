@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return redirect()->route('profile.show');
+    return redirect()->route('dashboard');
 })->name('home');
 
 Route::get('/home', function () {
