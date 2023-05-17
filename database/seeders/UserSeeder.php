@@ -24,11 +24,9 @@ class UserSeeder extends Seeder
             'name'              => 'John Doe',
             'email'             => 'super@admin.com',
             'password'          => Hash::make('password'),
-            'school_id'         => 1,
             'address'           => 'super admin street',
             'birthday'          => '22/04/04',
             'email_verified_at' => now(),
-            'gender'            => 'male',
         ]);
 
         $superAdmin->assignRole('super-admin');
@@ -39,11 +37,9 @@ class UserSeeder extends Seeder
             'name'              => 'Jane Doe',
             'email'             => 'admin@admin.com',
             'password'          => Hash::make('password'),
-            'school_id'         => 1,
             'address'           => 'admin street',
             'birthday'          => '22/04/04',
             'email_verified_at' => now(),
-            'gender'            => 'male',
 
         ]);
 
@@ -54,11 +50,9 @@ class UserSeeder extends Seeder
             'name'              => 'John Doe',
             'email'             => 'teacher@teacher.com',
             'password'          => Hash::make('password'),
-            'school_id'         => 1,
             'address'           => 'teacher street',
             'birthday'          => '22/04/04',
             'email_verified_at' => now(),
-            'gender'            => 'male',
 
         ]);
 
@@ -73,64 +67,16 @@ class UserSeeder extends Seeder
             'name'              => 'Jane Doe',
             'email'             => 'student@student.com',
             'password'          => Hash::make('password'),
-            'school_id'         => 1,
             'address'           => 'student street',
             'birthday'          => '22/04/04',
             'email_verified_at' => now(),
-            'gender'            => 'male',
         ]);
         $student->studentRecord()->create([
-            'my_class_id'      => 1,
-            'section_id'       => 1,
             'admission_date'   => '22/04/04',
             'is_graduated'     => false,
             'admission_number' => Str::random(10),
         ]);
 
         $student->assignRole('student');
-
-        $parent = User::create([
-            'name'              => 'John Doe',
-            'email'             => 'parent@parent.com',
-            'password'          => Hash::make('password'),
-            'school_id'         => 1,
-            'address'           => 'parent street',
-            'birthday'          => '22/04/04',
-            'email_verified_at' => now(),
-            'gender'            => 'male',
-
-        ]);
-
-        $parent->assignRole('parent');
-
-        $parent->parentRecord()->create();
-
-        $accountant = User::create([
-            'name'              => 'Jane Doe',
-            'email'             => 'accountant@accountant.com',
-            'password'          => Hash::make('password'),
-            'school_id'         => 1,
-            'address'           => 'accountant street',
-            'birthday'          => '22/04/04',
-            'email_verified_at' => now(),
-            'gender'            => 'male',
-
-        ]);
-
-        $accountant->assignRole('accountant');
-
-        $librarian = User::create([
-            'name'              => 'John Doe',
-            'email'             => 'libratian@librarian.com',
-            'password'          => Hash::make('password'),
-            'school_id'         => 1,
-            'address'           => 'librarian street',
-            'birthday'          => '22/04/04',
-            'email_verified_at' => now(),
-            'gender'            => 'male',
-
-        ]);
-
-        $librarian->assignRole('librarian');
     }
 }

@@ -20,12 +20,6 @@ class StoreFeeInvoiceRequest extends FormRequest
             'due_date'   => 'required|date|after_or_equal:issue_date',
             'note'       => 'nullable|max:10000',
             'users'      => 'required|array',
-            'users.*'    => [
-                'integer',
-                Rule::exists('users', 'id')->where(function (Builder $query) {
-                    return $query->where('school_id', auth()->user()->school->id);
-                }),
-            ],
             'records'          => 'required|array',
             'records.*.fee_id' => 'required|integer|exists:fees,id',
             'records.*.amount' => 'required|integer|min:1',

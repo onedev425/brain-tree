@@ -17,7 +17,7 @@ class ExamSlotFactory extends Factory
      */
     public function definition()
     {
-        $exam = Exam::query()->whereRelation('semester', 'id', 1)->inRandomOrder()->first();
+        $exam = Exam::query()->inRandomOrder()->first();
 
         return [
             'name'        => $this->faker->name,

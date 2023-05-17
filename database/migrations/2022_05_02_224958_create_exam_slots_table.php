@@ -9,8 +9,7 @@ return new class() extends Migration {
     {
         Schema::create('exam_slots', static function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('description')->nullable();
+            $table->foreignId('user_id');
             $table->integer('total_marks')->unsigned();
             $table->foreignId('exam_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();

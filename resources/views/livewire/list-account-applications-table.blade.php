@@ -5,7 +5,6 @@
     <div class="card-body">
         <livewire:datatable :model="App\Models\User::class"
         :filters="[
-            ['name' => 'inSchool'],
             ['name' => 'applicants'],
         ]"
         :columns="[

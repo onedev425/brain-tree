@@ -2,19 +2,13 @@
 
 namespace App\Http\Livewire;
 
-use App\Models\MyClass;
 use App\Models\User;
-use App\Services\MyClass\MyClassService;
 use App\Services\Teacher\TeacherService;
 use Livewire\Component;
 
 class AssignTeacherToSubjects extends Component
 {
     public $teachers;
-
-    public $classes;
-
-    public ?int $class;
 
     public $subjects;
 
@@ -25,17 +19,14 @@ class AssignTeacherToSubjects extends Component
      */
     public User $teacherState;
 
-    public function mount(TeacherService $teacherService, MyClassService $myclassService)
+    public function mount(TeacherService $teacherService)
     {
-        $this->classes = $myclassService->getAllClasses();
-        $this->class = $this->classes->first()?->id;
         $this->teachers = $teacherService->getAllTeachers();
         $this->teacher = $this->teachers->first()?->id;
     }
 
-    public function fetchSubjects(MyClass $class, User $teacher)
+    public function fetchSubjects(User $teacher)
     {
-        $this->subjects = $class->subjects;
         $this->teacherState = $teacher;
     }
 

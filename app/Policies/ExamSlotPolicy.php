@@ -25,9 +25,6 @@ class ExamSlotPolicy
      */
     public function view(User $user, ExamSlot $examSlot)
     {
-        if ($user->can('read exam slot') && $examSlot->exam->semester->school_id == $user->school_id) {
-            return true;
-        }
     }
 
     /**
@@ -45,9 +42,6 @@ class ExamSlotPolicy
      */
     public function update(User $user, ExamSlot $examSlot)
     {
-        if ($user->can('update exam slot') && $examSlot->exam->semester->school_id == $user->school_id) {
-            return true;
-        }
     }
 
     /**
@@ -55,9 +49,6 @@ class ExamSlotPolicy
      */
     public function delete(User $user, ExamSlot $examSlot)
     {
-        if ($user->can('delete exam slot') && $examSlot->exam->semester->school_id == $user->school_id) {
-            return true;
-        }
     }
 
     /**
@@ -65,7 +56,6 @@ class ExamSlotPolicy
      */
     public function restore(User $user, ExamSlot $examSlot)
     {
-        //
     }
 
     /**
@@ -73,6 +63,5 @@ class ExamSlotPolicy
      */
     public function forceDelete(User $user, ExamSlot $examSlot)
     {
-        //
     }
 }

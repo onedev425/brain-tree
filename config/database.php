@@ -48,7 +48,7 @@ return [
             'url'            => env('DATABASE_URL'),
             'host'           => env('DB_HOST', '127.0.0.1'),
             'port'           => env('DB_PORT', '3306'),
-            'database'       => env('DB_DATABASE', 'braintree'),
+            'database'       => env('DB_DATABASE', 'braintree_main'),
             'username'       => env('DB_USERNAME', 'braintree'),
             'password'       => env('DB_PASSWORD', 'braintree'),
             'unix_socket'    => env('DB_SOCKET', 'braintree'),

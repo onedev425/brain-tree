@@ -11,7 +11,6 @@
     <div class="overflow-scroll beautify-scrollbar text-center">
         <table class="w-full" id="mark-tabulation">
             <thead class="">
-                <th class="border p-4">Class Position</th>
                 <th class="border p-4">Name</th>
                 <th class="border p-4">Admission Number</th>
                 @foreach ($heads as $head)

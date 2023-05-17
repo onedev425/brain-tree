@@ -7,6 +7,7 @@ use App\Http\Livewire\LoginForm;
 use App\Http\Requests\RegistrationRequest;
 use App\Services\AccountApplication\AccountApplicationService;
 use App\Services\User\UserService;
+use Illuminate\Support\Facades\Log;
 
 class RegistrationController extends Controller
 {
@@ -33,15 +34,12 @@ class RegistrationController extends Controller
 
     public function register(RegistrationRequest $request)
     {
-        $request['school_id'] = 1;
-
         $user = $this->userService->createUser($request);
 
         //assign applicant role
         $user->assignRole('applicant');
 
         $accountApplication = $this->accountApplicationService->createAccountApplication($user->id, $request->role);
-
         $status = 'Application Received';
         $reason = 'Application has been received, we would reach out to you for further information';
         $accountApplication->setStatus($status, $reason);
