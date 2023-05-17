@@ -2,17 +2,17 @@
     <div class="card-header">
         <h1 class="card-title">Application Status</h1>
     </div>
-    @if (!is_null($applicant->accountApplication))  
+    @if (!is_null($applicant->accountApplication))
         <div class="card-body">
-            
+
             <h3 class="m-2 text-center text-bold text-2xl font-bold">Account Application History</h3>
             <livewire:application-history :applicant="$applicant"/>
             <x-loading-spinner/>
-            
+
             @can('change account application status')
                 <form action="{{route('account-applications.change-status', $applicant->id)}}" method="POST" class="col-md-9 m-auto">
-                    <x-select id="name" name="status" label="Status"
-                    wire:model="status" >
+                    <x-select id="name" name="status" label="Status" group-class=""
+                              wire:model="status" >
                         @foreach ($statuses as $status)
                             <option value="{{$status}}">{{ucwords($status)}}</option>
                         @endforeach

@@ -18,7 +18,7 @@
             <div class="md:grid md:grid-cols-3 gap-4">
                 <x-loading-spinner wire:target="addStudent"/>
 
-                <x-select id="student" name="" label="Student" wire:model="student">
+                <x-select id="student" name="" label="Student" group-class="" wire:model="student">
                     <option value="">All Students</option>
                     @isset($students)
                         @foreach ($students as $item)
@@ -70,12 +70,12 @@
             <x-loading-spinner wire:target="addFees"/>
             <x-loading-spinner wire:target="feeCategory"/>
             <div class="md:grid grid-cols-2 items-end gap-4">
-                <x-select id="fee" name="" label="Fee Category" wire:model="feeCategory">
+                <x-select id="fee" name="" label="Fee Category" group-class="" wire:model="feeCategory">
                     @foreach ($feeCategories as $item)
                         <option value="{{$item->id}}">{{$item->name}}</option>
                     @endforeach
                 </x-select>
-                <x-select id="fee" name="" label="Fee" wire:model="fee">
+                <x-select id="fee" name="" label="Fee" group-class="" wire:model="fee">
                     @isset($fees)
                         <option value="">All Fees </option>
                         @foreach ($fees as $item)

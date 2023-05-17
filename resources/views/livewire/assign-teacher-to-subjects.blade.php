@@ -9,8 +9,8 @@
                     <option value="{{$teacher->id}}">{{$teacher->name}}</option>
                 @endforeach
             </x-select>
-            <x-button label="Fetch Subjects" theme="primary" icon="fas fa-paper-plane" type="submit"  class="w-full"/>
-            
+            <x-button label="Fetch Subjects" theme="primary" icon="fas fa-paper-plane" type="submit" group-class="" class="w-full"/>
+
         </form>
     </div>
     <div class="card-body">
@@ -30,7 +30,7 @@
                                     <tr>
                                         <td class="border p-2 whitespace-nowrap">{{$subject->name}}</td>
                                         <td class="border p-2">
-                                            <x-select name="subjects[]" id="subject-{{$subject->id}}" >
+                                            <x-select name="subjects[]" id="subject-{{$subject->id}}" group-class="" >
                                                 <option value="{{$subject['id']}}">Include</option>
                                                 <option value="">Dont Include</option>
                                             </x-select>

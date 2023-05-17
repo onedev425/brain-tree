@@ -5,7 +5,7 @@
     <div class="card-body">
         <form action="" class="my-5 md:grid grid-cols-2 gap-4">
             <x-input-year id="year" name="year" label="Due Date Year" wire:model="year"/>
-            <x-select name="" wire:model="status" id="invoice-status" label="Invoice status" >
+            <x-select name="" wire:model="status" id="invoice-status" group-class="" label="Invoice status" >
                 @foreach ($statuses as $status)
                     <option value="{{$status}}">{{ucfirst($status)}}</option>
                 @endforeach
@@ -15,7 +15,7 @@
 
         <div wire:loading.remove.delay class="my-3">
             @unlessrole(['student'])
-                <livewire:datatable :model="App\Models\FeeInvoice::class" 
+                <livewire:datatable :model="App\Models\FeeInvoice::class"
                 :wire:key="Str::Random(10)"
                 uniqueId="list-fee-invoices"
                 :filters="array_merge([
@@ -38,7 +38,7 @@
                 />
             @endunlessrole
             @role('student')
-                <livewire:datatable :model="App\Models\FeeInvoice::class" 
+                <livewire:datatable :model="App\Models\FeeInvoice::class"
                 :wire:key="Str::Random(10)"
                 uniqueId="list-fee-invoices"
                 :filters="array_merge([
@@ -58,6 +58,6 @@
                 />
             @endrole
         </div>
-    
+
     </div>
 </div>

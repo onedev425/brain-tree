@@ -7,7 +7,7 @@
             <x-display-validation-errors/>
             <x-input id="name" name="name" label="Subject Name" placeholder="Enter subject name" />
             <x-input id="short-name" name="short_name" label="Subject short Name" placeholder="Enter subject short name" />
-            <x-select id="select" name="teachers[]" multiple label="Select Teachers" placeholder="Select teachers.....">
+            <x-select id="select" name="teachers[]" multiple label="Select Teachers" group-class="" placeholder="Select teachers.....">
                 @foreach ($teachers as $teacher)
                     <option value="{{$teacher->id}}">{{$teacher->name}}</option>
                 @endforeach

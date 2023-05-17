@@ -8,7 +8,7 @@
         <x-loading-spinner/>
         {{-- form for selecting exam to display --}}
         <form wire:submit.prevent="tabulate('{{$exam}}'')" class="md:grid grid-cols-3 gap-4">
-                <x-select id="exam" name="exam_id" label="Select exam" wire:model="exam">
+                <x-select id="exam" name="exam_id" label="Select exam" group-class="" wire:model="exam">
                     @foreach ($exams as $item)
                         <option value="{{$item['id']}}">{{$item['name']}}</option>
                     @endforeach
