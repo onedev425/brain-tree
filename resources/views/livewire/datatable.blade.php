@@ -1,35 +1,28 @@
 <div>
     <x-loading-spinner/>
-    <div class="flex flex-col md:flex-row gap-4 items-center">
-        <div class="flex gap-4 items-center overflow-scroll beautify-scrollbar">
-            <label for="datatable-search-{{$uniqueId}}">Search</label>
-            <input id="datatable-search-{{$uniqueId}}" type="search" wire:model.sebounce.500ms="search" class="border-gray-500 dark:bg-inherit border rounded px-4 py-1 md:py-2">
-        </div>
-        <select class="bg-white dark:bg-gray-800 px-4 py-2 border border-gray-500 rounded" wire:model="perPage">
-            @foreach ([5,10,20,25,100] as $item)
-                <option value="{{$item}}" class="bg-inherit">{{$item}}</option>
-            @endforeach
-        </select>
+    <div class="flex items-center justify-end">
+        <input id="datatable-search-{{$uniqueId}}" type="search" wire:model.sebounce.500ms="search"  placeholder="Search" class="border border-gray-300 rounded-l py-2 px-4"/>
+        <button class="bg-red-500 hover:bg-red-600 text-white rounded-r py-2 px-4 focus:outline-none focus:ring focus:border-red-300">
+            <i class="fas fa-search"></i>
+        </button>
     </div>
-    <div class="overflow-x-scroll beautify-scrollbar text-center">
-        <table class="border w-full my-4 table-auto">
-            <thead class="border bg-gray-900 dark:bg-white dark:bg-opacity-20 text-white">
-                <th class="p-4">S/N</th>
+    <div class="overflow-x-scroll beautify-scrollbar text-center my-4 border rounded-lg">
+        <table class="w-full table-auto">
+            <thead class="">
                 @foreach ($columns as $column)
                     @if (!isset($column['can']) || auth()->user()->can($column['can']))
-                        <th class="capitalize p-4 border whitespace-nowrap">{{str_replace('_' , ' ', Str::snake( $column['name'] ??  $column['property']))}}</th>
+                        <th class="capitalize p-4 whitespace-nowrap font-normal text-left">{{str_replace('_' , ' ', Str::snake( $column['name'] ??  $column['property']))}}</th>
                     @endif
                 @endforeach
             </thead>
             <tbody class="">
                 @if ($collection->isNotEmpty())
                     @foreach ($collection as $item)
-                        <tr class="border odd:bg-white even:bg-slate-100 dark:odd:bg-inherit dark:even:bg-white dark:even:bg-opacity-5">
-                            <th class="border w-24">{{ $collection->perPage() * ($collection->currentPage() - 1) + $loop->iteration }}</th>
+                        <tr class="border-t">
                             @foreach ($columns as $column)
                                 @if (!isset($column['can']) || auth()->user()->can($column['can']))
-                                    <td class="p-4 border w-60 whitespace-nowrap">
-                                        @php 
+                                    <td class="p-4 whitespace-nowrap">
+                                        @php
                                             $model = $item;
                                             if (isset($column['relation'])) {
                                                 $relations = explode('.',$column['relation']);
@@ -40,7 +33,7 @@
                                             if (is_array($model)) {
                                                 $model = collect($model);
                                             }
-                                            
+
                                         @endphp
                                         <p>
                                             @if (array_key_exists('method', $column) && !empty($column['method']))
@@ -70,6 +63,13 @@
                                                             @endif
                                                         @endforeach
                                                     </x-dropdown>
+                                                @elseif ($column['type'] == 'href')
+                                                    <div class="flex">
+                                                        @if ($column['image'] != '')
+                                                            <img width="50" height="50" class="rounded-full" src="{{ asset('upload/user/' . ($model?->{$column['image']})) }}" onerror="this.src='{{ asset('images/logo/avatar.png') }}'" />
+                                                        @endif
+                                                        <a href="{{route($column['links'])}}" class="flex capitalize items-center justify-start gap-2 py-3 px-6 hover:bg-white hover:bg-opacity-20 {{ $column['class'] ?? '' }}">{{ ($model?->{$column['property'] ?? $column['text']}) }}</a>
+                                                    </div>
                                                 @elseif($column['type'] == 'boolean-switch')
                                                 <form action="{{route($column['action'], $model->id)}}" method="POST">
                                                     @csrf
@@ -77,7 +77,7 @@
                                                         <input type="checkbox" class="sr-only peer" name="{{$column['field']}}" onChange="this.form.submit()" @checked($model?->{$column['property'] ?? $column['name']}  == true)>
                                                         <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-green-300 dark:peer-focus:ring-green-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-green-600"></div>
                                                         <span class="ml-3 text-sm font-medium text-gray-900 dark:text-gray-300">{{$model?->{$column['property'] ?? $column['name']} == true ? ($column['true-statement'] ?? 'Yes') : ($column['false-statement'] ?? 'No') }}</span>
-                                                    </label>  
+                                                    </label>
                                                 </form>
                                                 @endif
                                             @else
