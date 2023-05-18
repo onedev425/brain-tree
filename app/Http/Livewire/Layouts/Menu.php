@@ -21,7 +21,7 @@ class Menu extends Component
                             </svg>',
                 'text'  => 'Profile',
                 'route' => 'profile.show',
-                'routes' => ['profile.show'],
+                'sub_routes' => ['profile.show'],
             ],
             [
                 'type'  => 'menu-item',
@@ -33,7 +33,7 @@ class Menu extends Component
                             </svg>',
                 'text'  => 'Courses',
                 'route' => auth()->user()->hasRole('student') ? 'teacher.course.index' : 'teacher.course.index',
-                'routes' => auth()->user()->hasRole('student') ? ['teacher.course.index', 'teacher.course.create'] : ['teacher.course.index', 'teacher.course.create'],
+                'sub_routes' => auth()->user()->hasRole('student') ? ['teacher.course.index', 'teacher.course.create'] : ['teacher.course.index', 'teacher.course.create'],
             ],
             [
                 'type'  => 'menu-item',
@@ -42,20 +42,28 @@ class Menu extends Component
                             </svg>',
                 'text'  => 'Certifications & Marks',
                 'route' => 'profile.show',
-                'routes' => ['profile.show'],
+                'sub_routes' => ['profile.show'],
                 'can' => 'certification-marks'
             ],
             [
                 'type'  => 'menu-item',
-                'icon'  => '<svg xmlns="http://www.w3.org/2000/svg" width="26.443" height="31.251" viewBox="0 0 26.443 31.251">
-                              <g id="user_people_person_users_man" data-name="user people person users man" transform="translate(-5 -3)">
-                                <path id="Path_21" data-name="Path 21" d="M27.525,16.239a1.2,1.2,0,1,0-1.695,1.707,10.818,10.818,0,0,1,3.209,7.693c0,1.466-4.219,3.606-10.818,3.606S7.4,27.1,7.4,25.638a10.818,10.818,0,0,1,3.161-7.656A1.2,1.2,0,0,0,8.87,16.287,13.125,13.125,0,0,0,5,25.638c0,3.906,6.815,6.01,13.222,6.01s13.222-2.1,13.222-6.01a13.149,13.149,0,0,0-3.918-9.4Z" transform="translate(0 2.603)"/>
-                                <path id="Path_22" data-name="Path 22" d="M17.414,19.827A8.414,8.414,0,1,0,9,11.414,8.414,8.414,0,0,0,17.414,19.827Zm0-14.424a6.01,6.01,0,1,1-6.01,6.01A6.01,6.01,0,0,1,17.414,5.4Z" transform="translate(0.808 0)"/>
-                              </g>
-                            </svg>',
+                'icon'  => '<svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 512 512" preserveAspectRatio="xMidYMid meet">
+                                <g transform="translate(0,512) scale(0.1,-0.1)" fill="currentColor" stroke="none">
+                                <path d="M2335 5105 c-273 -42 -517 -172 -708 -375 -210 -223 -319 -481 -334 -790 -21 -432 191 -845 557 -1084 180 -118 353 -178 563 -195 389 -30 721 92
+                                989 365 262 267 379 596 347 974 -28 324 -171 603 -419 817 -196 168 -376 252 -625 288 -120 17 -260 18 -370 0z m426 -314 c157 -40 275 -109 407 -236 172
+                                -163 259 -343 282 -576 27 -276 -58 -528 -245 -728 -116 -124 -287 -229 -432 -266 -215 -54 -471 -31 -655 60 -251 124 -437 356 -505 630 -26 105 -23 342 6
+                                450 77 290 329 559 609 650 152 49 379 56 533 16z"/>
+                                <path d="M1427 2639 c-153 -16 -311 -74 -436 -158 -312 -212 -514 -686 -561 -1316 -26 -354 -5 -529 86 -712 50 -102 145 -214 242 -286 74 -54 198 -110
+                                307 -138 l90 -24 1400 0 1400 0 90 23 c316 83 537 296 616 597 41 155 36 525 -12 817 -105 650 -371 1040 -792 1162 -96 28 -268 49 -319 39 -49 -9 -117 -45
+                                -271 -144 -166 -107 -192 -121 -316 -166 -146 -53 -255 -74 -390 -74 -140 0 -248 20 -390 70 -134 48 -140 51 -350 184 -110 70 -192 115 -224 124 -56 14
+                                -56 14 -170 2z m260 -395 c188 -121 267 -160 432 -214 430 -141 869 -73 1283 198 187 123 183 121 262 111 363 -46 590 -351 686 -924 39 -236 51 -565 25
+                                -690 -42 -201 -178 -343 -386 -402 -60 -17 -139 -18 -1434 -18 -1298 0 -1373 1 -1435 18 -149 42 -278 144 -338 267 -52 106 -65 195 -57 410 7 217 17 318
+                                52 495 26 138 87 334 130 419 129 256 304 396 531 425 37 5 71 9 75 10 4 0 82 -47 174 -105z"/>
+                                </g>
+                                </svg>',
                 'text'  => 'Students',
-                'route' => 'profile.show',
-                'routes' => ['profile.show'],
+                'route' => 'students.index',
+                'sub_routes' => ['students.index'],
                 'can'   => 'read student',
             ],
             [
@@ -68,7 +76,7 @@ class Menu extends Component
                             </svg>',
                 'text'  => 'Assessments',
                 'route' => 'profile.show',
-                'routes' => ['profile.show'],
+                'sub_routes' => ['profile.show'],
                 'can'   => 'assessments',
             ],
             [
@@ -78,7 +86,7 @@ class Menu extends Component
                             </svg>',
                 'text'  => 'Marks',
                 'route' => 'profile.show',
-                'routes' => ['profile.show'],
+                'sub_routes' => ['profile.show'],
                 'can'   => 'marks',
             ],
             [
@@ -88,7 +96,7 @@ class Menu extends Component
                             </svg>',
                 'text'  => 'Pricing',
                 'route' => 'pricing.index',
-                'routes' => ['pricing.index'],
+                'sub_routes' => ['pricing.index'],
                 'can' => 'pricing'
             ],
             [
@@ -101,7 +109,7 @@ class Menu extends Component
                             </svg>',
                 'text'  => 'Security & Settings',
                 'route' => 'settings.index',
-                'routes' => ['settings.index'],
+                'sub_routes' => ['settings.index'],
                 'can' => 'settings'
             ],
 
