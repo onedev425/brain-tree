@@ -1,24 +1,12 @@
 <div class="card">
    <div class="card-body">
-      <div class=" profile-image-wrapper" >
-         <img src="{{asset($user->profile_photo_url)}}" alt="user photo"  height="200px" class="m-auto rounded-full profile-image" width="200px" style="width: 175px;height: 175px;"/>  
-      </div>
-      <h2 class="text-center text-3xl m-4">{{$user->name}}</h2>
-      <div class="w-full md:w-8/12 m-auto">
-         <h4 class="text-left text-xl my-2">Personal information</h4>
-         <x-show-table :body="[
-               ['First Name' , $user->first_name],
-               ['Last Name' , $user->last_name],
-               ['Other Name' , $user->other_names],
-               ['Email' , $user->email],
-               ['Gender' , $user->gender],
-               ['Birthday' , $user->birthday],
-               ['state' , $user->state],
-               ['City' , $user->city],
-               ['Address' , $user->address],
-               ['Phone' , $user->phone],
-
-         ]"/>
-      </div>
+       <h3 class="text text-2xl m-2 font-bold">Student Info</h3>
+       <div class="flex mt-5">
+           <img width="150" height="150" class="rounded-full" src="{{ asset('upload/user/' . $user->profile_photo_path) }}" onerror="this.src='{{ asset('images/logo/avatar.png') }}'" />
+           <div class="flex items-start flex-col flex-wrap justify-center ml-8">
+               <div class="text-xl">{{ $user->name }}</div>
+               <div>Joined in {{ date('jS F Y', strtotime($user->created_at)) }}</div>
+           </div>
+       </div>
    </div>
 </div>
