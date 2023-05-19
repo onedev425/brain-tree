@@ -63,7 +63,7 @@ class Menu extends Component
                                 </svg>',
                 'text'  => 'Students',
                 'route' => 'students.index',
-                'sub_routes' => ['students.index'],
+                'sub_routes' => ['students.index', 'students.show'],
                 'can'   => 'read student',
             ],
             [

@@ -1,7 +1,4 @@
-@extends('layouts.app', ['breadcrumbs' => [
-    ['href'=> route('dashboard'), 'text'=> 'Dashboard'],
-    ['href'=> route('students.index'), 'text'=> 'Students', 'active'],
-]])
+@extends('layouts.app')
 
 @section('title',  __('Students'))
 
