@@ -68,7 +68,7 @@
                                                         @if ($column['image'] != '')
                                                             <img width="50" height="50" class="rounded-full" src="{{ asset('upload/user/' . ($model?->{$column['image']})) }}" onerror="this.src='{{ asset('images/logo/avatar.png') }}'" />
                                                         @endif
-                                                        <a href="{{route($column['links'])}}" class="flex capitalize items-center justify-start gap-2 py-3 px-6 hover:bg-white hover:bg-opacity-20 {{ $column['class'] ?? '' }}">{{ ($model?->{$column['property'] ?? $column['text']}) }}</a>
+                                                        <a href="{{route($column['links'],array_merge(($column['links']['pre-route-parameters'] ?? []),[$model->id], ($column['links']['post-route-parameters'] ?? [])))}}" class="flex capitalize items-center justify-start gap-2 py-3 px-6 hover:bg-white hover:bg-opacity-20 {{ $column['class'] ?? '' }}">{{ ($model?->{$column['property'] ?? $column['text']}) }}</a>
                                                     </div>
                                                 @elseif($column['type'] == 'boolean-switch')
                                                 <form action="{{route($column['action'], $model->id)}}" method="POST">
