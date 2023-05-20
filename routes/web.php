@@ -56,6 +56,9 @@ Route::middleware('auth:sanctum', 'verified', 'App\Http\Middleware\PreventLockAc
 
     //student routes
     Route::resource('students', StudentController::class);
+
+    //Marks routes
+    Route::get('marks', ['App\Http\Controllers\MarksController', 'index'])->name('marks.index');
 });
 
 //user must be authenticated
