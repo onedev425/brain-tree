@@ -6,7 +6,7 @@ use Livewire\Component;
 
 class PricingForm extends Component
 {
-    public $activeTab = 'payment_method';
+    public $activeTab = 'histories';
 
     public function setTab($tab)
     {
