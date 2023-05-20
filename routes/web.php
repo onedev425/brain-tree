@@ -59,6 +59,10 @@ Route::middleware('auth:sanctum', 'verified', 'App\Http\Middleware\PreventLockAc
 
     // certificaiton routes
     Route::get('certification', ['App\Http\Controllers\CertificationController', 'index'])->name('certification.index');
+
+    //Marks routes
+    Route::get('marks', ['App\Http\Controllers\MarksController', 'index'])->name('marks.index');
+
 });
 
 //user must be authenticated
