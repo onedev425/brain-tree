@@ -63,13 +63,6 @@ Route::middleware('auth:sanctum', 'verified', 'App\Http\Middleware\PreventLockAc
     //Marks routes
     Route::get('marks', ['App\Http\Controllers\MarksController', 'index'])->name('marks.index');
 
-    //Students Courses routes
-    Route::prefix('student')->group(function () {
-        Route::resource('course', StudentCourseController::class)->names([
-            'index' => 'student.course.index',
-            'show' => 'student.course.show',
-        ]);
-    });
 });
 
 //user must be authenticated
