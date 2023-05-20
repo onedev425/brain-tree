@@ -10,7 +10,7 @@
             <span class="text-xs">{{ $created_at }}</span>
         </div>
         <div class="">
-            <h3 class="text-lg leading-normal mb-3 font-bold text-gray-800 dark:text-gray-300">
+            <h3 class="text-lg leading-normal mb-3 font-bold text-gray-800">
                 <a href="#" class="hover:text-indigo-700">{{ $title }}</a>
             </h3>
             <div class="text-gray-500">
