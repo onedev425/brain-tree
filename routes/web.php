@@ -53,6 +53,23 @@ Route::middleware('auth:sanctum', 'verified', 'App\Http\Middleware\PreventLockAc
             'destroy' => 'teacher.course.destroy',
         ]);
     });
+
+    //student routes
+    Route::resource('students', StudentController::class);
+
+    // certificaiton routes
+    Route::get('certification', ['App\Http\Controllers\CertificationController', 'index'])->name('certification.index');
+
+    //Marks routes
+    Route::get('marks', ['App\Http\Controllers\MarksController', 'index'])->name('marks.index');
+
+    //Students Courses routes
+    Route::prefix('student')->group(function () {
+        Route::resource('course', StudentCourseController::class)->names([
+            'index' => 'student.course.index',
+            'show' => 'student.course.show',
+        ]);
+    });
 });
 
 //user must be authenticated
@@ -72,12 +89,6 @@ Route::middleware('auth:sanctum', 'verified', 'App\Http\Middleware\PreventLockAc
     Route::get('account-applications/change-status/{applicant}', ['App\Http\Controllers\AccountApplicationController', 'changeStatusView'])->name('account-applications.change-status');
 
     Route::post('account-applications/change-status/{applicant}', ['App\Http\Controllers\AccountApplicationController', 'changeStatus']);
-
-    //graduation routes
-    Route::get('students/graduations', ['App\Http\Controllers\GraduationController', 'index'])->name('students.graduations');
-    Route::get('students/graduate', ['App\Http\Controllers\GraduationController', 'graduateView'])->name('students.graduate');
-    Route::post('students/graduate', ['App\Http\Controllers\GraduationController', 'graduate']);
-    Route::delete('students/graduations/{student}/reset', ['App\Http\Controllers\GraduationController', 'resetGraduation'])->name('students.graduations.reset');
 
     //fee categories routes
     Route::resource('fees/fee-categories', FeeCategoryController::class);
@@ -114,11 +125,6 @@ Route::middleware('auth:sanctum', 'verified', 'App\Http\Middleware\PreventLockAc
         Route::resource('exams/{exam}/manage/exam-slots', ExamSlotController::class);
     });
 
-    //manage exam record
-    Route::resource('exams/exam-records', ExamRecordController::class);
-
-        //student routes
-    Route::resource('students', StudentController::class);
     Route::get('students/{student}/print', ['App\Http\Controllers\StudentController', 'printProfile'])->name('students.print-profile');
 
     //teacher routes

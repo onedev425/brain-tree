@@ -232,7 +232,7 @@
         </div>
     </div>
 
-    <input name="add_new_lesson_label" value="{{ __('Add New Lesson') }}" />
+    <input type="hidden" name="add_new_lesson_label" value="{{ __('Add New Lesson') }}" />
 
     <script>
         // handle the image uploading
