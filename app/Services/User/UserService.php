@@ -84,9 +84,9 @@ class UserService
      *
      * @return string
      */
-    public function createFullName($firstname, $lastname, $othernames = null)
+    public function createFullName($firstname, $lastname)
     {
-        return $firstname.' '.$lastname.' '.$othernames;
+        return $firstname.' '.$lastname;
     }
 
     /**
@@ -119,11 +119,7 @@ class UserService
                 abort('403', "User isn't a/an $role");
             }
         }
-        if (!$record['other_names']) {
-            $record['other_names'] = null;
-        }
-
-        $record['name'] = $this->createFullName($record['first_name'], $record['last_name'], $record['other_names']);
+        $record['name'] = $this->createFullName($record['first_name'], $record['last_name']);
 
         //update profile photo if present
         if (isset($record['profile_photo'])) {

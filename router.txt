@@ -28,13 +28,6 @@
   PUT|PATCH       dashboard/account-applications/{applicant} account-applications.update › AccountApplicationCont…
   DELETE          dashboard/account-applications/{applicant} account-applications.destroy › AccountApplicationCon…
   GET|HEAD        dashboard/account-applications/{applicant}/edit account-applications.edit › AccountApplicationC…
-  GET|HEAD        dashboard/admins .......................................... admins.index › AdminController@index
-  POST            dashboard/admins .......................................... admins.store › AdminController@store
-  GET|HEAD        dashboard/admins/create ................................. admins.create › AdminController@create
-  GET|HEAD        dashboard/admins/{admin} .................................... admins.show › AdminController@show
-  PUT|PATCH       dashboard/admins/{admin} ................................ admins.update › AdminController@update
-  DELETE          dashboard/admins/{admin} .............................. admins.destroy › AdminController@destroy
-  GET|HEAD        dashboard/admins/{admin}/edit ............................... admins.edit › AdminController@edit
   GET|HEAD        dashboard/class-groups ......................... class-groups.index › ClassGroupController@index
   POST            dashboard/class-groups ......................... class-groups.store › ClassGroupController@store
   GET|HEAD        dashboard/class-groups/create ................ class-groups.create › ClassGroupController@create

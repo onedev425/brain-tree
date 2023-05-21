@@ -9,7 +9,7 @@
             {{-- form for selecting students to display --}}
             <form wire:submit.prevent="checkResult('{{$student}}')" class="">
                 <div class="md:flex gap-4 items-end">
-                    @hasanyrole('super-admin|admin|teacher')
+                    @hasanyrole('super-admin|teacher')
                     @endhasanyrole
                     <x-select id="student" name="student" label="Student"  wire:model="student" group-class="md:w-3/12">
                         @isset($students)

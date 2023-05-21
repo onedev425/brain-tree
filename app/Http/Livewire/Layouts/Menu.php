@@ -32,8 +32,9 @@ class Menu extends Component
                               </g>
                             </svg>',
                 'text'  => 'Courses',
-                'route' => auth()->user()->hasRole('student') ? 'teacher.course.index' : 'teacher.course.index',
-                'routes' => auth()->user()->hasRole('student') ? ['teacher.course.index', 'teacher.course.create'] : ['teacher.course.index', 'teacher.course.create'],
+                'route' => 'teacher.course.index',
+                'routes' => ['teacher.course.index', 'teacher.course.create'],
+                'can' => 'teacher-courses'
             ],
             [
                 'type'  => 'menu-item',
@@ -104,6 +105,14 @@ class Menu extends Component
                 'routes' => ['settings.index'],
                 'can' => 'settings'
             ],
+           [
+               'type'    => 'menu-item',
+               'text'    => 'Account Applications',
+               'icon'    => 'fas fa-plus',
+                'route' => 'account-applications.index',
+                'routes' => ['account-applications.index'],
+               'can'     => 'menu-account-application',
+           ],
 
 
 
@@ -159,26 +168,6 @@ class Menu extends Component
 //            ],
 //            [
 //                'type'    => 'menu-item',
-//                'text'    => 'Account Applications',
-//                'icon'    => 'fas fa-plus',
-//                'can'     => 'menu-account-application',
-//                'submenu' => [
-//                    [
-//                        'type'  => 'menu-item',
-//                        'text'  => 'View account applications',
-//                        'route' => 'account-applications.index',
-//                        'can'   => 'read applicant',
-//                    ],
-//                    [
-//                        'type'  => 'menu-item',
-//                        'text'  => 'View rejected applications',
-//                        'route' => 'account-applications.rejected-applications',
-//                        'can'   => 'read applicant',
-//                    ],
-//                ],
-//            ],
-//            [
-//                'type'    => 'menu-item',
 //                'text'    => 'Teachers',
 //                'icon'    => 'fas fa-user',
 //                'can'     => 'menu-teacher',
@@ -194,26 +183,6 @@ class Menu extends Component
 //                        'text'  => 'Create teacher',
 //                        'route' => 'teachers.create',
 //                        'can'   => 'create teacher',
-//                    ],
-//                ],
-//            ],
-//            [
-//                'type'    => 'menu-item',
-//                'text'    => 'Admins',
-//                'icon'    => 'fas fa-user',
-//                'can'     => 'menu-admin',
-//                'submenu' => [
-//                    [
-//                        'type'  => 'menu-item',
-//                        'text'  => 'View admins',
-//                        'route' => 'admins.index',
-//                        'can'   => 'read admin',
-//                    ],
-//                    [
-//                        'type'  => 'menu-item',
-//                        'text'  => 'Create admin',
-//                        'route' => 'admins.create',
-//                        'can'   => 'create admin',
 //                    ],
 //                ],
 //            ],

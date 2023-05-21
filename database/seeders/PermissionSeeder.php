@@ -35,20 +35,6 @@ class PermissionSeeder extends Seeder
             'name' => 'delete student',
         ]);
 
-        //Permission for admins
-        Permission::firstOrCreate([
-            'name' => 'create admin',
-        ]);
-        Permission::firstOrCreate([
-            'name' => 'read admin',
-        ]);
-        Permission::firstOrCreate([
-            'name' => 'update admin',
-        ]);
-        Permission::firstOrCreate([
-            'name' => 'delete admin',
-        ]);
-
         //Permission for teacher
         Permission::firstOrCreate([
             'name' => 'create teacher',
@@ -236,6 +222,12 @@ class PermissionSeeder extends Seeder
             'name' => 'header-administrate',
         ]);
         Permission::firstOrCreate([
+            'name' => 'teacher-courses',
+        ]);
+        Permission::firstOrCreate([
+            'name' => 'student-courses',
+        ]);
+        Permission::firstOrCreate([
             'name' => 'menu-student',
         ]);
         Permission::firstOrCreate([
@@ -275,10 +267,11 @@ class PermissionSeeder extends Seeder
          * assign permissions to roles.
          */
 
-        //assign permissions to admin
-        $admin = Role::where('name', 'admin')->first();
-        $admin->syncPermissions([
+        //assign permissions to super-admin
+        $superAdmin = Role::where('name', 'super-admin')->first();
+        $superAdmin->syncPermissions([
             'header-administrate',
+            'teacher-courses',
             'menu-student',
             'menu-teacher',
             'menu-subject',
@@ -335,12 +328,17 @@ class PermissionSeeder extends Seeder
             'read fee invoice record',
             'update fee invoice record',
             'delete fee invoice record',
+            'marks',
+            'assessments',
+            'pricing',
+            'settings',
         ]);
 
         //assign permissions to teacher
         $teacher = Role::where('name', 'teacher')->first();
         $teacher->syncPermissions([
             'header-administrate',
+            'teacher-courses',
             'menu-exam',
             'menu-notice',
             'menu-student',
@@ -363,6 +361,7 @@ class PermissionSeeder extends Seeder
         $student = Role::where('name', 'student')->first();
         $student->syncPermissions([
             'header-administrate',
+            'student-courses',
             'menu-fee',
             'menu-notice',
             'menu-exam',
