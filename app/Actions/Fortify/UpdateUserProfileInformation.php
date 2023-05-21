@@ -6,6 +6,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Laravel\Fortify\Contracts\UpdatesUserProfileInformation;
+use Egulias\EmailValidator\Validation\RFCValidation;
 
 class UpdateUserProfileInformation implements UpdatesUserProfileInformation
 {
@@ -20,13 +21,10 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
     {
         Validator::make($input, [
             'name'        => ['required', 'string', 'max:255'],
-            'email'       => ['required', 'email:rfc,dns', 'max:255', Rule::unique('users')->ignore($user->id)],
+            'email'       => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
             'photo'       => ['nullable', 'mimes:jpg,jpeg,png', 'max:1024'],
             'birthday'    => ['required', 'date', 'before:today'],
             'address'     => ['required', 'string', 'max:500'],
-            'state'       => ['required', 'string', 'max:255'],
-            'city'        => ['required', 'string', 'max:255'],
-            'gender'      => ['required', 'string', 'max:255'],
             'phone'       => ['nullable', 'string', 'max:255'],
         ])->validate();
 
@@ -43,9 +41,6 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
                 'email'       => $input['email'],
                 'birthday'    => $input['birthday'],
                 'address'     => $input['address'],
-                'state'       => $input['state'],
-                'city'        => $input['city'],
-                'gender'      => $input['gender'],
                 'phone'       => $input['phone'] ?? '',
             ])->save();
         }
@@ -68,12 +63,10 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
             'email_verified_at' => null,
             'birthday'          => $input['birthday'],
             'address'           => $input['address'],
-            'state'             => $input['state'],
-            'city'              => $input['city'],
             'phone'             => $input['phone'] ?? '',
         ])->save();
 
-        $user->sendEmailVerificationNotification();
+        // $user->sendEmailVerificationNotification();
 
         return $user;
     }

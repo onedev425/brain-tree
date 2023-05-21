@@ -127,9 +127,6 @@ Route::middleware('auth:sanctum', 'verified', 'App\Http\Middleware\PreventLockAc
 
     Route::get('students/{student}/print', ['App\Http\Controllers\StudentController', 'printProfile'])->name('students.print-profile');
 
-    //admin routes
-    Route::resource('admins', AdminController::class);
-
     //teacher routes
     Route::resource('teachers', TeacherController::class);
 

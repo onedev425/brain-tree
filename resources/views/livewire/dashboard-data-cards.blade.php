@@ -1,4 +1,4 @@
-@hasanyrole('admin|super-admin')
+@hasanyrole('super-admin')
     <div class="card">
         <div class="card-body">
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">

@@ -32,8 +32,22 @@ class Menu extends Component
                               </g>
                             </svg>',
                 'text'  => 'Courses',
-                'route' => auth()->user()->hasRole('student') ? 'student.course.index' : 'teacher.course.index',
-                'sub_routes' => auth()->user()->hasRole('student') ? ['student.course.index'] : ['teacher.course.index'],
+                'route' => 'teacher.course.index',
+                'routes' => ['teacher.course.index', 'teacher.course.create'],
+                'can' => 'teacher-courses'
+            ],
+            [
+                'type'  => 'menu-item',
+                'icon'  => '<svg xmlns="http://www.w3.org/2000/svg" width="30.866" height="27.98" viewBox="0 0 30.866 27.98">
+                              <g id="Icon_feather-book-open" data-name="Icon feather-book-open" transform="translate(-2 -3.5)">
+                                <path id="Path_46" data-name="Path 46" d="M3,4.5h8.66a5.773,5.773,0,0,1,5.773,5.773V30.48a4.33,4.33,0,0,0-4.33-4.33H3Z" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+                                <path id="Path_47" data-name="Path 47" d="M32.433,4.5h-8.66A5.773,5.773,0,0,0,18,10.273V30.48a4.33,4.33,0,0,1,4.33-4.33h10.1Z" transform="translate(-0.567)" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+                              </g>
+                            </svg>',
+                'text'  => 'Courses',
+                'route' => 'student.course.index',
+                'sub_routes' => ['student.course.index'],
+                'can' => ['student.course.index'],
             ],
             [
                 'type'  => 'menu-item',
@@ -112,6 +126,14 @@ class Menu extends Component
                 'sub_routes' => ['settings.index'],
                 'can' => 'settings'
             ],
+           [
+               'type'    => 'menu-item',
+               'text'    => 'Account Applications',
+               'icon'    => 'fas fa-plus',
+                'route' => 'account-applications.index',
+                'routes' => ['account-applications.index'],
+               'can'     => 'menu-account-application',
+           ],
 
 
 
@@ -167,26 +189,6 @@ class Menu extends Component
 //            ],
 //            [
 //                'type'    => 'menu-item',
-//                'text'    => 'Account Applications',
-//                'icon'    => 'fas fa-plus',
-//                'can'     => 'menu-account-application',
-//                'submenu' => [
-//                    [
-//                        'type'  => 'menu-item',
-//                        'text'  => 'View account applications',
-//                        'route' => 'account-applications.index',
-//                        'can'   => 'read applicant',
-//                    ],
-//                    [
-//                        'type'  => 'menu-item',
-//                        'text'  => 'View rejected applications',
-//                        'route' => 'account-applications.rejected-applications',
-//                        'can'   => 'read applicant',
-//                    ],
-//                ],
-//            ],
-//            [
-//                'type'    => 'menu-item',
 //                'text'    => 'Teachers',
 //                'icon'    => 'fas fa-user',
 //                'can'     => 'menu-teacher',
@@ -202,26 +204,6 @@ class Menu extends Component
 //                        'text'  => 'Create teacher',
 //                        'route' => 'teachers.create',
 //                        'can'   => 'create teacher',
-//                    ],
-//                ],
-//            ],
-//            [
-//                'type'    => 'menu-item',
-//                'text'    => 'Admins',
-//                'icon'    => 'fas fa-user',
-//                'can'     => 'menu-admin',
-//                'submenu' => [
-//                    [
-//                        'type'  => 'menu-item',
-//                        'text'  => 'View admins',
-//                        'route' => 'admins.index',
-//                        'can'   => 'read admin',
-//                    ],
-//                    [
-//                        'type'  => 'menu-item',
-//                        'text'  => 'Create admin',
-//                        'route' => 'admins.create',
-//                        'can'   => 'create admin',
 //                    ],
 //                ],
 //            ],
