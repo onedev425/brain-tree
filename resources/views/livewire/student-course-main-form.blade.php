@@ -14,6 +14,7 @@
                 @if ($activeTab === 'progress')
                     @foreach($progress_courses as $course)
                         @livewire('student-course-block', [
+                            'course_id' => $course->id,
                             'title' => $course->title,
                             'image' => $course->image,
                             'created_by' => $course->created_by,
@@ -25,6 +26,7 @@
                 @else
                     @foreach($completed_courses as $course)
                         @livewire('student-course-block', [
+                            'course_id' => $course->id,
                             'title' => $course->title,
                             'image' => $course->image,
                             'created_by' => $course->created_by,
