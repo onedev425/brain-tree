@@ -37,11 +37,11 @@
         <div>Register As,</div>
         <div class="inline-flex space-x-4">
             <label class="py-4 rounded-lg flex items-center">
-                <input type="radio" name="role" class="form-radio h-4 w-4 text-blue-600" value="4">
+                <input type="radio" name="role" class="form-radio h-4 w-4 text-blue-600" value="3">
                 <span class="ml-2 text-gray-700">Student</span>
             </label>
             <label class="py-4 rounded-lg flex items-center">
-                <input type="radio" name="role" class="form-radio h-4 w-4 text-blue-600" value="3" checked>
+                <input type="radio" name="role" class="form-radio h-4 w-4 text-blue-600" value="2" checked>
                 <span class="ml-2 text-gray-700">Instructor</span>
             </label>
 
