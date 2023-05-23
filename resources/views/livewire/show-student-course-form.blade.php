@@ -1,4 +1,5 @@
 <div>
+    <!-- Begin: Lesson title -->
     <div class="card p-7">
         <div class="card-body">
             <div class="flex">
@@ -14,8 +15,10 @@
             </div>
         </div>
     </div>
+    <!-- End: Lesson title -->
 
-    <div class="card hidden">
+    <!-- Begin::Bad Luck -->
+    <div class="card ">
         <div class="card-body text-center">
             <div class="flex justify-center mt-4">
                 <svg xmlns="http://www.w3.org/2000/svg" width="245.364" height="245.364" viewBox="0 0 245.364 245.364">
@@ -37,9 +40,10 @@
             </div>
         </div>
     </div>
+    <!-- End::Bad Luck -->
 
-
-    <div class="card">
+    <!-- Begin::Congratulations -->
+    <div class="card ">
         <div class="card-body text-center">
             <div class="flex justify-center mt-2">
                 <svg xmlns="http://www.w3.org/2000/svg" width="175.308" height="284.399" viewBox="0 0 175.308 284.399">
@@ -85,4 +89,238 @@
             </div>
         </div>
     </div>
+    <!-- End::Congratulations -->
+
+    <!-- Begin:Lesson content area -->
+    <div class="card p-0">
+        <div class="card-body">
+            <div class="lg:grid grid-cols-12 gap-2 w-full">
+                <div class="col-span-5 bg-neutral-300 p-6 pb-10">
+                    <h1 class="text-xl font-bold mb-4">{{ __('Lessons') }}</h1>
+                    <div id="topic_list" x-data="{selected:0000}">
+                        <div class="relative flex flex-wrap flex-col mb-2">
+                            <div class="border-b border-gray-200 mb-0 bg-gray-100 py-2 px-4 mt-2 rounded">
+                                <div class="d-grid mb-0">
+                                    <a href="javascript:;" class="py-1 px-0 w-full rounded leading-5 font-medium flex justify-between focus:outline-none focus:ring-0" @click="selected !== '0000' ? selected = '0000' : selected = null">
+                                        <div class="flex mt-1.5">
+                                                    <span class="mr-3">
+                                                        <svg class="transform transition duration-500 -rotate-180" :class="{ '-rotate-180': selected == '0000' }" width="1rem" height="1rem" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                          <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 01.708 0L8 10.293l5.646-5.647a.5.5 0 01.708.708l-6 6a.5.5 0 01-.708 0l-6-6a.5.5 0 010-.708z" clip-rule="evenodd"></path>
+                                                        </svg>
+                                                    </span>
+                                            <span class="topic_info" data-uuid="0000" data-summary="abcd">Figma & Web Design</span>
+                                        </div>
+                                        <div class="flex mt-1.5">
+                                            <span class="text-sm text-gray-600">2 Lectures  • 2Min</span>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="p-3" x-show="selected == '0000'">
+                                <div class="flex py-1 px-3 justify-between">
+                                    <div class="flex">
+                                        <svg class="mt-1" xmlns="http://www.w3.org/2000/svg" width="19.313" height="19.264" viewBox="0 0 19.313 19.264">
+                                            <path id="Icon_material-slow-motion-video" data-name="Icon material-slow-motion-video" d="M13.724,10.568,10.771,8.351v8.712l2.953-2.217,2.856-2.139Zm0,0L10.771,8.351v8.712l2.953-2.217,2.856-2.139Zm0,0L10.771,8.351v8.712l2.953-2.217,2.856-2.139ZM11.739,5.03V3.075a9.631,9.631,0,0,0-5.15,2.139L7.964,6.6A7.687,7.687,0,0,1,11.739,5.03ZM6.6,7.964,5.214,6.589a9.631,9.631,0,0,0-2.139,5.15H5.03A7.687,7.687,0,0,1,6.6,7.964ZM5.03,13.675H3.075a9.631,9.631,0,0,0,2.139,5.15L6.6,17.441A7.617,7.617,0,0,1,5.03,13.675ZM6.589,20.2a9.662,9.662,0,0,0,5.15,2.139V20.384a7.687,7.687,0,0,1-3.775-1.568L6.589,20.2Zm15.8-7.493a9.7,9.7,0,0,1-8.664,9.632V20.384a7.744,7.744,0,0,0,0-15.353V3.075A9.7,9.7,0,0,1,22.388,12.707Z" transform="translate(-3.075 -3.075)"/>
+                                        </svg>
+                                        <a href="javascript:;" class="ml-2">Figma Basics</a>
+                                    </div>
+                                    <div class="text-sm">00 : 02</div>
+                                </div>
+                                <div class="flex py-1 px-3 justify-between">
+                                    <div class="flex">
+                                        <svg class="mt-1" xmlns="http://www.w3.org/2000/svg" width="19.313" height="19.264" viewBox="0 0 19.313 19.264">
+                                            <path id="Icon_material-slow-motion-video" data-name="Icon material-slow-motion-video" d="M13.724,10.568,10.771,8.351v8.712l2.953-2.217,2.856-2.139Zm0,0L10.771,8.351v8.712l2.953-2.217,2.856-2.139Zm0,0L10.771,8.351v8.712l2.953-2.217,2.856-2.139ZM11.739,5.03V3.075a9.631,9.631,0,0,0-5.15,2.139L7.964,6.6A7.687,7.687,0,0,1,11.739,5.03ZM6.6,7.964,5.214,6.589a9.631,9.631,0,0,0-2.139,5.15H5.03A7.687,7.687,0,0,1,6.6,7.964ZM5.03,13.675H3.075a9.631,9.631,0,0,0,2.139,5.15L6.6,17.441A7.617,7.617,0,0,1,5.03,13.675ZM6.589,20.2a9.662,9.662,0,0,0,5.15,2.139V20.384a7.687,7.687,0,0,1-3.775-1.568L6.589,20.2Zm15.8-7.493a9.7,9.7,0,0,1-8.664,9.632V20.384a7.744,7.744,0,0,0,0-15.353V3.075A9.7,9.7,0,0,1,22.388,12.707Z" transform="translate(-3.075 -3.075)"/>
+                                        </svg>
+                                        <a href="javascript:;" class="ml-2">Figma Plugin And Community</a>
+                                    </div>
+                                    <div class="text-sm">09 : 21</div>
+                                </div>
+                                <div class="flex py-1 px-3 justify-between">
+                                    <div class="flex">
+                                        <svg class="mt-1" xmlns="http://www.w3.org/2000/svg" width="19.313" height="19.264" viewBox="0 0 19.313 19.264">
+                                            <path id="Icon_material-slow-motion-video" data-name="Icon material-slow-motion-video" d="M13.724,10.568,10.771,8.351v8.712l2.953-2.217,2.856-2.139Zm0,0L10.771,8.351v8.712l2.953-2.217,2.856-2.139Zm0,0L10.771,8.351v8.712l2.953-2.217,2.856-2.139ZM11.739,5.03V3.075a9.631,9.631,0,0,0-5.15,2.139L7.964,6.6A7.687,7.687,0,0,1,11.739,5.03ZM6.6,7.964,5.214,6.589a9.631,9.631,0,0,0-2.139,5.15H5.03A7.687,7.687,0,0,1,6.6,7.964ZM5.03,13.675H3.075a9.631,9.631,0,0,0,2.139,5.15L6.6,17.441A7.617,7.617,0,0,1,5.03,13.675ZM6.589,20.2a9.662,9.662,0,0,0,5.15,2.139V20.384a7.687,7.687,0,0,1-3.775-1.568L6.589,20.2Zm15.8-7.493a9.7,9.7,0,0,1-8.664,9.632V20.384a7.744,7.744,0,0,0,0-15.353V3.075A9.7,9.7,0,0,1,22.388,12.707Z" transform="translate(-3.075 -3.075)"/>
+                                        </svg>
+                                        <a href="javascript:;" class="ml-2">Figma Core Engine Concepts</a>
+                                    </div>
+                                    <div class="text-sm">20 : 41</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="relative flex flex-wrap flex-col mb-2">
+                            <div class="border-b border-gray-200 mb-0 bg-gray-100 py-2 px-4 mt-2 rounded">
+                                <div class="d-grid mb-0">
+                                    <a href="javascript:;" class="py-1 px-0 w-full rounded leading-5 font-medium flex justify-between focus:outline-none focus:ring-0" @click="selected !== '1111' ? selected = '1111' : selected = null">
+                                        <div class="flex mt-1.5">
+                                                    <span class="mr-3">
+                                                        <svg class="transform transition duration-500 -rotate-180" :class="{ '-rotate-180': selected == '1111' }" width="1rem" height="1rem" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                          <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 01.708 0L8 10.293l5.646-5.647a.5.5 0 01.708.708l-6 6a.5.5 0 01-.708 0l-6-6a.5.5 0 010-.708z" clip-rule="evenodd"></path>
+                                                        </svg>
+                                                    </span>
+                                            <span class="topic_info" data-uuid="1111" data-summary="abcd">CSS Grid And Flexbox</span>
+                                        </div>
+                                        <div class="flex mt-1.5">
+                                            <span class="text-sm text-gray-600">2 Lectures  • 2Min</span>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="p-3" x-show="selected == '1111'">
+                                <div class="flex py-1 px-3 justify-between">
+                                    <div class="flex">
+                                        <svg class="mt-1" xmlns="http://www.w3.org/2000/svg" width="19.313" height="19.264" viewBox="0 0 19.313 19.264">
+                                            <path id="Icon_material-slow-motion-video" data-name="Icon material-slow-motion-video" d="M13.724,10.568,10.771,8.351v8.712l2.953-2.217,2.856-2.139Zm0,0L10.771,8.351v8.712l2.953-2.217,2.856-2.139Zm0,0L10.771,8.351v8.712l2.953-2.217,2.856-2.139ZM11.739,5.03V3.075a9.631,9.631,0,0,0-5.15,2.139L7.964,6.6A7.687,7.687,0,0,1,11.739,5.03ZM6.6,7.964,5.214,6.589a9.631,9.631,0,0,0-2.139,5.15H5.03A7.687,7.687,0,0,1,6.6,7.964ZM5.03,13.675H3.075a9.631,9.631,0,0,0,2.139,5.15L6.6,17.441A7.617,7.617,0,0,1,5.03,13.675ZM6.589,20.2a9.662,9.662,0,0,0,5.15,2.139V20.384a7.687,7.687,0,0,1-3.775-1.568L6.589,20.2Zm15.8-7.493a9.7,9.7,0,0,1-8.664,9.632V20.384a7.744,7.744,0,0,0,0-15.353V3.075A9.7,9.7,0,0,1,22.388,12.707Z" transform="translate(-3.075 -3.075)"/>
+                                        </svg>
+                                        <a href="javascript:;" class="ml-2">Figma Basics</a>
+                                    </div>
+                                    <div class="text-sm">00 : 02</div>
+                                </div>
+                                <div class="flex py-1 px-3 justify-between">
+                                    <div class="flex">
+                                        <svg class="mt-1" xmlns="http://www.w3.org/2000/svg" width="19.313" height="19.264" viewBox="0 0 19.313 19.264">
+                                            <path id="Icon_material-slow-motion-video" data-name="Icon material-slow-motion-video" d="M13.724,10.568,10.771,8.351v8.712l2.953-2.217,2.856-2.139Zm0,0L10.771,8.351v8.712l2.953-2.217,2.856-2.139Zm0,0L10.771,8.351v8.712l2.953-2.217,2.856-2.139ZM11.739,5.03V3.075a9.631,9.631,0,0,0-5.15,2.139L7.964,6.6A7.687,7.687,0,0,1,11.739,5.03ZM6.6,7.964,5.214,6.589a9.631,9.631,0,0,0-2.139,5.15H5.03A7.687,7.687,0,0,1,6.6,7.964ZM5.03,13.675H3.075a9.631,9.631,0,0,0,2.139,5.15L6.6,17.441A7.617,7.617,0,0,1,5.03,13.675ZM6.589,20.2a9.662,9.662,0,0,0,5.15,2.139V20.384a7.687,7.687,0,0,1-3.775-1.568L6.589,20.2Zm15.8-7.493a9.7,9.7,0,0,1-8.664,9.632V20.384a7.744,7.744,0,0,0,0-15.353V3.075A9.7,9.7,0,0,1,22.388,12.707Z" transform="translate(-3.075 -3.075)"/>
+                                        </svg>
+                                        <a href="javascript:;" class="ml-2">Figma Basics</a>
+                                    </div>
+                                    <div class="text-sm">00 : 02</div>
+                                </div>
+                                <div class="flex py-1 px-3 justify-between">
+                                    <div class="flex">
+                                        <svg class="mt-1" xmlns="http://www.w3.org/2000/svg" width="19.313" height="19.264" viewBox="0 0 19.313 19.264">
+                                            <path id="Icon_material-slow-motion-video" data-name="Icon material-slow-motion-video" d="M13.724,10.568,10.771,8.351v8.712l2.953-2.217,2.856-2.139Zm0,0L10.771,8.351v8.712l2.953-2.217,2.856-2.139Zm0,0L10.771,8.351v8.712l2.953-2.217,2.856-2.139ZM11.739,5.03V3.075a9.631,9.631,0,0,0-5.15,2.139L7.964,6.6A7.687,7.687,0,0,1,11.739,5.03ZM6.6,7.964,5.214,6.589a9.631,9.631,0,0,0-2.139,5.15H5.03A7.687,7.687,0,0,1,6.6,7.964ZM5.03,13.675H3.075a9.631,9.631,0,0,0,2.139,5.15L6.6,17.441A7.617,7.617,0,0,1,5.03,13.675ZM6.589,20.2a9.662,9.662,0,0,0,5.15,2.139V20.384a7.687,7.687,0,0,1-3.775-1.568L6.589,20.2Zm15.8-7.493a9.7,9.7,0,0,1-8.664,9.632V20.384a7.744,7.744,0,0,0,0-15.353V3.075A9.7,9.7,0,0,1,22.388,12.707Z" transform="translate(-3.075 -3.075)"/>
+                                        </svg>
+                                        <a href="javascript:;" class="ml-2">Figma Basics</a>
+                                    </div>
+                                    <div class="text-sm">00 : 02</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="relative flex flex-wrap flex-col mb-2">
+                            <div class="border-b border-gray-200 mb-0 bg-gray-100 py-2 px-4 mt-2 rounded">
+                                <div class="d-grid mb-0">
+                                    <a href="javascript:;" class="py-1 px-0 w-full rounded leading-5 font-medium flex justify-between focus:outline-none focus:ring-0" @click="selected !== '2222' ? selected = '2222' : selected = null">
+                                        <div class="flex mt-1.5">
+                                                    <span class="mr-3">
+                                                        <svg class="transform transition duration-500 -rotate-180" :class="{ '-rotate-180': selected == '2222' }" width="1rem" height="1rem" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                          <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 01.708 0L8 10.293l5.646-5.647a.5.5 0 01.708.708l-6 6a.5.5 0 01-.708 0l-6-6a.5.5 0 010-.708z" clip-rule="evenodd"></path>
+                                                        </svg>
+                                                    </span>
+                                            <span class="topic_info" data-uuid="1111" data-summary="abcd">Final Quiz</span>
+                                        </div>
+                                        <div class="flex mt-1.5">
+                                            <span class="text-sm text-gray-600">25 Quizzes</span>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="p-3" x-show="selected == '2222'">
+                                <div class="flex py-1 px-3 justify-between">
+                                    <div class="flex">
+                                        <svg class="mt-1" xmlns="http://www.w3.org/2000/svg" width="19.313" height="19.313" viewBox="0 0 19.313 19.313">
+                                            <g id="_1814114_help_question_icon" data-name="1814114_help_question_icon" transform="translate(-8.2 -8.2)">
+                                                <g id="Icon-Question" transform="translate(8.2 8.2)">
+                                                    <path id="Fill-47" d="M-160.144-250.487a9.656,9.656,0,0,1-9.656-9.656,9.656,9.656,0,0,1,9.656-9.656,9.656,9.656,0,0,1,9.656,9.656,9.656,9.656,0,0,1-9.656,9.656Zm0-18.262a8.639,8.639,0,0,0-8.606,8.606,8.639,8.639,0,0,0,8.606,8.606,8.639,8.639,0,0,0,8.606-8.606,8.613,8.613,0,0,0-8.606-8.606Z" transform="translate(169.8 269.8)" fill="#0f743c"/>
+                                                    <path id="Fill-48" d="M-153.56-256.48a2.9,2.9,0,0,1,.646-1.091,3.159,3.159,0,0,1,1.05-.687,3.841,3.841,0,0,1,1.414-.242,3.754,3.754,0,0,1,1.172.2,3.719,3.719,0,0,1,.97.525,2.264,2.264,0,0,1,.646.848,2.637,2.637,0,0,1,.242,1.172,2.629,2.629,0,0,1-.364,1.414,6.008,6.008,0,0,1-.929,1.131l-.727.727a1.531,1.531,0,0,0-.4.525,1.339,1.339,0,0,0-.162.606,4.675,4.675,0,0,0-.04.848h-.929a3.04,3.04,0,0,1,.081-.929,3,3,0,0,1,.283-.848,4.1,4.1,0,0,1,.525-.727c.242-.242.485-.485.808-.768a2.765,2.765,0,0,0,.687-.848,1.958,1.958,0,0,0,.283-1.051,1.809,1.809,0,0,0-.162-.808,3.662,3.662,0,0,0-.444-.646,1.3,1.3,0,0,0-.687-.4,2.612,2.612,0,0,0-.808-.162,2.7,2.7,0,0,0-1.05.2,1.82,1.82,0,0,0-.768.566,2.138,2.138,0,0,0-.444.848,2.563,2.563,0,0,0-.121.97h-.929a3,3,0,0,1,.162-1.374Zm2.424,7.071H-150v1.131h-1.131Z" transform="translate(160.226 263.066)" fill="#0f743c"/>
+                                                </g>
+                                            </g>
+                                        </svg>
+                                        <a href="javascript:;" class="ml-2">Figma Basics</a>
+                                    </div>
+                                    <div class="text-sm">10 Points</div>
+                                </div>
+                                <div class="flex py-1 px-3 justify-between">
+                                    <div class="flex">
+                                        <svg class="mt-1" xmlns="http://www.w3.org/2000/svg" width="19.313" height="19.313" viewBox="0 0 19.313 19.313">
+                                            <g id="_1814114_help_question_icon" data-name="1814114_help_question_icon" transform="translate(-8.2 -8.2)">
+                                                <g id="Icon-Question" transform="translate(8.2 8.2)">
+                                                    <path id="Fill-47" d="M-160.144-250.487a9.656,9.656,0,0,1-9.656-9.656,9.656,9.656,0,0,1,9.656-9.656,9.656,9.656,0,0,1,9.656,9.656,9.656,9.656,0,0,1-9.656,9.656Zm0-18.262a8.639,8.639,0,0,0-8.606,8.606,8.639,8.639,0,0,0,8.606,8.606,8.639,8.639,0,0,0,8.606-8.606,8.613,8.613,0,0,0-8.606-8.606Z" transform="translate(169.8 269.8)"/>
+                                                    <path id="Fill-48" d="M-153.56-256.48a2.9,2.9,0,0,1,.646-1.091,3.159,3.159,0,0,1,1.05-.687,3.841,3.841,0,0,1,1.414-.242,3.754,3.754,0,0,1,1.172.2,3.719,3.719,0,0,1,.97.525,2.264,2.264,0,0,1,.646.848,2.637,2.637,0,0,1,.242,1.172,2.629,2.629,0,0,1-.364,1.414,6.008,6.008,0,0,1-.929,1.131l-.727.727a1.531,1.531,0,0,0-.4.525,1.339,1.339,0,0,0-.162.606,4.675,4.675,0,0,0-.04.848h-.929a3.04,3.04,0,0,1,.081-.929,3,3,0,0,1,.283-.848,4.1,4.1,0,0,1,.525-.727c.242-.242.485-.485.808-.768a2.765,2.765,0,0,0,.687-.848,1.958,1.958,0,0,0,.283-1.051,1.809,1.809,0,0,0-.162-.808,3.662,3.662,0,0,0-.444-.646,1.3,1.3,0,0,0-.687-.4,2.612,2.612,0,0,0-.808-.162,2.7,2.7,0,0,0-1.05.2,1.82,1.82,0,0,0-.768.566,2.138,2.138,0,0,0-.444.848,2.563,2.563,0,0,0-.121.97h-.929a3,3,0,0,1,.162-1.374Zm2.424,7.071H-150v1.131h-1.131Z" transform="translate(160.226 263.066)"/>
+                                                </g>
+                                            </g>
+                                        </svg>
+                                        <a href="javascript:;" class="ml-2">Figma Plugin And Community</a>
+                                    </div>
+                                    <div class="text-sm">5 Points</div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-span-7 p-6">
+                    <h1 class="text-xl font-bold mb-4">Figma & Web Design</h1>
+                    <div class="my-5">
+                        A Figma web design course is a learning program that teaches students how to use Figma, a popular web design tool, to create visually appealing and functional websites. The course typically covers topics such as designing layouts, creating UI elements, using typography, and implementing design principles.
+                    </div>
+                    <div class="w-full mx-auto max-w-screen-lg">
+                        <div class="aspect-w-16 aspect-h-9 flex justify-center">
+                            <iframe class="w-full lg:w-4/5 h-96" src="https://www.youtube.com/embed/sNs5Bny70Vo" frameborder="0" allowfullscreen></iframe>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-end mt-10">
+                        <h2 class="font-bold mr-3 text-lg">{{ __('Next') }}</h2>
+                        <a href="javascript:history.back()">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32.975" height="24.718" viewBox="0 0 32.975 24.718">
+                                <g id="Icon_feather-arrow-left" data-name="Icon feather-arrow-left" transform="translate(38.975 30.097) rotate(180)">
+                                    <path id="Path_69" data-name="Path 69" d="M37.475,18H7.5" transform="translate(0 -0.262)" fill="none" stroke="#d93e3e" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"/>
+                                    <path id="Path_70" data-name="Path 70" d="M17.738,27.976,7.5,17.738,17.738,7.5" transform="translate(0 0)" fill="none" stroke="#d93e3e" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"/>
+                                </g>
+                            </svg>
+                        </a>
+                    </div>
+
+                </div>
+
+                <div class="col-span-7 p-6">
+                    <h1 class="text-xl font-bold mb-4">{{ __('Final Quiz') }}</h1>
+                    <div class="my-5">
+                        Q: What is the correct syntax for adding a CSS style to a HTML element and how would you use it to set the background color of a div to red?
+                    </div>
+                    <div class="my-5 text-gray-400">
+                        This question tests your knowledge of creating effective websites with topics like HTML, CSS . It helps you evaluate your understanding and enhance your skills in this exciting field.
+                    </div>
+                    <div class="question-list">
+                        <div wire:click="setQuiz('quiz1')" class="rounded-3xl border border-gray-300 p-2 mb-3 cursor-pointer {{ in_array('quiz1', $activeQuiz) ? 'bg-purple-600 hover:bg-purple-700 text-white' : 'hover:bg-purple-100' }}">
+                            <div class="flex">
+                                <span class="rounded-full border w-10 h-10 p-0.5 pt-1.5 text-center {{ in_array('quiz1', $activeQuiz) ? 'border-white' : 'border-gray-600' }}">A</span>
+                                <span class="ml-5 mt-2">div {background-color: red;}</span>
+                            </div>
+                        </div>
+
+                        <div wire:click="setQuiz('quiz2')" class="rounded-3xl border border-gray-300 p-2 mb-3 cursor-pointer {{ in_array('quiz2', $activeQuiz) ? 'bg-purple-600 hover:bg-purple-700 text-white' : 'hover:bg-purple-100' }}">
+                            <div class="flex">
+                                <span class="rounded-full border w-10 h-10 p-0.5 pt-1.5 text-center {{ in_array('quiz2', $activeQuiz) ? 'border-white' : 'border-gray-600' }}">B</span>
+                                <span class="ml-5 mt-2">background-color: red; div</span>
+                            </div>
+                        </div>
+
+                        <div wire:click="setQuiz('quiz3')" class="rounded-3xl border border-gray-300 p-2 mb-3 cursor-pointer {{ in_array('quiz3', $activeQuiz) ? 'bg-purple-600 hover:bg-purple-700 text-white' : 'hover:bg-purple-100' }}">
+                            <div class="flex">
+                                <span class="rounded-full border w-10 h-10 p-0.5 pt-1.5 text-center {{ in_array('quiz3', $activeQuiz) ? 'border-white' : 'border-gray-600' }}">C</span>
+                                <span class="ml-5 mt-2">div background-color: red;</span>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="flex justify-end mt-10">
+                        <h2 class="font-bold mr-3 text-lg">{{ __('Next') }}</h2>
+                        <a href="javascript:history.back()">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32.975" height="24.718" viewBox="0 0 32.975 24.718">
+                                <g id="Icon_feather-arrow-left" data-name="Icon feather-arrow-left" transform="translate(38.975 30.097) rotate(180)">
+                                    <path id="Path_69" data-name="Path 69" d="M37.475,18H7.5" transform="translate(0 -0.262)" fill="none" stroke="#d93e3e" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"/>
+                                    <path id="Path_70" data-name="Path 70" d="M17.738,27.976,7.5,17.738,17.738,7.5" transform="translate(0 0)" fill="none" stroke="#d93e3e" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"/>
+                                </g>
+                            </svg>
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End:Lesson content area -->
 </div>
