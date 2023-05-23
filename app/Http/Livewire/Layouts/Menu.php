@@ -46,7 +46,7 @@ class Menu extends Component
                             </svg>',
                 'text'  => 'Courses',
                 'route' => 'student.course.index',
-                'sub_routes' => ['student.course.index'],
+                'sub_routes' => ['student.course.index', 'student.course.show'],
                 'can' => ['student-courses'],
             ],
             [
