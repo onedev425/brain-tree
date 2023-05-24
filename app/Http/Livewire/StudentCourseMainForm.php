@@ -17,6 +17,7 @@ class StudentCourseMainForm extends Component
     {
         $progress_courses = [];
         $course = new \stdClass();
+        $course->id = 1;
         $course->title = 'Learning Laravel Framework';
         $course->created_by = 'Bobby Mark Fest';
         $course->image = asset('upload/course/course-1.jpg');
@@ -27,6 +28,7 @@ class StudentCourseMainForm extends Component
         $progress_courses[] = $course;
 
         $course = new \stdClass();
+        $course->id = 2;
         $course->title = 'Learning MySQL Framework';
         $course->created_by = 'Rocksuly Chan';
         $course->image = asset('upload/course/course-2.jpg');
@@ -37,6 +39,7 @@ class StudentCourseMainForm extends Component
         $progress_courses[] = $course;
 
         $course = new \stdClass();
+        $course->id = 3;
         $course->title = 'Wordpress Blogging, Tumblr And Blogger';
         $course->created_by = 'Bobby';
         $course->image = asset('upload/course/course-3.jpg');
@@ -47,6 +50,7 @@ class StudentCourseMainForm extends Component
         $progress_courses[] = $course;
 
         $course = new \stdClass();
+        $course->id = 4;
         $course->title = 'Learn Web Design & Development';
         $course->created_by = 'Lionel Messi';
         $course->image = asset('upload/course/course-4.jpg');
@@ -57,6 +61,7 @@ class StudentCourseMainForm extends Component
         $progress_courses[] = $course;
 
         $course = new \stdClass();
+        $course->id = 5;
         $course->title = 'Learning Laravel and Livewire';
         $course->created_by = 'Ronaldo';
         $course->image = asset('upload/course/course-5.jpg');
@@ -67,6 +72,7 @@ class StudentCourseMainForm extends Component
         $progress_courses[] = $course;
 
         $course = new \stdClass();
+        $course->id = 6;
         $course->title = 'Tailwnd CSS Documentation';
         $course->created_by = 'Ziddan';
         $course->image = asset('upload/course/course-6.jpg');
@@ -79,6 +85,7 @@ class StudentCourseMainForm extends Component
 
         $completed_courses = [];
         $course = new \stdClass();
+        $course->id = 7;
         $course->title = 'AWS and Heroku';
         $course->created_by = 'May 20, 2021 4:32 am';
         $course->image = asset('upload/course/course-7.png');
