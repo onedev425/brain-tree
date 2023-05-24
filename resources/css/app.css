@@ -156,4 +156,12 @@
         padding-bottom:0.5rem;
     }
     /*end::Form validation*/
+
+    .lesson-item.active, .quiz-item.active {
+        @apply bg-gray-500 rounded-2xl text-white hover:bg-gray-600;
+    }
+
+    #question_list li.active {
+        @apply bg-purple-600 hover:bg-purple-700 text-white;
+    }
 }
