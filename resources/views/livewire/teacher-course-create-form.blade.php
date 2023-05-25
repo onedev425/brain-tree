@@ -162,10 +162,6 @@
                     <label for="topic_name" class="inline-block mb-2">{{ __('Topic Name') }}</label>
                     <input id="topic_name" type="text" class="w-full leading-5 relative py-2 px-4 rounded text-gray-800 bg-white border border-gray-300 overflow-x-auto focus:outline-none focus:border-gray-400 focus:ring-0" placeholder="" required>
                 </div>
-                <div class="form-group flex-shrink max-w-full px-4 w-full mb-4">
-                    <label for="topic_summary" class="inline-block mb-2">{{ __('Topic Summary') }}</label>
-                    <textarea id="topic_summary" rows="8" class="w-full leading-5 relative py-2 px-4 rounded-lg text-gray-800 bg-white border border-gray-300 overflow-x-auto focus:outline-none focus:border-gray-400 focus:ring-0" ></textarea>
-                </div>
 
                 <div class="form-group flex-shrink max-w-full px-4 w-full">
                     <x-button label="{{ __('Save') }}" type="submit" id="save_topic_button" icon="" class="py-3 md:px-10 bg-red-700 text-white font-semibold border-transparent" />
@@ -220,6 +216,19 @@
                     <label for="quiz_title" class="inline-block mb-2">{{ __('Write your question here') }}</label>
                     <input id="quiz_title" type="text" class="w-full leading-5 relative py-2 px-4 rounded text-gray-800 bg-white border border-gray-300 overflow-x-auto focus:outline-none focus:border-gray-400 focus:ring-0" placeholder="" required>
                 </div>
+                <div class="form-group flex-shrink px-4 w-full md:w-1/2 mb-4">
+                    <label for="quiz_type" class="inline-block mb-2">{{ __('Select your question type') }}</label>
+                    <select id="quiz_type" class="inline-block w-full leading-5 relative py-2 pl-3 pr-8 rounded text-gray-800 bg-white border border-gray-300 overflow-x-auto focus:outline-none focus:border-gray-400 focus:ring-0 select-caret appearance-none" required>
+                        <option value="">{{ __('Choose...') }}</option>
+                        <option value="boolean">{{ __('True / False') }}</option>
+                        <option value="single">{{ __('Single Selection') }}</option>
+                        <option value="multi">{{ __('Multiple Selection') }}</option>
+                    </select>
+                </div>
+                <div class="form-group flex-shrink px-4 w-full md:w-1/2 mb-4">
+                    <label for="quiz_points" class="inline-block mb-2">{{ __('Points') }}</label>
+                    <input id="quiz_points" type="number" class="w-full leading-5 relative py-2 px-4 rounded text-gray-800 bg-white border border-gray-300 overflow-x-auto focus:outline-none focus:border-gray-400 focus:ring-0" placeholder="" required>
+                </div>
                 <div class="form-group flex-shrink max-w-full px-4 w-full mb-4">
                     <label for="quiz_description" class="inline-block mb-2">{{ __('Description') }} ({{ __('Optional') }})</label>
                     <textarea id="quiz_description" rows="8" class="w-full leading-5 relative py-2 px-4 rounded-lg text-gray-800 bg-white border border-gray-300 overflow-x-auto focus:outline-none focus:border-gray-400 focus:ring-0" ></textarea>
@@ -270,7 +279,6 @@
                 $('div#topic_dialog').removeClass('hidden');
                 $('div#overlay').removeClass('hidden');
                 $('input#topic_name').val('');
-                $('textarea#topic_summary').val('');
                 $('input[name=topic_edit_flag]').val('new');
             });
 
@@ -281,7 +289,6 @@
 
                 const topicObject = $(this).parent().prev();
                 $('input#topic_name').val($(topicObject).find('span.topic_info').html());
-                $('textarea#topic_summary').val($(topicObject).find('span.topic_info').attr('data-summary'));
                 $('input[name=topic_edit_flag]').val($(topicObject).find('span.topic_info').data('uuid'));
             });
 
@@ -393,7 +400,6 @@
                 if (valid) {
 
                     const topicName = $('input#topic_name').val();
-                    const topicSummary = $('textarea#topic_summary').val();
 
                     if ($('input[name=topic_edit_flag]').val() == 'new') {
                         const uuid = generateUUID();
@@ -407,7 +413,7 @@
                                                   <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 01.708 0L8 10.293l5.646-5.647a.5.5 0 01.708.708l-6 6a.5.5 0 01-.708 0l-6-6a.5.5 0 010-.708z" clip-rule="evenodd"></path>
                                                 </svg>
                                             </span>
-                                            <span class="topic_info" data-uuid="${uuid}" data-summary="${topicSummary}">${topicName}</span>
+                                            <span class="topic_info" data-uuid="${uuid}">${topicName}</span>
                                         </div>
                                         <div class="flex">
                                             <x-edit-icon-button class="edit_topic_dialog_button" />
@@ -440,7 +446,6 @@
                         const uuid = $('input[name=topic_edit_flag]').val();
                         const topicObject = $('span[data-uuid="' + uuid + '"]');
                         $(topicObject).html(topicName);
-                        $(topicObject).attr('data-summary', topicSummary);
                     }
 
 
