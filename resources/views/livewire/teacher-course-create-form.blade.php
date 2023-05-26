@@ -99,7 +99,6 @@
                             <div id="topic_list" x-data="{selected:0}"></div>
 
                             <x-button id="open_topic_dialog_button" label="{{ __('Add new Topic') }}" icon="fas fa-plus" class="py-3 md:px-10 bg-red-700 text-white font-semibold border-transparent" />
-                            <x-light-button id="open_quiz_dialog_button" label="{{ __('Create quiz') }}" icon="fas fa-plus" class="py-3 md:px-10 bg-white text-black font-semibold border border-red-300" />
                         </div>
                     </div>
                 </div>
@@ -117,27 +116,8 @@
                             </h3>
                         </div>
                         <div class="card-body">
-                            <div class="flex pt-4 justify-between">
-                                <div class="pt-1.5">What Are The Principles Of Effective Web Design?</div>
-                                <div class="min-w-fit" >
-                                    <x-edit-icon-button class=""/>
-                                    <x-remove-icon-button class=""/>
-                                </div>
-                            </div>
-                            <div class="flex pt-4 justify-between">
-                                <div class="pt-1.5">How Do You Ensure That A Website Is Mobile-Friendly?</div>
-                                <div class="min-w-fit" >
-                                    <x-edit-icon-button class=""/>
-                                    <x-remove-icon-button class=""/>
-                                </div>
-                            </div>
-                            <div class="flex pt-4 justify-between">
-                                <div class="pt-1.5">What Are Some Common Mistakes To Avoid In Web Design?</div>
-                                <div class="min-w-fit" >
-                                    <x-edit-icon-button class=""/>
-                                    <x-remove-icon-button class=""/>
-                                </div>
-                            </div>
+                            <div id="quiz_list" class="mb-5"></div>
+                            <div><x-button id="open_quiz_dialog_button" label="{{ __('Add new Question') }}" icon="fas fa-plus" class="py-3 md:px-10 bg-red-700 text-white font-semibold border-transparent" /></div>
                         </div>
                     </div>
                 </div>
@@ -210,13 +190,14 @@
     <div id="quiz_dialog" class="hidden fixed z-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full md:w-2/3 lg:w-1/2 xl:2/5 bg-white rounded-md px-8 py-6 space-y-5 drop-shadow-lg">
         <h1 class="text-2xl font-semibold">{{ __('Quiz') }}</h1>
         <div class="py-5">
-            <form class="valid-form flex flex-wrap flex-row -mx-4">
+            <form id="quiz_form" class="valid-form flex flex-wrap flex-row -mx-4">
+                <input type="hidden" name="quiz_edit_flag" value="new" />
                 <button id="close_quiz_dialog" type="button" class="fill-current h-6 w-6 absolute right-0 top-0 m-4 text-3xl font-bold">×</button>
-                <div class="form-group flex-shrink max-w-full px-4 w-full mb-4">
+                <div class="form-group flex-shrink max-w-full px-4 w-full mb-7">
                     <label for="quiz_title" class="inline-block mb-2">{{ __('Write your question here') }}</label>
                     <input id="quiz_title" type="text" class="w-full leading-5 relative py-2 px-4 rounded text-gray-800 bg-white border border-gray-300 overflow-x-auto focus:outline-none focus:border-gray-400 focus:ring-0" placeholder="" required>
                 </div>
-                <div class="form-group flex-shrink px-4 w-full md:w-1/2 mb-4">
+                <div class="form-group flex-shrink px-4 w-full md:w-1/2 mb-7">
                     <label for="quiz_type" class="inline-block mb-2">{{ __('Select your question type') }}</label>
                     <select id="quiz_type" class="inline-block w-full leading-5 relative py-2 pl-3 pr-8 rounded text-gray-800 bg-white border border-gray-300 overflow-x-auto focus:outline-none focus:border-gray-400 focus:ring-0 select-caret appearance-none" required>
                         <option value="">{{ __('Choose...') }}</option>
@@ -225,17 +206,47 @@
                         <option value="multi">{{ __('Multiple Selection') }}</option>
                     </select>
                 </div>
-                <div class="form-group flex-shrink px-4 w-full md:w-1/2 mb-4">
+                <div class="form-group flex-shrink px-4 w-full md:w-1/2 mb-7">
                     <label for="quiz_points" class="inline-block mb-2">{{ __('Points') }}</label>
                     <input id="quiz_points" type="number" class="w-full leading-5 relative py-2 px-4 rounded text-gray-800 bg-white border border-gray-300 overflow-x-auto focus:outline-none focus:border-gray-400 focus:ring-0" placeholder="" required>
                 </div>
-                <div class="form-group flex-shrink max-w-full px-4 w-full mb-4">
+                <div class="form-group flex-shrink max-w-full px-4 w-full mb-7">
                     <label for="quiz_description" class="inline-block mb-2">{{ __('Description') }} ({{ __('Optional') }})</label>
-                    <textarea id="quiz_description" rows="8" class="w-full leading-5 relative py-2 px-4 rounded-lg text-gray-800 bg-white border border-gray-300 overflow-x-auto focus:outline-none focus:border-gray-400 focus:ring-0" ></textarea>
+                    <textarea id="quiz_description" rows="4" class="w-full leading-5 relative py-2 px-4 rounded-lg text-gray-800 bg-white border border-gray-300 overflow-x-auto focus:outline-none focus:border-gray-400 focus:ring-0" ></textarea>
                 </div>
 
-                <div class="form-group flex-shrink max-w-full px-4 w-full">
-                    <x-button label="{{ __('Save') }}" type="submit" icon="" class="py-3 md:px-10 bg-red-700 text-white font-semibold border-transparent" />
+                <div class="flex-shrink max-w-full px-4 w-full mb-7">
+                    <label for="answer_list" class="inline-block mb-2">{{ __('Input options for the question and select the correct answer. You can only add four answers.') }}</label>
+                    <div id="boolean_answer_list" class="hidden">
+                        <div class="flex justify-between">
+                            <div class="handle p-2 flex bg-gray-100 rounded-lg justify-between mb-2 w-full">
+                                <input type="text" class="boolean-answer-text leading-5 relative py-2 px-4 rounded-lg text-gray-800 bg-gray-100 w-full" value="True" readonly/>
+                                <div class="flex p-2">
+                                    <input type="radio" name="boolean_answer" class="boolean-answer-value form-checkbox h-5 w-5 text-indigo-500 border border-gray-300 rounded focus:outline-none mr-3 mt-1 rounded-full">
+                                    <i class="fas fa-bars text-lg cursor-move"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-between">
+                            <div class="handle p-2 flex bg-gray-100 rounded-lg justify-between mb-2 w-full">
+                                <input type="text" class="boolean-answer-text leading-5 relative py-2 px-4 rounded-lg text-gray-800 bg-gray-100 w-full" value="False" readonly />
+                                <div class="flex p-2">
+                                    <input type="radio" name="boolean_answer" class="boolean-answer-value form-checkbox h-5 w-5 text-indigo-500 border border-gray-300 rounded focus:outline-none mr-3 mt-1 rounded-full">
+                                    <i class="fas fa-bars text-lg cursor-move"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="single_answer_list" class="hidden"></div>
+
+                    <div id="multiple_answer_list" class="hidden"></div>
+                </div>
+
+                <div class="form-group flex max-w-full px-4 w-full justify-between">
+                    <x-light-button id="add_answer_button" label="{{ __('Add a Answer') }}" icon="fas fa-plus" class="py-3 md:px-10 bg-white text-black font-semibold border border-red-300" />
+                    <x-button id="add_quiz_button" label="{{ __('Add / Update to Question') }}" type="submit" icon="" class="py-3 md:px-10 bg-red-700 text-white font-semibold border-transparent" />
                 </div>
             </form>
         </div>
@@ -323,6 +334,7 @@
                 $('div#overlay').removeClass('hidden');
                 $('input[name=topic_uuid]').val($(this).attr('data-topic-uuid'));
 
+                $('input[name=lesson_edit_flag]').val('new');
                 $('input#lesson_name').val('');
                 $('textarea#lesson_description').val('');
                 $('select#video_source').val('');
@@ -365,27 +377,210 @@
     </script>
 
     <script>
-        // handle the Quiz Dialog
-        var openQuizDialogButton = document.getElementById('open_quiz_dialog_button');
-        var quizDialog = document.getElementById('quiz_dialog');
-        var closeButton = document.getElementById('close_quiz_dialog');
-        var overlay = document.getElementById('overlay');
+        var quizForm;
+        var pristine;
 
-        var openQuizDialog = function(event) {
+        const single_answer_item = `
+            <div class="flex justify-between answer-item">
+                            <div class="handle p-2 flex bg-gray-100 rounded-lg justify-between mb-2 w-full">
+                                <div class="w-full">
+                                    <input type="text" name="single_answer_text[]" class="single-answer-text leading-5 relative py-2 px-4 rounded-lg text-gray-800 bg-white border border-gray-300 w-full overflow-x-auto focus:outline-none focus:border-gray-400 focus:ring-0" placeholder="Answer" />
+                                </div>
+                                <div class="flex p-2">
+                                    <input type="radio" name="single-answer-value" class="single-answer-value form-checkbox h-5 w-5 text-indigo-500 border border-gray-300 rounded focus:outline-none mr-3 mt-1 rounded-full">
+                                    <i class="fas fa-bars text-lg cursor-move"></i>
+                                </div>
+                            </div>
+                            <div class="p-4">
+                                <a href="javascript:;" class="remove-answer"><i class="fas fa-trash text-2xl text-red-500"></i></a>
+                            </div>
+                        </div>
+        `;
+        const multi_answer_item = `
+            <div class="flex justify-between answer-item">
+                            <div class="handle p-2 flex bg-gray-100 rounded-lg justify-between mb-2 w-full">
+                                <div class="w-full">
+                                    <input type="text" name="multi_answer_text[]" class="multi-answer-text leading-5 relative py-2 px-4 rounded-lg text-gray-800 bg-white border border-gray-300 w-full overflow-x-auto focus:outline-none focus:border-gray-400 focus:ring-0" placeholder="Answer" />
+                                </div>
+                                <div class="flex p-2">
+                                    <input type="checkbox" class="multi-answer-value form-checkbox h-5 w-5 text-indigo-500 border border-gray-300 rounded focus:outline-none mr-3 mt-1">
+                                    <i class="fas fa-bars text-lg cursor-move"></i>
+                                </div>
+                            </div>
+                            <div class="p-4">
+                                <a href="javascript:;" class="remove-answer"><i class="fas fa-trash text-2xl text-red-500"></i></a>
+                            </div>
+                        </div>
+        `;
+
+        $('button#open_quiz_dialog_button').on('click', function(event) {
             event.preventDefault();
-            quizDialog.classList.remove('hidden');
-            overlay.classList.remove('hidden');
-        };
+            $('div#quiz_dialog').removeClass('hidden');
+            $('div#overlay').removeClass('hidden');
+
+            $('input#quiz_title').val('');
+            $('select#quiz_type').val('');
+            $('input#quiz_points').val('');
+            $('textarea#quiz_description').val('');
+            $('input[name=quiz_edit_flag]').val('new');
+
+            $('div#boolean_answer_list').addClass('hidden');
+            $('div#single_answer_list').addClass('hidden');
+            $('div#single_answer_list').html('');
+            $('div#single_answer_list').append(single_answer_item);
+            $('div#single_answer_list').append(single_answer_item);
+            $('div#single_answer_list').append(single_answer_item);
+
+            $('div#multiple_answer_list').addClass('hidden');
+            $('div#multiple_answer_list').html('');
+            $('div#multiple_answer_list').append(multi_answer_item);
+            $('div#multiple_answer_list').append(multi_answer_item);
+            $('div#multiple_answer_list').append(multi_answer_item);
+
+            pristine = new Pristine(quizForm);
+        });
+
+        $('button#close_quiz_dialog').on('click', function() {
+            closeQuizDialog();
+        });
+
+        $('div#overlay').on('click', function() {
+            closeQuizDialog();
+        });
+
+        $('body').on('click', '.edit_quiz_dialog_button', function(event) {
+            event.preventDefault();
+            $('div#quiz_dialog').removeClass('hidden');
+            $('div#overlay').removeClass('hidden');
+
+            const quizObject = $(this).parent().prev();
+            const quizType = $(quizObject).attr('data-type');
+            $('input#quiz_title').val($(quizObject).html());
+            $('textarea#quiz_description').val($(quizObject).attr('data-description'));
+            $('select#quiz_type').val(quizType).trigger('change');
+            $('input#quiz_points').val($(quizObject).attr('data-points'));
+            $('input[name=quiz_edit_flag]').val($(quizObject).data('uuid'));
+
+            const answers = $(quizObject).attr('data-answer').split('$$$');
+            const answer_values = $(quizObject).attr('data-answer-value').split('$$$');
+
+            if (quizType == 'boolean') {
+                $('div#boolean_answer_list').find('input.boolean-answer-text:first').val(answers[0]);
+                $('div#boolean_answer_list').find('input.boolean-answer-text:last').val(answers[1]);
+                if (answer_values[0] == 1) $('div#boolean_answer_list').find('input.boolean-answer-value:first').prop('checked', true);
+                if (answer_values[1] == 1) $('div#boolean_answer_list').find('input.boolean-answer-value:last').prop('checked', true);
+            }
+
+            if (quizType == 'single') {
+                $('div#single_answer_list').html('');
+                $.each(answers, function(index, answer) {
+                    $('div#single_answer_list').append(single_answer_item);
+                    $('div#single_answer_list').find('input.single-answer-text:last').val(answer);
+                    if (answer_values[index] == 1) $('div#single_answer_list').find('input.single-answer-value:last').prop('checked', true);
+                });
+                if (answers.length == 1) $('div#single_answer_list').find('a.remove-answer').hide();
+            }
+
+
+            if (quizType == 'multi') {
+                $('div#multiple_answer_list').html('');
+                $.each(answers, function(index, answer) {
+                    $('div#multiple_answer_list').append(multi_answer_item);
+                    $('div#multiple_answer_list').find('input.multi-answer-text:last').val(answer);
+                    $('div#multiple_answer_list').find('input.multi-answer-value:last').prop('checked', answer_values[index] == 1 ? true : false);
+                });
+                if (answers.length == 1) $('div#multiple_answer_list').find('a.remove-answer').hide();
+            }
+            pristine = new Pristine(quizForm);
+        });
+
+        $('body').on('click', '.remove_quiz_button', function(event) {
+            event.preventDefault();
+            const quizObject = $(this).parent().parent();
+            $(quizObject).remove();
+        });
 
         // hide the overlay and the dialog
-        var closeQuizDialog = function () {
-            quizDialog.classList.add('hidden');
-            overlay.classList.add('hidden');
-        };
+        function closeQuizDialog() {
+            $('div#quiz_dialog').addClass('hidden');
+            $('div#overlay').addClass('hidden');
+        }
 
-        openQuizDialogButton.addEventListener('click', openQuizDialog);
-        closeButton.addEventListener('click', closeQuizDialog);
-        overlay.addEventListener('click', closeQuizDialog);
+        $('select#quiz_type').on('change', function() {
+            console.log('selcting');
+            $('div#boolean_answer_list').addClass('hidden');
+            $('div#single_answer_list').addClass('hidden');
+            $('div#single_answer_list').find('input.single-answer-text').parent().removeClass('form-group');
+            $('div#single_answer_list').find('input.single-answer-text').removeAttr('required');
+
+            $('div#multiple_answer_list').addClass('hidden');
+            $('div#multiple_answer_list').find('input.multi-answer-text').parent().removeClass('form-group');
+            $('div#multiple_answer_list').find('input.multi-answer-text').removeAttr('required');
+
+            if ($(this).val() == 'boolean') $('div#boolean_answer_list').removeClass('hidden');
+            if ($(this).val() == 'single') {
+                $('div#single_answer_list').removeClass('hidden');
+                $('div#single_answer_list').find('input.single-answer-text').parent().addClass('form-group');
+                $('div#single_answer_list').find('input.single-answer-text').attr('required', true);
+            }
+            if ($(this).val() == 'multi') {
+                $('div#multiple_answer_list').removeClass('hidden');
+                $('div#multiple_answer_list').find('input.multi-answer-text').parent().addClass('form-group');
+                $('div#multiple_answer_list').find('input.multi-answer-text').attr('required', true);
+            }
+            pristine = new Pristine(quizForm);
+        });
+
+        $('button#add_answer_button').on('click', function() {
+            if ($('select#quiz_type option:selected').val() == 'single') {
+                $('div#single_answer_list').append(single_answer_item);
+                $('div#single_answer_list').find('input.single-answer-text:last').parent().addClass('form-group');
+                $('div#single_answer_list').find('input.single-answer-text:last').attr('required', true);
+                $('div#single_answer_list').find('a.remove-answer').show();
+            }
+
+            if ($('select#quiz_type option:selected').val() == 'multi') {
+                $('div#multiple_answer_list').append(multi_answer_item);
+                $('div#multiple_answer_list').find('input.multi-answer-text:last').parent().addClass('form-group');
+                $('div#multiple_answer_list').find('input.multi-answer-text:last').attr('required', true);
+                $('div#multiple_answer_list').find('a.remove-answer').show();
+            }
+            pristine = new Pristine(quizForm);
+        });
+
+
+        $('body').on('click', '.remove-answer', function(event) {
+            event.preventDefault();
+            $(this).parent().parent().remove();
+            if ($('select#quiz_type option:selected').val() == 'multi' && $('div#multiple_answer_list').find('div.answer-item').length == 1) {
+                $('div#multiple_answer_list').find('a.remove-answer').hide();
+            }
+
+            if ($('select#quiz_type option:selected').val() == 'single' && $('div#single_answer_list').find('div.answer-item').length == 1) {
+                $('div#single_answer_list').find('a.remove-answer').hide();
+            }
+            pristine = new Pristine(quizForm);
+        });
+
+        const boolean_answer_list = document.getElementById('boolean_answer_list');
+        new Sortable(boolean_answer_list, {
+            handle: '.handle', // handle's class
+            animation: 150
+        });
+
+        const single_answer_list = document.getElementById('single_answer_list');
+        new Sortable(single_answer_list, {
+            handle: '.handle', // handle's class
+            animation: 150
+        });
+
+        const multiple_answer_list = document.getElementById('multiple_answer_list');
+        new Sortable(multiple_answer_list, {
+            handle: '.handle', // handle's class
+            animation: 150
+        });
+
+
     </script>
 
     <script>
@@ -501,12 +696,90 @@
             });
         };
 
+        $(document).ready(function() {
+            quizForm = document.getElementById('quiz_form');
+            pristine = new Pristine(quizForm);
+            $('form#quiz_form').on('submit', function(event) {
+                event.preventDefault();
+                // var quizForm = document.getElementById('quiz_form');
+                // var pristine = new Pristine(quizForm);
+                console.log('submit');
+                const valid = pristine.validate();
+
+                console.log(valid);
+                if (valid) {
+                    const quizTitle = $('input#quiz_title').val();
+                    const quizDescription = $('textarea#quiz_description').val();
+                    const quizType = $('select#quiz_type option:selected').val();
+                    const quizPoints = $('input#quiz_points').val();
+
+                    // convert from answer values to string
+                    var answer_text = [];
+                    var answer_value = [];
+                    if (quizType == 'boolean') {
+                        $.each($('div#boolean_answer_list').find('input.boolean-answer-text'), function (index, obj) {
+                            answer_text.push($(obj).val());
+                            answer_value.push($(obj).parent().parent().find('input.boolean-answer-value').prop('checked') ? 1 : 0);
+                        })
+                    }
+                    if (quizType == 'single') {
+                        $.each($('div#single_answer_list').find('input.single-answer-text'), function (index, obj) {
+                            answer_text.push($(obj).val());
+                            answer_value.push($(obj).parent().parent().find('input.single-answer-value').prop('checked') ? 1 : 0);
+                        })
+                    }
+                    if (quizType == 'multi') {
+                        $.each($('div#multiple_answer_list').find('input.multi-answer-text'), function (index, obj) {
+                            answer_text.push($(obj).val());
+                            answer_value.push($(obj).parent().parent().find('input.multi-answer-value').prop('checked') ? 1 : 0);
+                        })
+                    }
+                    answer_text = answer_text.join('$$$');
+                    answer_value = answer_value.join('$$$');
+                    // end
+
+                    if ($('input[name=quiz_edit_flag]').val() == 'new') {
+                        const uuid = generateUUID();
+                        const newQuiz = `
+                            <div class="flex pt-3 justify-between">
+                                <div class="pt-1.5 quiz_info" data-uuid="${uuid}" data-description="${quizDescription}" data-type="${quizType}" data-points="${quizPoints}"
+                                    data-answer="${answer_text}" data-answer-value="${answer_value}">${quizTitle}
+                                </div>
+                                <div class="min-w-fit" >
+                                    <x-edit-icon-button class="edit_quiz_dialog_button"/>
+                                    <x-remove-icon-button class="remove_quiz_button"/>
+                                </div>
+                            </div>
+                        `;
+
+                        $('div#quiz_list').append(newQuiz);
+                    }
+                    else {
+                        const uuid = $('input[name=quiz_edit_flag]').val();
+                        const quizObject = $('div.quiz_info[data-uuid="' + uuid + '"]');
+                        $(quizObject).html(quizTitle);
+                        $(quizObject).attr('data-description', quizDescription);
+                        $(quizObject).attr('data-type', quizType);
+                        $(quizObject).attr('data-points', quizPoints);
+                        $(quizObject).attr('data-answer', answer_text);
+                        $(quizObject).attr('data-answer-value', answer_value);
+                    }
+
+                    closeQuizDialog();
+                }
+
+            });
+        });
+
+
+
         window.addEventListener("load", () => {
             topicValidation();
             lessonValidation();
         });
 
     </script>
+
     <script>
         function generateUUID() {
             return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
