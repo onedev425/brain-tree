@@ -164,4 +164,5 @@
     #question_list li.active {
         @apply bg-purple-600 hover:bg-purple-700 text-white;
     }
+
 }
