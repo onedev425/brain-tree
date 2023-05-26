@@ -19,10 +19,10 @@
     @csrf
     <div class="flex gap-1 items-center">
         <div class="w-full my-2">
-            <x-button class="mt-3 py-3 md:px-10 bg-red-700 text-white font-semibold border-transparent text-xs">Login account</x-button>
+            <x-button class="mt-3 py-3 md:px-10 text-white font-semibold border-transparent">Login account</x-button>
         </div>
     </div>
-    <div class="flex gap-1 items-center">
-        <a href="{{route('password.request')}}" class="text-black text-sm block font-semibold underline" aria-label="Forgot Password">Forgot your Password?</a>
+    <div class="flex gap-1 items-center my-4">
+        <a href="{{route('password.request')}}" class="text-black block font-semibold underline" aria-label="Forgot Password">Forgot your Password?</a>
     </div>
 </form>
