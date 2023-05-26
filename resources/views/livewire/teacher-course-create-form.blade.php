@@ -219,20 +219,20 @@
                     <label for="answer_list" class="inline-block mb-2">{{ __('Input options for the question and select the correct answer. You can only add four answers.') }}</label>
                     <div id="boolean_answer_list" class="hidden">
                         <div class="flex justify-between">
-                            <div class="handle p-2 flex bg-gray-100 rounded-lg justify-between mb-2 w-full">
+                            <div class="handle p-2 flex bg-gray-100 rounded-lg justify-between mb-2 w-full items-center">
                                 <input type="text" class="boolean-answer-text leading-5 relative py-2 px-4 rounded-lg text-gray-800 bg-gray-100 w-full" value="True" readonly/>
-                                <div class="flex p-2">
-                                    <input type="radio" name="boolean_answer" class="boolean-answer-value form-checkbox h-5 w-5 text-indigo-500 border border-gray-300 rounded focus:outline-none mr-3 mt-1 rounded-full">
+                                <div class="flex p-2 items-center">
+                                    <input type="radio" name="boolean_answer" class="boolean-answer-value h-5 w-5 text-indigo-500 border border-gray-300 rounded focus:outline-none mr-3 rounded-full">
                                     <i class="fas fa-bars text-lg cursor-move"></i>
                                 </div>
                             </div>
                         </div>
 
                         <div class="flex justify-between">
-                            <div class="handle p-2 flex bg-gray-100 rounded-lg justify-between mb-2 w-full">
+                            <div class="handle p-2 flex bg-gray-100 rounded-lg justify-between mb-2 w-full items-center">
                                 <input type="text" class="boolean-answer-text leading-5 relative py-2 px-4 rounded-lg text-gray-800 bg-gray-100 w-full" value="False" readonly />
-                                <div class="flex p-2">
-                                    <input type="radio" name="boolean_answer" class="boolean-answer-value form-checkbox h-5 w-5 text-indigo-500 border border-gray-300 rounded focus:outline-none mr-3 mt-1 rounded-full">
+                                <div class="flex p-2 items-center">
+                                    <input type="radio" name="boolean_answer" class="boolean-answer-value h-5 w-5 text-indigo-500 border border-gray-300 rounded focus:outline-none mr-3 rounded-full">
                                     <i class="fas fa-bars text-lg cursor-move"></i>
                                 </div>
                             </div>
@@ -382,12 +382,12 @@
 
         const single_answer_item = `
             <div class="flex justify-between answer-item">
-                            <div class="handle p-2 flex bg-gray-100 rounded-lg justify-between mb-2 w-full">
+                            <div class="handle p-2 flex bg-gray-100 rounded-lg justify-between mb-2 w-full items-center">
                                 <div class="w-full">
                                     <input type="text" name="single_answer_text[]" class="single-answer-text leading-5 relative py-2 px-4 rounded-lg text-gray-800 bg-white border border-gray-300 w-full overflow-x-auto focus:outline-none focus:border-gray-400 focus:ring-0" placeholder="Answer" />
                                 </div>
-                                <div class="flex p-2">
-                                    <input type="radio" name="single-answer-value" class="single-answer-value form-checkbox h-5 w-5 text-indigo-500 border border-gray-300 rounded focus:outline-none mr-3 mt-1 rounded-full">
+                                <div class="flex p-2 items-center">
+                                    <input type="radio" name="single-answer-value" class="single-answer-value h-5 w-5 text-indigo-500 border border-gray-300 rounded focus:outline-none mr-3 rounded-full">
                                     <i class="fas fa-bars text-lg cursor-move"></i>
                                 </div>
                             </div>
@@ -398,12 +398,12 @@
         `;
         const multi_answer_item = `
             <div class="flex justify-between answer-item">
-                            <div class="handle p-2 flex bg-gray-100 rounded-lg justify-between mb-2 w-full">
+                            <div class="handle p-2 flex bg-gray-100 rounded-lg justify-between mb-2 w-full items-center">
                                 <div class="w-full">
                                     <input type="text" name="multi_answer_text[]" class="multi-answer-text leading-5 relative py-2 px-4 rounded-lg text-gray-800 bg-white border border-gray-300 w-full overflow-x-auto focus:outline-none focus:border-gray-400 focus:ring-0" placeholder="Answer" />
                                 </div>
-                                <div class="flex p-2">
-                                    <input type="checkbox" class="multi-answer-value form-checkbox h-5 w-5 text-indigo-500 border border-gray-300 rounded focus:outline-none mr-3 mt-1">
+                                <div class="flex p-2 items-center">
+                                    <input type="checkbox" class="multi-answer-value h-5 w-5 text-indigo-500 border border-gray-300 rounded focus:outline-none mr-3">
                                     <i class="fas fa-bars text-lg cursor-move"></i>
                                 </div>
                             </div>
