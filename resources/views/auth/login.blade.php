@@ -1,6 +1,6 @@
 @extends('layouts.guest')
 
-@section('title', 'Login')
+@section('title', __('Login'))
 
 @section('body')
     <x-partials.authentication-card>
