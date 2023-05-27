@@ -5,15 +5,17 @@ export default defineConfig({
     plugins: [
         laravel({
             input: [
-                'resources/css/app.css',
-                'resources/js/app.js',
+                "resources/css/app.css",
+                "resources/js/app.js",
+                "resources/js/pristine.js",
+                "resources/js/pristine.min.js",
             ],
             refresh: true,
         }),
     ],
     server: {
         hmr: {
-            host: 'localhost',
+            host: "localhost",
         },
-    }
+    },
 });
