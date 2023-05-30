@@ -21,6 +21,9 @@
                 @endforeach
             </x-select>
             <x-select label="Industry *" id="industry" name="industry" group-class="col-span-6" wire:model="state.industry">
+                @foreach ($industries as $industry)
+                    <option value="{{ $industry->id }}">{{ $industry->name }}</option>
+                @endforeach
             </x-select>
 
             <x-select label="Language *" id="language" name="language" group-class="col-span-6" wire:model="state.language">
