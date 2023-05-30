@@ -24,6 +24,9 @@
             </x-select>
 
             <x-select label="Language *" id="language" name="language" group-class="col-span-6" wire:model="state.language">
+                @foreach ($languages as $language)
+                    <option value="{{ $language->id }}">{{ $language->name }} ({{ $language->name_native }})</option>
+                @endforeach
             </x-select>
         </div>
     </x-slot>

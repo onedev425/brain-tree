@@ -5,6 +5,7 @@ namespace App\Http\Livewire;
 use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Country;
+use App\Models\Language;
 
 class StudentProfileForm extends Component
 {
@@ -15,7 +16,8 @@ class StudentProfileForm extends Component
     public function mount()
     {
         $this->state = Auth::user()->withoutRelations()->toArray();
-        $this->countries = Country::all();
+        $this->countries = Country::orderBy('name')->get();
+        $this->languages = Language::orderBy('name')->get();
     }
 
     public function render()
