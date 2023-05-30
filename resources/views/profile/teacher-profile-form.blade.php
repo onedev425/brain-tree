@@ -14,14 +14,27 @@
             <x-input label="Email *" id="email" name="email" placeholder="Your Email Address" group-class="col-span-6" wire:model="state.email"/>
             <x-input label="Phone number* " id="phone" name="phone" placeholder="Your phone number" group-class="col-span-6" wire:model="state.phone"/>
 
-            <x-select label="Country *" id="country" name="country" group-class="col-span-6" wire:model="state.country">
+            <x-select label="Country *" id="country" name="country" group-class="col-span-6" wire:model="state.country_id">
+                @foreach ($countries as $country)
+                    <option value="{{ $country->id }}">{{ $country->name }}</option>
+                @endforeach
             </x-select>
-            <x-select label="Industry *" id="industry" name="industry" group-class="col-span-6" wire:model="state.industry">
+            <x-select label="Industry *" id="industry" name="industry" group-class="col-span-6" wire:model="state.industry_id">
+                @foreach ($industries as $industry)
+                    <option value="{{ $industry->id }}">{{ $industry->name }}</option>
+                @endforeach
             </x-select>
 
-            <x-select label="Language *" id="language" name="language" group-class="col-span-6" wire:model="state.language">
+            <x-select label="Language *" id="language" name="language" group-class="col-span-6" wire:model="state.language_id">
+                @foreach ($languages as $language)
+                    <option value="{{ $language->id }}">{{ $language->name }} ({{ $language->name_native }})</option>
+                @endforeach
             </x-select>
             <x-select label="Years of Experience *" id="experience" name="experience" group-class="col-span-6" wire:model="state.experience">
+                @php ($experiences = ['1', '2', '3', '4', '5', '5+'])
+                @foreach ($experiences as $experience)
+                    <option value="{{$experience}}">{{$experience}} {{ $experience == 1 ? __('Year') : __('Years') }}</option>
+                @endforeach
             </x-select>
 
         </div>
