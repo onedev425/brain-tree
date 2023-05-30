@@ -16,6 +16,9 @@
             <x-input label="Phone number* " id="phone" name="phone" placeholder="Your phone number" group-class="col-span-6" wire:model="state.phone"/>
 
             <x-select label="Country *" id="country" name="country" group-class="col-span-6" wire:model="state.country">
+                @foreach ($countries as $country)
+                    <option value="{{ $country->id }}">{{ $country->name }}</option>
+                @endforeach
             </x-select>
             <x-select label="Industry *" id="industry" name="industry" group-class="col-span-6" wire:model="state.industry">
             </x-select>
