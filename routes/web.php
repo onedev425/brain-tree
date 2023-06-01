@@ -35,6 +35,8 @@ Route::middleware(['guest'])->group(function () {
 
 //user must be authenticated
 Route::middleware('auth:sanctum', 'verified', 'App\Http\Middleware\PreventLockAccountAccess', 'App\Http\Middleware\EnsureDefaultPasswordIsChanged')->namespace('App\Http\Controllers')->group(function () {
+    Route::post('/update-profile', ['App\Http\Controllers\ProfileController', 'update'])->name('profile.update');
+
     //Setting routes
     Route::get('settings', ['App\Http\Controllers\SettingController', 'index'])->name('settings.index');
 

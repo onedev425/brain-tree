@@ -40,7 +40,9 @@ class User extends Authenticatable implements MustVerifyEmail
         'address',
         'phone',
         'country_id',
+        'industry_id',
         'language_id',
+        'experience',
     ];
 
     /**
@@ -220,5 +222,10 @@ class User extends Authenticatable implements MustVerifyEmail
     public function language(): BelongsTo
     {
         return $this->belongsTo(Language::class);
+    }
+
+    public function industry(): BelongsTo
+    {
+        return $this->belongsTo(Industry::class);
     }
 }
