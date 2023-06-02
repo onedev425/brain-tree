@@ -39,6 +39,10 @@ class User extends Authenticatable implements MustVerifyEmail
         'birthday',
         'address',
         'phone',
+        'country_id',
+        'industry_id',
+        'language_id',
+        'experience',
     ];
 
     /**
@@ -208,5 +212,20 @@ class User extends Authenticatable implements MustVerifyEmail
     public function adminlte_profile_url()
     {
         return 'profile/username';
+    }
+
+    public function country(): BelongsTo
+    {
+        return $this->belongsTo(Country::class);
+    }
+
+    public function language(): BelongsTo
+    {
+        return $this->belongsTo(Language::class);
+    }
+
+    public function industry(): BelongsTo
+    {
+        return $this->belongsTo(Industry::class);
     }
 }
