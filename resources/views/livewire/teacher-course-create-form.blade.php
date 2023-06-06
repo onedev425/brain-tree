@@ -1,12 +1,16 @@
 <div>
     <div class="block">
-        <form>
+        <form id="course_form" action="{{ route('teacher.course.store') }}" method="post" enctype="multipart/form-data">
+            @csrf
+            <input type="hidden" name="topic_list">
+            <input type="hidden" name="quiz_list">
+            <input type="hidden" name="is_published">
             <div class="float-right my-3">
-                <button type="button" class="py-3 px-11 inline-block text-center mb-3 rounded-lg leading-5 text-gray-500 bg-white border border-gray-300 hover:text-dark hover:bg-gray-200 hover:ring-0 hover:border-gray-500 focus:text-dark focus:bg-gray-200 focus:border-gray-500 focus:outline-none focus:ring-0 mr-4">
+                <button type="submit" id="save_course_button" class="py-3 px-11 inline-block text-center mb-3 rounded-lg leading-5 text-gray-500 bg-white border border-gray-300 hover:text-dark hover:bg-gray-200 hover:ring-0 hover:border-gray-500 focus:text-dark focus:bg-gray-200 focus:border-gray-500 focus:outline-none focus:ring-0 mr-4">
                     {{ __('Save') }}
                 </button>
 
-                <button type="button" class="py-3 px-8 inline-block text-center mb-3 rounded-lg leading-5 text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 hover:ring-0 hover:border-red-600 focus:bg-red-600 focus:border-red-600 focus:outline-none focus:ring-0">
+                <button type="submit" id="publish_course_button" class="py-3 px-8 inline-block text-center mb-3 rounded-lg leading-5 text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 hover:ring-0 hover:border-red-600 focus:bg-red-600 focus:border-red-600 focus:outline-none focus:ring-0">
                     {{ __('Publish') }}
                 </button>
             </div>
@@ -22,17 +26,25 @@
                             </h3>
                         </div>
                         <div class="card-body">
-                            <div class="mb-6">
+                            <div class="form-group mb-6">
                                 <label for="course_title" class="block mb-2 font-medium text-gray-900">{{ __('Course Title') }}</label>
-                                <input type="text" id="course_title" minlength="3" maxlength="255" required class="shadow-sm border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="" required>
+                                <input type="text" id="course_title" name="course_title" minlength="3" maxlength="255" class="shadow-sm border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="" required>
                             </div>
                             <div class="mb-6">
+                                <label for="industry" class="block mb-2 font-medium text-gray-900">{{ __('Industry') }}</label>
+                                <x-select id="industry" name="industry">
+                                    @foreach ($industries as $industry)
+                                        <option value="{{ $industry->id }}">{{ $industry->name }}</option>
+                                    @endforeach
+                                </x-select>
+                            </div>
+                            <div class="form-group mb-6">
                                 <label for="course_price" class="block mb-2 font-medium text-gray-900">{{ __('Pricing') }} ($)</label>
-                                <input type="number" id="course_price" minlength="1" maxlength="10" required class="shadow-sm border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="" required>
+                                <input type="number" id="course_price" name="course_price" minlength="1" maxlength="10" class="shadow-sm border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="" required>
                             </div>
                             <div class="mb-6">
                                 <label for="course_description" class="inline-block mb-2">{{ __('Description') }}</label>
-                                <textarea id="course_description" rows="8" class="course_description w-full leading-5 relative py-3 px-5 rounded-lg text-gray-800 bg-white border border-gray-300 overflow-x-auto focus:outline-none focus:border-gray-400 focus:ring-0" id="texteditor" rows="3"></textarea>
+                                <textarea id="course_description" name="course_description" rows="8" class="course_description w-full leading-5 relative py-3 px-5 rounded-lg text-gray-800 bg-white border border-gray-300 overflow-x-auto focus:outline-none focus:border-gray-400 focus:ring-0" id="texteditor" rows="3"></textarea>
                             </div>
                         </div>
                     </div>
@@ -77,7 +89,7 @@
                                                         </span>
                                     <!--end::Remove-->
                                 </div>
-                                <div class="form-text">Allowed file types: png, jpg, jpeg.<br/>Max Size: 5MB, 1000 x 1000</div>
+                                <div class="form-text">{{ __('Allowed file types: png, jpg, jpeg.') }}<br/>Max Size: 5MB, 1000 x 1000</div>
                             </div>
                         </div>
                     </div>
@@ -116,6 +128,13 @@
                             </h3>
                         </div>
                         <div class="card-body">
+                            <div>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" class="sr-only peer" name="quiz_active" checked>
+                                    <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-green-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600"></div>
+                                    <span class="ml-3 text-sm font-medium text-gray-900">{{ __('Enable Quizzes') }}</span>
+                                </label>
+                            </div>
                             <div id="quiz_list" class="mb-5"></div>
                             <div><x-button id="open_quiz_dialog_button" label="{{ __('Add new Question') }}" icon="fas fa-plus" class="py-3 md:px-10 bg-red-700 text-white font-semibold border-transparent" /></div>
                         </div>
@@ -507,7 +526,7 @@
         }
 
         $('select#quiz_type').on('change', function() {
-            console.log('selcting');
+
             $('div#boolean_answer_list').addClass('hidden');
             $('div#single_answer_list').addClass('hidden');
             $('div#single_answer_list').find('input.single-answer-text').parent().removeClass('form-group');
@@ -579,11 +598,10 @@
             handle: '.handle', // handle's class
             animation: 150
         });
-
-
     </script>
 
     <script>
+
         const topicValidation = function () {
             var topicForm = document.getElementById('topic_form');
             var pristine = new Pristine(topicForm);
@@ -689,12 +707,67 @@
                         $(lessonObject).attr('data-video-url', videoURL);
                     }
 
-
                     closeLessonDialog();
                 }
 
             });
         };
+
+        const courseValidation = function () {
+            const courseForm = document.getElementById('course_form');
+            const pristine = new Pristine(courseForm);
+            courseForm.addEventListener('submit', function(event) {
+                event.preventDefault();
+                const valid = pristine.validate();
+
+                if (valid) {
+                    if ($('div#topic_list div.lesson_info').length == 0) {
+                        toastr.error('You need at least one topic and lesson.');
+                        return false;
+                    }
+                    else {
+                        let topic_list = [];
+                        $.each($('div#topic_list span.topic_info'), function(index, topic_obj) {
+                            let lesson_list = [];
+                            $.each($(topic_obj).parent().parent().parent().parent().next().find('div.lesson_info'), function(index, lesson_obj) {
+                                const lesson = {
+                                    title: $(lesson_obj).html(),
+                                    description: $(lesson_obj).attr('data-description'),
+                                    video_source: $(lesson_obj).attr('data-video-source'),
+                                    video_url: $(lesson_obj).attr('data-video-url'),
+                                };
+                                lesson_list.push(lesson);
+                            });
+                            const topic_info = {
+                                title: $(topic_obj).html(),
+                                lessons: lesson_list
+                            }
+                            topic_list.push(topic_info);
+                        });
+
+                        let quiz_list = [];
+                        $.each($('div.quiz_info'), function(index, quiz_obj) {
+                            const quiz = {
+                                title: $(quiz_obj).html(),
+                                description: $(quiz_obj).attr('data-description'),
+                                type: $(quiz_obj).attr('data-type'),
+                                points: $(quiz_obj).attr('data-points'),
+                                answer: $(quiz_obj).attr('data-answer'),
+                                answer_values: $(quiz_obj).attr('data-answer-value'),
+                            }
+                            quiz_list.push(quiz);
+                        })
+
+                        $('input[name=topic_list]').val(JSON.stringify(topic_list));
+                        $('input[name=quiz_list]').val(JSON.stringify(quiz_list));
+                        courseForm.submit();
+                        return true;
+                    }
+
+                }
+                // toastr.warning('You clicked Success toast');
+            });
+        }
 
         $(document).ready(function() {
             quizForm = document.getElementById('quiz_form');
@@ -703,10 +776,8 @@
                 event.preventDefault();
                 // var quizForm = document.getElementById('quiz_form');
                 // var pristine = new Pristine(quizForm);
-                console.log('submit');
                 const valid = pristine.validate();
 
-                console.log(valid);
                 if (valid) {
                     const quizTitle = $('input#quiz_title').val();
                     const quizDescription = $('textarea#quiz_description').val();
@@ -771,13 +842,23 @@
             });
         });
 
-
-
         window.addEventListener("load", () => {
             topicValidation();
             lessonValidation();
+            courseValidation();
         });
 
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            $('button#save_course_button').on('click', function(event) {
+                $('input[name=is_published]').val(0);
+            });
+            $('button#publish_course_button').on('click', function(event) {
+                $('input[name=is_published]').val(1);
+            });
+        });
     </script>
 
     <script>
