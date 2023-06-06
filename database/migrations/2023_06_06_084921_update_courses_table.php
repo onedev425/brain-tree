@@ -21,6 +21,8 @@ return new class extends Migration
             $table->integer('price')->default(0)->after('title');
             $table->softDeletes();
         });
+        DB::statement('ALTER TABLE courses DROP FOREIGN KEY courses_subject_id_foreign');
+        DB::statement('ALTER TABLE courses ADD CONSTRAINT courses_industry_id_foreign FOREIGN KEY (industry_id) REFERENCES industries(id)');
     }
 
     /**
@@ -28,6 +30,9 @@ return new class extends Migration
      */
     public function down(): void
     {
+        DB::statement('ALTER TABLE courses DROP FOREIGN KEY courses_industry_id_foreign');
+        DB::statement('ALTER TABLE courses ADD CONSTRAINT courses_subject_id_foreign FOREIGN KEY (subject_id) REFERENCES subjects(id)');
+
         Schema::table('courses', function (Blueprint $table) {
             $table->dropSoftDeletes();
             $table->dropColumn('price');
