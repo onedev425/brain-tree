@@ -3,11 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use App\Services\Course\CourseService;
 use App\Models\Course;
 use App\Http\Requests\TeacherCourseStoreRequest;
 use Illuminate\View\View;
+use Illuminate\Database\Eloquent\Collection;
 
 class TeacherCourseController extends Controller
 {
@@ -26,12 +26,20 @@ class TeacherCourseController extends Controller
 
     public function create(): View
     {
-        return view('pages.teacher-course.new');
+        $data['course'] = new Course();
+        $data['topics'] = new Collection();
+        $data['quizzes'] = new Collection();
+
+        return view('pages.teacher-course.new', $data);
     }
 
     public function edit(Course $course): View
     {
-        return view('pages.teacher-course.new');
+        $data['course'] = $course;
+        $data['topics'] = $course->topics()->with('lessons')->get();
+        $data['quizzes'] = $course->questions()->with('quiz_options')->get();
+
+        return view('pages.teacher-course.edit', $data);
     }
 
     public function store(TeacherCourseStoreRequest $request): RedirectResponse
