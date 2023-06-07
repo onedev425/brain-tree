@@ -19,9 +19,9 @@ class CourseService
     public function getCourses($type): Collection
     {
         if ($type == 'publish')
-            return Course::where('is_published', 1)->get();
+            return Course::with('lessons')->where('is_published', 1)->get();
         if ($type == 'draft')
-            return Course::where('is_published', 0)->get();
+            return Course::with('lessons')->where('is_published', 0)->get();
     }
 
     /**
