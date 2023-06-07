@@ -7,27 +7,21 @@ use App\Models\Topic;
 use App\Models\Lesson;
 use App\Models\Question;
 use App\Models\QuestionOption;
+use Illuminate\Database\Eloquent\Collection;
 
 class CourseService
 {
     /**
-     * Get published courses.
+     * Get courses.
      *
      * @return \Illuminate\Database\Eloquent\Collection
      */
-    public function getPublishedCourses()
+    public function getCourses($type): Collection
     {
-        return Course::where('is_published', 1)->get();
-    }
-
-    /**
-     * Get drafted courses.
-     *
-     * @return \Illuminate\Database\Eloquent\Collection
-     */
-    public function getDraftedCourses()
-    {
-        return Course::where('is_published', 0)->get();
+        if ($type == 'publish')
+            return Course::where('is_published', 1)->get();
+        if ($type == 'draft')
+            return Course::where('is_published', 0)->get();
     }
 
     /**
@@ -36,7 +30,7 @@ class CourseService
      *
      * @return \App\Models\Subject
      */
-    public function getCourseId(int $id)
+    public function getCourseId(int $id): Course
     {
         return Course::find($id);
     }

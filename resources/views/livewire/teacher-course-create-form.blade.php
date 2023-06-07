@@ -29,6 +29,9 @@
                             <div class="form-group mb-6">
                                 <label for="course_title" class="block mb-2 font-medium text-gray-900">{{ __('Course Title') }}</label>
                                 <input type="text" id="course_title" name="course_title" minlength="3" maxlength="255" class="shadow-sm border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="" required>
+                                @error('course_title')
+                                <span class="text-red-500">{{ $message }}</span>
+                                @enderror
                             </div>
                             <div class="mb-6">
                                 <label for="industry" class="block mb-2 font-medium text-gray-900">{{ __('Industry') }}</label>
@@ -41,6 +44,9 @@
                             <div class="form-group mb-6">
                                 <label for="course_price" class="block mb-2 font-medium text-gray-900">{{ __('Pricing') }} ($)</label>
                                 <input type="number" id="course_price" name="course_price" minlength="1" maxlength="10" class="shadow-sm border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="" required>
+                                @error('course_price')
+                                <span class="text-red-500">{{ $message }}</span>
+                                @enderror
                             </div>
                             <div class="mb-6">
                                 <label for="course_description" class="inline-block mb-2">{{ __('Description') }}</label>

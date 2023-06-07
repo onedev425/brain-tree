@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use App\Services\Course\CourseService;
 use App\Models\Course;
+use App\Http\Requests\TeacherCourseStoreRequest;
+use Illuminate\View\View;
 
 class TeacherCourseController extends Controller
 {
@@ -16,17 +19,17 @@ class TeacherCourseController extends Controller
         $this->authorizeResource(Course::class);
     }
 
-    public function index()
+    public function index(): View
     {
         return view('pages.teacher-course.index');
     }
 
-    public function create()
+    public function create(): View
     {
         return view('pages.teacher-course.new');
     }
 
-    public function store(Request $request)
+    public function store(TeacherCourseStoreRequest $request): RedirectResponse
     {
         $data['course_title'] = $request['course_title'];
         $data['industry_id'] = $request['industry'];
@@ -38,6 +41,14 @@ class TeacherCourseController extends Controller
         $data['quiz_active'] = isset($request['quiz_active']) ? 1 : 0;
         $data['is_published'] = $request['is_published'];
 
+        $lesson_nums = 0;
+        foreach($data['topic_list'] as $topic) {
+            $lesson_nums += count($topic['lessons']);
+        }
+        if ($lesson_nums == 0) {
+            return back()->with('danger', __('You need at least one topic and lesson.'));
+        }
+
         $data['course_image'] = asset('images/logo/course.jpg');
         if ($request->hasFile('course_image')) {
             $image = $request->file('course_image');
@@ -48,7 +59,6 @@ class TeacherCourseController extends Controller
 
         $this->courseService->createCourse($data);
 
-        // return back()->with('success', 'Course Created Successfully');
         return redirect()->route('teacher.course.index', $data['is_published'] == 1 ? 'type=publish' : 'type=draft');
     }
 }
