@@ -4,28 +4,41 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Course extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'title', 'description', 'image', 'user_id', 'subject_id'
+        'title', 'price', 'description', 'image', 'user_id', 'created_by', 'assigned_id', 'industry_id', 'quiz_active', 'is_published'
     ];
 
     /**
      * Get the teacher for the course
      */
-    public function teacher(): BelongsTo
+    public function createdUser(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 
-    /**
-     * Get the subject for the course
-     */
-    public function subject(): BelongsTo
+    public function assignedTeacher()
     {
-        return $this->belongsTo(Subject::class);
+        return $this->belongsTo(User::class, 'assigned_id');
     }
+
+    public function topics(): HasMany
+    {
+        return $this->hasMany(Topic::class);
+    }
+
+    public function lessons(): HasMany
+    {
+        return $this->hasMany(Lesson::class);
+    }
+    public function questions(): HasMany
+    {
+        return $this->hasMany(Question::class);
+    }
+
 }

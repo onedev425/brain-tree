@@ -11,9 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->foreignId('country_id')->nullable()->constrained()->nullOnDelete()->onUpdate('cascade');
-        });
+        Schema::rename('questions', 'question_options');
     }
 
     /**
@@ -21,9 +19,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropForeign(['country_id']);
-            $table->dropColumn('country_id');
-        });
+        Schema::rename('question_options', 'questions');
     }
 };

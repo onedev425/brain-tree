@@ -82,19 +82,6 @@ class Menu extends Component
             ],
             [
                 'type'  => 'menu-item',
-                'icon'  => '<svg xmlns="http://www.w3.org/2000/svg" width="25.163" height="30.954" viewBox="0 0 25.163 30.954">
-                              <g id="Icon_feather-book" data-name="Icon feather-book" transform="translate(-5 -2)">
-                                <path id="Path_58" data-name="Path 58" d="M6,29.119A3.619,3.619,0,0,1,9.619,25.5H29.163" transform="translate(0 -0.785)" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
-                                <path id="Path_59" data-name="Path 59" d="M9.619,3H29.163V31.954H9.619A3.619,3.619,0,0,1,6,28.335V6.619A3.619,3.619,0,0,1,9.619,3Z" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
-                              </g>
-                            </svg>',
-                'text'  => 'Assessments',
-                'route' => 'notices.index',
-                'sub_routes' => ['notices.index'],
-                'can'   => 'assessments',
-            ],
-            [
-                'type'  => 'menu-item',
                 'icon'  => '<svg xmlns="http://www.w3.org/2000/svg" width="30.866" height="29" viewBox="0 0 30.866 29">
                               <path id="Icon_feather-bookmark" data-name="Icon feather-bookmark" d="M36.366,31.5,21.933,24,7.5,31.5V7.5c0-1.657,1.846-3,4.124-3H32.242c2.277,0,4.124,1.343,4.124,3Z" transform="translate(-6.5 -3.5)" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
                             </svg>',
