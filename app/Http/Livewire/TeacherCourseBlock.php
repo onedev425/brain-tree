@@ -6,11 +6,11 @@ use Livewire\Component;
 
 class TeacherCourseBlock extends Component
 {
-    public $title;
-    public $image;
-    public $created_at;
-    public $duration;
-    public $price;
+    public string $title;
+    public string $image;
+    public string $created_at;
+    public string $lessons;
+    public string $price;
 
     public function render()
     {

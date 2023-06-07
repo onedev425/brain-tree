@@ -10,8 +10,8 @@ class TeacherCourseStoreRequest extends FormRequest
     {
         return [
             'course_title'  => 'required|max:100',
-//            'industry'      => 'required|integer',
-//            'course_price'  => 'required|integer',
+            'industry'      => 'required|integer',
+            'course_price'  => 'required|integer',
         ];
     }
 }
