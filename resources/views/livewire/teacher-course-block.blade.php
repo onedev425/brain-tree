@@ -1,4 +1,4 @@
-<div class="flex flex-col bg-white mb-12 md:mb-0 rounded-2xl border overflow-hidden">
+<div class="flex flex-col bg-white mb-12 md:mb-0 rounded-2xl border">
     <div class="relative border-b">
         <a href="#">
             <div class="absolute inset-0 hover:bg-white opacity-0 transition duration-700 hover:opacity-10"></div>
@@ -52,9 +52,9 @@
                         </svg>
 
                     </button>
-                    <div x-show="open" @click.away="open = false" class="origin-top-right absolute rounded-xl bg-white py-2 pl-4 z-10" style="min-width: 10rem; display: none; right:0; box-shadow: 0px 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 50px -6px rgb(0 0 0 / 0.1);">
-                        <a class="block px-3 py-2 hover:bg-gray-100 focus:bg-gray-100 dark:hover:bg-gray-900 dark:hover:bg-opacity-20 dark:focus:bg-gray-900" href="#">{{ __('Unpublish') }}</a>
-                        <a class="block px-3 py-2 hover:bg-gray-100 focus:bg-gray-100 dark:hover:bg-gray-900 dark:hover:bg-opacity-20 dark:focus:bg-gray-900" href="#">{{ __('Delete') }}</a>
+                    <div x-show="open" @click.away="open = false" class="origin-top-right absolute rounded-xl bg-white py-2 px-3 z-10" style="min-width: 10rem; display: none; right:0; box-shadow: 0px 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 50px -6px rgb(0 0 0 / 0.1);">
+                        <a class="block rounded-lg px-3 py-2 hover:bg-gray-100 focus:bg-gray-100 " href="#">{{ $is_published == 1 ? __('Unpublish') : __('Publish') }}</a>
+                        <a class="block rounded-lg px-3 py-2 hover:bg-gray-100 focus:bg-gray-100 " href="#">{{ __('Delete') }}</a>
                     </div>
                 </div>
             </div>

@@ -25,6 +25,7 @@
                             'created_at' => $course->created_at,
                             'lessons' => count($course->lessons),
                             'price' => $course->price,
+                            'is_published' => $course->is_published,
                         ])
                     @endforeach
                 @else
@@ -35,6 +36,7 @@
                             'created_at' => $course->created_at,
                             'lessons' => count($course->lessons),
                             'price' => $course->price,
+                            'is_published' => $course->is_published,
                         ])
                     @endforeach
                 @endif

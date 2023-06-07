@@ -11,6 +11,7 @@ class TeacherCourseBlock extends Component
     public string $created_at;
     public string $lessons;
     public string $price;
+    public int $is_published;
 
     public function render()
     {
