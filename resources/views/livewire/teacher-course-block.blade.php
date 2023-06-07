@@ -14,19 +14,14 @@
                 <a href="#" class="hover:text-indigo-700">{{ $title }}</a>
             </h3>
             <div class="text-gray-500">
-                <svg class="bi bi-calendar ltr:mr-2 rtl:ml-2 inline-block" xmlns="http://www.w3.org/2000/svg" width="12.997" height="15" viewBox="0 0 14.997 15">
-                    <g id="Icon_ionic-ios-timer" data-name="Icon ionic-ios-timer" transform="translate(-3.938 -3.938)">
-                        <path id="Path_23" data-name="Path 23" d="M11.438,18.938a7.5,7.5,0,0,1-5.205-12.9.6.6,0,1,1,.836.866,6.294,6.294,0,1,0,4.969-1.733V7.519a.6.6,0,0,1-1.208,0V4.541a.6.6,0,0,1,.6-.6,7.5,7.5,0,0,1,0,15Z" transform="translate(0 0)" fill="#6c6c6c"/>
-                        <path id="Path_24" data-name="Path 24" d="M11.847,11.322,15.579,14a1.129,1.129,0,1,1-1.313,1.838A1.09,1.09,0,0,1,14,15.578l-2.681-3.731a.376.376,0,0,1,.525-.525Z" transform="translate(-3.413 -3.413)" fill="#6c6c6c"/>
-                    </g>
-                </svg><span class="ml-2 text-xs">{{ $duration }}</span>
+                <span class="text-xs">{{ $lessons }} {{ $lessons == 1 ? __('lesson') : __('lessons') }}</span>
             </div>
         </div>
     </div>
     <div class="border-t pl-4 py-2">
         <div class="flex flex-row justify-between">
             <div class="flex flex-col">
-                <h3 class="text-base">Price: ${{ $price }}</h3>
+                <h3 class="text-base">{{ __('Price') }}: ${{ $price }}</h3>
             </div>
             <div class="flex">
                 <a href="#" class="mr-3">
@@ -58,8 +53,8 @@
 
                     </button>
                     <div x-show="open" @click.away="open = false" class="origin-top-right absolute rounded-xl bg-white py-2 pl-4 z-10" style="min-width: 10rem; display: none; right:0; box-shadow: 0px 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 50px -6px rgb(0 0 0 / 0.1);">
-                        <a class="block px-3 py-2 hover:bg-gray-100 focus:bg-gray-100 dark:hover:bg-gray-900 dark:hover:bg-opacity-20 dark:focus:bg-gray-900" href="#">Unpublish</a>
-                        <a class="block px-3 py-2 hover:bg-gray-100 focus:bg-gray-100 dark:hover:bg-gray-900 dark:hover:bg-opacity-20 dark:focus:bg-gray-900" href="#">Delete</a>
+                        <a class="block px-3 py-2 hover:bg-gray-100 focus:bg-gray-100 dark:hover:bg-gray-900 dark:hover:bg-opacity-20 dark:focus:bg-gray-900" href="#">{{ __('Unpublish') }}</a>
+                        <a class="block px-3 py-2 hover:bg-gray-100 focus:bg-gray-100 dark:hover:bg-gray-900 dark:hover:bg-opacity-20 dark:focus:bg-gray-900" href="#">{{ __('Delete') }}</a>
                     </div>
                 </div>
             </div>
