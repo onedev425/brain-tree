@@ -29,6 +29,11 @@ class TeacherCourseController extends Controller
         return view('pages.teacher-course.new');
     }
 
+    public function edit(Course $course): View
+    {
+        return view('pages.teacher-course.new');
+    }
+
     public function store(TeacherCourseStoreRequest $request): RedirectResponse
     {
         $data['course_title'] = $request['course_title'];

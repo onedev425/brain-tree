@@ -20,6 +20,7 @@
                 @if ($activeTab === 'publish')
                     @foreach($publish_courses as $course)
                         @livewire('teacher-course-block', [
+                            'course_id' => $course->id,
                             'title' => $course->title,
                             'image' => $course->image,
                             'created_at' => $course->created_at,
@@ -31,6 +32,7 @@
                 @else
                     @foreach($draft_courses as $course)
                         @livewire('teacher-course-block', [
+                            'course_id' => $course->id,
                             'title' => $course->title,
                             'image' => $course->image,
                             'created_at' => $course->created_at,

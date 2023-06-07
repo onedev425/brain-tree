@@ -24,7 +24,7 @@
                 <h3 class="text-base">{{ __('Price') }}: ${{ $price }}</h3>
             </div>
             <div class="flex">
-                <a href="#" class="mr-3">
+                <a href="{{ route('teacher.course.edit', $course_id) }}" class="mr-3">
                     <svg xmlns="http://www.w3.org/2000/svg" width="18.906" height="18.906" viewBox="0 0 18.906 18.906">
                         <g id="Icon_feather-edit" data-name="Icon feather-edit" transform="translate(-2 -1.818)">
                             <path id="Path_56" data-name="Path 56" d="M10.562,6H4.68A1.68,1.68,0,0,0,3,7.68V19.443a1.68,1.68,0,0,0,1.68,1.68H16.443a1.68,1.68,0,0,0,1.68-1.68V13.562" transform="translate(0 -1.4)" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
