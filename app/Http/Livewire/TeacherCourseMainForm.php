@@ -3,10 +3,16 @@
 namespace App\Http\Livewire;
 
 use Livewire\Component;
+use Illuminate\Support\Facades\Request;
 
 class TeacherCourseMainForm extends Component
 {
     public $activeTab = 'publish';
+
+    public function mount()
+    {
+        $this->activeTab = Request::input('type');
+    }
 
     public function setTab($tab)
     {

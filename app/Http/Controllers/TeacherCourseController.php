@@ -49,6 +49,6 @@ class TeacherCourseController extends Controller
         $this->courseService->createCourse($data);
 
         // return back()->with('success', 'Course Created Successfully');
-        return redirect()->route('teacher.course.index');
+        return redirect()->route('teacher.course.index', $data['is_published'] == 1 ? 'type=publish' : 'type=draft');
     }
 }
