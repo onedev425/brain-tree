@@ -33,7 +33,7 @@ class Menu extends Component
                             </svg>',
                 'text'  => 'Courses',
                 'route' => 'teacher.course.index',
-                'sub_routes' => ['teacher.course.index', 'teacher.course.create'],
+                'sub_routes' => ['teacher.course.index', 'teacher.course.create', 'teacher.course.edit'],
                 'can' => 'teacher-courses'
             ],
             [
