@@ -14,6 +14,17 @@ class Topic extends Model
         'description', 'course_id', 'user_id'
     ];
 
+    public static function createTopic($course_id, $data)
+    {
+        $data['course_id'] = $course_id;
+        return self::create($data);
+    }
+
+    public function createLesson($data)
+    {
+        return Lesson::createLesson($this->id, $data);
+    }
+
     public function lessons(): HasMany
     {
         return $this->hasMany(Lesson::class);

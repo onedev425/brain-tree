@@ -14,6 +14,17 @@ class Question extends Model
         'name', 'description', 'course_id', 'user_id', 'type'
     ];
 
+    public static function createQuestion($course_id, $data)
+    {
+        $data['course_id'] = $course_id;
+        return self::create($data);
+    }
+
+    public function createQuestionOption($data)
+    {
+        return QuestionOption::createQuestionOption($this->id, $data);
+    }
+
     public function quiz_options(): HasMany
     {
         return $this->hasMany(QuestionOption::class);

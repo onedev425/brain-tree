@@ -13,4 +13,9 @@ class Lesson extends Model
         'title', 'description', 'video_link', 'video_type', 'user_id', 'course_id', 'topic_id'
     ];
 
+    public static function createLesson($topic_id, $data)
+    {
+        $data['topic_id'] = $topic_id;
+        return self::create($data);
+    }
 }

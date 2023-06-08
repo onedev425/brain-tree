@@ -15,13 +15,40 @@ class Course extends Model
     ];
 
     /**
-     * Get the teacher for the course
+     * Create a course
+     */
+    public static function createCourse($data): Course
+    {
+        return self::create($data);
+    }
+
+    /**
+     * Create a topic of a course
+     */
+    public function createTopic($data)
+    {
+        return Topic::createTopic($this->id, $data);
+    }
+
+    /**
+     * Create a question of a course
+     */
+    public function createQuestion($data)
+    {
+        return Question::createQuestion($this->id, $data);
+    }
+
+    /**
+     * Get the course creator
      */
     public function createdUser(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
     }
 
+    /**
+     * Get the teacher for the course
+     */
     public function assignedTeacher()
     {
         return $this->belongsTo(User::class, 'assigned_id');
