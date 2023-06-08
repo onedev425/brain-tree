@@ -84,6 +84,15 @@ class TeacherCourseController extends Controller
         return redirect()->route('teacher.course.index', $request['is_published'] == 1 ? 'type=publish' : 'type=draft');
     }
 
+    public function publish(Request $request, Course $course): RedirectResponse
+    {
+        $publish_result = ! $request['is_published'];
+        $course->is_published = $publish_result;
+        $course->save();
+
+        return redirect()->route('teacher.course.index', $publish_result == 1 ? 'type=publish' : 'type=draft');
+    }
+
     private function getCourseData(TeacherCourseStoreRequest $request): array
     {
         $data['course_title'] = $request['course_title'];
