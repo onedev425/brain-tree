@@ -53,8 +53,13 @@
 
                     </button>
                     <div x-show="open" @click.away="open = false" class="origin-top-right absolute rounded-xl bg-white py-2 px-3 z-10" style="min-width: 10rem; display: none; right:0; box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 50px -6px rgb(0 0 0 / 0.1);">
-                        <a class="block rounded-lg px-3 py-2 hover:bg-gray-100 focus:bg-gray-100 " href="#">{{ $is_published == 1 ? __('Unpublish') : __('Publish') }}</a>
-                        <a class="block rounded-lg px-3 py-2 hover:bg-gray-100 focus:bg-gray-100 " href="#">{{ __('Delete') }}</a>
+                        <a class="block rounded-lg px-3 py-2 hover:bg-gray-100 focus:bg-gray-100 ">{{ $is_published == 1 ? __('Unpublish') : __('Publish') }}</a>
+                        <form id="delete_course_form" action="{{ route('teacher.course.destroy', $course_id) }}" method="POST">
+                            @csrf
+                            @method('delete')
+                            <input type="hidden" name="is_published" value="{{ $is_published }}">
+                            <button type="submit" id="delete_course_button" class="w-full text-left block rounded-lg px-3 py-2 hover:bg-gray-100 focus:bg-gray-100 ">{{ __('Delete') }}</button>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -63,3 +68,27 @@
     </div>
 </div><!-- end card -->
 
+<script>
+    $(document).ready(function() {
+        $('button#delete_course_button').on('click', function(event) {
+            event.preventDefault();
+            const form = $(this).parent();
+            Swal.fire({
+                html: "Are you sure you want to delete the course?",
+                icon: "warning",
+                showCancelButton: !0,
+                buttonsStyling: !1,
+                confirmButtonText: "Yes, delete!",
+                cancelButtonText: "No, cancel",
+                customClass: {
+                    confirmButton: "py-2 px-4 inline-block text-center mb-3 rounded leading-5 text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 hover:ring-0 hover:border-red-600 focus:bg-red-600 focus:border-red-600 focus:outline-none focus:ring-0",
+                    cancelButton: "ml-3 py-2 px-4 inline-block text-center mb-3 rounded leading-5 text-gray-800 bg-gray-100 border border-gray-100 hover:text-gray-900 hover:bg-gray-200 hover:ring-0 hover:border-gray-200 focus:bg-gray-200 focus:border-gray-200 focus:outline-none focus:ring-0"
+                },
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $(form).submit();
+                }
+            })
+        })
+    });
+</script>

@@ -6,6 +6,7 @@ use Illuminate\Http\RedirectResponse;
 use App\Services\Course\CourseService;
 use App\Models\Course;
 use App\Http\Requests\TeacherCourseStoreRequest;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -75,6 +76,12 @@ class TeacherCourseController extends Controller
         $this->courseService->updateCourse($data);
 
         return redirect()->route('teacher.course.index', $data['is_published'] == 1 ? 'type=publish' : 'type=draft');
+    }
+
+    public function destroy(Request $request, Course $course): RedirectResponse
+    {
+        $course->delete();
+        return redirect()->route('teacher.course.index', $request['is_published'] == 1 ? 'type=publish' : 'type=draft');
     }
 
     private function getCourseData(TeacherCourseStoreRequest $request): array
