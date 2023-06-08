@@ -22,6 +22,13 @@ class Course extends Model
         return self::create($data);
     }
 
+    public function updateCourse($data): Course
+    {
+        $this->fill($data);
+        $this->save();
+        return $this;
+    }
+
     /**
      * Create a topic of a course
      */

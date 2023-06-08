@@ -18,4 +18,10 @@ class Lesson extends Model
         $data['topic_id'] = $topic_id;
         return self::create($data);
     }
+
+    public function updateLesson($data): void
+    {
+        $this->fill($data);
+        $this->save();
+    }
 }

@@ -20,6 +20,13 @@ class Question extends Model
         return self::create($data);
     }
 
+    public function updateQuestion($data): Question
+    {
+        $this->fill($data);
+        $this->save();
+        return $this;
+    }
+
     public function createQuestionOption($data)
     {
         return QuestionOption::createQuestionOption($this->id, $data);

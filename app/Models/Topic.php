@@ -14,10 +14,17 @@ class Topic extends Model
         'description', 'course_id', 'user_id'
     ];
 
-    public static function createTopic($course_id, $data)
+    public static function createTopic($course_id, $data): Topic
     {
         $data['course_id'] = $course_id;
         return self::create($data);
+    }
+
+    public function updateTopic($data): Topic
+    {
+        $this->fill($data);
+        $this->save();
+        return $this;
     }
 
     public function createLesson($data)
