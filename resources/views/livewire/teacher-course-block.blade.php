@@ -1,6 +1,6 @@
 <div class="flex flex-col bg-white mb-12 md:mb-0 rounded-2xl border">
     <div class="relative border-b">
-        <a href="#">
+        <a href="{{ route('teacher.course.edit', $course_id) }}">
             <div class="absolute inset-0 hover:bg-white opacity-0 transition duration-700 hover:opacity-10"></div>
             <img class="w-full h-48 object-cover" src="{{ $image }}" alt="alt title">
         </a>
@@ -11,7 +11,7 @@
         </div>
         <div class="">
             <h3 class="text-lg leading-normal mb-3 font-bold text-gray-800">
-                <a href="#" class="hover:text-indigo-700">{{ $title }}</a>
+                <a href="{{ route('teacher.course.edit', $course_id) }}" class="hover:text-indigo-700">{{ $title }}</a>
             </h3>
             <div class="text-gray-500">
                 <span class="text-xs">{{ $lessons }} {{ $lessons == 1 ? __('lesson') : __('lessons') }}</span>
@@ -52,7 +52,7 @@
                         </svg>
 
                     </button>
-                    <div x-show="open" @click.away="open = false" class="origin-top-right absolute rounded-xl bg-white py-2 px-3 z-10" style="min-width: 10rem; display: none; right:0; box-shadow: 0px 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 50px -6px rgb(0 0 0 / 0.1);">
+                    <div x-show="open" @click.away="open = false" class="origin-top-right absolute rounded-xl bg-white py-2 px-3 z-10" style="min-width: 10rem; display: none; right:0; box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 50px -6px rgb(0 0 0 / 0.1);">
                         <a class="block rounded-lg px-3 py-2 hover:bg-gray-100 focus:bg-gray-100 " href="#">{{ $is_published == 1 ? __('Unpublish') : __('Publish') }}</a>
                         <a class="block rounded-lg px-3 py-2 hover:bg-gray-100 focus:bg-gray-100 " href="#">{{ __('Delete') }}</a>
                     </div>
