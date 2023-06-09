@@ -34,8 +34,8 @@ class TeacherCourseMainForm extends Component
         return view('livewire.teacher-course-main-form');
     }
 
-    public function getCourseVideoLength(Course $course): string
+    public function getCourseVideoDuration(Course $course): string
     {
-        return $this->courseService->getCourseVideoLength($course);
+        return $this->courseService->getCourseVideoDuration($course);
     }
 }

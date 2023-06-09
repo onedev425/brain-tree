@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('lessons', function (Blueprint $table) {
-            $table->integer('video_length')->after('video_type')->default(0);
+            $table->integer('video_duration')->after('video_type')->default(0);
         });
     }
 
