@@ -7,6 +7,9 @@ use App\Models\Topic;
 use App\Models\Lesson;
 use App\Models\Question;
 use Illuminate\Database\Eloquent\Collection;
+use Google_Client;
+use Google_Service_YouTube;
+use GuzzleHttp\Client;
 
 class CourseService
 {
@@ -87,6 +90,7 @@ class CourseService
                     'description' => $lesson_info['description'],
                     'video_type' => $lesson_info['video_source'],
                     'video_link' => $lesson_info['video_url'],
+                    'video_duration' => $this->getVideoLength($lesson_info['video_source'], $lesson_info['video_url']),
                     'user_id' => auth()->user()->id,
                     'course_id' => $course->id,
                 ]);
@@ -164,6 +168,7 @@ class CourseService
                         'description' => $lesson_info['description'],
                         'video_type' => $lesson_info['video_source'],
                         'video_link' => $lesson_info['video_url'],
+                        'video_duration' => $this->getVideoLength($lesson_info['video_source'], $lesson_info['video_url']),
                         'user_id' => auth()->user()->id,
                         'course_id' => $course->id,
                     ]);
@@ -175,6 +180,7 @@ class CourseService
                         'description' => $lesson_info['description'],
                         'video_type' => $lesson_info['video_source'],
                         'video_link' => $lesson_info['video_url'],
+                        'video_duration' => $this->getVideoLength($lesson_info['video_source'], $lesson_info['video_url']),
                     ]);
                     $lesson->save();
                 }
@@ -226,11 +232,72 @@ class CourseService
     public function deleteCourseImage($image_path): void
     {
         $image_name = basename($image_path);
-        var_dump('kkkkkk');
-        var_dump($image_name);
-        var_dump(public_path('upload/course/') . $image_name);
         if ($image_name != 'course.jpg')
             unlink(public_path('upload/course/') . $image_name);
+    }
+
+    private function getVideoLength($video_type, $video_url): int
+    {
+        $video_duration = 0;
+        if ($video_type == 'youtube') {
+            $client = new Google_Client();
+            $client->setDeveloperKey(env('GOOGLE_API_KEY'));
+
+            $youtube = new Google_Service_YouTube($client);
+            $video_id = $this->getYoutubeVideoIdFromUrl($video_url);
+
+            if ($video_id != '') {
+                $response = $youtube->videos->listVideos('contentDetails', ['id' => $video_id]);
+                $duration = $response['items'][0]['contentDetails']['duration'];
+
+                // Parse the duration into seconds
+                preg_match('/PT(\d+H)?(\d+M)?(\d+S)?/', $duration, $matches);
+                $hours = isset($matches[1]) ? intval(str_replace('H', '', $matches[1])) * 3600 : 0;
+                $minutes = isset($matches[2]) ? intval(str_replace('M', '', $matches[2])) * 60 : 0;
+                $seconds = isset($matches[3]) ? intval(str_replace('S', '', $matches[3])) : 0;
+                $video_duration = $hours + $minutes + $seconds;
+            }
+
+        }
+        elseif ($video_type == 'vimeo') {
+            $client = new Client();
+            $video_id = $this->getVimeoIdFromUrl($video_url);
+            if ($video_id != '') {
+                $response = $client->request('GET', "https://api.vimeo.com/videos/$video_id", [
+                    'headers' => [
+                        'Authorization' => 'Bearer ' . env('VIMEO_ACCESS_TOKEN'),
+                        'Accept' => 'application/vnd.vimeo.*+json;version=3.4',
+                    ],
+                ]);
+                $data = json_decode($response->getBody(), true);
+                $video_duration = $data['duration'];
+            }
+
+        }
+        return $video_duration;
+    }
+
+    private function getYoutubeVideoIdFromUrl($url): string
+    {
+        $regex_pattern = '/(?:youtube(?:-nocookie)?\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|vi|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/';
+        preg_match($regex_pattern, $url, $matches);
+
+        return empty($matches[1]) ? '' : $matches[1];
+    }
+
+    private function getVimeoIdFromUrl($url): string
+    {
+        $parsedUrl = parse_url($url);
+
+        if (isset($parsedUrl['host']) && $parsedUrl['host'] === 'vimeo.com') {
+            $path = ltrim($parsedUrl['path'], '/');
+            if (is_numeric($path)) {
+                return $path;
+            } elseif (preg_match('/\/(\d+)/', $path, $matches)) {
+                return $matches[1];
+            }
+        }
+        return '';
     }
 
 }
