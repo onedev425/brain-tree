@@ -24,7 +24,7 @@
                             'title' => $course->title,
                             'image' => $course->image,
                             'created_at' => $course->created_at,
-                            'lessons' => $course->lessons->count(),
+                            'duration' => $this->getCourseVideoLength($course),
                             'price' => $course->price,
                             'is_published' => $course->is_published,
                         ])
@@ -36,7 +36,7 @@
                             'title' => $course->title,
                             'image' => $course->image,
                             'created_at' => $course->created_at,
-                            'lessons' => $course->lessons->count(),
+                            'duration' => $this->getCourseVideoLength($course),
                             'price' => $course->price,
                             'is_published' => $course->is_published,
                         ])
