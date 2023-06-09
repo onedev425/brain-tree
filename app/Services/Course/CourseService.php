@@ -45,7 +45,7 @@ class CourseService
      */
     public function createCourse($data): void
     {
-        $course = Course::createCourse([
+        $course = Course::create([
             'title' => $data['course_title'],
             'price'  => $data['course_price'],
             'description'  => $data['course_description'],
@@ -58,13 +58,13 @@ class CourseService
         ]);
 
         foreach($data['topic_list'] as $topic_info) {
-            $topic = $course->createTopic([
+            $topic = $course->topics()->create([
                 'description' => $topic_info['title'],
                 'user_id' => auth()->user()->id
             ]);
 
             foreach($topic_info['lessons'] as $lesson_info) {
-                $topic->createLesson([
+                $topic->lessons()->create([
                     'title' => $lesson_info['title'],
                     'description' => $lesson_info['description'],
                     'video_type' => $lesson_info['video_source'],
@@ -76,7 +76,7 @@ class CourseService
         }
 
         foreach ($data['quiz_list'] as $quiz_info) {
-            $question = $course->createQuestion([
+            $question = $course->questions()->create([
                 'name' => $quiz_info['title'],
                 'description' => $quiz_info['description'],
                 'user_id' => auth()->user()->id,
@@ -87,7 +87,7 @@ class CourseService
             $answers = explode('$$$', $quiz_info['answer']);
             $answer_values = explode('$$$', $quiz_info['answer_values']);
             foreach($answers as $key => $answer) {
-                $question->createQuestionOption([
+                $question->quiz_options()->create([
                     'description' => $answer,
                     'answer' => $answer_values[$key]
                 ]);
@@ -99,7 +99,7 @@ class CourseService
     {
         // update a selected course
         $course = $data['course'];
-        $course = $course->updateCourse([
+        $course->fill([
             'title' => $data['course_title'],
             'price'  => $data['course_price'],
             'description'  => $data['course_description'],
@@ -108,6 +108,7 @@ class CourseService
             'quiz_active'  => $data['quiz_active'],
             'is_published'  => $data['is_published'],
         ]);
+        $course->save();
 
 
         // if some topics removed from UI, remove the topics from database
@@ -120,14 +121,15 @@ class CourseService
         // Create/Update topics/lessons
         foreach($data['topic_list'] as $topic_info) {
             if ($topic_info['id'] == 0) {
-                $topic = $course->createTopic([
+                $topic = $course->topics()->create([
                     'description' => $topic_info['title'],
                     'user_id' => auth()->user()->id
                 ]);
             }
             else {
                 $topic = Topic::find($topic_info['id']);
-                $topic = $topic->updateTopic(['description' => $topic_info['title']]);
+                $topic->fill(['description' => $topic_info['title']]);
+                $topic->save();
             }
 
             // if some lessons removed from UI, remove the lessons from database
@@ -139,7 +141,7 @@ class CourseService
 
             foreach($topic_info['lessons'] as $lesson_info) {
                 if ($lesson_info['id'] == 0) {
-                    $topic->createLesson([
+                    $topic->lessons()->create([
                         'title' => $lesson_info['title'],
                         'description' => $lesson_info['description'],
                         'video_type' => $lesson_info['video_source'],
@@ -150,12 +152,13 @@ class CourseService
                 }
                 else {
                     $lesson = Lesson::find($lesson_info['id']);
-                    $lesson->updateLesson([
+                    $lesson->fill([
                         'title' => $lesson_info['title'],
                         'description' => $lesson_info['description'],
                         'video_type' => $lesson_info['video_source'],
                         'video_link' => $lesson_info['video_url'],
                     ]);
+                    $lesson->save();
                 }
             }
         }
@@ -169,7 +172,7 @@ class CourseService
 
         foreach ($data['quiz_list'] as $quiz_info) {
             if ($quiz_info['id'] == 0) {
-                $question = $course->createQuestion([
+                $question = $course->questions()->create([
                     'name' => $quiz_info['title'],
                     'description' => $quiz_info['description'],
                     'user_id' => auth()->user()->id,
@@ -179,12 +182,13 @@ class CourseService
             }
             else {
                 $question = Question::find($quiz_info['id']);
-                $question = $question->updateQuestion([
+                $question->fill([
                     'name' => $quiz_info['title'],
                     'description' => $quiz_info['description'],
                     'type' => $quiz_info['type'],
                     'points' => $quiz_info['points']
                 ]);
+                $question->save();
             }
 
             $question->quiz_options()->delete();
@@ -192,7 +196,7 @@ class CourseService
             $answers = explode('$$$', $quiz_info['answer']);
             $answer_values = explode('$$$', $quiz_info['answer_values']);
             foreach($answers as $key => $answer) {
-                $question->createQuestionOption([
+                $question->quiz_options()->create([
                     'description' => $answer,
                     'answer' => $answer_values[$key]
                 ]);

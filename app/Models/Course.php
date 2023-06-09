@@ -15,37 +15,6 @@ class Course extends Model
     ];
 
     /**
-     * Create a course
-     */
-    public static function createCourse($data): Course
-    {
-        return self::create($data);
-    }
-
-    public function updateCourse($data): Course
-    {
-        $this->fill($data);
-        $this->save();
-        return $this;
-    }
-
-    /**
-     * Create a topic of a course
-     */
-    public function createTopic($data)
-    {
-        return Topic::createTopic($this->id, $data);
-    }
-
-    /**
-     * Create a question of a course
-     */
-    public function createQuestion($data)
-    {
-        return Question::createQuestion($this->id, $data);
-    }
-
-    /**
      * Get the course creator
      */
     public function createdUser(): BelongsTo
