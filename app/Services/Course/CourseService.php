@@ -6,7 +6,6 @@ use App\Models\Course;
 use App\Models\Topic;
 use App\Models\Lesson;
 use App\Models\Question;
-use App\Models\QuestionOption;
 use Illuminate\Database\Eloquent\Collection;
 
 class CourseService
@@ -23,6 +22,25 @@ class CourseService
         else
             $course = Course::with('lessons')->where('is_published', 0)->get();
         return $course;
+    }
+
+    public function getCourseVideoDuration(Course $course): string
+    {
+        $video_duration = Lesson::selectRaw('SUM(video_duration) as total_duration')
+            ->where('course_id', $course->id)
+            ->value('total_duration');
+
+        $hours = floor($video_duration / 3600);
+        $minutes = floor(($video_duration / 60) % 60);
+        $seconds = $video_duration % 60;
+
+        $formatted_minutes = str_pad(strval($minutes), 2, '0', STR_PAD_LEFT);
+        $formatted_seconds = str_pad(strval($seconds), 2, '0', STR_PAD_LEFT);
+
+        if ($hours == 0)
+            return $formatted_minutes . 'm ' . $formatted_seconds . 's';
+        else
+            return $hours .'h ' . $formatted_minutes . 'm ' . $formatted_seconds . 's';
     }
 
     /**
@@ -214,4 +232,5 @@ class CourseService
         if ($image_name != 'course.jpg')
             unlink(public_path('upload/course/') . $image_name);
     }
+
 }
