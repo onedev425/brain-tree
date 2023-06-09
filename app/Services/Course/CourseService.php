@@ -71,7 +71,7 @@ class CourseService
                     'description' => $lesson_info['description'],
                     'video_type' => $lesson_info['video_source'],
                     'video_link' => $lesson_info['video_url'],
-                    'video_length' => $this->getVideoLength($lesson_info['video_source'], $lesson_info['video_url']),
+                    'video_duration' => $this->getVideoLength($lesson_info['video_source'], $lesson_info['video_url']),
                     'user_id' => auth()->user()->id,
                     'course_id' => $course->id,
                 ]);
@@ -149,7 +149,7 @@ class CourseService
                         'description' => $lesson_info['description'],
                         'video_type' => $lesson_info['video_source'],
                         'video_link' => $lesson_info['video_url'],
-                        'video_length' => $this->getVideoLength($lesson_info['video_source'], $lesson_info['video_url']),
+                        'video_duration' => $this->getVideoLength($lesson_info['video_source'], $lesson_info['video_url']),
                         'user_id' => auth()->user()->id,
                         'course_id' => $course->id,
                     ]);
@@ -161,7 +161,7 @@ class CourseService
                         'description' => $lesson_info['description'],
                         'video_type' => $lesson_info['video_source'],
                         'video_link' => $lesson_info['video_url'],
-                        'video_length' => $this->getVideoLength($lesson_info['video_source'], $lesson_info['video_url']),
+                        'video_duration' => $this->getVideoLength($lesson_info['video_source'], $lesson_info['video_url']),
                     ]);
                     $lesson->save();
                 }
@@ -219,7 +219,7 @@ class CourseService
 
     private function getVideoLength($video_type, $video_url): int
     {
-        $video_length = 0;
+        $video_duration = 0;
         if ($video_type == 'youtube') {
             $client = new Google_Client();
             $client->setDeveloperKey(env('GOOGLE_API_KEY'));
@@ -236,7 +236,7 @@ class CourseService
                 $hours = isset($matches[1]) ? intval(str_replace('H', '', $matches[1])) * 3600 : 0;
                 $minutes = isset($matches[2]) ? intval(str_replace('M', '', $matches[2])) * 60 : 0;
                 $seconds = isset($matches[3]) ? intval(str_replace('S', '', $matches[3])) : 0;
-                $video_length = $hours + $minutes + $seconds;
+                $video_duration = $hours + $minutes + $seconds;
             }
 
         }
@@ -251,11 +251,11 @@ class CourseService
                     ],
                 ]);
                 $data = json_decode($response->getBody(), true);
-                $video_length = $data['duration'];
+                $video_duration = $data['duration'];
             }
 
         }
-        return $video_length;
+        return $video_duration;
     }
 
     private function getYoutubeVideoIdFromUrl($url): string
