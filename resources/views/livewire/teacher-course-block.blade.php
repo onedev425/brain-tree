@@ -13,8 +13,14 @@
             <h3 class="text-lg leading-normal mb-3 font-bold text-gray-800">
                 <a href="{{ route('teacher.course.edit', $course_id) }}" class="hover:text-indigo-700">{{ $title }}</a>
             </h3>
-            <div class="text-gray-500">
-                <span class="text-xs">{{ $lessons }} {{ $lessons == 1 ? __('lesson') : __('lessons') }}</span>
+            <div class="flex text-gray-500">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14.997" height="15" viewBox="0 0 14.997 15">
+                    <g id="Icon_ionic-ios-timer" data-name="Icon ionic-ios-timer" transform="translate(-3.938 -3.938)">
+                        <path id="Path_23" data-name="Path 23" d="M11.438,18.938a7.5,7.5,0,0,1-5.205-12.9.6.6,0,1,1,.836.866,6.294,6.294,0,1,0,4.969-1.733V7.519a.6.6,0,0,1-1.208,0V4.541a.6.6,0,0,1,.6-.6,7.5,7.5,0,0,1,0,15Z" transform="translate(0 0)" fill="#6c6c6c"/>
+                        <path id="Path_24" data-name="Path 24" d="M11.847,11.322,15.579,14a1.129,1.129,0,1,1-1.313,1.838A1.09,1.09,0,0,1,14,15.578l-2.681-3.731a.376.376,0,0,1,.525-.525Z" transform="translate(-3.413 -3.413)" fill="#6c6c6c"/>
+                    </g>
+                </svg>
+                <span class="ml-2 text-xs">{{ $duration }}</span>
             </div>
         </div>
     </div>
