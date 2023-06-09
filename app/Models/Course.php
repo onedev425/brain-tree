@@ -15,13 +15,16 @@ class Course extends Model
     ];
 
     /**
-     * Get the teacher for the course
+     * Get the course creator
      */
     public function createdUser(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
     }
 
+    /**
+     * Get the teacher for the course
+     */
     public function assignedTeacher()
     {
         return $this->belongsTo(User::class, 'assigned_id');

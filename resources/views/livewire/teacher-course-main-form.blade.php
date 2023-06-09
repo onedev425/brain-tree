@@ -20,21 +20,25 @@
                 @if ($activeTab === 'publish')
                     @foreach($publish_courses as $course)
                         @livewire('teacher-course-block', [
+                            'course_id' => $course->id,
                             'title' => $course->title,
                             'image' => $course->image,
                             'created_at' => $course->created_at,
-                            'lessons' => count($course->lessons),
+                            'lessons' => $course->lessons->count(),
                             'price' => $course->price,
+                            'is_published' => $course->is_published,
                         ])
                     @endforeach
                 @else
                     @foreach($draft_courses as $course)
                         @livewire('teacher-course-block', [
+                            'course_id' => $course->id,
                             'title' => $course->title,
                             'image' => $course->image,
                             'created_at' => $course->created_at,
-                            'lessons' => count($course->lessons),
+                            'lessons' => $course->lessons->count(),
                             'price' => $course->price,
+                            'is_published' => $course->is_published,
                         ])
                     @endforeach
                 @endif

@@ -35,13 +35,13 @@ Route::middleware(['guest'])->group(function () {
 
 //user must be authenticated
 Route::middleware('auth:sanctum', 'verified', 'App\Http\Middleware\PreventLockAccountAccess', 'App\Http\Middleware\EnsureDefaultPasswordIsChanged')->namespace('App\Http\Controllers')->group(function () {
-    Route::post('/update-profile', ['App\Http\Controllers\ProfileController', 'update'])->name('profile.update');
-
     //Setting routes
     Route::get('settings', ['App\Http\Controllers\SettingController', 'index'])->name('settings.index');
 
     //Pricing routes
     Route::get('pricing', ['App\Http\Controllers\PricingController', 'index'])->name('pricing.index');
+
+    Route::put('teacher_course_publish/{course}', ['App\Http\Controllers\TeacherCourseController', 'publish'])->name('teacher.course.publish');
 
     //Teacher Courses routes
     Route::prefix('teacher')->group(function () {

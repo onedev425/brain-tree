@@ -1,13 +1,17 @@
 <div>
     <div class="block">
-        <form id="course_form" action="{{ route('teacher.course.store') }}" method="post" enctype="multipart/form-data">
+        <form id="course_form" action="{{ $course->title ? route('teacher.course.update', $course) : route('teacher.course.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
+            @if($course->title)
+                @method('PUT')
+            @endif
             <input type="hidden" name="topic_list">
             <input type="hidden" name="quiz_list">
             <input type="hidden" name="is_published">
+            <input type="hidden" name="use_default_image">
             <div class="float-right my-3">
                 <button type="submit" id="save_course_button" class="py-3 px-11 inline-block text-center mb-3 rounded-lg leading-5 text-gray-500 bg-white border border-gray-300 hover:text-dark hover:bg-gray-200 hover:ring-0 hover:border-gray-500 focus:text-dark focus:bg-gray-200 focus:border-gray-500 focus:outline-none focus:ring-0 mr-4">
-                    {{ __('Save') }}
+                    {{ __('Save as Draft') }}
                 </button>
 
                 <button type="submit" id="publish_course_button" class="py-3 px-8 inline-block text-center mb-3 rounded-lg leading-5 text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 hover:ring-0 hover:border-red-600 focus:bg-red-600 focus:border-red-600 focus:outline-none focus:ring-0">
@@ -28,14 +32,14 @@
                         <div class="card-body">
                             <div class="form-group mb-6">
                                 <label for="course_title" class="block mb-2 font-medium text-gray-900">{{ __('Course Title') }}</label>
-                                <input type="text" id="course_title" name="course_title" minlength="3" maxlength="255" class="shadow-sm border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="" required>
+                                <input type="text" id="course_title" name="course_title" wire:model="state.course_title" minlength="3" maxlength="100" class="shadow-sm border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="" required />
                                 @error('course_title')
                                 <span class="text-red-500">{{ $message }}</span>
                                 @enderror
                             </div>
                             <div class="mb-6">
                                 <label for="industry" class="block mb-2 font-medium text-gray-900">{{ __('Industry') }}</label>
-                                <x-select id="industry" name="industry">
+                                <x-select id="industry" name="industry" wire:model="state.industry_id">
                                     @foreach ($industries as $industry)
                                         <option value="{{ $industry->id }}">{{ $industry->name }}</option>
                                     @endforeach
@@ -43,14 +47,14 @@
                             </div>
                             <div class="form-group mb-6">
                                 <label for="course_price" class="block mb-2 font-medium text-gray-900">{{ __('Pricing') }} ($)</label>
-                                <input type="number" id="course_price" name="course_price" minlength="1" maxlength="10" class="shadow-sm border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="" required>
+                                <input type="number" id="course_price" name="course_price" wire:model="state.price" minlength="1" maxlength="10" class="shadow-sm border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="" required />
                                 @error('course_price')
                                 <span class="text-red-500">{{ $message }}</span>
                                 @enderror
                             </div>
                             <div class="mb-6">
                                 <label for="course_description" class="inline-block mb-2">{{ __('Description') }}</label>
-                                <textarea id="course_description" name="course_description" rows="8" class="course_description w-full leading-5 relative py-3 px-5 rounded-lg text-gray-800 bg-white border border-gray-300 overflow-x-auto focus:outline-none focus:border-gray-400 focus:ring-0" id="texteditor" rows="3"></textarea>
+                                <textarea id="course_description" name="course_description" wire:model="state.course_description" rows="8" class="course_description w-full leading-5 relative py-3 px-3 rounded-lg text-gray-800 bg-white border border-gray-300 overflow-x-auto focus:outline-none focus:border-gray-400 focus:ring-0" ></textarea>
                             </div>
                         </div>
                     </div>
@@ -65,9 +69,9 @@
                         </div>
                         <div class="card-body">
                             <div class="text-center mb-7">
-                                <div class="image-input image-input-outline image-input-empty" data-kt-image-input="true" style="background-image: url( {{ asset('images/logo/course.jpg') }} )">
+                                <div class="image-input image-input-outline {{ strpos($course->image, 'images/logo/course') > 0 || ! $course->title ? 'image-input-empty' : '' }} " data-kt-image-input="true" style="background-image: url( {{ asset('images/logo/course.jpg') }} )">
                                     <!--begin::Preview existing avatar-->
-                                    <div class="image-input-wrapper w-72 h-52" id="course_image_container" style="background-image: url( {{ asset('images/logo/course.jpg') }} )"></div>
+                                    <div class="image-input-wrapper w-72 h-52" id="course_image_container" style="background-image: url( {{ strpos($course->image, 'images/logo/course') > 0 || ! $course->title ? '' : $course->image }})"></div>
                                     <!--end::Preview existing avatar-->
                                     <!--begin::Label-->
                                     <label class="btn btn-icon rounded-full hover:text-green-600 w-6 h-6 bg-white shadow" data-kt-image-input-action="change" title="Change company logo">
@@ -114,7 +118,53 @@
                             </h3>
                         </div>
                         <div class="card-body">
-                            <div id="topic_list" x-data="{selected:0}"></div>
+                            <div id="topic_list" x-data="{selected:0}">
+                                @foreach($topics as $topic)
+                                    @php $uuid = Illuminate\Support\Str::uuid()->toString() @endphp
+                                    <div class="relative flex flex-wrap flex-col shadow mb-4 bg-white">
+                                        <div class="border-b border-gray-200 mb-0 bg-gray-100 py-2 px-4">
+                                            <div class="d-grid mb-0">
+                                                <a href="javascript:;" class="py-1 px-0 w-full rounded leading-5 font-medium flex justify-between focus:outline-none focus:ring-0" @click="selected !== '{{ $uuid }}' ? selected = '{{ $uuid }}' : selected = null">
+                                                    <div class="flex mt-2.5">
+                                                        <span class="mr-3">
+                                                            <svg class="transform transition duration-500 -rotate-180" :class="{ '-rotate-180': selected == '{{ $uuid }}' }" width="1rem" height="1rem" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                              <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 01.708 0L8 10.293l5.646-5.647a.5.5 0 01.708.708l-6 6a.5.5 0 01-.708 0l-6-6a.5.5 0 010-.708z" clip-rule="evenodd"></path>
+                                                            </svg>
+                                                        </span>
+                                                        <span class="topic_info" data-uuid="{{ $uuid }}" data-topic-id="{{ $topic->id }}">{!! $topic->description  !!}</span>
+                                                    </div>
+                                                    <div class="flex">
+                                                        <x-edit-icon-button class="edit_topic_dialog_button" />
+                                                        <x-remove-icon-button class="remove_topic_button" />
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div x-show="selected == '{{ $uuid }}'">
+                                            <div class="flex-1 py-4 px-7">
+                                                @foreach($topic->lessons as $lesson)
+                                                    <div class="flex pt-4 justify-between">
+                                                        <div class="lesson_info pt-1.5" data-lesson-id="{{ $lesson->id }}" data-description="{!! $lesson->description !!}" data-video-source="{{ $lesson->video_type }}" data-video-url="{{ $lesson->video_link }}" data-uuid="{{ $uuid }}">{{ $lesson->title }}</div>
+                                                        <div class="min-w-fit" >
+                                                            <x-edit-icon-button class="edit_lesson_dialog_button"/>
+                                                            <x-remove-icon-button class="remove_lesson_button"/>
+                                                        </div>
+                                                    </div>
+                                                @endforeach
+                                                <button type="button" data-topic-uuid="{{ $uuid }}" class="open_lesson_dialog_button flex py-3 md:px-10 bg-white text-sm text-black font-semibold border border-red-300 uppercase inline-block py-2 px-4 border-2 rounded-lg my-3 hover:bg-gray-50" icon="">
+                                                    <i class="" aria-hidden="true"></i>
+                                                    <svg class="mr-3" xmlns="http://www.w3.org/2000/svg" width="20.376" height="18.538" viewBox="0 0 20.376 18.538">
+                                                        <g id="Icon_feather-book-open" data-name="Icon feather-book-open" transform="translate(-2 -3.5)">
+                                                            <path id="Path_64" data-name="Path 64" d="M3,4.5H8.513a3.675,3.675,0,0,1,3.675,3.675V21.038a2.756,2.756,0,0,0-2.756-2.756H3Z" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                                                            <path id="Path_65" data-name="Path 65" d="M27.188,4.5H21.675A3.675,3.675,0,0,0,18,8.175V21.038a2.756,2.756,0,0,1,2.756-2.756h6.431Z" transform="translate(-5.812)" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                                                        </g>
+                                                    </svg> {{ __('Add New Lesson') }}
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
 
                             <x-button id="open_topic_dialog_button" label="{{ __('Add new Topic') }}" icon="fas fa-plus" class="py-3 md:px-10 bg-red-700 text-white font-semibold border-transparent" />
                         </div>
@@ -136,12 +186,37 @@
                         <div class="card-body">
                             <div>
                                 <label class="relative inline-flex items-center cursor-pointer">
-                                    <input type="checkbox" class="sr-only peer" name="quiz_active" checked>
+                                    <input type="checkbox" class="sr-only peer" name="quiz_active" {{ $course->quiz_active == 1 || ! $course->title ? 'checked' : '' }} />
                                     <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-green-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600"></div>
                                     <span class="ml-3 text-sm font-medium text-gray-900">{{ __('Enable Quizzes') }}</span>
                                 </label>
                             </div>
-                            <div id="quiz_list" class="mb-5"></div>
+                            <div id="quiz_list" class="mb-5">
+                                @foreach($quizzes as $quiz)
+                                    @php
+                                        $uuid = Illuminate\Support\Str::uuid()->toString();
+                                        $quiz_options = $quiz->quiz_options;
+                                        $answer_text = [];
+                                        $answer_value = [];
+                                        foreach($quiz_options as $quiz_option) {
+                                            $answer_text[] = $quiz_option->description;
+                                            $answer_value[] = $quiz_option->answer;
+                                        }
+                                        $answer_text = implode('$$$', $answer_text);
+                                        $answer_value = implode('$$$', $answer_value);
+                                    @endphp
+
+                                    <div class="flex pt-3 justify-between">
+                                        <div class="pt-1.5 quiz_info" data-quiz-id="{{ $quiz->id }}" data-uuid="{{ $uuid }}" data-description="{!! $quiz->description !!}" data-type="{{ $quiz->type }}" data-points="{{ $quiz->points }}"
+                                             data-answer="{{ $answer_text }}" data-answer-value="{{ $answer_value }}">{{ $quiz->name }}
+                                        </div>
+                                        <div class="min-w-fit" >
+                                            <x-edit-icon-button class="edit_quiz_dialog_button"/>
+                                            <x-remove-icon-button class="remove_quiz_button"/>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
                             <div><x-button id="open_quiz_dialog_button" label="{{ __('Add new Question') }}" icon="fas fa-plus" class="py-3 md:px-10 bg-red-700 text-white font-semibold border-transparent" /></div>
                         </div>
                     </div>
@@ -189,7 +264,7 @@
                 </div>
                 <div class="form-group flex-shrink max-w-full px-4 w-full mb-4">
                     <label for="lesson_description" class="inline-block mb-2">{{ __('Lesson Content') }}</label>
-                    <textarea id="lesson_description" rows="8" class="w-full leading-5 relative py-2 px-4 rounded-lg text-gray-800 bg-white border border-gray-300 overflow-x-auto focus:outline-none focus:border-gray-400 focus:ring-0" id="texteditor"></textarea>
+                    <textarea id="lesson_description" rows="8" class="w-full leading-5 relative py-2 px-4 rounded-lg text-gray-800 bg-white border border-gray-300 overflow-x-auto focus:outline-none focus:border-gray-400 focus:ring-0"></textarea>
                 </div>
                 <div class="form-group flex-shrink max-w-full px-4 w-full md:w-1/2 mb-4">
                     <label for="video_source" class="inline-block mb-2">{{ __('Video Source') }}</label>
@@ -347,7 +422,7 @@
         function closeTopicDialog() {
             $('div#topic_dialog').addClass('hidden');
             $('div#overlay').addClass('hidden');
-        };
+        }
     </script>
 
     <script>
@@ -398,7 +473,7 @@
         function closeLessonDialog() {
             $('div#lesson_dialog').addClass('hidden');
             $('div#overlay').addClass('hidden');
-        };
+        }
     </script>
 
     <script>
@@ -632,7 +707,7 @@
                                                   <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 01.708 0L8 10.293l5.646-5.647a.5.5 0 01.708.708l-6 6a.5.5 0 01-.708 0l-6-6a.5.5 0 010-.708z" clip-rule="evenodd"></path>
                                                 </svg>
                                             </span>
-                                            <span class="topic_info" data-uuid="${uuid}">${topicName}</span>
+                                            <span class="topic_info" data-uuid="${uuid}" data-topic-id="0" >${topicName}</span>
                                         </div>
                                         <div class="flex">
                                             <x-edit-icon-button class="edit_topic_dialog_button" />
@@ -693,7 +768,7 @@
                         const topicUuid = $('input[name=topic_uuid]').val();
                         const newLesson = `
                             <div class="flex pt-4 justify-between">
-                                <div class="lesson_info pt-1.5" data-description="${lessonDescription}" data-video-source="${videoSource}" data-video-url="${videoURL}" data-uuid="${uuid}">${lessonName}</div>
+                                <div class="lesson_info pt-1.5" data-lesson-id="0" data-description="${lessonDescription}" data-video-source="${videoSource}" data-video-url="${videoURL}" data-uuid="${uuid}">${lessonName}</div>
                                 <div class="min-w-fit" >
                                     <x-edit-icon-button class="edit_lesson_dialog_button"/>
                                     <x-remove-icon-button class="remove_lesson_button"/>
@@ -737,6 +812,7 @@
                             let lesson_list = [];
                             $.each($(topic_obj).parent().parent().parent().parent().next().find('div.lesson_info'), function(index, lesson_obj) {
                                 const lesson = {
+                                    id: $(lesson_obj).attr('data-lesson-id'),
                                     title: $(lesson_obj).html(),
                                     description: $(lesson_obj).attr('data-description'),
                                     video_source: $(lesson_obj).attr('data-video-source'),
@@ -745,6 +821,7 @@
                                 lesson_list.push(lesson);
                             });
                             const topic_info = {
+                                id: $(topic_obj).attr('data-topic-id'),
                                 title: $(topic_obj).html(),
                                 lessons: lesson_list
                             }
@@ -754,6 +831,7 @@
                         let quiz_list = [];
                         $.each($('div.quiz_info'), function(index, quiz_obj) {
                             const quiz = {
+                                id: $(quiz_obj).attr('data-quiz-id'),
                                 title: $(quiz_obj).html(),
                                 description: $(quiz_obj).attr('data-description'),
                                 type: $(quiz_obj).attr('data-type'),
@@ -764,6 +842,7 @@
                             quiz_list.push(quiz);
                         })
 
+                        $('input[name=use_default_image]').val(($('div#course_image_container').css('background-image') == 'none' || $('div#course_image_container').css('background-image') == '') ? 1 : 0);
                         $('input[name=topic_list]').val(JSON.stringify(topic_list));
                         $('input[name=quiz_list]').val(JSON.stringify(quiz_list));
                         courseForm.submit();
@@ -819,7 +898,7 @@
                         const uuid = generateUUID();
                         const newQuiz = `
                             <div class="flex pt-3 justify-between">
-                                <div class="pt-1.5 quiz_info" data-uuid="${uuid}" data-description="${quizDescription}" data-type="${quizType}" data-points="${quizPoints}"
+                                <div class="pt-1.5 quiz_info" data-quiz-id="0" data-uuid="${uuid}" data-description="${quizDescription}" data-type="${quizType}" data-points="${quizPoints}"
                                     data-answer="${answer_text}" data-answer-value="${answer_value}">${quizTitle}
                                 </div>
                                 <div class="min-w-fit" >
@@ -858,10 +937,10 @@
 
     <script>
         $(document).ready(function() {
-            $('button#save_course_button').on('click', function(event) {
+            $('button#save_course_button').on('click', function() {
                 $('input[name=is_published]').val(0);
             });
-            $('button#publish_course_button').on('click', function(event) {
+            $('button#publish_course_button').on('click', function() {
                 $('input[name=is_published]').val(1);
             });
         });

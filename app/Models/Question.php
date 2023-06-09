@@ -14,7 +14,7 @@ class Question extends Model
         'name', 'description', 'course_id', 'user_id', 'type'
     ];
 
-    public function answers(): HasMany
+    public function quiz_options(): HasMany
     {
         return $this->hasMany(QuestionOption::class);
     }

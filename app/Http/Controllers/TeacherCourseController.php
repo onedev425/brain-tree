@@ -3,11 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use App\Services\Course\CourseService;
 use App\Models\Course;
 use App\Http\Requests\TeacherCourseStoreRequest;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Illuminate\Database\Eloquent\Collection;
 
 class TeacherCourseController extends Controller
 {
@@ -26,10 +27,73 @@ class TeacherCourseController extends Controller
 
     public function create(): View
     {
-        return view('pages.teacher-course.new');
+        $data['course'] = new Course();
+        $data['topics'] = new Collection();
+        $data['quizzes'] = new Collection();
+
+        return view('pages.teacher-course.new', $data);
+    }
+
+    public function edit(Course $course): View
+    {
+        $data['course'] = $course;
+        $data['topics'] = $course->topics()->with('lessons')->get();
+        $data['quizzes'] = $course->questions()->with('quiz_options')->get();
+
+        return view('pages.teacher-course.edit', $data);
     }
 
     public function store(TeacherCourseStoreRequest $request): RedirectResponse
+    {
+        $data = $this->getCourseData($request);
+        if ($data == []) {
+            return back()->with('danger', __('You need at least one topic and lesson.'));
+        }
+
+        if ( !array_key_exists('course_image', $data))
+            $data['course_image'] = asset('images/logo/course.jpg');
+        $this->courseService->createCourse($data);
+
+        return redirect()->route('teacher.course.index', $data['is_published'] == 1 ? 'type=publish' : 'type=draft');
+    }
+
+    public function update(TeacherCourseStoreRequest $request, Course $course): RedirectResponse
+    {
+        $data = $this->getCourseData($request);
+        if ($data == []) {
+            return back()->with('danger', __('You need at least one topic and lesson.'));
+        }
+
+        if ($request->hasFile('course_image') || $request['use_default_image'] == 1) {
+            // delete course's previous image
+            $this->courseService->deleteCourseImage($course->image);
+        }
+
+        $data['course'] = $course;
+        if ( !array_key_exists('course_image', $data))
+            $data['course_image'] = $course->image;
+
+        $this->courseService->updateCourse($data);
+
+        return redirect()->route('teacher.course.index', $data['is_published'] == 1 ? 'type=publish' : 'type=draft');
+    }
+
+    public function destroy(Request $request, Course $course): RedirectResponse
+    {
+        $course->delete();
+        return redirect()->route('teacher.course.index', $request['is_published'] == 1 ? 'type=publish' : 'type=draft');
+    }
+
+    public function publish(Request $request, Course $course): RedirectResponse
+    {
+        $publish_result = ! $request['is_published'];
+        $course->is_published = $publish_result;
+        $course->save();
+
+        return redirect()->route('teacher.course.index', $publish_result == 1 ? 'type=publish' : 'type=draft');
+    }
+
+    private function getCourseData(TeacherCourseStoreRequest $request): array
     {
         $data['course_title'] = $request['course_title'];
         $data['industry_id'] = $request['industry'];
@@ -46,19 +110,20 @@ class TeacherCourseController extends Controller
             $lesson_nums += count($topic['lessons']);
         }
         if ($lesson_nums == 0) {
-            return back()->with('danger', __('You need at least one topic and lesson.'));
+            return [];
         }
 
-        $data['course_image'] = asset('images/logo/course.jpg');
         if ($request->hasFile('course_image')) {
             $image = $request->file('course_image');
             $image_name = time() . '_' . $image->getClientOriginalName();
             $image->move(public_path('upload/course'), $image_name);
             $data['course_image'] = asset('upload/course/' . $image_name);
         }
-
-        $this->courseService->createCourse($data);
-
-        return redirect()->route('teacher.course.index', $data['is_published'] == 1 ? 'type=publish' : 'type=draft');
+        else {
+            if ($request['use_default_image'] == 1)
+                $data['course_image'] = asset('images/logo/course.jpg');
+        }
+        return $data;
     }
+
 }
