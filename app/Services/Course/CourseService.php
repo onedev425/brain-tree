@@ -21,10 +21,48 @@ class CourseService
     public function getCourses($type): Collection
     {
         if ($type == 'publish')
-            $course = Course::with('lessons')->where('is_published', 1)->get();
+            $courses = Course::with('lessons')->where('is_published', 1)->get();
+        elseif ($type == 'draft')
+            $courses = Course::with('lessons')->where('is_published', 0)->get();
+        elseif ($type == 'progress') {
+            /*
+            SELECT DISTINCT c.*
+            FROM courses c
+            LEFT JOIN student_lessons s ON c.id = s.course_id AND s.student_id = '31'
+            WHERE s.course_id IS NULL
+
+            UNION
+
+            SELECT DISTINCT c.*
+            FROM courses c
+            RIGHT JOIN student_lessons s ON c.id = s.course_id AND s.student_id = '31'
+            WHERE c.id IS NULL
+            */
+
+            $student_id = auth()->user()->id;
+            $courses = Course::select('courses.*')
+                ->leftJoin('student_lessons', function ($join) use ($student_id) {
+                    $join->on('courses.id', '=', 'student_lessons.course_id')
+                        ->where('student_lessons.student_id', '=', $student_id);
+                })
+                ->whereNull('student_lessons.course_id')
+                ->orWhere(function ($query) {
+                    $query->rightJoin('student_lessons', 'courses.id', '=', 'student_lessons.course_id')
+                        ->whereNull('courses.id');
+                })
+                ->with('lessons')
+                ->with('questions')
+                ->with('assignedTeacher')
+                ->distinct()
+                ->get();
+        }
         else
-            $course = Course::with('lessons')->where('is_published', 0)->get();
-        return $course;
+            $courses = Course::join('student_lessons', 'courses.id', '=', 'student_lessons.course_id')
+                ->where('student_lessons.student_id', auth()->user()->id)
+                ->distinct()
+                ->get(['courses.*']);
+
+        return $courses;
     }
 
     public function getCourseVideoDuration(Course $course): string
