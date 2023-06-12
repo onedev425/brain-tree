@@ -11,7 +11,7 @@
                         </g>
                     </svg>
                 </a>
-                <h2 class="font-bold ml-3 text-lg">Learn Web Design & Development</h2>
+                <h2 class="font-bold ml-3 text-lg">{{ $course->title }}</h2>
             </div>
         </div>
     </div>
@@ -98,173 +98,43 @@
                 <div class="col-span-5 bg-neutral-300 p-6 pb-10">
                     <h1 class="text-xl font-bold mb-4">{{ __('Lessons') }}</h1>
                     <div id="topic_list" x-data="{selected:0000}">
-                        <div class="relative flex flex-wrap flex-col mb-2">
-                            <div class="border-b border-gray-200 mb-0 bg-gray-100 py-2 px-4 mt-2 rounded">
-                                <div class="d-grid mb-0">
-                                    <a href="javascript:;" class="py-1 px-0 w-full rounded leading-5 font-medium flex justify-between focus:outline-none focus:ring-0" @click="selected !== '0000' ? selected = '0000' : selected = null">
-                                        <div class="flex mt-1.5">
-                                                    <span class="mr-3">
-                                                        <svg class="transform transition duration-500 -rotate-90" :class="{ 'rotate-0': selected == '0000' }" width="1rem" height="1rem" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                                          <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 01.708 0L8 10.293l5.646-5.647a.5.5 0 01.708.708l-6 6a.5.5 0 01-.708 0l-6-6a.5.5 0 010-.708z" clip-rule="evenodd"></path>
-                                                        </svg>
-                                                    </span>
-                                            <span class="topic_info" data-uuid="0000">Figma & Web Design</span>
-                                        </div>
-                                        <div class="flex mt-1.5">
-                                            <span class="text-sm text-gray-600">2 Lectures  • 2Min</span>
-                                        </div>
-                                    </a>
+                        @foreach($topics as $key => $topic)
+                            @php $uuid = $key == 0 ? '0000' : Illuminate\Support\Str::uuid()->toString(); @endphp
+                            <div class="relative flex flex-wrap flex-col mb-2">
+                                <div class="border-b border-gray-200 mb-0 bg-gray-100 py-2 px-4 mt-2 rounded">
+                                    <div class="d-grid mb-0">
+                                        <a href="javascript:;" class="py-1 px-0 w-full rounded leading-5 font-medium flex justify-between focus:outline-none focus:ring-0" @click="selected !== '{{$uuid}}' ? selected = '{{$uuid}}' : selected = null">
+                                            <div class="flex mt-1.5">
+                                                        <span class="mr-3">
+                                                            <svg class="transform transition duration-500 -rotate-90" :class="{ 'rotate-0': selected == '{{$uuid}}' }" width="1rem" height="1rem" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                              <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 01.708 0L8 10.293l5.646-5.647a.5.5 0 01.708.708l-6 6a.5.5 0 01-.708 0l-6-6a.5.5 0 010-.708z" clip-rule="evenodd"></path>
+                                                            </svg>
+                                                        </span>
+                                                <span class="topic_info" data-uuid="{{$uuid}}">{{ $topic->description }}</span>
+                                            </div>
+                                            <div class="flex mt-1.5">
+                                                <span class="text-sm text-gray-600">{{ count($topic->lessons) }} {{ __('Lectures') }}  • {{ $this->getTopicVideoDuration($topic) }}</span>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="accordion p-3" x-show="selected == '{{$uuid}}'">
+                                    <ul>
+                                        @foreach($topic->lessons as $index => $lesson)
+                                            <li class="lesson-quiz-item lesson-item flex py-1 px-3 justify-between hover:bg-gray-200 hover:rounded-2xl {{ $index == 0 ? 'active' : '' }}">
+                                                <div class="flex">
+                                                    <svg class="mt-1" xmlns="http://www.w3.org/2000/svg" width="19.313" height="19.264" viewBox="0 0 19.313 19.264">
+                                                        <path fill="currentColor" d="M13.724,10.568,10.771,8.351v8.712l2.953-2.217,2.856-2.139Zm0,0L10.771,8.351v8.712l2.953-2.217,2.856-2.139Zm0,0L10.771,8.351v8.712l2.953-2.217,2.856-2.139ZM11.739,5.03V3.075a9.631,9.631,0,0,0-5.15,2.139L7.964,6.6A7.687,7.687,0,0,1,11.739,5.03ZM6.6,7.964,5.214,6.589a9.631,9.631,0,0,0-2.139,5.15H5.03A7.687,7.687,0,0,1,6.6,7.964ZM5.03,13.675H3.075a9.631,9.631,0,0,0,2.139,5.15L6.6,17.441A7.617,7.617,0,0,1,5.03,13.675ZM6.589,20.2a9.662,9.662,0,0,0,5.15,2.139V20.384a7.687,7.687,0,0,1-3.775-1.568L6.589,20.2Zm15.8-7.493a9.7,9.7,0,0,1-8.664,9.632V20.384a7.744,7.744,0,0,0,0-15.353V3.075A9.7,9.7,0,0,1,22.388,12.707Z" transform="translate(-3.075 -3.075)"/>
+                                                    </svg>
+                                                    <a href="javascript:;" class="ml-2" data-content="{{ $lesson->description }}" data-video-url="{{ $this->getVideoEmbedURL($lesson->video_type, $lesson->video_link) }}">{{ $lesson->title }}</a>
+                                                </div>
+                                                <div class="text-sm">{{ $this->getLessonVideoDuration($lesson->video_duration) }}</div>
+                                            </li>
+                                        @endforeach
+                                    </ul>
                                 </div>
                             </div>
-                            <div class="accordion p-3" x-show="selected == '0000'">
-                                <ul>
-                                    <li class="lesson-quiz-item lesson-item flex py-1 px-3 justify-between hover:bg-gray-200 hover:rounded-2xl active">
-                                        <div class="flex">
-                                            <svg class="mt-1" xmlns="http://www.w3.org/2000/svg" width="19.313" height="19.264" viewBox="0 0 19.313 19.264">
-                                                <path fill="currentColor" d="M13.724,10.568,10.771,8.351v8.712l2.953-2.217,2.856-2.139Zm0,0L10.771,8.351v8.712l2.953-2.217,2.856-2.139Zm0,0L10.771,8.351v8.712l2.953-2.217,2.856-2.139ZM11.739,5.03V3.075a9.631,9.631,0,0,0-5.15,2.139L7.964,6.6A7.687,7.687,0,0,1,11.739,5.03ZM6.6,7.964,5.214,6.589a9.631,9.631,0,0,0-2.139,5.15H5.03A7.687,7.687,0,0,1,6.6,7.964ZM5.03,13.675H3.075a9.631,9.631,0,0,0,2.139,5.15L6.6,17.441A7.617,7.617,0,0,1,5.03,13.675ZM6.589,20.2a9.662,9.662,0,0,0,5.15,2.139V20.384a7.687,7.687,0,0,1-3.775-1.568L6.589,20.2Zm15.8-7.493a9.7,9.7,0,0,1-8.664,9.632V20.384a7.744,7.744,0,0,0,0-15.353V3.075A9.7,9.7,0,0,1,22.388,12.707Z" transform="translate(-3.075 -3.075)"/>
-                                            </svg>
-                                            <a href="javascript:;" class="ml-2" data-content="lesson content1" data-video-url="https://www.youtube.com/embed/sNs5Bny70Vo">Figma Basics</a>
-                                        </div>
-                                        <div class="text-sm">00 : 02</div>
-                                    </li>
-                                    <li class="lesson-quiz-item lesson-item flex py-1 px-3 justify-between hover:bg-gray-200 hover:rounded-2xl">
-                                        <div class="flex">
-                                            <svg class="mt-1" xmlns="http://www.w3.org/2000/svg" width="19.313" height="19.264" viewBox="0 0 19.313 19.264">
-                                                <path fill="currentColor" d="M13.724,10.568,10.771,8.351v8.712l2.953-2.217,2.856-2.139Zm0,0L10.771,8.351v8.712l2.953-2.217,2.856-2.139Zm0,0L10.771,8.351v8.712l2.953-2.217,2.856-2.139ZM11.739,5.03V3.075a9.631,9.631,0,0,0-5.15,2.139L7.964,6.6A7.687,7.687,0,0,1,11.739,5.03ZM6.6,7.964,5.214,6.589a9.631,9.631,0,0,0-2.139,5.15H5.03A7.687,7.687,0,0,1,6.6,7.964ZM5.03,13.675H3.075a9.631,9.631,0,0,0,2.139,5.15L6.6,17.441A7.617,7.617,0,0,1,5.03,13.675ZM6.589,20.2a9.662,9.662,0,0,0,5.15,2.139V20.384a7.687,7.687,0,0,1-3.775-1.568L6.589,20.2Zm15.8-7.493a9.7,9.7,0,0,1-8.664,9.632V20.384a7.744,7.744,0,0,0,0-15.353V3.075A9.7,9.7,0,0,1,22.388,12.707Z" transform="translate(-3.075 -3.075)"/>
-                                            </svg>
-                                            <a href="javascript:;" class="ml-2" data-content="lesson content2" data-video-url="https://www.youtube.com/embed/kneHsqzJRQc">Figma Plugin And Community</a>
-                                        </div>
-                                        <div class="text-sm">00 : 02</div>
-                                    </li>
-                                    <li class="lesson-quiz-item lesson-item flex py-1 px-3 justify-between hover:bg-gray-200 hover:rounded-2xl">
-                                        <div class="flex">
-                                            <svg class="mt-1" xmlns="http://www.w3.org/2000/svg" width="19.313" height="19.264" viewBox="0 0 19.313 19.264">
-                                                <path fill="currentColor" d="M13.724,10.568,10.771,8.351v8.712l2.953-2.217,2.856-2.139Zm0,0L10.771,8.351v8.712l2.953-2.217,2.856-2.139Zm0,0L10.771,8.351v8.712l2.953-2.217,2.856-2.139ZM11.739,5.03V3.075a9.631,9.631,0,0,0-5.15,2.139L7.964,6.6A7.687,7.687,0,0,1,11.739,5.03ZM6.6,7.964,5.214,6.589a9.631,9.631,0,0,0-2.139,5.15H5.03A7.687,7.687,0,0,1,6.6,7.964ZM5.03,13.675H3.075a9.631,9.631,0,0,0,2.139,5.15L6.6,17.441A7.617,7.617,0,0,1,5.03,13.675ZM6.589,20.2a9.662,9.662,0,0,0,5.15,2.139V20.384a7.687,7.687,0,0,1-3.775-1.568L6.589,20.2Zm15.8-7.493a9.7,9.7,0,0,1-8.664,9.632V20.384a7.744,7.744,0,0,0,0-15.353V3.075A9.7,9.7,0,0,1,22.388,12.707Z" transform="translate(-3.075 -3.075)"/>
-                                            </svg>
-                                            <a href="javascript:;" class="ml-2" data-content="lesson content3" data-video-url="https://player.vimeo.com/video/355570333">Figma Core Engine Concepts</a>
-                                        </div>
-                                        <div class="text-sm">00 : 02</div>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-
-                        <div class="relative flex flex-wrap flex-col mb-2">
-                            <div class="border-b border-gray-200 mb-0 bg-gray-100 py-2 px-4 mt-2 rounded">
-                                <div class="d-grid mb-0">
-                                    <a href="javascript:;" class="py-1 px-0 w-full rounded leading-5 font-medium flex justify-between focus:outline-none focus:ring-0" @click="selected !== '1111' ? selected = '1111' : selected = null">
-                                        <div class="flex mt-1.5">
-                                                    <span class="mr-3">
-                                                        <svg class="transform transition duration-500 -rotate-90" :class="{ 'rotate-0': selected == '1111' }" width="1rem" height="1rem" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                                          <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 01.708 0L8 10.293l5.646-5.647a.5.5 0 01.708.708l-6 6a.5.5 0 01-.708 0l-6-6a.5.5 0 010-.708z" clip-rule="evenodd"></path>
-                                                        </svg>
-                                                    </span>
-                                            <span class="topic_info" data-uuid="0000">Figma & Web Design</span>
-                                        </div>
-                                        <div class="flex mt-1.5">
-                                            <span class="text-sm text-gray-600">2 Lectures  • 2Min</span>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="accordion p-3" x-show="selected == '1111'">
-                                <ul>
-                                    <li class="lesson-quiz-item lesson-item flex py-1 px-3 justify-between hover:bg-gray-200 hover:rounded-2xl">
-                                        <div class="flex">
-                                            <svg class="mt-1" xmlns="http://www.w3.org/2000/svg" width="19.313" height="19.264" viewBox="0 0 19.313 19.264">
-                                                <path fill="currentColor" d="M13.724,10.568,10.771,8.351v8.712l2.953-2.217,2.856-2.139Zm0,0L10.771,8.351v8.712l2.953-2.217,2.856-2.139Zm0,0L10.771,8.351v8.712l2.953-2.217,2.856-2.139ZM11.739,5.03V3.075a9.631,9.631,0,0,0-5.15,2.139L7.964,6.6A7.687,7.687,0,0,1,11.739,5.03ZM6.6,7.964,5.214,6.589a9.631,9.631,0,0,0-2.139,5.15H5.03A7.687,7.687,0,0,1,6.6,7.964ZM5.03,13.675H3.075a9.631,9.631,0,0,0,2.139,5.15L6.6,17.441A7.617,7.617,0,0,1,5.03,13.675ZM6.589,20.2a9.662,9.662,0,0,0,5.15,2.139V20.384a7.687,7.687,0,0,1-3.775-1.568L6.589,20.2Zm15.8-7.493a9.7,9.7,0,0,1-8.664,9.632V20.384a7.744,7.744,0,0,0,0-15.353V3.075A9.7,9.7,0,0,1,22.388,12.707Z" transform="translate(-3.075 -3.075)"/>
-                                            </svg>
-                                            <a href="javascript:;" class="ml-2" data-content="lesson content1" data-video-url="https://www.youtube.com/embed/sNs5Bny70Vo">Figma Basics</a>
-                                        </div>
-                                        <div class="text-sm">00 : 02</div>
-                                    </li>
-                                    <li class="lesson-quiz-item lesson-item flex py-1 px-3 justify-between hover:bg-gray-200 hover:rounded-2xl">
-                                        <div class="flex">
-                                            <svg class="mt-1" xmlns="http://www.w3.org/2000/svg" width="19.313" height="19.264" viewBox="0 0 19.313 19.264">
-                                                <path fill="currentColor" d="M13.724,10.568,10.771,8.351v8.712l2.953-2.217,2.856-2.139Zm0,0L10.771,8.351v8.712l2.953-2.217,2.856-2.139Zm0,0L10.771,8.351v8.712l2.953-2.217,2.856-2.139ZM11.739,5.03V3.075a9.631,9.631,0,0,0-5.15,2.139L7.964,6.6A7.687,7.687,0,0,1,11.739,5.03ZM6.6,7.964,5.214,6.589a9.631,9.631,0,0,0-2.139,5.15H5.03A7.687,7.687,0,0,1,6.6,7.964ZM5.03,13.675H3.075a9.631,9.631,0,0,0,2.139,5.15L6.6,17.441A7.617,7.617,0,0,1,5.03,13.675ZM6.589,20.2a9.662,9.662,0,0,0,5.15,2.139V20.384a7.687,7.687,0,0,1-3.775-1.568L6.589,20.2Zm15.8-7.493a9.7,9.7,0,0,1-8.664,9.632V20.384a7.744,7.744,0,0,0,0-15.353V3.075A9.7,9.7,0,0,1,22.388,12.707Z" transform="translate(-3.075 -3.075)"/>
-                                            </svg>
-                                            <a href="javascript:;" class="ml-2" data-content="lesson content2" data-video-url="https://www.youtube.com/embed/kneHsqzJRQc">Figma Plugin And Community</a>
-                                        </div>
-                                        <div class="text-sm">00 : 02</div>
-                                    </li>
-                                    <li class="lesson-quiz-item lesson-item flex py-1 px-3 justify-between hover:bg-gray-200 hover:rounded-2xl">
-                                        <div class="flex">
-                                            <svg class="mt-1" xmlns="http://www.w3.org/2000/svg" width="19.313" height="19.264" viewBox="0 0 19.313 19.264">
-                                                <path fill="currentColor" d="M13.724,10.568,10.771,8.351v8.712l2.953-2.217,2.856-2.139Zm0,0L10.771,8.351v8.712l2.953-2.217,2.856-2.139Zm0,0L10.771,8.351v8.712l2.953-2.217,2.856-2.139ZM11.739,5.03V3.075a9.631,9.631,0,0,0-5.15,2.139L7.964,6.6A7.687,7.687,0,0,1,11.739,5.03ZM6.6,7.964,5.214,6.589a9.631,9.631,0,0,0-2.139,5.15H5.03A7.687,7.687,0,0,1,6.6,7.964ZM5.03,13.675H3.075a9.631,9.631,0,0,0,2.139,5.15L6.6,17.441A7.617,7.617,0,0,1,5.03,13.675ZM6.589,20.2a9.662,9.662,0,0,0,5.15,2.139V20.384a7.687,7.687,0,0,1-3.775-1.568L6.589,20.2Zm15.8-7.493a9.7,9.7,0,0,1-8.664,9.632V20.384a7.744,7.744,0,0,0,0-15.353V3.075A9.7,9.7,0,0,1,22.388,12.707Z" transform="translate(-3.075 -3.075)"/>
-                                            </svg>
-                                            <a href="javascript:;" class="ml-2" data-content="lesson content3" data-video-url="https://player.vimeo.com/video/355570333">Figma Core Engine Concepts</a>
-                                        </div>
-                                        <div class="text-sm">00 : 02</div>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-
-                        <div class="relative flex flex-wrap flex-col mb-2">
-                            <div class="border-b border-gray-200 mb-0 bg-gray-100 py-2 px-4 mt-2 rounded">
-                                <div class="d-grid mb-0">
-                                    <a href="javascript:;" class="py-1 px-0 w-full rounded leading-5 font-medium flex justify-between focus:outline-none focus:ring-0" @click="selected !== '9999' ? selected = '9999' : selected = null">
-                                        <div class="flex mt-1.5">
-                                                    <span class="mr-3">
-                                                        <svg class="transform transition duration-500 -rotate-90" :class="{ 'rotate-0': selected == '9999' }" width="1rem" height="1rem" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                                          <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 01.708 0L8 10.293l5.646-5.647a.5.5 0 01.708.708l-6 6a.5.5 0 01-.708 0l-6-6a.5.5 0 010-.708z" clip-rule="evenodd"></path>
-                                                        </svg>
-                                                    </span>
-                                            <span class="topic_info" data-uuid="9999">{{ __('Final Quiz') }}</span>
-                                        </div>
-                                        <div class="flex mt-1.5">
-                                            <span class="text-sm text-gray-600">25 {{ __('Quizzes') }}</span>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="accordion p-3" x-show="selected == '9999'">
-                                <ul>
-                                    <li class="lesson-quiz-item quiz-item flex py-1 px-3 justify-between hover:bg-gray-200 hover:rounded-2xl">
-                                        <div class="flex">
-                                            <svg class="mt-1" xmlns="http://www.w3.org/2000/svg" width="19.313" height="19.313" viewBox="0 0 19.313 19.313">
-                                                <g transform="translate(-8.2 -8.2)">
-                                                    <g transform="translate(8.2 8.2)" fill="currentColor">
-                                                        <path d="M-160.144-250.487a9.656,9.656,0,0,1-9.656-9.656,9.656,9.656,0,0,1,9.656-9.656,9.656,9.656,0,0,1,9.656,9.656,9.656,9.656,0,0,1-9.656,9.656Zm0-18.262a8.639,8.639,0,0,0-8.606,8.606,8.639,8.639,0,0,0,8.606,8.606,8.639,8.639,0,0,0,8.606-8.606,8.613,8.613,0,0,0-8.606-8.606Z" transform="translate(169.8 269.8)"/>
-                                                        <path d="M-153.56-256.48a2.9,2.9,0,0,1,.646-1.091,3.159,3.159,0,0,1,1.05-.687,3.841,3.841,0,0,1,1.414-.242,3.754,3.754,0,0,1,1.172.2,3.719,3.719,0,0,1,.97.525,2.264,2.264,0,0,1,.646.848,2.637,2.637,0,0,1,.242,1.172,2.629,2.629,0,0,1-.364,1.414,6.008,6.008,0,0,1-.929,1.131l-.727.727a1.531,1.531,0,0,0-.4.525,1.339,1.339,0,0,0-.162.606,4.675,4.675,0,0,0-.04.848h-.929a3.04,3.04,0,0,1,.081-.929,3,3,0,0,1,.283-.848,4.1,4.1,0,0,1,.525-.727c.242-.242.485-.485.808-.768a2.765,2.765,0,0,0,.687-.848,1.958,1.958,0,0,0,.283-1.051,1.809,1.809,0,0,0-.162-.808,3.662,3.662,0,0,0-.444-.646,1.3,1.3,0,0,0-.687-.4,2.612,2.612,0,0,0-.808-.162,2.7,2.7,0,0,0-1.05.2,1.82,1.82,0,0,0-.768.566,2.138,2.138,0,0,0-.444.848,2.563,2.563,0,0,0-.121.97h-.929a3,3,0,0,1,.162-1.374Zm2.424,7.071H-150v1.131h-1.131Z" transform="translate(160.226 263.066)"/>
-                                                    </g>
-                                                </g>
-                                            </svg>
-                                            <a href="javascript:;" class="ml-2" data-description="quiz content1" data-content="{{ json_encode(['aaaa', 'bbbb', 'cccc']) }}">Figma Basics</a>
-                                        </div>
-                                        <div class="text-sm">10 {{ __('Points') }}</div>
-                                    </li>
-                                    <li class="lesson-quiz-item quiz-item flex py-1 px-3 justify-between hover:bg-gray-200 hover:rounded-2xl">
-                                        <div class="flex">
-                                            <svg class="mt-1" xmlns="http://www.w3.org/2000/svg" width="19.313" height="19.313" viewBox="0 0 19.313 19.313">
-                                                <g transform="translate(-8.2 -8.2)">
-                                                    <g transform="translate(8.2 8.2)" fill="currentColor">
-                                                        <path d="M-160.144-250.487a9.656,9.656,0,0,1-9.656-9.656,9.656,9.656,0,0,1,9.656-9.656,9.656,9.656,0,0,1,9.656,9.656,9.656,9.656,0,0,1-9.656,9.656Zm0-18.262a8.639,8.639,0,0,0-8.606,8.606,8.639,8.639,0,0,0,8.606,8.606,8.639,8.639,0,0,0,8.606-8.606,8.613,8.613,0,0,0-8.606-8.606Z" transform="translate(169.8 269.8)"/>
-                                                        <path d="M-153.56-256.48a2.9,2.9,0,0,1,.646-1.091,3.159,3.159,0,0,1,1.05-.687,3.841,3.841,0,0,1,1.414-.242,3.754,3.754,0,0,1,1.172.2,3.719,3.719,0,0,1,.97.525,2.264,2.264,0,0,1,.646.848,2.637,2.637,0,0,1,.242,1.172,2.629,2.629,0,0,1-.364,1.414,6.008,6.008,0,0,1-.929,1.131l-.727.727a1.531,1.531,0,0,0-.4.525,1.339,1.339,0,0,0-.162.606,4.675,4.675,0,0,0-.04.848h-.929a3.04,3.04,0,0,1,.081-.929,3,3,0,0,1,.283-.848,4.1,4.1,0,0,1,.525-.727c.242-.242.485-.485.808-.768a2.765,2.765,0,0,0,.687-.848,1.958,1.958,0,0,0,.283-1.051,1.809,1.809,0,0,0-.162-.808,3.662,3.662,0,0,0-.444-.646,1.3,1.3,0,0,0-.687-.4,2.612,2.612,0,0,0-.808-.162,2.7,2.7,0,0,0-1.05.2,1.82,1.82,0,0,0-.768.566,2.138,2.138,0,0,0-.444.848,2.563,2.563,0,0,0-.121.97h-.929a3,3,0,0,1,.162-1.374Zm2.424,7.071H-150v1.131h-1.131Z" transform="translate(160.226 263.066)"/>
-                                                    </g>
-                                                </g>
-                                            </svg>
-                                            <a href="javascript:;" class="ml-2" data-description="quiz content2" data-content="{{ json_encode(['11111', '2222', '33333']) }}">Figma Plugin And Community</a>
-                                        </div>
-                                        <div class="text-sm">15 {{ __('Points') }}</div>
-                                    </li>
-                                    <li class="lesson-quiz-item quiz-item flex py-1 px-3 justify-between hover:bg-gray-200 hover:rounded-2xl">
-                                        <div class="flex">
-                                            <svg class="mt-1" xmlns="http://www.w3.org/2000/svg" width="19.313" height="19.313" viewBox="0 0 19.313 19.313">
-                                                <g transform="translate(-8.2 -8.2)">
-                                                    <g transform="translate(8.2 8.2)" fill="currentColor">
-                                                        <path d="M-160.144-250.487a9.656,9.656,0,0,1-9.656-9.656,9.656,9.656,0,0,1,9.656-9.656,9.656,9.656,0,0,1,9.656,9.656,9.656,9.656,0,0,1-9.656,9.656Zm0-18.262a8.639,8.639,0,0,0-8.606,8.606,8.639,8.639,0,0,0,8.606,8.606,8.639,8.639,0,0,0,8.606-8.606,8.613,8.613,0,0,0-8.606-8.606Z" transform="translate(169.8 269.8)"/>
-                                                        <path d="M-153.56-256.48a2.9,2.9,0,0,1,.646-1.091,3.159,3.159,0,0,1,1.05-.687,3.841,3.841,0,0,1,1.414-.242,3.754,3.754,0,0,1,1.172.2,3.719,3.719,0,0,1,.97.525,2.264,2.264,0,0,1,.646.848,2.637,2.637,0,0,1,.242,1.172,2.629,2.629,0,0,1-.364,1.414,6.008,6.008,0,0,1-.929,1.131l-.727.727a1.531,1.531,0,0,0-.4.525,1.339,1.339,0,0,0-.162.606,4.675,4.675,0,0,0-.04.848h-.929a3.04,3.04,0,0,1,.081-.929,3,3,0,0,1,.283-.848,4.1,4.1,0,0,1,.525-.727c.242-.242.485-.485.808-.768a2.765,2.765,0,0,0,.687-.848,1.958,1.958,0,0,0,.283-1.051,1.809,1.809,0,0,0-.162-.808,3.662,3.662,0,0,0-.444-.646,1.3,1.3,0,0,0-.687-.4,2.612,2.612,0,0,0-.808-.162,2.7,2.7,0,0,0-1.05.2,1.82,1.82,0,0,0-.768.566,2.138,2.138,0,0,0-.444.848,2.563,2.563,0,0,0-.121.97h-.929a3,3,0,0,1,.162-1.374Zm2.424,7.071H-150v1.131h-1.131Z" transform="translate(160.226 263.066)"/>
-                                                    </g>
-                                                </g>
-                                            </svg>
-                                            <a href="javascript:;" class="ml-2" data-description="quiz content3" data-content="{{ json_encode(['qwetr', 'asdf', 'zxcv']) }}">Figma Core Engine Concepts</a>
-                                        </div>
-                                        <div class="text-sm">5 {{ __('Points') }}</div>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
+                        @endforeach
 
                     </div>
                 </div>

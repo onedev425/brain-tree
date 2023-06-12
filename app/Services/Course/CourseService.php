@@ -71,19 +71,22 @@ class CourseService
             ->where('course_id', $course->id)
             ->value('total_duration');
 
-        $hours = floor($video_duration / 3600);
-        $minutes = floor(($video_duration / 60) % 60);
-        $seconds = $video_duration % 60;
-
-        $formatted_minutes = str_pad(strval($minutes), 2, '0', STR_PAD_LEFT);
-        $formatted_seconds = str_pad(strval($seconds), 2, '0', STR_PAD_LEFT);
-
-        if ($hours == 0)
-            return $formatted_minutes . 'm ' . $formatted_seconds . 's';
-        else
-            return $hours .'h ' . $formatted_minutes . 'm ' . $formatted_seconds . 's';
+        return $this->convertDurationFromSeconds($video_duration);
     }
 
+    public function getTopicVideoDuration(Topic $topic): string
+    {
+        $video_duration = Lesson::selectRaw('SUM(video_duration) as total_duration')
+            ->where('topic_id', $topic->id)
+            ->value('total_duration');
+
+        return is_null($video_duration) ? '-' : $this->convertDurationFromSeconds($video_duration);
+    }
+
+    public function getLessonVideoDuration(int $video_duration): string
+    {
+        return $this->convertDurationFromSeconds($video_duration);
+    }
     /**
      * Get a course by Id.
      *
@@ -274,6 +277,33 @@ class CourseService
             unlink(public_path('upload/course/') . $image_name);
     }
 
+    public function getYoutubeEmbedURL(string $video_url): string
+    {
+        $video_id = $this->getYoutubeVideoIdFromUrl($video_url);
+        return 'https://www.youtube.com/embed/' . $video_id;
+    }
+
+    public function getVimeoEmbedURL(string $video_url): string
+    {
+        $video_id = $this->getVimeoIdFromUrl($video_url);
+        return 'https://player.vimeo.com/video/' . $video_id;
+    }
+
+    private function convertDurationFromSeconds(int $video_duration): string
+    {
+        $hours = floor($video_duration / 3600);
+        $minutes = floor(($video_duration / 60) % 60);
+        $seconds = $video_duration % 60;
+
+        $formatted_minutes = str_pad(strval($minutes), 2, '0', STR_PAD_LEFT);
+        $formatted_seconds = str_pad(strval($seconds), 2, '0', STR_PAD_LEFT);
+
+        if ($hours == 0)
+            return $formatted_minutes . 'm ' . $formatted_seconds . 's';
+        else
+            return $hours .'h ' . $formatted_minutes . 'm ' . $formatted_seconds . 's';
+    }
+
     private function getVideoLength($video_type, $video_url): int
     {
         $video_duration = 0;
@@ -337,5 +367,6 @@ class CourseService
         }
         return '';
     }
+
 
 }
