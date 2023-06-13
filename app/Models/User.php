@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -228,4 +229,10 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->belongsTo(Industry::class);
     }
+
+    public function student_lessons(): HasMany
+    {
+        return $this->hasMany(StudentLesson::class, 'student_id');
+    }
+
 }

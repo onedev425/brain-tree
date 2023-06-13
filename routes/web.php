@@ -43,6 +43,8 @@ Route::middleware('auth:sanctum', 'verified', 'App\Http\Middleware\PreventLockAc
 
     Route::put('teacher_course_publish/{course}', ['App\Http\Controllers\TeacherCourseController', 'publish'])->name('teacher.course.publish');
 
+    Route::post('lesson_complete', ['App\Http\Controllers\StudentCourseController', 'lesson_complete'])->name('student.lesson.complete');
+
     //Teacher Courses routes
     Route::prefix('teacher')->group(function () {
         Route::resource('course', TeacherCourseController::class)->names([

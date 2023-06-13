@@ -7,6 +7,7 @@ use App\Models\Topic;
 use App\Models\Lesson;
 use App\Models\Question;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\DB;
 use Google_Client;
 use Google_Service_YouTube;
 use GuzzleHttp\Client;
@@ -87,6 +88,20 @@ class CourseService
     {
         return $this->convertDurationFromSeconds($video_duration);
     }
+
+    public function completeLesson($course_id, $lesson_id): void
+    {
+        $student = auth()->user();
+        $is_completed = $student->student_lessons()->where('course_id', $course_id)->where('lesson_id', $lesson_id)->exists();
+        if ( !$is_completed) {
+            $student->student_lessons()->create([
+                'course_id' => $course_id,
+                'lesson_id' => $lesson_id
+            ]);
+        }
+
+    }
+
     /**
      * Get a course by Id.
      *

@@ -110,7 +110,7 @@
                                                               <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 01.708 0L8 10.293l5.646-5.647a.5.5 0 01.708.708l-6 6a.5.5 0 01-.708 0l-6-6a.5.5 0 010-.708z" clip-rule="evenodd"></path>
                                                             </svg>
                                                         </span>
-                                                <span class="topic_info" data-uuid="{{$uuid}}">{{ $topic->description }}</span>
+                                                <span class="topic_info" data-uuid="{{$uuid}}">{!! $topic->description !!}</span>
                                             </div>
                                             <div class="flex mt-1.5">
                                                 <span class="text-sm text-gray-600">{{ count($topic->lessons) }} {{ __('Lectures') }}  • {{ $this->getTopicVideoDuration($topic) }}</span>
@@ -126,7 +126,7 @@
                                                     <svg class="mt-1" xmlns="http://www.w3.org/2000/svg" width="19.313" height="19.264" viewBox="0 0 19.313 19.264">
                                                         <path fill="currentColor" d="M13.724,10.568,10.771,8.351v8.712l2.953-2.217,2.856-2.139Zm0,0L10.771,8.351v8.712l2.953-2.217,2.856-2.139Zm0,0L10.771,8.351v8.712l2.953-2.217,2.856-2.139ZM11.739,5.03V3.075a9.631,9.631,0,0,0-5.15,2.139L7.964,6.6A7.687,7.687,0,0,1,11.739,5.03ZM6.6,7.964,5.214,6.589a9.631,9.631,0,0,0-2.139,5.15H5.03A7.687,7.687,0,0,1,6.6,7.964ZM5.03,13.675H3.075a9.631,9.631,0,0,0,2.139,5.15L6.6,17.441A7.617,7.617,0,0,1,5.03,13.675ZM6.589,20.2a9.662,9.662,0,0,0,5.15,2.139V20.384a7.687,7.687,0,0,1-3.775-1.568L6.589,20.2Zm15.8-7.493a9.7,9.7,0,0,1-8.664,9.632V20.384a7.744,7.744,0,0,0,0-15.353V3.075A9.7,9.7,0,0,1,22.388,12.707Z" transform="translate(-3.075 -3.075)"/>
                                                     </svg>
-                                                    <a href="javascript:;" class="ml-2" data-content="{{ $lesson->description }}" data-video-url="{{ $this->getVideoEmbedURL($lesson->video_type, $lesson->video_link) }}">{{ $lesson->title }}</a>
+                                                    <a href="javascript:;" class="ml-2" data-lesson-id="{{ $lesson->id }}" data-content="{{ $lesson->description }}" data-video-url="{{ $this->getVideoEmbedURL($lesson->video_type, $lesson->video_link) }}">{{ $lesson->title }}</a>
                                                 </div>
                                                 <div class="text-sm">{{ $this->getLessonVideoDuration($lesson->video_duration) }}</div>
                                             </li>
@@ -253,20 +253,40 @@
             // next lesson
             $('a#next_lesson').on('click', function() {
                 var active_lesson = $('li.lesson-quiz-item.active');
-                var next_lesson = $(active_lesson).next();
-                if ( ! next_lesson.hasClass('lesson-quiz-item') ) {
-                    // if there is no next lesson, close the current accordion and then open the next accordion
-                    $(active_lesson).parent().parent().parent().find('div.accordion').hide();
-                    $(active_lesson).parent().parent().parent().next().find('div.accordion').show();
-                    next_lesson = $(active_lesson).parent().parent().parent().next().find('li.lesson-quiz-item:first');
+                $.ajax({
+                    type: 'POST',
+                    url: '{{ route('student.lesson.complete') }}',
+                    dataType: 'text',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    data: {
+                        course_id: '{{ $course->id }}',
+                        lesson_id: $(active_lesson).find('a').data('lesson-id')
+                    },
+                    success: function(response) {
+                        console.log(response);
+                        var next_lesson = $(active_lesson).next();
+                        if ( ! next_lesson.hasClass('lesson-quiz-item') ) {
+                            // if there is no next lesson, close the current accordion and then open the next accordion
+                            $(active_lesson).parent().parent().parent().find('div.accordion').hide();
+                            $(active_lesson).parent().parent().parent().next().find('div.accordion').show();
+                            next_lesson = $(active_lesson).parent().parent().parent().next().find('li.lesson-quiz-item:first');
 
-                    if ( ! next_lesson.hasClass('lesson-quiz-item') ) {
-                        $('div#lesson_quiz_section').addClass('hidden');
-                        $('div#congratulation_section').removeClass('hidden');
-                        return;
+                            if ( ! next_lesson.hasClass('lesson-quiz-item') ) {
+                                $('div#lesson_quiz_section').addClass('hidden');
+                                $('div#congratulation_section').removeClass('hidden');
+                                return;
+                            }
+                        }
+                        $(next_lesson).click();
+                    },
+                    error: function(jq, status, data) {
+                        console.log('lesson complete - error: ' + data.toString());
                     }
-                }
-                $(next_lesson).click();
+                })
+
+
             });
 
             // next quiz
