@@ -13,13 +13,11 @@ class StudentCourseMainForm extends Component
     public string $activeTab = 'progress';
     public Collection $progress_courses;
     public Collection $completed_courses;
-    private CourseService $courseService;
 
     public function mount(CourseService $courseService): void
     {
         $this->progress_courses = $courseService->getCourses('progress');
         $this->completed_courses = $courseService->getCourses('completed');
-        $this->courseService = $courseService;
     }
 
     public function setTab($tab): void
@@ -30,5 +28,11 @@ class StudentCourseMainForm extends Component
     public function render()
     {
         return view('livewire.student-course-main-form');
+    }
+
+    public function getCourseProgressPercent(Course $course): int
+    {
+        $courseService = new CourseService();
+        return $courseService->getCourseProgressPercent($course);
     }
 }

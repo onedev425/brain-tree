@@ -109,6 +109,14 @@ class CourseService
 
     }
 
+    public function getCourseProgressPercent(Course $course): int
+    {
+        $total_lessons = count($course->lessons);
+        $student = auth()->user();
+        $completed_lessons = count($student->student_lessons->where('course_id', $course->id));
+        return $total_lessons == 0 ? 0 : intval($completed_lessons / $total_lessons * 100);
+    }
+
     /**
      * Get a course by Id.
      *

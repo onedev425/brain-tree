@@ -20,7 +20,7 @@
                             'teacher' => $course->assignedTeacher->name,
                             'lesson_nums' => count($course->lessons),
                             'quiz_nums' => count($course->questions),
-                            'progress' => $course->progress,
+                            'progress' => $this->getCourseProgressPercent($course),
                         ])
                     @endforeach
                 @else
@@ -32,7 +32,7 @@
                             'teacher' => $course->assignedTeacher->name,
                             'lesson_nums' => count($course->lessons),
                             'quiz_nums' => count($course->questions),
-                            'progress' => $course->progress,
+                            'progress' => $this->getCourseProgressPercent($course),
                         ])
                     @endforeach
                 @endif
