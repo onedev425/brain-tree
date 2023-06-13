@@ -27,41 +27,48 @@ class CourseService
             $courses = Course::with('lessons')->where('is_published', 0)->get();
         elseif ($type == 'progress') {
             /*
-            SELECT DISTINCT c.*
-            FROM courses c
-            LEFT JOIN student_lessons s ON c.id = s.course_id AND s.student_id = '31'
-            WHERE s.course_id IS NULL
-
-            UNION
-
-            SELECT DISTINCT c.*
-            FROM courses c
-            RIGHT JOIN student_lessons s ON c.id = s.course_id AND s.student_id = '31'
-            WHERE c.id IS NULL
+            SELECT DISTINCT C.* FROM courses C
+            LEFT JOIN lessons L ON C.id = L.course_id
+            LEFT JOIN student_lessons S ON c.id = S.course_id AND S.lesson_id = L.id AND s.student_id = 31
+            WHERE S.course_id IS NULL
             */
 
             $student_id = auth()->user()->id;
             $courses = Course::select('courses.*')
+                ->leftJoin('lessons', 'courses.id', '=', 'lessons.course_id')
                 ->leftJoin('student_lessons', function ($join) use ($student_id) {
                     $join->on('courses.id', '=', 'student_lessons.course_id')
+                        ->on('student_lessons.lesson_id', '=', 'lessons.id')
                         ->where('student_lessons.student_id', '=', $student_id);
                 })
                 ->whereNull('student_lessons.course_id')
-                ->orWhere(function ($query) {
-                    $query->rightJoin('student_lessons', 'courses.id', '=', 'student_lessons.course_id')
-                        ->whereNull('courses.id');
-                })
+                ->distinct()
                 ->with('lessons')
                 ->with('questions')
                 ->with('assignedTeacher')
-                ->distinct()
                 ->get();
         }
-        else
-            $courses = Course::join('student_lessons', 'courses.id', '=', 'student_lessons.course_id')
-                ->where('student_lessons.student_id', auth()->user()->id)
-                ->distinct()
-                ->get(['courses.*']);
+        else {
+            /*
+            SELECT * FROM courses C WHERE id NOT IN (
+                SELECT DISTINCT C.id FROM courses C
+                LEFT JOIN lessons L ON C.id = L.course_id
+                LEFT JOIN student_lessons S ON c.id = S.course_id AND S.lesson_id = L.id AND s.student_id = 31
+                WHERE S.course_id IS NULL
+            )
+             */
+            $student_id = auth()->user()->id;
+            $progress_courses_id = Course::select('courses.id')
+                ->leftJoin('lessons', 'courses.id', '=', 'lessons.course_id')
+                ->leftJoin('student_lessons', function ($join) use ($student_id) {
+                    $join->on('courses.id', '=', 'student_lessons.course_id')
+                        ->on('student_lessons.lesson_id', '=', 'lessons.id')
+                        ->where('student_lessons.student_id', '=', $student_id);
+                })
+                ->whereNull('student_lessons.course_id')
+                ->distinct();
+            $courses = Course::whereNotIn('id', $progress_courses_id)->get();
+        }
 
         return $courses;
     }
