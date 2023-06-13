@@ -12,6 +12,7 @@ class TeacherCourseStoreRequest extends FormRequest
             'course_title'  => 'required|max:100',
             'industry'      => 'required|integer',
             'course_price'  => 'required|integer',
+            'course_pass_percent'  => 'required|integer',
         ];
     }
 }

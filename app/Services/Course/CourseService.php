@@ -6,8 +6,8 @@ use App\Models\Course;
 use App\Models\Topic;
 use App\Models\Lesson;
 use App\Models\Question;
+use App\Models\QuestionOption;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Support\Facades\DB;
 use Google_Client;
 use Google_Service_YouTube;
 use GuzzleHttp\Client;
@@ -140,6 +140,7 @@ class CourseService
         $course = Course::create([
             'title' => $data['course_title'],
             'price'  => $data['course_price'],
+            'pass_percent'  => $data['course_pass_percent'],
             'description'  => $data['course_description'],
             'industry_id'  => $data['industry_id'],
             'image'  => $data['course_image'],
@@ -195,6 +196,7 @@ class CourseService
         $course->fill([
             'title' => $data['course_title'],
             'price'  => $data['course_price'],
+            'pass_percent'  => $data['course_pass_percent'],
             'description'  => $data['course_description'],
             'industry_id'  => $data['industry_id'],
             'image'  => $data['course_image'],
@@ -258,7 +260,7 @@ class CourseService
             }
         }
 
-        // if some topics removed from UI, remove the topics from database
+        // if some quizzes removed from UI, remove the quizzes from database
         $quiz_ids = [];
         foreach($data['quiz_list'] as $quiz_info) {
             $quiz_ids[] = $quiz_info['id'];
@@ -286,15 +288,27 @@ class CourseService
                 $question->save();
             }
 
-            $question->quiz_options()->delete();
-
+            $answer_ids = explode('$$$', $quiz_info['answer_id']);
             $answers = explode('$$$', $quiz_info['answer']);
             $answer_values = explode('$$$', $quiz_info['answer_values']);
+            $question->quiz_options()->whereNotIn('id', $answer_ids)->delete();
+
             foreach($answers as $key => $answer) {
-                $question->quiz_options()->create([
-                    'description' => $answer,
-                    'answer' => $answer_values[$key]
-                ]);
+                if ($answer_ids[$key] == 0) {
+                    $question->quiz_options()->create([
+                        'description' => $answer,
+                        'answer' => $answer_values[$key]
+                    ]);
+                }
+                else {
+                    $quiz_option = QuestionOption::find($answer_ids[$key]);
+                    $quiz_option->fill([
+                        'description' => $answer,
+                        'answer' => $answer_values[$key]
+                    ]);
+                    $quiz_option->save();
+                }
+
             }
         }
 

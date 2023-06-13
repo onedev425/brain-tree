@@ -52,6 +52,13 @@
                                 <span class="text-red-500">{{ $message }}</span>
                                 @enderror
                             </div>
+                            <div class="form-group mb-6">
+                                <label for="course_pass_percent" class="block mb-2 font-medium text-gray-900">{{ __('Pass Percent') }} ($)</label>
+                                <input type="number" id="course_pass_percent" name="course_pass_percent" wire:model="state.pass_percent" minlength="1" maxlength="3" class="shadow-sm border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="" required />
+                                @error('course_pass_percent')
+                                <span class="text-red-500">{{ $message }}</span>
+                                @enderror
+                            </div>
                             <div class="mb-6">
                                 <label for="course_description" class="inline-block mb-2">{{ __('Description') }}</label>
                                 <textarea id="course_description" name="course_description" wire:model="state.course_description" rows="8" class="course_description w-full leading-5 relative py-3 px-3 rounded-lg text-gray-800 bg-white border border-gray-300 overflow-x-auto focus:outline-none focus:border-gray-400 focus:ring-0" ></textarea>
@@ -144,7 +151,7 @@
                                             <div class="flex-1 py-4 px-7">
                                                 @foreach($topic->lessons as $lesson)
                                                     <div class="flex pt-4 justify-between">
-                                                        <div class="lesson_info pt-1.5" data-lesson-id="{{ $lesson->id }}" data-description="{!! $lesson->description !!}" data-video-source="{{ $lesson->video_type }}" data-video-url="{{ $lesson->video_link }}" data-uuid="{{ $uuid }}">{{ $lesson->title }}</div>
+                                                        <div class="lesson_info pt-1.5" data-lesson-id="{{ $lesson->id }}" data-description="{!! htmlspecialchars($lesson->description) !!}" data-video-source="{{ $lesson->video_type }}" data-video-url="{{ $lesson->video_link }}" data-uuid="{{ $uuid }}">{{ $lesson->title }}</div>
                                                         <div class="min-w-fit" >
                                                             <x-edit-icon-button class="edit_lesson_dialog_button"/>
                                                             <x-remove-icon-button class="remove_lesson_button"/>
@@ -196,19 +203,22 @@
                                     @php
                                         $uuid = Illuminate\Support\Str::uuid()->toString();
                                         $quiz_options = $quiz->quiz_options;
+                                        $answer_id = [];
                                         $answer_text = [];
                                         $answer_value = [];
                                         foreach($quiz_options as $quiz_option) {
+                                            $answer_id[] = $quiz_option->id;
                                             $answer_text[] = $quiz_option->description;
                                             $answer_value[] = $quiz_option->answer;
                                         }
+                                        $answer_id = implode('$$$', $answer_id);
                                         $answer_text = implode('$$$', $answer_text);
                                         $answer_value = implode('$$$', $answer_value);
                                     @endphp
 
                                     <div class="flex pt-3 justify-between">
-                                        <div class="pt-1.5 quiz_info" data-quiz-id="{{ $quiz->id }}" data-uuid="{{ $uuid }}" data-description="{!! $quiz->description !!}" data-type="{{ $quiz->type }}" data-points="{{ $quiz->points }}"
-                                             data-answer="{{ $answer_text }}" data-answer-value="{{ $answer_value }}">{{ $quiz->name }}
+                                        <div class="pt-1.5 quiz_info" data-quiz-id="{{ $quiz->id }}" data-uuid="{{ $uuid }}" data-description="{!! htmlspecialchars($quiz->description) !!}" data-type="{{ $quiz->type }}" data-points="{{ $quiz->points }}"
+                                             data-answer-id="{{ $answer_id }}" data-answer="{{ $answer_text }}" data-answer-value="{{ $answer_value }}">{{ $quiz->name }}
                                         </div>
                                         <div class="min-w-fit" >
                                             <x-edit-icon-button class="edit_quiz_dialog_button"/>
@@ -320,7 +330,7 @@
                     <div id="boolean_answer_list" class="hidden">
                         <div class="flex justify-between">
                             <div class="handle p-2 flex bg-gray-100 rounded-lg justify-between mb-2 w-full items-center">
-                                <input type="text" class="boolean-answer-text leading-5 relative py-2 px-4 rounded-lg text-gray-800 bg-gray-100 w-full" value="True" readonly/>
+                                <input type="text" data-answer-id="0" class="boolean-answer-text leading-5 relative py-2 px-4 rounded-lg text-gray-800 bg-gray-100 w-full" value="True" readonly/>
                                 <div class="flex p-2 items-center">
                                     <input type="radio" name="boolean_answer" class="boolean-answer-value h-5 w-5 text-indigo-500 border border-gray-300 rounded focus:outline-none mr-3 rounded-full">
                                     <i class="fas fa-bars text-lg cursor-move"></i>
@@ -330,7 +340,7 @@
 
                         <div class="flex justify-between">
                             <div class="handle p-2 flex bg-gray-100 rounded-lg justify-between mb-2 w-full items-center">
-                                <input type="text" class="boolean-answer-text leading-5 relative py-2 px-4 rounded-lg text-gray-800 bg-gray-100 w-full" value="False" readonly />
+                                <input type="text" data-answer-id="0" class="boolean-answer-text leading-5 relative py-2 px-4 rounded-lg text-gray-800 bg-gray-100 w-full" value="False" readonly />
                                 <div class="flex p-2 items-center">
                                     <input type="radio" name="boolean_answer" class="boolean-answer-value h-5 w-5 text-indigo-500 border border-gray-300 rounded focus:outline-none mr-3 rounded-full">
                                     <i class="fas fa-bars text-lg cursor-move"></i>
@@ -484,7 +494,7 @@
             <div class="flex justify-between answer-item">
                             <div class="handle p-2 flex bg-gray-100 rounded-lg justify-between mb-2 w-full items-center">
                                 <div class="w-full">
-                                    <input type="text" name="single_answer_text[]" class="single-answer-text leading-5 relative py-2 px-4 rounded-lg text-gray-800 bg-white border border-gray-300 w-full overflow-x-auto focus:outline-none focus:border-gray-400 focus:ring-0" placeholder="Answer" />
+                                    <input type="text" name="single_answer_text[]" data-answer-id="0" class="single-answer-text leading-5 relative py-2 px-4 rounded-lg text-gray-800 bg-white border border-gray-300 w-full overflow-x-auto focus:outline-none focus:border-gray-400 focus:ring-0" placeholder="Answer" />
                                 </div>
                                 <div class="flex p-2 items-center">
                                     <input type="radio" name="single-answer-value" class="single-answer-value h-5 w-5 text-indigo-500 border border-gray-300 rounded focus:outline-none mr-3 rounded-full">
@@ -500,7 +510,7 @@
             <div class="flex justify-between answer-item">
                             <div class="handle p-2 flex bg-gray-100 rounded-lg justify-between mb-2 w-full items-center">
                                 <div class="w-full">
-                                    <input type="text" name="multi_answer_text[]" class="multi-answer-text leading-5 relative py-2 px-4 rounded-lg text-gray-800 bg-white border border-gray-300 w-full overflow-x-auto focus:outline-none focus:border-gray-400 focus:ring-0" placeholder="Answer" />
+                                    <input type="text" name="multi_answer_text[]" data-answer-id="0" class="multi-answer-text leading-5 relative py-2 px-4 rounded-lg text-gray-800 bg-white border border-gray-300 w-full overflow-x-auto focus:outline-none focus:border-gray-400 focus:ring-0" placeholder="Answer" />
                                 </div>
                                 <div class="flex p-2 items-center">
                                     <input type="checkbox" class="multi-answer-value h-5 w-5 text-indigo-500 border border-gray-300 rounded focus:outline-none mr-3">
@@ -562,11 +572,14 @@
             $('input[name=quiz_edit_flag]').val($(quizObject).data('uuid'));
 
             const answers = $(quizObject).attr('data-answer').split('$$$');
+            const answer_ids = $(quizObject).attr('data-answer-id').split('$$$');
             const answer_values = $(quizObject).attr('data-answer-value').split('$$$');
 
             if (quizType == 'boolean') {
                 $('div#boolean_answer_list').find('input.boolean-answer-text:first').val(answers[0]);
                 $('div#boolean_answer_list').find('input.boolean-answer-text:last').val(answers[1]);
+                $('div#boolean_answer_list').find('input.boolean-answer-text:first').attr('data-answer-id', answer_ids[0]);
+                $('div#boolean_answer_list').find('input.boolean-answer-text:last').attr('data-answer-id', answer_ids[1]);
                 if (answer_values[0] == 1) $('div#boolean_answer_list').find('input.boolean-answer-value:first').prop('checked', true);
                 if (answer_values[1] == 1) $('div#boolean_answer_list').find('input.boolean-answer-value:last').prop('checked', true);
             }
@@ -576,6 +589,7 @@
                 $.each(answers, function(index, answer) {
                     $('div#single_answer_list').append(single_answer_item);
                     $('div#single_answer_list').find('input.single-answer-text:last').val(answer);
+                    $('div#single_answer_list').find('input.single-answer-text:last').attr('data-answer-id', answer_ids[index]);
                     if (answer_values[index] == 1) $('div#single_answer_list').find('input.single-answer-value:last').prop('checked', true);
                 });
                 if (answers.length == 1) $('div#single_answer_list').find('a.remove-answer').hide();
@@ -587,6 +601,7 @@
                 $.each(answers, function(index, answer) {
                     $('div#multiple_answer_list').append(multi_answer_item);
                     $('div#multiple_answer_list').find('input.multi-answer-text:last').val(answer);
+                    $('div#multiple_answer_list').find('input.multi-answer-text:last').attr('data-answer-id', answer_ids[index]);
                     $('div#multiple_answer_list').find('input.multi-answer-value:last').prop('checked', answer_values[index] == 1 ? true : false);
                 });
                 if (answers.length == 1) $('div#multiple_answer_list').find('a.remove-answer').hide();
@@ -763,6 +778,7 @@
                     const videoSource = $('select#video_source option:selected').val();
                     const videoURL = $('input#video_url').val();
 
+                    console.log(lessonDescription);
                     if ($('input[name=lesson_edit_flag]').val() == 'new') {
                         const uuid = generateUUID();
                         const topicUuid = $('input[name=topic_uuid]').val();
@@ -780,7 +796,7 @@
                         $(new_lesson_button).before(newLesson);
                     }
                     else {
-                        const uuid = $('input[name=topic_edit_flag]').val();
+                        const uuid = $('input[name=lesson_edit_flag]').val();
                         const lessonObject = $('div.lesson_info[data-uuid="' + uuid + '"]');
                         $(lessonObject).html(lessonName);
                         $(lessonObject).attr('data-description', lessonDescription);
@@ -836,6 +852,7 @@
                                 description: $(quiz_obj).attr('data-description'),
                                 type: $(quiz_obj).attr('data-type'),
                                 points: $(quiz_obj).attr('data-points'),
+                                answer_id: $(quiz_obj).attr('data-answer-id'),
                                 answer: $(quiz_obj).attr('data-answer'),
                                 answer_values: $(quiz_obj).attr('data-answer-value'),
                             }
@@ -870,26 +887,32 @@
                     const quizPoints = $('input#quiz_points').val();
 
                     // convert from answer values to string
+                    var answer_id = [];
                     var answer_text = [];
                     var answer_value = [];
                     if (quizType == 'boolean') {
                         $.each($('div#boolean_answer_list').find('input.boolean-answer-text'), function (index, obj) {
+                            answer_id.push($(obj).attr('data-answer-id'));
                             answer_text.push($(obj).val());
                             answer_value.push($(obj).parent().parent().find('input.boolean-answer-value').prop('checked') ? 1 : 0);
                         })
                     }
                     if (quizType == 'single') {
                         $.each($('div#single_answer_list').find('input.single-answer-text'), function (index, obj) {
+                            answer_id.push($(obj).attr('data-answer-id'));
                             answer_text.push($(obj).val());
                             answer_value.push($(obj).parent().parent().find('input.single-answer-value').prop('checked') ? 1 : 0);
                         })
                     }
                     if (quizType == 'multi') {
                         $.each($('div#multiple_answer_list').find('input.multi-answer-text'), function (index, obj) {
+                            answer_id.push($(obj).attr('data-answer-id'));
                             answer_text.push($(obj).val());
                             answer_value.push($(obj).parent().parent().find('input.multi-answer-value').prop('checked') ? 1 : 0);
                         })
                     }
+
+                    answer_id = answer_id.join('$$$');
                     answer_text = answer_text.join('$$$');
                     answer_value = answer_value.join('$$$');
                     // end
@@ -899,7 +922,7 @@
                         const newQuiz = `
                             <div class="flex pt-3 justify-between">
                                 <div class="pt-1.5 quiz_info" data-quiz-id="0" data-uuid="${uuid}" data-description="${quizDescription}" data-type="${quizType}" data-points="${quizPoints}"
-                                    data-answer="${answer_text}" data-answer-value="${answer_value}">${quizTitle}
+                                    data-answer-id="${answer_id}" data-answer="${answer_text}" data-answer-value="${answer_value}">${quizTitle}
                                 </div>
                                 <div class="min-w-fit" >
                                     <x-edit-icon-button class="edit_quiz_dialog_button"/>
@@ -917,6 +940,7 @@
                         $(quizObject).attr('data-description', quizDescription);
                         $(quizObject).attr('data-type', quizType);
                         $(quizObject).attr('data-points', quizPoints);
+                        $(quizObject).attr('data-answer-id', answer_id);
                         $(quizObject).attr('data-answer', answer_text);
                         $(quizObject).attr('data-answer-value', answer_value);
                     }

@@ -98,6 +98,7 @@ class TeacherCourseController extends Controller
         $data['course_title'] = $request['course_title'];
         $data['industry_id'] = $request['industry'];
         $data['course_price'] = $request['course_price'];
+        $data['course_pass_percent'] = $request['course_pass_percent'];
         $data['course_description'] = $request['course_description'];
 
         $data['topic_list'] = json_decode($request['topic_list'], true);

@@ -11,7 +11,7 @@ class Question extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name', 'description', 'course_id', 'user_id', 'type'
+        'name', 'description', 'course_id', 'user_id', 'type', 'points'
     ];
 
     public function quiz_options(): HasMany
