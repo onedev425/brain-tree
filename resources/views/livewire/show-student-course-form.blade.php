@@ -135,7 +135,54 @@
                                 </div>
                             </div>
                         @endforeach
-
+                        <div class="relative flex flex-wrap flex-col mb-2">
+                            <div class="border-b border-gray-200 mb-0 bg-gray-100 py-2 px-4 mt-2 rounded">
+                                <div class="d-grid mb-0">
+                                    <a href="javascript:;" class="py-1 px-0 w-full rounded leading-5 font-medium flex justify-between focus:outline-none focus:ring-0" @click="selected !== '9999' ? selected = '9999' : selected = null">
+                                        <div class="flex mt-1.5">
+                                                <span class="mr-3">
+                                                    <svg class="transform transition duration-500 -rotate-90" :class="{ 'rotate-0': selected == '9999' }" width="1rem" height="1rem" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                      <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 01.708 0L8 10.293l5.646-5.647a.5.5 0 01.708.708l-6 6a.5.5 0 01-.708 0l-6-6a.5.5 0 010-.708z" clip-rule="evenodd"></path>
+                                                    </svg>
+                                                </span>
+                                            <span class="topic_info" data-uuid="9999">{{ __('Final Quiz') }}</span>
+                                        </div>
+                                        <div class="flex mt-1.5">
+                                            <span class="text-sm text-gray-600">{{ count($course->questions) }} {{ count($course->questions) == 1 ? __('Quiz') : __('Quizzes') }}</span>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="accordion p-3" x-show="selected == '9999'">
+                                <ul>
+                                    @php
+                                        $questions = $course->questions()->with('quiz_options')->get()
+                                    @endphp
+                                    @foreach($questions as $question)
+                                        @php
+                                            $quiz_options = [];
+                                            foreach($question->quiz_options as $quiz_option) {
+                                                $quiz_options[] = $quiz_option->description;
+                                            }
+                                        @endphp
+                                        <li class="lesson-quiz-item quiz-item flex py-1 px-3 justify-between hover:bg-gray-200 hover:rounded-2xl">
+                                            <div class="flex">
+                                                <svg class="mt-1" xmlns="http://www.w3.org/2000/svg" width="19.313" height="19.313" viewBox="0 0 19.313 19.313">
+                                                    <g transform="translate(-8.2 -8.2)">
+                                                        <g transform="translate(8.2 8.2)" fill="currentColor">
+                                                            <path d="M-160.144-250.487a9.656,9.656,0,0,1-9.656-9.656,9.656,9.656,0,0,1,9.656-9.656,9.656,9.656,0,0,1,9.656,9.656,9.656,9.656,0,0,1-9.656,9.656Zm0-18.262a8.639,8.639,0,0,0-8.606,8.606,8.639,8.639,0,0,0,8.606,8.606,8.639,8.639,0,0,0,8.606-8.606,8.613,8.613,0,0,0-8.606-8.606Z" transform="translate(169.8 269.8)"/>
+                                                            <path d="M-153.56-256.48a2.9,2.9,0,0,1,.646-1.091,3.159,3.159,0,0,1,1.05-.687,3.841,3.841,0,0,1,1.414-.242,3.754,3.754,0,0,1,1.172.2,3.719,3.719,0,0,1,.97.525,2.264,2.264,0,0,1,.646.848,2.637,2.637,0,0,1,.242,1.172,2.629,2.629,0,0,1-.364,1.414,6.008,6.008,0,0,1-.929,1.131l-.727.727a1.531,1.531,0,0,0-.4.525,1.339,1.339,0,0,0-.162.606,4.675,4.675,0,0,0-.04.848h-.929a3.04,3.04,0,0,1,.081-.929,3,3,0,0,1,.283-.848,4.1,4.1,0,0,1,.525-.727c.242-.242.485-.485.808-.768a2.765,2.765,0,0,0,.687-.848,1.958,1.958,0,0,0,.283-1.051,1.809,1.809,0,0,0-.162-.808,3.662,3.662,0,0,0-.444-.646,1.3,1.3,0,0,0-.687-.4,2.612,2.612,0,0,0-.808-.162,2.7,2.7,0,0,0-1.05.2,1.82,1.82,0,0,0-.768.566,2.138,2.138,0,0,0-.444.848,2.563,2.563,0,0,0-.121.97h-.929a3,3,0,0,1,.162-1.374Zm2.424,7.071H-150v1.131h-1.131Z" transform="translate(160.226 263.066)"/>
+                                                        </g>
+                                                    </g>
+                                                </svg>
+                                                <a href="javascript:;" class="ml-2" data-question-id="{{ $question->id }}" data-description="{{ $question->description }}" data-content="{{ json_encode($quiz_options) }}">{{ $question->name }}</a>
+                                            </div>
+                                            <div class="text-sm">{{ $question->points }} {{ __('Points') }}</div>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div id="lesson_section" class="col-span-7 p-6">
@@ -209,7 +256,7 @@
                 $(this).addClass('active');
             });
 
-            // clicked a lesson
+            // clicked a lesson or quiz
             $('li.quiz-item').on('click', function() {
                 const quiz_obj = $(this).find('a');
                 $('div#lesson_section').addClass('hidden');
@@ -236,7 +283,7 @@
                 $(this).addClass('active');
             });
 
-            // clicked a quiz
+            // clicked a quiz option
             $('body').on('click', 'div#question_list li', function(event) {
                 event.preventDefault();
                 if ($(this).hasClass('active')) {
