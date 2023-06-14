@@ -26,6 +26,7 @@ class StudentCourseController extends Controller
         $data['course'] = $course;
         $data['topics'] = $course->topics()->with('lessons')->get();
         $data['quizzes'] = $course->questions()->with('quiz_options')->get();
+        $data['passed_exam'] = $this->courseService->isPassedFromCourseExam($course);
 
         return view('pages.student-course.show', $data);
     }
@@ -38,12 +39,19 @@ class StudentCourseController extends Controller
         $this->courseService->completeLesson($course_id, $lesson_id);
     }
 
-    public function question_complete(): void
+    public function question_complete(): bool
     {
         $course_id = request('course_id');
         $question_id = request('question_id');
         $question_options = request('question_options');
+        $is_latest_question = request('is_latest_question');
 
-        $this->courseService->completeQuestion($course_id, $question_id, $question_options);
+        return $this->courseService->completeQuestion($course_id, $question_id, $question_options, $is_latest_question);
+    }
+
+    public function question_clear(): void
+    {
+        $course_id = request('course_id');
+        $this->courseService->clearQuestion($course_id);
     }
 }

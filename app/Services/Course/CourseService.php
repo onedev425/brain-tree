@@ -8,6 +8,7 @@ use App\Models\Lesson;
 use App\Models\Question;
 use App\Models\QuestionOption;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\DB;
 use Google_Client;
 use Google_Service_YouTube;
 use GuzzleHttp\Client;
@@ -109,10 +110,10 @@ class CourseService
 
     }
 
-    public function completeQuestion($course_id, $question_id, $quiz_options): void
+    public function completeQuestion($course_id, $question_id, $quiz_options, $is_latest_question): bool
     {
         $student = auth()->user();
-        $is_completed = $student->student_questions()->where('course_id', $course_id)->where('question_id', $question_id)->delete();
+        $student->student_questions()->where('course_id', $course_id)->where('question_id', $question_id)->delete();
         foreach($quiz_options as $quiz_option) {
             $student->student_questions()->create([
                 'course_id' => $course_id,
@@ -122,6 +123,42 @@ class CourseService
             ]);
         }
 
+        if ($is_latest_question)
+            return $this->isPassedFromCourseExam(Course::find($course_id));
+        return true;
+    }
+
+    public function isPassedFromCourseExam(Course $course): bool
+    {
+        $student_id = auth()->user()->id;
+        $course_id = $course->id;
+
+        $total_points = 0;
+        $correct_points = 0;
+
+        $query = "
+                SELECT id, points, SUM(1) quiz_option_nums, SUM(result) correct_option_nums FROM (
+                    SELECT C.title, Q.id, Q.name, Q.points, QO.description, QO.answer, SQ.question_id, SQ.answer student_answer,
+                        IF(Q.id = SQ.question_id AND QO.answer = SQ.answer, 1, 0) result
+                    FROM courses C
+                    LEFT JOIN questions Q ON C.id = Q.course_id
+                    LEFT JOIN question_options QO ON Q.id = QO.question_id
+                    LEFT JOIN student_questions SQ ON C.id = SQ.course_id AND Q.id = SQ.question_id AND QO.id = SQ.question_option_id AND SQ.student_id = '$student_id'
+                    WHERE C.id = '$course_id'
+                ) T GROUP BY T.id";
+        $questions = DB::select($query);
+        foreach($questions as $question) {
+            $total_points += $question->points;
+            $correct_points += $question->quiz_option_nums == $question->correct_option_nums ? $question->points : 0;
+        }
+        $student_exam_percent = $total_points == 0 ? 100 : intval($correct_points / $total_points * 100);
+        return $student_exam_percent >= $course->pass_percent;
+    }
+
+    public function clearQuestion($course_id): void
+    {
+        $student = auth()->user();
+        $student->student_questions()->where('course_id', $course_id)->delete();
     }
 
     public function isLessonCompleted($lesson_id): bool

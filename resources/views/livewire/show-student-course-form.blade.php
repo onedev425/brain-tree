@@ -35,8 +35,8 @@
             <h1 class="text-center font-semibold text-2xl mt-8">{{ __('Bad Luck! Please Try Again') }}</h1>
             <div class="text-sm mt-4">{{ __("We regret to inform you that you did not pass the Web Design & Development Quiz. Please don't get disheartened and keep learning and practicing.") }}</div>
             <div class="flex justify-center mt-4">
-                <x-button id="open_topic_dialog_button" label="{{ __('Try Again') }}" icon="" class="py-3 md:px-10 bg-red-700 text-white font-semibold border-transparent" />
-                <x-light-button id="open_quiz_dialog_button" label="{{ __('View Marks') }}" icon="" class="py-3 md:px-10 bg-white text-black font-semibold border border-red-300 ml-10" />
+                <x-button id="main_try_again_button" label="{{ __('Try Again') }}" icon="" class="py-3 md:px-10 bg-red-700 text-white font-semibold border-transparent" />
+                <x-light-button label="{{ __('View Marks') }}" icon="" class="view_marks_button py-3 md:px-10 bg-white text-black font-semibold border border-red-300 ml-10" />
             </div>
         </div>
     </div>
@@ -84,8 +84,8 @@
             <h1 class="text-center font-semibold text-2xl mt-8">{{ __('Congratulations!') }}</h1>
             <div class="text-sm mt-4">{{ __("You've successfully passed the Web Design & Development Quiz. Your hard work and dedication have paid off! To view your marks and download your certificate, please click the buttons below.") }}</div>
             <div class="flex justify-center mt-4">
-                <x-button id="open_topic_dialog_button" label="{{ __('Download Certificate') }}" icon="" class="py-3 md:px-10 bg-red-700 text-white font-semibold border-transparent" />
-                <x-light-button id="open_quiz_dialog_button" label="{{ __('View Marks') }}" icon="" class="py-3 md:px-20 bg-white text-black font-semibold border border-red-300 ml-10" />
+                <x-button id="download_certificate_button" label="{{ __('Download Certificate') }}" icon="" class="py-3 md:px-10 bg-red-700 text-white font-semibold border-transparent" />
+                <x-light-button label="{{ __('View Marks') }}" icon="" class="view_marks_button py-3 md:px-20 bg-white text-black font-semibold border border-red-300 ml-10" />
             </div>
         </div>
     </div>
@@ -158,7 +158,8 @@
                             <div class="accordion p-3" x-show="selected == '9999'">
                                 <ul>
                                     @php
-                                        $questions = $course->questions()->with('quiz_options')->get()
+                                        $questions = $course->questions()->with('quiz_options')->get();
+                                        $prev_quiz_processed = true;
                                     @endphp
                                     @foreach($questions as $question)
                                         @php
@@ -169,7 +170,7 @@
                                                 $quiz_option_text[] = $quiz_option->description;
                                             }
                                         @endphp
-                                        <li class="lesson-quiz-item quiz-item flex py-1 px-3 justify-between hover:bg-gray-200 hover:rounded-2xl  {{ $this->isLessonCompleted($question->id) ? 'text-green-700' : '' }}">
+                                        <li class="lesson-quiz-item {{ $prev_quiz_processed ? 'quiz-item hover:bg-gray-200 hover:rounded-2xl' : '' }} flex py-1 px-3 justify-between {{ $this->isQuestionCompleted($question->id) ? 'text-green-700' : '' }}">
                                             <div class="flex">
                                                 <svg class="mt-1" xmlns="http://www.w3.org/2000/svg" width="19.313" height="19.313" viewBox="0 0 19.313 19.313">
                                                     <g transform="translate(-8.2 -8.2)">
@@ -183,8 +184,16 @@
                                             </div>
                                             <div class="text-sm">{{ $question->points }} {{ __('Points') }}</div>
                                         </li>
+                                        @php
+                                            $prev_quiz_processed = $this->isQuestionCompleted($question->id);
+                                        @endphp
                                     @endforeach
                                 </ul>
+                                @if ($prev_quiz_processed && ! $passed_exam)
+                                    <div class="flex justify-end mt-4">
+                                        <x-button id="sub_try_again_button" label="{{ __('Try Again') }}" icon="" class="py-1 md:px-4 bg-red-700 text-white font-semibold border-transparent" />
+                                    </div>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -238,6 +247,11 @@
 
     <script>
         $(document).ready(function() {
+            // if student already took the exam, he can't take the exam anymore.
+            if ($('button#sub_try_again_button').length > 0) {
+                $('li.quiz-item').removeClass('quiz-item hover:bg-gray-200 hover:rounded-2xl');
+            }
+
             if ( ! $('div#lesson_quiz_section').hasClass('hidden') ) {
                 const lesson_obj = $('li.lesson-item:first').find('a');
                 $('div#quiz_section').addClass('hidden');
@@ -262,7 +276,7 @@
             });
 
             // clicked a quiz
-            $('li.quiz-item').on('click', function() {
+            $('body').on('click', 'li.quiz-item', function() {
                 const quiz_obj = $(this).find('a');
                 $('div#lesson_section').addClass('hidden');
                 $('div#quiz_section').removeClass('hidden');
@@ -355,6 +369,7 @@
                     })
                 });
 
+                const is_latest_question = $(next_quiz).hasClass('lesson-quiz-item') ? 0 : 1
                 $.ajax({
                     type: 'POST',
                     url: '{{ route('student.question.complete') }}',
@@ -366,13 +381,19 @@
                     data: {
                         course_id: '{{ $course->id }}',
                         question_id: $(active_quiz).find('a').data('question-id'),
-                        question_options: question_options
+                        question_options: question_options,
+                        is_latest_question: is_latest_question
                     },
                     success: function(response) {
+                        console.log(response);
                         $(active_quiz).addClass('text-green-700');
-                        if ( ! next_quiz.hasClass('lesson-quiz-item') ) {
+                        $(next_quiz).addClass('quiz-item hover:bg-gray-200 hover:rounded-2xl');
+                        if ( is_latest_question ) {
                             $('div#lesson_quiz_section').addClass('hidden');
-                            $('div#congratulation_section').removeClass('hidden');
+                            if (response == 1)
+                                $('div#congratulation_section').removeClass('hidden');
+                            else
+                                $('div#bad_luck_section').removeClass('hidden');
                             return;
                         }
                         $(next_quiz).click();
@@ -383,6 +404,27 @@
                 })
 
 
+            })
+
+            $('button#sub_try_again_button, button#main_try_again_button').on('click', function() {
+                $.ajax({
+                    type: 'POST',
+                    url: '{{ route('student.question.clear') }}',
+                    dataType: 'text',
+                    async: false,
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    data: {
+                        course_id: '{{ $course->id }}',
+                    },
+                    success: function(response) {
+                       window.location.reload();
+                    },
+                    error: function(jq, status, data) {
+                        console.log('question clear - error: ' + data.toString());
+                    }
+                })
             })
         });
     </script>

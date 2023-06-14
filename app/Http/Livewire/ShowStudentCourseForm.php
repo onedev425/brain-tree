@@ -14,6 +14,7 @@ class ShowStudentCourseForm extends Component
     public Course $course;
     public Collection $topics;
     public Collection $quizzes;
+    public bool $passed_exam;
     private CourseService $courseService;
 
     public function mount(CourseService $courseService): void
