@@ -20,13 +20,6 @@ class ShowStudentCourseForm extends Component
     {
         $this->courseService = $courseService;
     }
-    public function setQuiz($quiz_id)
-    {
-        if (in_array($quiz_id, $this->activeQuiz))
-            $this->activeQuiz = array_diff($this->activeQuiz, array($quiz_id));
-        else
-            $this->activeQuiz[] = $quiz_id;
-    }
 
     public function render()
     {
@@ -46,5 +39,15 @@ class ShowStudentCourseForm extends Component
     public function getVideoEmbedURL(string $video_type, string $video_url): string
     {
         return $video_type == 'youtube' ? $this->courseService->getYoutubeEmbedURL($video_url) : $this->courseService->getVimeoEmbedURL($video_url);
+    }
+
+    public function isLessonCompleted($lesson_id): bool
+    {
+        return $this->courseService->isLessonCompleted($lesson_id);
+    }
+
+    public function isQuestionCompleted($question_id): bool
+    {
+        return $this->courseService->isQuestionCompleted($question_id);
     }
 }

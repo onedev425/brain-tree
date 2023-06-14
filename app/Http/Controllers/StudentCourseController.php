@@ -30,12 +30,20 @@ class StudentCourseController extends Controller
         return view('pages.student-course.show', $data);
     }
 
-    public function lesson_complete(): string
+    public function lesson_complete(): void
     {
         $course_id = request('course_id');
         $lesson_id = request('lesson_id');
 
         $this->courseService->completeLesson($course_id, $lesson_id);
-        return 'success';
+    }
+
+    public function question_complete(): void
+    {
+        $course_id = request('course_id');
+        $question_id = request('question_id');
+        $question_options = request('question_options');
+
+        $this->courseService->completeQuestion($course_id, $question_id, $question_options);
     }
 }

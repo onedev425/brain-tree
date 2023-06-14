@@ -94,12 +94,12 @@
     <!-- Begin:Lesson content area -->
     <div id="lesson_quiz_section" class="card p-0">
         <div class="card-body">
-            <div class="lg:grid grid-cols-12 gap-2 w-full">
+            <div class="xl:grid grid-cols-12 gap-2 w-full">
                 <div class="col-span-5 bg-neutral-300 p-6 pb-10">
                     <h1 class="text-xl font-bold mb-4">{{ __('Lessons') }}</h1>
                     <div id="topic_list" x-data="{selected:0000}">
-                        @foreach($topics as $key => $topic)
-                            @php $uuid = $key == 0 ? '0000' : Illuminate\Support\Str::uuid()->toString(); @endphp
+                        @foreach($topics as $topic_index => $topic)
+                            @php $uuid = $topic_index == 0 ? '0000' : Illuminate\Support\Str::uuid()->toString(); @endphp
                             <div class="relative flex flex-wrap flex-col mb-2">
                                 <div class="border-b border-gray-200 mb-0 bg-gray-100 py-2 px-4 mt-2 rounded">
                                     <div class="d-grid mb-0">
@@ -120,15 +120,17 @@
                                 </div>
                                 <div class="accordion p-3" x-show="selected == '{{$uuid}}'">
                                     <ul>
-                                        @foreach($topic->lessons as $index => $lesson)
-                                            <li class="lesson-quiz-item lesson-item flex py-1 px-3 justify-between hover:bg-gray-200 hover:rounded-2xl {{ $index == 0 ? 'active' : '' }}">
+                                        @foreach($topic->lessons as $lesson_index => $lesson)
+                                            <li class="lesson-quiz-item lesson-item flex py-1 px-3 justify-between hover:bg-gray-200 hover:rounded-2xl {{ $this->isLessonCompleted($lesson->id) ? 'text-green-700' : '' }} {{ $topic_index == 0 && $lesson_index == 0 ? 'active' : '' }}">
                                                 <div class="flex">
-                                                    <svg class="mt-1" xmlns="http://www.w3.org/2000/svg" width="19.313" height="19.264" viewBox="0 0 19.313 19.264">
-                                                        <path fill="currentColor" d="M13.724,10.568,10.771,8.351v8.712l2.953-2.217,2.856-2.139Zm0,0L10.771,8.351v8.712l2.953-2.217,2.856-2.139Zm0,0L10.771,8.351v8.712l2.953-2.217,2.856-2.139ZM11.739,5.03V3.075a9.631,9.631,0,0,0-5.15,2.139L7.964,6.6A7.687,7.687,0,0,1,11.739,5.03ZM6.6,7.964,5.214,6.589a9.631,9.631,0,0,0-2.139,5.15H5.03A7.687,7.687,0,0,1,6.6,7.964ZM5.03,13.675H3.075a9.631,9.631,0,0,0,2.139,5.15L6.6,17.441A7.617,7.617,0,0,1,5.03,13.675ZM6.589,20.2a9.662,9.662,0,0,0,5.15,2.139V20.384a7.687,7.687,0,0,1-3.775-1.568L6.589,20.2Zm15.8-7.493a9.7,9.7,0,0,1-8.664,9.632V20.384a7.744,7.744,0,0,0,0-15.353V3.075A9.7,9.7,0,0,1,22.388,12.707Z" transform="translate(-3.075 -3.075)"/>
-                                                    </svg>
-                                                    <a href="javascript:;" class="ml-2" data-lesson-id="{{ $lesson->id }}" data-content="{{ $lesson->description }}" data-video-url="{{ $this->getVideoEmbedURL($lesson->video_type, $lesson->video_link) }}">{{ $lesson->title }}</a>
+                                                    <span class="w-5">
+                                                        <svg class="mt-1" xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 19 19">
+                                                            <path fill="currentColor" d="M13.724,10.568,10.771,8.351v8.712l2.953-2.217,2.856-2.139Zm0,0L10.771,8.351v8.712l2.953-2.217,2.856-2.139Zm0,0L10.771,8.351v8.712l2.953-2.217,2.856-2.139ZM11.739,5.03V3.075a9.631,9.631,0,0,0-5.15,2.139L7.964,6.6A7.687,7.687,0,0,1,11.739,5.03ZM6.6,7.964,5.214,6.589a9.631,9.631,0,0,0-2.139,5.15H5.03A7.687,7.687,0,0,1,6.6,7.964ZM5.03,13.675H3.075a9.631,9.631,0,0,0,2.139,5.15L6.6,17.441A7.617,7.617,0,0,1,5.03,13.675ZM6.589,20.2a9.662,9.662,0,0,0,5.15,2.139V20.384a7.687,7.687,0,0,1-3.775-1.568L6.589,20.2Zm15.8-7.493a9.7,9.7,0,0,1-8.664,9.632V20.384a7.744,7.744,0,0,0,0-15.353V3.075A9.7,9.7,0,0,1,22.388,12.707Z" transform="translate(-3.075 -3.075)"/>
+                                                        </svg>
+                                                    </span>
+                                                    <a href="javascript:;" class="ml-2" data-lesson-id="{{ $lesson->id }}" data-content="{!! htmlspecialchars($lesson->description) !!}" data-video-url="{{ $this->getVideoEmbedURL($lesson->video_type, $lesson->video_link) }}">{!! $lesson->title !!}</a>
                                                 </div>
-                                                <div class="text-sm">{{ $this->getLessonVideoDuration($lesson->video_duration) }}</div>
+                                                <div class="text-sm w-20 text-right">{{ $this->getLessonVideoDuration($lesson->video_duration) }}</div>
                                             </li>
                                         @endforeach
                                     </ul>
@@ -160,12 +162,14 @@
                                     @endphp
                                     @foreach($questions as $question)
                                         @php
-                                            $quiz_options = [];
+                                            $quiz_option_id = [];
+                                            $quiz_option_text = [];
                                             foreach($question->quiz_options as $quiz_option) {
-                                                $quiz_options[] = $quiz_option->description;
+                                                $quiz_option_id[] = $quiz_option->id;
+                                                $quiz_option_text[] = $quiz_option->description;
                                             }
                                         @endphp
-                                        <li class="lesson-quiz-item quiz-item flex py-1 px-3 justify-between hover:bg-gray-200 hover:rounded-2xl">
+                                        <li class="lesson-quiz-item quiz-item flex py-1 px-3 justify-between hover:bg-gray-200 hover:rounded-2xl  {{ $this->isLessonCompleted($question->id) ? 'text-green-700' : '' }}">
                                             <div class="flex">
                                                 <svg class="mt-1" xmlns="http://www.w3.org/2000/svg" width="19.313" height="19.313" viewBox="0 0 19.313 19.313">
                                                     <g transform="translate(-8.2 -8.2)">
@@ -175,7 +179,7 @@
                                                         </g>
                                                     </g>
                                                 </svg>
-                                                <a href="javascript:;" class="ml-2" data-question-id="{{ $question->id }}" data-description="{{ $question->description }}" data-content="{{ json_encode($quiz_options) }}">{{ $question->name }}</a>
+                                                <a href="javascript:;" class="ml-2" data-question-id="{{ $question->id }}" data-description="{!! htmlspecialchars($question->description) !!}" data-question-option-ids="{{ json_encode($quiz_option_id) }}" data-question-options="{{ json_encode($quiz_option_text) }}">{{ $question->name }}</a>
                                             </div>
                                             <div class="text-sm">{{ $question->points }} {{ __('Points') }}</div>
                                         </li>
@@ -242,6 +246,7 @@
                 $('div#lesson_section iframe#lesson_video').attr('src', $(lesson_obj).data('video-url'));
             }
 
+            // clicked a lesson
             $('li.lesson-item').on('click', function() {
                 const lesson_obj = $(this).find('a');
                 $('div#quiz_section').addClass('hidden');
@@ -256,7 +261,7 @@
                 $(this).addClass('active');
             });
 
-            // clicked a lesson or quiz
+            // clicked a quiz
             $('li.quiz-item').on('click', function() {
                 const quiz_obj = $(this).find('a');
                 $('div#lesson_section').addClass('hidden');
@@ -266,10 +271,11 @@
                 $('div#quiz_section div#quiz_description').html($(quiz_obj).data('description'));
 
                 var quiz_list = '';
-                const quizzes = $(quiz_obj).data('content');
+                const quizzes = $(quiz_obj).data('question-options');
+                const quiz_ids = $(quiz_obj).data('question-option-ids');
                 $.each(quizzes, function(index, quiz) {
                     quiz_list += `
-                        <li class="rounded-3xl border border-gray-300 p-2 mb-3 cursor-pointer hover:bg-purple-100">
+                        <li data-question-option-id="${quiz_ids[index]}" class="rounded-3xl border border-gray-300 p-2 mb-3 cursor-pointer hover:bg-purple-100">
                             <div class="flex">
                                 <span class="quiz-index rounded-full border w-10 h-10 p-0.5 pt-1.5 text-center border-gray-600">${String.fromCharCode(index + 65)}</span>
                                 <span class="ml-5 mt-2">${quiz}</span>
@@ -312,7 +318,7 @@
                         lesson_id: $(active_lesson).find('a').data('lesson-id')
                     },
                     success: function(response) {
-                        console.log(response);
+                        $(active_lesson).addClass('text-green-700');
                         var next_lesson = $(active_lesson).next();
                         if ( ! next_lesson.hasClass('lesson-quiz-item') ) {
                             // if there is no next lesson, close the current accordion and then open the next accordion
@@ -341,12 +347,42 @@
                 const active_quiz = $('li.lesson-quiz-item.active');
                 const next_quiz = $(active_quiz).next();
 
-                if ( ! next_quiz.hasClass('lesson-quiz-item') ) {
-                    $('div#lesson_quiz_section').addClass('hidden');
-                    $('div#congratulation_section').removeClass('hidden');
-                    return;
-                }
-                $(next_quiz).click();
+                var question_options = [];
+                $.each($('div#question_list').find('li'), function(index, question_option) {
+                    question_options.push({
+                        id: $(question_option).data('question-option-id'),
+                        value: $(question_option).hasClass('active') ? 1 : 0
+                    })
+                });
+
+                $.ajax({
+                    type: 'POST',
+                    url: '{{ route('student.question.complete') }}',
+                    dataType: 'text',
+                    async: false,
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    data: {
+                        course_id: '{{ $course->id }}',
+                        question_id: $(active_quiz).find('a').data('question-id'),
+                        question_options: question_options
+                    },
+                    success: function(response) {
+                        $(active_quiz).addClass('text-green-700');
+                        if ( ! next_quiz.hasClass('lesson-quiz-item') ) {
+                            $('div#lesson_quiz_section').addClass('hidden');
+                            $('div#congratulation_section').removeClass('hidden');
+                            return;
+                        }
+                        $(next_quiz).click();
+                    },
+                    error: function(jq, status, data) {
+                        console.log('question complete - error: ' + data.toString());
+                    }
+                })
+
+
             })
         });
     </script>

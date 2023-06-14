@@ -109,6 +109,35 @@ class CourseService
 
     }
 
+    public function completeQuestion($course_id, $question_id, $quiz_options): void
+    {
+        $student = auth()->user();
+        $is_completed = $student->student_questions()->where('course_id', $course_id)->where('question_id', $question_id)->delete();
+        foreach($quiz_options as $quiz_option) {
+            $student->student_questions()->create([
+                'course_id' => $course_id,
+                'question_id' => $question_id,
+                'question_option_id' => $quiz_option['id'],
+                'answer' => $quiz_option['value'],
+            ]);
+        }
+
+    }
+
+    public function isLessonCompleted($lesson_id): bool
+    {
+        $student = auth()->user();
+        $is_completed = $student->student_lessons->where('lesson_id', $lesson_id);
+        return (bool)count($is_completed);
+    }
+
+    public function isQuestionCompleted($question_id): bool
+    {
+        $student = auth()->user();
+        $is_completed = $student->student_questions->where('question_id', $question_id);
+        return (bool)count($is_completed);
+    }
+
     public function getCourseProgressPercent(Course $course): int
     {
         $total_lessons = count($course->lessons);
