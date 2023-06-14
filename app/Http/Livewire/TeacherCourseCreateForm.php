@@ -21,6 +21,7 @@ class TeacherCourseCreateForm extends Component
         $this->state['course_title'] = $this->course->title;
         $this->state['industry_id'] = $this->course->industry_id;
         $this->state['price'] = $this->course->price;
+        $this->state['pass_percent'] = $this->course->pass_percent;
         $this->state['course_description'] = $this->course->description;
         $this->industries = Industry::orderBy('name')->get();
     }

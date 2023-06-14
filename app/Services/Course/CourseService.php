@@ -6,7 +6,9 @@ use App\Models\Course;
 use App\Models\Topic;
 use App\Models\Lesson;
 use App\Models\Question;
+use App\Models\QuestionOption;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\DB;
 use Google_Client;
 use Google_Service_YouTube;
 use GuzzleHttp\Client;
@@ -21,10 +23,55 @@ class CourseService
     public function getCourses($type): Collection
     {
         if ($type == 'publish')
-            $course = Course::with('lessons')->where('is_published', 1)->get();
-        else
-            $course = Course::with('lessons')->where('is_published', 0)->get();
-        return $course;
+            $courses = Course::with('lessons')->where('is_published', 1)->get();
+        elseif ($type == 'draft')
+            $courses = Course::with('lessons')->where('is_published', 0)->get();
+        elseif ($type == 'progress') {
+            /*
+            SELECT DISTINCT C.* FROM courses C
+            LEFT JOIN lessons L ON C.id = L.course_id
+            LEFT JOIN student_lessons S ON c.id = S.course_id AND S.lesson_id = L.id AND s.student_id = 31
+            WHERE S.course_id IS NULL
+            */
+
+            $student_id = auth()->user()->id;
+            $courses = Course::select('courses.*')
+                ->leftJoin('lessons', 'courses.id', '=', 'lessons.course_id')
+                ->leftJoin('student_lessons', function ($join) use ($student_id) {
+                    $join->on('courses.id', '=', 'student_lessons.course_id')
+                        ->on('student_lessons.lesson_id', '=', 'lessons.id')
+                        ->where('student_lessons.student_id', '=', $student_id);
+                })
+                ->whereNull('student_lessons.course_id')
+                ->distinct()
+                ->with('lessons')
+                ->with('questions')
+                ->with('assignedTeacher')
+                ->get();
+        }
+        else {
+            /*
+            SELECT * FROM courses C WHERE id NOT IN (
+                SELECT DISTINCT C.id FROM courses C
+                LEFT JOIN lessons L ON C.id = L.course_id
+                LEFT JOIN student_lessons S ON c.id = S.course_id AND S.lesson_id = L.id AND s.student_id = 31
+                WHERE S.course_id IS NULL
+            )
+             */
+            $student_id = auth()->user()->id;
+            $progress_courses_id = Course::select('courses.id')
+                ->leftJoin('lessons', 'courses.id', '=', 'lessons.course_id')
+                ->leftJoin('student_lessons', function ($join) use ($student_id) {
+                    $join->on('courses.id', '=', 'student_lessons.course_id')
+                        ->on('student_lessons.lesson_id', '=', 'lessons.id')
+                        ->where('student_lessons.student_id', '=', $student_id);
+                })
+                ->whereNull('student_lessons.course_id')
+                ->distinct();
+            $courses = Course::whereNotIn('id', $progress_courses_id)->get();
+        }
+
+        return $courses;
     }
 
     public function getCourseVideoDuration(Course $course): string
@@ -33,17 +80,107 @@ class CourseService
             ->where('course_id', $course->id)
             ->value('total_duration');
 
-        $hours = floor($video_duration / 3600);
-        $minutes = floor(($video_duration / 60) % 60);
-        $seconds = $video_duration % 60;
+        return $this->convertDurationFromSeconds($video_duration);
+    }
 
-        $formatted_minutes = str_pad(strval($minutes), 2, '0', STR_PAD_LEFT);
-        $formatted_seconds = str_pad(strval($seconds), 2, '0', STR_PAD_LEFT);
+    public function getTopicVideoDuration(Topic $topic): string
+    {
+        $video_duration = Lesson::selectRaw('SUM(video_duration) as total_duration')
+            ->where('topic_id', $topic->id)
+            ->value('total_duration');
 
-        if ($hours == 0)
-            return $formatted_minutes . 'm ' . $formatted_seconds . 's';
-        else
-            return $hours .'h ' . $formatted_minutes . 'm ' . $formatted_seconds . 's';
+        return is_null($video_duration) ? '-' : $this->convertDurationFromSeconds($video_duration);
+    }
+
+    public function getLessonVideoDuration(int $video_duration): string
+    {
+        return $this->convertDurationFromSeconds($video_duration);
+    }
+
+    public function completeLesson($course_id, $lesson_id): void
+    {
+        $student = auth()->user();
+        $is_completed = $student->student_lessons()->where('course_id', $course_id)->where('lesson_id', $lesson_id)->exists();
+        if ( !$is_completed) {
+            $student->student_lessons()->create([
+                'course_id' => $course_id,
+                'lesson_id' => $lesson_id
+            ]);
+        }
+
+    }
+
+    public function completeQuestion($course_id, $question_id, $quiz_options, $is_latest_question): bool
+    {
+        $student = auth()->user();
+        $student->student_questions()->where('course_id', $course_id)->where('question_id', $question_id)->delete();
+        foreach($quiz_options as $quiz_option) {
+            $student->student_questions()->create([
+                'course_id' => $course_id,
+                'question_id' => $question_id,
+                'question_option_id' => $quiz_option['id'],
+                'answer' => $quiz_option['value'],
+            ]);
+        }
+
+        if ($is_latest_question)
+            return $this->isPassedFromCourseExam(Course::find($course_id));
+        return true;
+    }
+
+    public function isPassedFromCourseExam(Course $course): bool
+    {
+        $student_id = auth()->user()->id;
+        $course_id = $course->id;
+
+        $total_points = 0;
+        $correct_points = 0;
+
+        $query = "
+                SELECT id, points, SUM(1) quiz_option_nums, SUM(result) correct_option_nums FROM (
+                    SELECT C.title, Q.id, Q.name, Q.points, QO.description, QO.answer, SQ.question_id, SQ.answer student_answer,
+                        IF(Q.id = SQ.question_id AND QO.answer = SQ.answer, 1, 0) result
+                    FROM courses C
+                    LEFT JOIN questions Q ON C.id = Q.course_id
+                    LEFT JOIN question_options QO ON Q.id = QO.question_id
+                    LEFT JOIN student_questions SQ ON C.id = SQ.course_id AND Q.id = SQ.question_id AND QO.id = SQ.question_option_id AND SQ.student_id = '$student_id'
+                    WHERE C.id = '$course_id'
+                ) T GROUP BY T.id";
+        $questions = DB::select($query);
+        foreach($questions as $question) {
+            $total_points += $question->points;
+            $correct_points += $question->quiz_option_nums == $question->correct_option_nums ? $question->points : 0;
+        }
+        $student_exam_percent = $total_points == 0 ? 100 : intval($correct_points / $total_points * 100);
+        return $student_exam_percent >= $course->pass_percent;
+    }
+
+    public function clearQuestion($course_id): void
+    {
+        $student = auth()->user();
+        $student->student_questions()->where('course_id', $course_id)->delete();
+    }
+
+    public function isLessonCompleted($lesson_id): bool
+    {
+        $student = auth()->user();
+        $is_completed = $student->student_lessons->where('lesson_id', $lesson_id);
+        return (bool)count($is_completed);
+    }
+
+    public function isQuestionCompleted($question_id): bool
+    {
+        $student = auth()->user();
+        $is_completed = $student->student_questions->where('question_id', $question_id);
+        return (bool)count($is_completed);
+    }
+
+    public function getCourseProgressPercent(Course $course): int
+    {
+        $total_lessons = count($course->lessons);
+        $student = auth()->user();
+        $completed_lessons = count($student->student_lessons->where('course_id', $course->id));
+        return $total_lessons == 0 ? 0 : intval($completed_lessons / $total_lessons * 100);
     }
 
     /**
@@ -69,6 +206,7 @@ class CourseService
         $course = Course::create([
             'title' => $data['course_title'],
             'price'  => $data['course_price'],
+            'pass_percent'  => $data['course_pass_percent'],
             'description'  => $data['course_description'],
             'industry_id'  => $data['industry_id'],
             'image'  => $data['course_image'],
@@ -124,6 +262,7 @@ class CourseService
         $course->fill([
             'title' => $data['course_title'],
             'price'  => $data['course_price'],
+            'pass_percent'  => $data['course_pass_percent'],
             'description'  => $data['course_description'],
             'industry_id'  => $data['industry_id'],
             'image'  => $data['course_image'],
@@ -187,7 +326,7 @@ class CourseService
             }
         }
 
-        // if some topics removed from UI, remove the topics from database
+        // if some quizzes removed from UI, remove the quizzes from database
         $quiz_ids = [];
         foreach($data['quiz_list'] as $quiz_info) {
             $quiz_ids[] = $quiz_info['id'];
@@ -215,15 +354,27 @@ class CourseService
                 $question->save();
             }
 
-            $question->quiz_options()->delete();
-
+            $answer_ids = explode('$$$', $quiz_info['answer_id']);
             $answers = explode('$$$', $quiz_info['answer']);
             $answer_values = explode('$$$', $quiz_info['answer_values']);
+            $question->quiz_options()->whereNotIn('id', $answer_ids)->delete();
+
             foreach($answers as $key => $answer) {
-                $question->quiz_options()->create([
-                    'description' => $answer,
-                    'answer' => $answer_values[$key]
-                ]);
+                if ($answer_ids[$key] == 0) {
+                    $question->quiz_options()->create([
+                        'description' => $answer,
+                        'answer' => $answer_values[$key]
+                    ]);
+                }
+                else {
+                    $quiz_option = QuestionOption::find($answer_ids[$key]);
+                    $quiz_option->fill([
+                        'description' => $answer,
+                        'answer' => $answer_values[$key]
+                    ]);
+                    $quiz_option->save();
+                }
+
             }
         }
 
@@ -234,6 +385,33 @@ class CourseService
         $image_name = basename($image_path);
         if ($image_name != 'course.jpg')
             unlink(public_path('upload/course/') . $image_name);
+    }
+
+    public function getYoutubeEmbedURL(string $video_url): string
+    {
+        $video_id = $this->getYoutubeVideoIdFromUrl($video_url);
+        return 'https://www.youtube.com/embed/' . $video_id;
+    }
+
+    public function getVimeoEmbedURL(string $video_url): string
+    {
+        $video_id = $this->getVimeoIdFromUrl($video_url);
+        return 'https://player.vimeo.com/video/' . $video_id;
+    }
+
+    private function convertDurationFromSeconds(int $video_duration): string
+    {
+        $hours = floor($video_duration / 3600);
+        $minutes = floor(($video_duration / 60) % 60);
+        $seconds = $video_duration % 60;
+
+        $formatted_minutes = str_pad(strval($minutes), 2, '0', STR_PAD_LEFT);
+        $formatted_seconds = str_pad(strval($seconds), 2, '0', STR_PAD_LEFT);
+
+        if ($hours == 0)
+            return $formatted_minutes . 'm ' . $formatted_seconds . 's';
+        else
+            return $hours .'h ' . $formatted_minutes . 'm ' . $formatted_seconds . 's';
     }
 
     private function getVideoLength($video_type, $video_url): int
@@ -299,5 +477,6 @@ class CourseService
         }
         return '';
     }
+
 
 }

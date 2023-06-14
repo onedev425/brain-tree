@@ -16,7 +16,7 @@ class CoursePolicy
      */
     public function viewAny(User $user): bool
     {
-        if ($user->can('teacher-courses')) {
+        if ($user->can('teacher-courses') || $user->can('student-courses')) {
             return true;
         }
         return false;
@@ -27,7 +27,7 @@ class CoursePolicy
      */
     public function view(User $user, Course $course): bool
     {
-        if ($user->can('teacher-courses')) {
+        if ($user->can('teacher-courses') || $user->can('student-courses')) {
             return true;
         }
         return false;

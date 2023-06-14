@@ -2,8 +2,8 @@
 
 @section('title', __('Courses'))
 
-@section('page_heading', __('Courses') . ' / ' . 'Learn Web Design & Development' )
+@section('page_heading', __('Courses') . ' / ' . $course->title )
 
 @section('content')
-    @livewire('show-student-course-form')
+    @livewire('show-student-course-form', ['course' => $course, 'topics' => $topics, 'quizzes' => $quizzes, 'passed_exam' => $passed_exam])
 @endsection

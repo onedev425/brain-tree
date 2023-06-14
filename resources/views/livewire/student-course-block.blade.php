@@ -7,7 +7,7 @@
     </div>
     <div class="p-4 flex-1">
         <div class="mb-2">
-            <span class="text-xs">{{ $created_by }}</span>
+            <span class="text-xs">{{ $teacher }}</span>
         </div>
         <div class="">
             <h3 class="text-lg leading-normal mb-3 font-bold text-gray-800">
