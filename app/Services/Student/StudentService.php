@@ -182,11 +182,17 @@ class StudentService
         if ($type == 'progress') {
             /*
             SELECT DISTINCT C.* FROM courses C
-            LEFT JOIN lessons L ON C.id = L.course_id
-            LEFT JOIN student_lessons S ON c.id = S.course_id AND S.lesson_id = L.id AND s.student_id = 31
-            WHERE S.course_id IS NULL AND C.assigned_id = 30
+                INNER JOIN student_courses SC ON C.id = SC.course_id
+                LEFT JOIN lessons L ON C.id = L.course_id
+                LEFT JOIN student_lessons S ON c.id = S.course_id AND S.lesson_id = L.id AND S.student_id = '$student_id'
+            WHERE S.course_id IS NULL AND C.assigned_id = '$teacher_id'
             */
+
             $courses = Course::select('courses.*')
+                ->join('student_courses', function ($join) use ($student_id) {
+                    $join->on('courses.id', '=', 'student_courses.course_id')
+                        ->where('student_courses.student_id', '=', $student_id);
+                })
                 ->leftJoin('lessons', 'courses.id', '=', 'lessons.course_id')
                 ->leftJoin('student_lessons', function ($join) use ($student_id) {
                     $join->on('courses.id', '=', 'student_lessons.course_id')
@@ -202,16 +208,39 @@ class StudentService
                 ->get();
         }
         else {
-            $progress_courses_id = Course::select('courses.id')
-                ->leftJoin('lessons', 'courses.id', '=', 'lessons.course_id')
-                ->leftJoin('student_lessons', function ($join) use ($student_id) {
-                    $join->on('courses.id', '=', 'student_lessons.course_id')
-                        ->on('student_lessons.lesson_id', '=', 'lessons.id')
-                        ->where('student_lessons.student_id', '=', $student_id);
+            /*
+             SELECT * FROM courses C
+             INNER JOIN student_courses SC ON C.id = SC.course_id AND SC.student_id = '$student_id'
+             WHERE SC.course_id NOT IN (
+                SELECT DISTINCT C.id FROM courses C
+                    INNER JOIN student_courses SC ON C.id = SC.course_id AND SC.student_id = '$student_id'
+                    LEFT JOIN lessons L ON C.id = L.course_id
+                    LEFT JOIN student_lessons S ON c.id = S.course_id AND S.lesson_id = L.id AND s.student_id = '$student_id'
+                WHERE S.course_id IS NULL
+            )
+             */
+            $courses = Course::select('courses.*')
+                ->join('student_courses', function ($join) use ($student_id) {
+                    $join->on('courses.id', '=', 'student_courses.course_id')
+                        ->where('student_courses.student_id', '=', $student_id);
                 })
-                ->whereNull('student_lessons.course_id')
-                ->distinct();
-            $courses = Course::whereNotIn('id', $progress_courses_id)->where('courses.assigned_id', auth()->user()->id)->get();
+                ->whereNotIn('courses.id', function ($query) use ($student_id) {
+                    $query->select('courses.id')
+                        ->from('courses')
+                        ->join('student_courses', function ($join) use ($student_id) {
+                            $join->on('courses.id', '=', 'student_courses.course_id')
+                                ->where('student_courses.student_id', '=', $student_id);
+                        })
+                        ->leftJoin('lessons', 'courses.id', '=', 'lessons.course_id')
+                        ->leftJoin('student_lessons', function ($join) use ($student_id) {
+                            $join->on('courses.id', '=', 'student_lessons.course_id')
+                                ->on('lessons.id', '=', 'student_lessons.lesson_id')
+                                ->where('student_lessons.student_id', '=', $student_id);
+                        })
+                        ->whereNull('student_lessons.course_id');
+                })
+                ->where('courses.assigned_id', auth()->user()->id)
+                ->get();
         }
 
         return $courses;
