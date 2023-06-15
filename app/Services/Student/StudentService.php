@@ -180,6 +180,12 @@ class StudentService
     {
         $student_id = $student->id;
         if ($type == 'progress') {
+            /*
+            SELECT DISTINCT C.* FROM courses C
+            LEFT JOIN lessons L ON C.id = L.course_id
+            LEFT JOIN student_lessons S ON c.id = S.course_id AND S.lesson_id = L.id AND s.student_id = 31
+            WHERE S.course_id IS NULL AND C.assigned_id = 30
+            */
             $courses = Course::select('courses.*')
                 ->leftJoin('lessons', 'courses.id', '=', 'lessons.course_id')
                 ->leftJoin('student_lessons', function ($join) use ($student_id) {
@@ -188,6 +194,7 @@ class StudentService
                         ->where('student_lessons.student_id', '=', $student_id);
                 })
                 ->whereNull('student_lessons.course_id')
+                ->where('courses.assigned_id', auth()->user()->id)
                 ->distinct()
                 ->with('lessons')
                 ->with('questions')
@@ -204,9 +211,16 @@ class StudentService
                 })
                 ->whereNull('student_lessons.course_id')
                 ->distinct();
-            $courses = Course::whereNotIn('id', $progress_courses_id)->get();
+            $courses = Course::whereNotIn('id', $progress_courses_id)->where('courses.assigned_id', auth()->user()->id)->get();
         }
 
         return $courses;
+    }
+
+    public function getStudentCourseProgressPercent(Course $course, User $student): int
+    {
+        $total_lessons = count($course->lessons);
+        $completed_lessons = count($student->student_lessons->where('course_id', $course->id));
+        return $total_lessons == 0 ? 0 : intval($completed_lessons / $total_lessons * 100);
     }
 }
