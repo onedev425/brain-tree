@@ -4,11 +4,13 @@ namespace App\Services\Student;
 
 use App\Exceptions\EmptyRecordsException;
 use App\Exceptions\InvalidValueException;
+use App\Models\Course;
 use App\Models\StudentRecord;
 use App\Models\User;
 use App\Services\MyClass\MyClassService;
 use App\Services\Print\PrintService;
 use App\Services\User\UserService;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
 
 class StudentService
@@ -172,5 +174,39 @@ class StudentService
                 ]);
             }
         }
+    }
+
+    public function getCourses(User $student, string $type): Collection
+    {
+        $student_id = $student->id;
+        if ($type == 'progress') {
+            $courses = Course::select('courses.*')
+                ->leftJoin('lessons', 'courses.id', '=', 'lessons.course_id')
+                ->leftJoin('student_lessons', function ($join) use ($student_id) {
+                    $join->on('courses.id', '=', 'student_lessons.course_id')
+                        ->on('student_lessons.lesson_id', '=', 'lessons.id')
+                        ->where('student_lessons.student_id', '=', $student_id);
+                })
+                ->whereNull('student_lessons.course_id')
+                ->distinct()
+                ->with('lessons')
+                ->with('questions')
+                ->with('assignedTeacher')
+                ->get();
+        }
+        else {
+            $progress_courses_id = Course::select('courses.id')
+                ->leftJoin('lessons', 'courses.id', '=', 'lessons.course_id')
+                ->leftJoin('student_lessons', function ($join) use ($student_id) {
+                    $join->on('courses.id', '=', 'student_lessons.course_id')
+                        ->on('student_lessons.lesson_id', '=', 'lessons.id')
+                        ->where('student_lessons.student_id', '=', $student_id);
+                })
+                ->whereNull('student_lessons.course_id')
+                ->distinct();
+            $courses = Course::whereNotIn('id', $progress_courses_id)->get();
+        }
+
+        return $courses;
     }
 }
