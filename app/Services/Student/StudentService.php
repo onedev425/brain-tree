@@ -217,7 +217,7 @@ class StudentService
                     LEFT JOIN lessons L ON C.id = L.course_id
                     LEFT JOIN student_lessons S ON c.id = S.course_id AND S.lesson_id = L.id AND s.student_id = '$student_id'
                 WHERE S.course_id IS NULL
-            )
+            ) AND C.assigned_id = '$teacher_id'
              */
             $courses = Course::select('courses.*')
                 ->join('student_courses', function ($join) use ($student_id) {
