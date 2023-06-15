@@ -207,7 +207,7 @@ class StudentService
                 ->with('assignedTeacher')
                 ->get();
         }
-        else {
+        elseif ($type == 'completed') {
             /*
              SELECT * FROM courses C
              INNER JOIN student_courses SC ON C.id = SC.course_id AND SC.student_id = '$student_id'
@@ -242,6 +242,9 @@ class StudentService
                 ->where('courses.assigned_id', auth()->user()->id)
                 ->get();
         }
+        else {
+            $courses = $student->student_courses->load('course.lessons', 'course.questions');
+        }
 
         return $courses;
     }
@@ -251,5 +254,28 @@ class StudentService
         $total_lessons = count($course->lessons);
         $completed_lessons = count($student->student_lessons->where('course_id', $course->id));
         return $total_lessons == 0 ? 0 : intval($completed_lessons / $total_lessons * 100);
+    }
+
+    public function getPointsOfStudentExam(int $course_id, int $student_id): int
+    {
+        $correct_points = 0;
+
+        $query = "
+                SELECT id, points, SUM(1) quiz_option_nums, SUM(result) correct_option_nums FROM (
+                    SELECT C.title, Q.id, Q.name, Q.points, QO.description, QO.answer, SQ.question_id, SQ.answer student_answer,
+                        IF(Q.id = SQ.question_id AND QO.answer = SQ.answer, 1, 0) result
+                    FROM courses C
+                    INNER JOIN student_courses SC ON C.id = SC.course_id AND SC.student_id = '$student_id'
+                    LEFT JOIN questions Q ON C.id = Q.course_id
+                    LEFT JOIN question_options QO ON Q.id = QO.question_id
+                    LEFT JOIN student_questions SQ ON C.id = SQ.course_id AND Q.id = SQ.question_id AND QO.id = SQ.question_option_id AND SQ.student_id = '$student_id'
+                    WHERE C.id = '$course_id'
+                ) T GROUP BY T.id";
+        $questions = DB::select($query);
+        foreach($questions as $question) {
+            $correct_points += $question->quiz_option_nums == $question->correct_option_nums ? $question->points : 0;
+        }
+
+        return $correct_points;
     }
 }

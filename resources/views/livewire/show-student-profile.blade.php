@@ -53,13 +53,13 @@
                         <th class="capitalize p-4 whitespace-nowrap font-normal text-left">{{ __('Action') }}</th>
                     </thead>
                     <tbody class="">
-                        @foreach($progress_courses as $course)
+                        @foreach($all_courses as $course)
                             <tr class="border-t">
-                                <td class="p-4 whitespace-nowrap text-start">{{ $course->title }}</td>
-                                <td class="p-4 whitespace-nowrap text-start">{{ $course->progress }}</td>
-                                <td class="p-4 whitespace-nowrap text-start">{{ $course->mark }}</td>
+                                <td class="p-4 whitespace-nowrap text-start">{{ $course->course->title }}</td>
+                                <td class="p-4 whitespace-nowrap text-start">{{ $this->getStudentCourseProgressPercent($course->course, $student) }}%</td>
+                                <td class="p-4 whitespace-nowrap text-start">{{ $this->getPointsOfStudentExam($course->course, $student) }} / {{ $this->getCourseTotalPoints($course->course) }}</td>
                                 <td class="p-4 whitespace-nowrap text-start">
-                                    <a href="javascript:;" class="open_quiz_dialog_link text-purple-500">Show answers</a>
+                                    <a href="javascript:;" class="open_quiz_dialog_link text-purple-500">{{ __('Show answers') }}</a>
                                 </td>
                             </tr>
                         @endforeach

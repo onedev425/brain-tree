@@ -13,6 +13,7 @@ class ShowStudentProfile extends Component
     public User $student;
     public Collection $progress_courses;
     public Collection $completed_courses;
+    public Collection $all_courses;
     private StudentService $studentService;
     public string $activeTab = 'progress';
 
@@ -21,6 +22,7 @@ class ShowStudentProfile extends Component
         $this->studentService = $studentService;
         $this->progress_courses = $this->studentService->getCourses($this->student, 'progress');
         $this->completed_courses = $this->studentService->getCourses($this->student, 'completed');
+        $this->all_courses = $this->studentService->getCourses($this->student, 'all');
     }
 
     public function setTab($tab)
@@ -39,5 +41,15 @@ class ShowStudentProfile extends Component
             $this->studentService = app(StudentService::class);
         }
         return $this->studentService->getStudentCourseProgressPercent($course, $student);
+    }
+
+    public function getCourseTotalPoints(Course $course): int
+    {
+        return $course->questions->sum('points');
+    }
+
+    public function getPointsOfStudentExam(Course $course, User $student): int
+    {
+        return $this->studentService->getPointsOfStudentExam($course->id, $student->id);
     }
 }
