@@ -3,6 +3,7 @@
 namespace App\Http\Livewire;
 
 use App\Exceptions\InvalidClassException;
+use App\Services\Student\StudentService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
@@ -16,9 +17,11 @@ class StudentListTable extends Component
     public string $unique_id;
     public string $search = '';
     public int $per_page = 10;
+    private StudentService $studentService;
 
-    public function mount($unique_id = null, $per_page = 10)
+    public function mount(StudentService $studentService, $unique_id = null, $per_page = 10)
     {
+        $this->studentService = $studentService;
         $this->unique_id = $unique_id ?? Str::random(10);
         $this->per_page = $per_page;
     }
@@ -30,23 +33,7 @@ class StudentListTable extends Component
 
     public function render()
     {
-        $students = DB::table('users as U')
-            ->select('U.id', 'U.name', 'U.created_at', 'U.profile_photo_path')
-            ->joinSub(function ($query) {
-                $query->select('C.id', 'SL.student_id AS lesson_student_id', 'SQ.student_id AS question_student_id')
-                    ->from('courses as C')
-                    ->leftJoin('student_lessons as SL', 'C.id', '=', 'SL.course_id')
-                    ->leftJoin('student_questions as SQ', 'C.id', '=', 'SQ.course_id')
-                    ->where('C.assigned_id', 30);
-            }, 'C', function ($join) {
-                $join->on('U.id', '=', 'C.lesson_student_id')
-                    ->orOn('U.id', '=', 'C.question_student_id');
-            });
-        if ($this->search != '')
-            $students = $students->where('U.name', 'LIKE', '%'. $this->search . '%');
-        $students = $students->groupBy('U.id', 'U.name', 'U.created_at', 'U.profile_photo_path');
-
-        //$users = DB::table('users as U')->where('U.name', $this->search);
+        $students = $this->studentService->getStudentsOfTeacher($this->search);
         $students = $students->paginate(10);
         return view('livewire.student-list-table', [
             'students' => $students,

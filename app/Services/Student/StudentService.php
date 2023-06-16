@@ -2,10 +2,8 @@
 
 namespace App\Services\Student;
 
-use App\Exceptions\EmptyRecordsException;
 use App\Exceptions\InvalidValueException;
 use App\Models\Course;
-use App\Models\StudentRecord;
 use App\Models\User;
 use App\Services\MyClass\MyClassService;
 use App\Services\Print\PrintService;
@@ -247,6 +245,19 @@ class StudentService
         }
 
         return $courses;
+    }
+
+    public function getStudentsOfTeacher(string $search)
+    {
+        $students = DB::table('users')
+            ->join('student_courses', 'users.id', '=', 'student_courses.student_id')
+            ->join('courses', 'student_courses.course_id', '=', 'courses.id')
+            ->where('courses.assigned_id', '=', auth()->user()->id)
+            ->select('users.*');
+        if ($search != '')
+            $students = $students->where('users.name', 'LIKE', '%'. $search . '%');
+
+        return $students->distinct();
     }
 
     public function getStudentCourseProgressPercent(Course $course, User $student): int
