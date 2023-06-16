@@ -13,19 +13,19 @@ use Illuminate\View\View;
 
 class StudentController extends Controller
 {
-    public $student;
+    public StudentService $studentService;
 
     /**
      * Instance of user service class.
      *
      * @var UserService
      */
-    public $userService;
+    public UserService $userService;
 
     //construct method which assigns studentService to student variable
-    public function __construct(StudentService $student, UserService $userService)
+    public function __construct(StudentService $studentService, UserService $userService)
     {
-        $this->student = $student;
+        $this->studentService = $studentService;
         $this->userService = $userService;
     }
 
@@ -58,7 +58,7 @@ class StudentController extends Controller
     public function store(StudentStoreRequest $request): RedirectResponse
     {
         $this->authorize('create', [User::class, 'student']);
-        $this->student->createStudent($request);
+        $this->studentService->createStudent($request);
 
         return back()->with('success', 'Student Created Successfully');
     }
@@ -83,7 +83,7 @@ class StudentController extends Controller
         $this->authorize('view', [$student, 'student']);
         $data['student'] = $student;
 
-        return $this->student->printProfile($data['student']->name, 'pages.student.print-student-profile', $data);
+        return $this->studentService->printProfile($data['student']->name, 'pages.student.print-student-profile', $data);
     }
 
     /**
@@ -112,7 +112,7 @@ class StudentController extends Controller
         $this->userService->verifyUserIsOfRoleElseNotFound($student, 'student');
         $this->authorize('update', [$student, 'student']);
         $data = $request->except('_token', '_method');
-        $this->student->updateStudent($student, $data);
+        $this->studentService->updateStudent($student, $data);
 
         return back()->with('success', 'Student Updated Successfully');
     }
@@ -127,7 +127,7 @@ class StudentController extends Controller
     {
         $this->userService->verifyUserIsOfRoleElseNotFound($student, 'student');
         $this->authorize('delete', [$student, 'student']);
-        $this->student->deleteStudent($student);
+        $this->studentService->deleteStudent($student);
 
         return back()->with('success', 'Student Deleted Successfully');
     }

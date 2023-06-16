@@ -6,12 +6,12 @@ use Livewire\Component;
 
 class ShowStudentCourseBlock extends Component
 {
-    public $title;
-    public $image;
-    public $created_at;
-    public $lesson_nums;
-    public $quiz_nums;
-    public $progress;
+    public string $title;
+    public string $image;
+    public string $created_at;
+    public int $lesson_nums;
+    public int $quiz_nums;
+    public int $progress;
 
     public function render()
     {

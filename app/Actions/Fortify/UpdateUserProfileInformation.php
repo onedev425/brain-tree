@@ -6,6 +6,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Laravel\Fortify\Contracts\UpdatesUserProfileInformation;
+use Egulias\EmailValidator\Validation\RFCValidation;
 
 class UpdateUserProfileInformation implements UpdatesUserProfileInformation
 {
@@ -18,36 +19,30 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
      */
     public function update($user, array $input)
     {
-        Validator::make($input, [
+        $validation_rules = array(
             'name'        => ['required', 'string', 'max:255'],
-            'email'       => ['required', 'email:rfc,dns', 'max:255', Rule::unique('users')->ignore($user->id)],
-            'photo'       => ['nullable', 'mimes:jpg,jpeg,png', 'max:1024'],
-            'birthday'    => ['required', 'date', 'before:today'],
-            'address'     => ['required', 'string', 'max:500'],
-            'state'       => ['required', 'string', 'max:255'],
-            'city'        => ['required', 'string', 'max:255'],
-            'gender'      => ['required', 'string', 'max:255'],
-            'phone'       => ['nullable', 'string', 'max:255'],
-        ])->validate();
-
-        if (isset($input['photo'])) {
-            $user->updateProfilePhoto($input['photo']);
-        }
+            'email'       => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
+            'phone'       => ['required', 'string', 'max:20'],
+        );
+        if ($user->hasRole('student')) $validation_rules['birthday'] = ['required', 'string', 'max:20'];
+        Validator::make($input, $validation_rules)->validate();
 
         if ($input['email'] !== $user->email &&
             $user instanceof MustVerifyEmail) {
             $this->updateVerifiedUser($user, $input);
         } else {
-            $user->forceFill([
-                'name'        => $input['name'],
-                'email'       => $input['email'],
-                'birthday'    => $input['birthday'],
-                'address'     => $input['address'],
-                'state'       => $input['state'],
-                'city'        => $input['city'],
-                'gender'      => $input['gender'],
-                'phone'       => $input['phone'] ?? '',
-            ])->save();
+            $input_values = array(
+                'name' => $input['name'],
+                'email' => $input['email'],
+                'phone' => $input['phone'],
+                'country_id' => $input['country_id'],
+                'language_id' => $input['language_id'],
+                'industry_id' => $input['industry_id']
+            );
+            if (isset($input['birthday'])) $input_values['birthday'] = $input['birthday'];
+            if (isset($input['experience'])) $input_values['experience'] = $input['experience'];
+
+            $user->forceFill($input_values)->save();
         }
 
         return $user;
@@ -68,12 +63,10 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
             'email_verified_at' => null,
             'birthday'          => $input['birthday'],
             'address'           => $input['address'],
-            'state'             => $input['state'],
-            'city'              => $input['city'],
             'phone'             => $input['phone'] ?? '',
         ])->save();
 
-        $user->sendEmailVerificationNotification();
+        // $user->sendEmailVerificationNotification();
 
         return $user;
     }

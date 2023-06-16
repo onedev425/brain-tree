@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -39,6 +40,10 @@ class User extends Authenticatable implements MustVerifyEmail
         'birthday',
         'address',
         'phone',
+        'country_id',
+        'industry_id',
+        'language_id',
+        'experience',
     ];
 
     /**
@@ -209,4 +214,35 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return 'profile/username';
     }
+
+    public function country(): BelongsTo
+    {
+        return $this->belongsTo(Country::class);
+    }
+
+    public function language(): BelongsTo
+    {
+        return $this->belongsTo(Language::class);
+    }
+
+    public function industry(): BelongsTo
+    {
+        return $this->belongsTo(Industry::class);
+    }
+
+    public function student_courses(): HasMany
+    {
+        return $this->hasMany(StudentCourse::class, 'student_id');
+    }
+
+    public function student_lessons(): HasMany
+    {
+        return $this->hasMany(StudentLesson::class, 'student_id');
+    }
+
+    public function student_questions(): HasMany
+    {
+        return $this->hasMany(StudentQuestion::class, 'student_id');
+    }
+
 }

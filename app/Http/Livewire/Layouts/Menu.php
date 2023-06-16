@@ -32,8 +32,22 @@ class Menu extends Component
                               </g>
                             </svg>',
                 'text'  => 'Courses',
-                'route' => auth()->user()->hasRole('student') ? 'student.course.index' : 'teacher.course.index',
-                'sub_routes' => auth()->user()->hasRole('student') ? ['student.course.index'] : ['teacher.course.index'],
+                'route' => 'teacher.course.index',
+                'sub_routes' => ['teacher.course.index', 'teacher.course.create', 'teacher.course.edit'],
+                'can' => 'teacher-courses'
+            ],
+            [
+                'type'  => 'menu-item',
+                'icon'  => '<svg xmlns="http://www.w3.org/2000/svg" width="30.866" height="27.98" viewBox="0 0 30.866 27.98">
+                              <g id="Icon_feather-book-open" data-name="Icon feather-book-open" transform="translate(-2 -3.5)">
+                                <path id="Path_46" data-name="Path 46" d="M3,4.5h8.66a5.773,5.773,0,0,1,5.773,5.773V30.48a4.33,4.33,0,0,0-4.33-4.33H3Z" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+                                <path id="Path_47" data-name="Path 47" d="M32.433,4.5h-8.66A5.773,5.773,0,0,0,18,10.273V30.48a4.33,4.33,0,0,1,4.33-4.33h10.1Z" transform="translate(-0.567)" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+                              </g>
+                            </svg>',
+                'text'  => 'Courses',
+                'route' => 'student.course.index',
+                'sub_routes' => ['student.course.index', 'student.course.show'],
+                'can' => ['student-courses'],
             ],
             [
                 'type'  => 'menu-item',
@@ -68,19 +82,6 @@ class Menu extends Component
             ],
             [
                 'type'  => 'menu-item',
-                'icon'  => '<svg xmlns="http://www.w3.org/2000/svg" width="25.163" height="30.954" viewBox="0 0 25.163 30.954">
-                              <g id="Icon_feather-book" data-name="Icon feather-book" transform="translate(-5 -2)">
-                                <path id="Path_58" data-name="Path 58" d="M6,29.119A3.619,3.619,0,0,1,9.619,25.5H29.163" transform="translate(0 -0.785)" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
-                                <path id="Path_59" data-name="Path 59" d="M9.619,3H29.163V31.954H9.619A3.619,3.619,0,0,1,6,28.335V6.619A3.619,3.619,0,0,1,9.619,3Z" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
-                              </g>
-                            </svg>',
-                'text'  => 'Assessments',
-                'route' => 'profile.show',
-                'sub_routes' => ['profile.show'],
-                'can'   => 'assessments',
-            ],
-            [
-                'type'  => 'menu-item',
                 'icon'  => '<svg xmlns="http://www.w3.org/2000/svg" width="30.866" height="29" viewBox="0 0 30.866 29">
                               <path id="Icon_feather-bookmark" data-name="Icon feather-bookmark" d="M36.366,31.5,21.933,24,7.5,31.5V7.5c0-1.657,1.846-3,4.124-3H32.242c2.277,0,4.124,1.343,4.124,3Z" transform="translate(-6.5 -3.5)" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
                             </svg>',
@@ -111,6 +112,29 @@ class Menu extends Component
                 'route' => 'settings.index',
                 'sub_routes' => ['settings.index'],
                 'can' => 'settings'
+            ],
+            [
+                'type'    => 'menu-item',
+                'text'    => 'Account Applications',
+                'icon'    => '<svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 512 512" preserveAspectRatio="xMidYMid meet">
+                                <g transform="translate(0,512) scale(0.1,-0.1)" fill="currentColor" stroke="none">
+                                <path d="M1145 4631 c-340 -56 -624 -276 -753 -586 -50 -120 -66 -212 -66 -365 0 -156 13 -227 60 -349 140 -354 493 -604 856 -606 82 0 100 3 124 21 53 39 69 71 69 134 0 44 -5 66 -21 86 -39 52 -67 66 -156 74 -116 11 -172 26
+                                -253 65 -95 47 -154 92 -216 167 -212 255 -195 623 40 859 200 199 483 244 740 117 72 -35 102 -58 182 -139 76 -77 105 -99 133 -104 131 -25 233 97 182 219 -8 18 -44 66 -82 105 -184 195 -406 297 -669 306 -66 2 -142 0 -170 -4z"/>
+                                <path d="M3698 4630 c-135 -21 -275 -77 -394 -155 -89 -60 -228 -198 -250 -250 -51 -123 50 -245 182 -220 28 5 57 27 133 104 80 81 110 104 182 139 258 127 542 82 741 -119 248 -251 250 -642 6 -892 -119 -121 -245 -179 -425 -196
+                                -100 -9 -127 -21 -167 -75 -29 -39 -29 -133 0 -172 45 -61 67 -69 177 -68 405 4 782 310 887 720 66 259 12 557 -141 780 -126 183 -335 328 -557 385 -89 22 -287 33 -374 19z"/>
+                                <path d="M2393 3985 c-201 -36 -383 -134 -524 -282 -120 -126 -203 -277 -246 -449 -24 -95 -24 -333 0 -428 89 -356 354 -626 706 -717 109 -29 274 -35 387 -15 380 66 672 336 776 715 31 110 31 352 0 462 -103 377 -397 649 -769 714
+                                -102 18 -232 18 -330 0z m302 -320 c238 -50 440 -252 490 -490 95 -454 -307 -856 -759 -760 -290 61 -506 328 -506 625 0 237 141 465 350 569 139 68 279 87 425 56z"/>
+                                <path d="M1140 2554 c-19 -3 -71 -12 -115 -21 -570 -112 -1014 -635 -1019 -1200 -1 -121 6 -141 68 -187 27 -21 38 -21 566 -21 528 0 539 0 566 21 53 39 69 71 69 134 0 63 -16 95 -69 134 -27 20 -41 21 -451 24 l-423 3 14 59 c69
+                                296 293 557 575 669 102 41 187 60 315 70 112 8 136 19 178 75 29 39 29 133 0 172 -42 57 -69 69 -157 70 -45 1 -98 0 -117 -2z"/>
+                                <path d="M3775 2547 c-95 -44 -124 -170 -58 -248 35 -41 79 -59 146 -59 81 0 215 -26 310 -60 290 -105 530 -376 601 -677 l14 -62 -423 -3 c-410 -3 -424 -4 -451 -24 -53 -39 -69 -71 -69 -134 0 -63 16 -95 69 -134 27 -21 38 -21 566
+                                -21 528 0 539 0 566 21 62 46 69 66 68 187 -5 500 -353 975 -844 1152 -168 60 -428 93 -495 62z"/>
+                                <path d="M2420 1914 c-201 -26 -408 -102 -565 -207 -83 -56 -108 -77 -203 -170 -225 -222 -363 -540 -366 -844 -1 -121 6 -141 68 -187 27 -21 31 -21 1206 -21 1175 0 1179 0 1206 21 62 46 69 66 68 187 -4 437 -279 874 -681 1080
+                                -189 97 -341 136 -553 141 -80 2 -161 2 -180 0z m303 -329 c374 -65 685 -357 771 -723 l14 -62 -948 0 -948 0 14 60 c39 170 138 343 265 466 225 217 529 312 832 259z"/>
+                                </g>
+                            </svg>',
+                'route' => 'account-applications.index',
+                'sub_routes' => ['account-applications.index'],
+                'can'     => 'menu-account-application',
             ],
 
 
@@ -167,26 +191,6 @@ class Menu extends Component
 //            ],
 //            [
 //                'type'    => 'menu-item',
-//                'text'    => 'Account Applications',
-//                'icon'    => 'fas fa-plus',
-//                'can'     => 'menu-account-application',
-//                'submenu' => [
-//                    [
-//                        'type'  => 'menu-item',
-//                        'text'  => 'View account applications',
-//                        'route' => 'account-applications.index',
-//                        'can'   => 'read applicant',
-//                    ],
-//                    [
-//                        'type'  => 'menu-item',
-//                        'text'  => 'View rejected applications',
-//                        'route' => 'account-applications.rejected-applications',
-//                        'can'   => 'read applicant',
-//                    ],
-//                ],
-//            ],
-//            [
-//                'type'    => 'menu-item',
 //                'text'    => 'Teachers',
 //                'icon'    => 'fas fa-user',
 //                'can'     => 'menu-teacher',
@@ -202,26 +206,6 @@ class Menu extends Component
 //                        'text'  => 'Create teacher',
 //                        'route' => 'teachers.create',
 //                        'can'   => 'create teacher',
-//                    ],
-//                ],
-//            ],
-//            [
-//                'type'    => 'menu-item',
-//                'text'    => 'Admins',
-//                'icon'    => 'fas fa-user',
-//                'can'     => 'menu-admin',
-//                'submenu' => [
-//                    [
-//                        'type'  => 'menu-item',
-//                        'text'  => 'View admins',
-//                        'route' => 'admins.index',
-//                        'can'   => 'read admin',
-//                    ],
-//                    [
-//                        'type'  => 'menu-item',
-//                        'text'  => 'Create admin',
-//                        'route' => 'admins.create',
-//                        'can'   => 'create admin',
 //                    ],
 //                ],
 //            ],

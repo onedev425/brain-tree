@@ -4,28 +4,18 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Course extends Model
+class Topic extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'title', 'description', 'user_id', 'course_id'
+        'description', 'course_id', 'user_id'
     ];
 
-    /**
-     * Get the teacher for the course
-     */
-    public function teacher(): BelongsTo
+    public function lessons(): HasMany
     {
-        return $this->belongsTo(User::class);
-    }
-
-    /**
-     * Get the subject for the course
-     */
-    public function course(): BelongsTo
-    {
-        return $this->belongsTo(Course::class);
+        return $this->hasMany(Lesson::class);
     }
 }

@@ -41,6 +41,12 @@ Route::middleware('auth:sanctum', 'verified', 'App\Http\Middleware\PreventLockAc
     //Pricing routes
     Route::get('pricing', ['App\Http\Controllers\PricingController', 'index'])->name('pricing.index');
 
+    Route::put('teacher_course_publish/{course}', ['App\Http\Controllers\TeacherCourseController', 'publish'])->name('teacher.course.publish');
+
+    Route::post('lesson_complete', ['App\Http\Controllers\StudentCourseController', 'lesson_complete'])->name('student.lesson.complete');
+    Route::post('question_complete', ['App\Http\Controllers\StudentCourseController', 'question_complete'])->name('student.question.complete');
+    Route::post('question_clear', ['App\Http\Controllers\StudentCourseController', 'question_clear'])->name('student.question.clear');
+
     //Teacher Courses routes
     Route::prefix('teacher')->group(function () {
         Route::resource('course', TeacherCourseController::class)->names([
@@ -126,9 +132,6 @@ Route::middleware('auth:sanctum', 'verified', 'App\Http\Middleware\PreventLockAc
     });
 
     Route::get('students/{student}/print', ['App\Http\Controllers\StudentController', 'printProfile'])->name('students.print-profile');
-
-    //admin routes
-    Route::resource('admins', AdminController::class);
 
     //teacher routes
     Route::resource('teachers', TeacherController::class);

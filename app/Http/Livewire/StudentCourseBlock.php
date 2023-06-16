@@ -6,9 +6,10 @@ use Livewire\Component;
 
 class StudentCourseBlock extends Component
 {
+    public $course_id;
     public $title;
     public $image;
-    public $created_by;
+    public $teacher;
     public $lesson_nums;
     public $quiz_nums;
     public $progress;
