@@ -159,7 +159,7 @@
                                 <ul>
                                     @php
                                         $questions = $course->questions()->with('quiz_options')->get();
-                                        $prev_quiz_processed = true;
+                                        $prev_quiz_processed = $this->isAllLessonCompleted($course);
                                     @endphp
                                     @foreach($questions as $question)
                                         @php
@@ -347,6 +347,11 @@
                                 $('div#congratulation_section').removeClass('hidden');
                                 return;
                             }
+                        }
+                        if ( ! $(next_lesson).hasClass('lesson-item')) {
+                            // if next lesson is not lesson and all lessons was completed, go to first question.
+                            if ($('li.lesson-quiz-item.lesson-item').length == $('li.lesson-quiz-item.lesson-item.text-green-700').length)
+                                $(next_lesson).addClass('quiz-item hover:bg-gray-200 hover:rounded-2xl');
                         }
                         $(next_lesson).click();
                     },

@@ -47,6 +47,11 @@ class ShowStudentCourseForm extends Component
         return $this->courseService->isLessonCompleted($lesson_id);
     }
 
+    public function isAllLessonCompleted(Course $course): bool
+    {
+        return $this->courseService->isAllLessonCompleted($course);
+    }
+
     public function isQuestionCompleted($question_id): bool
     {
         return $this->courseService->isQuestionCompleted($question_id);
