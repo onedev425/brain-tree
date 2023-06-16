@@ -20,10 +20,10 @@
                 <span class="text-xs">{{ $lesson_nums }} Lessons | {{ $quiz_nums }} Quizzes</span>
                 <span class="text-xs">{{ $progress }}%</span>
             </div>
-            <div class="mt-2">
-                <button class="md:px-5 bg-red-700 text-xs font-semibold border-transparent uppercase hover:bg-opacity-90 active:bg-opacity-70 text-white py-2 px-4 border-2 rounded-md my-3">
-                    {{ __('Resume') . ' >' }}
-                </button>
+            <div class="mt-6">
+                <a  href="{{ route('student.course.show', $course_id) }}" class="md:px-5 bg-red-700 text-xs font-semibold border-transparent uppercase hover:bg-opacity-90 active:bg-opacity-70 text-white py-2 px-4 border-2 rounded-md my-3">
+                    {{ __('Enter Course') . ' >' }}
+                </a>
             </div>
         </div>
     </div>

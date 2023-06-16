@@ -179,65 +179,114 @@ class StudentService
         $student_id = $student->id;
         if ($type == 'progress') {
             /*
-            SELECT DISTINCT C.* FROM courses C
-                INNER JOIN student_courses SC ON C.id = SC.course_id
-                LEFT JOIN lessons L ON C.id = L.course_id
-                LEFT JOIN student_lessons S ON c.id = S.course_id AND S.lesson_id = L.id AND S.student_id = '$student_id'
-            WHERE S.course_id IS NULL AND C.assigned_id = '$teacher_id'
-            */
+            SELECT C.* FROM courses C INNER JOIN
+            (
+                SELECT M.course_id, SUM(1) question_nums, SUM(M.is_passed) passed_question_nums, IF(SUM(1) = SUM(M.is_passed), 1, 0) is_completed FROM (
+                    SELECT *, IF((R.question_type = 'multi' OR R.question_type = 'boolean') AND R.quiz_option_nums = R.correct_option_nums, 1, IF(R.question_type = 'single' AND R.correct_option_nums = 1, 1, 0)) is_passed FROM (
+                        SELECT course_id, question_id, question_text, question_type, points, SUM(1) quiz_option_nums, SUM(exam_result) correct_option_nums FROM (
+                                SELECT C.id course_id, Q.id question_id, Q.name question_text, Q.type question_type, Q.points, QO.description, QO.answer, SQ.question_id student_question_id,
+                                        SQ.answer student_answer, IF(Q.id = SQ.question_id AND (Q.type = 'multi' OR Q.type = 'boolean') AND QO.answer = SQ.answer, 1,
+                                            IF(Q.id = SQ.question_id AND Q.type = 'single', QO.answer * SQ.answer, 0)) exam_result
+                                FROM courses C
+                                INNER JOIN student_courses SC ON C.id = SC.course_id AND SC.student_id = '31'
+                                LEFT JOIN questions Q ON C.id = Q.course_id
+                                LEFT JOIN question_options QO ON Q.id = QO.question_id
+                                LEFT JOIN student_questions SQ ON C.id = SQ.course_id AND Q.id = SQ.question_id AND QO.id = SQ.question_option_id AND SQ.student_id = '31'
+                        ) T GROUP BY T.course_id, T.question_id, T.question_text, T.question_type, T.points
+                    ) R
+                ) M GROUP BY M.course_id
+            ) P ON C.id = P.course_id WHERE P.is_completed = 0 AND C.assigend_id = '$teacher_id'
+             */
 
-            $courses = Course::select('courses.*')
-                ->join('student_courses', function ($join) use ($student_id) {
-                    $join->on('courses.id', '=', 'student_courses.course_id')
-                        ->where('student_courses.student_id', '=', $student_id);
+            $courses =  Course::select('C.*')
+                ->from('courses AS C')
+                ->joinSub(function ($subquery) use ($student_id) {
+                    $subquery->select('M.course_id')
+                        ->selectRaw('SUM(1) AS question_nums')
+                        ->selectRaw('SUM(M.is_passed) AS passed_question_nums')
+                        ->selectRaw('IF(SUM(1) = SUM(M.is_passed), 1, 0) AS is_completed')
+                        ->from(function ($subquery) use ($student_id) {
+                            $subquery->select('*')
+                                ->selectRaw('IF((R.question_type = "multi" OR R.question_type = "boolean") AND R.quiz_option_nums = R.correct_option_nums, 1, IF(R.question_type = "single" AND R.correct_option_nums = 1, 1, 0)) AS is_passed')
+                                ->from(function ($subquery) use ($student_id) {
+                                    $subquery->select('T.course_id', 'T.question_id', 'T.question_text', 'T.question_type', 'T.points')
+                                        ->selectRaw('SUM(1) AS quiz_option_nums')
+                                        ->selectRaw('SUM(exam_result) AS correct_option_nums')
+                                        ->from(function ($subquery) use ($student_id) {
+                                            $subquery->select('C.id AS course_id', 'Q.id AS question_id', 'Q.name AS question_text', 'Q.type AS question_type', 'Q.points', 'QO.description', 'QO.answer', 'SQ.question_id AS student_question_id')
+                                                ->selectRaw('SQ.answer AS student_answer')
+                                                ->selectRaw('IF(Q.id = SQ.question_id AND (Q.type = "multi" OR Q.type = "boolean") AND QO.answer = SQ.answer, 1, IF(Q.id = SQ.question_id AND Q.type = "single", QO.answer * SQ.answer, 0)) AS exam_result')
+                                                ->from('courses AS C')
+                                                ->join('student_courses AS SC', 'C.id', '=', 'SC.course_id')
+                                                ->leftJoin('questions AS Q', function ($join) {
+                                                    $join->on('C.id', '=', 'Q.course_id');
+                                                })
+                                                ->leftJoin('question_options AS QO', 'Q.id', '=', 'QO.question_id')
+                                                ->leftJoin('student_questions AS SQ', function ($join) use ($student_id) {
+                                                    $join->on('C.id', '=', 'SQ.course_id')
+                                                        ->on('Q.id', '=', 'SQ.question_id')
+                                                        ->on('QO.id', '=', 'SQ.question_option_id')
+                                                        ->where('SQ.student_id', $student_id);
+                                                });
+                                        }, 'T')
+                                        ->groupBy('T.course_id', 'T.question_id', 'T.question_text', 'T.question_type', 'T.points');
+                                }, 'R');
+                        }, 'M')
+                        ->groupBy('M.course_id');
+                }, 'P', function ($join) {
+                    $join->on('C.id', '=', 'P.course_id');
                 })
-                ->leftJoin('lessons', 'courses.id', '=', 'lessons.course_id')
-                ->leftJoin('student_lessons', function ($join) use ($student_id) {
-                    $join->on('courses.id', '=', 'student_lessons.course_id')
-                        ->on('student_lessons.lesson_id', '=', 'lessons.id')
-                        ->where('student_lessons.student_id', '=', $student_id);
-                })
-                ->whereNull('student_lessons.course_id')
-                ->where('courses.assigned_id', auth()->user()->id)
-                ->distinct()
+                ->where('P.is_completed', 0)
+                ->where('C.assigned_id', auth()->user()->id)
                 ->with('lessons')
                 ->with('questions')
                 ->with('assignedTeacher')
                 ->get();
         }
         elseif ($type == 'completed') {
-            /*
-             SELECT * FROM courses C
-             INNER JOIN student_courses SC ON C.id = SC.course_id AND SC.student_id = '$student_id'
-             WHERE SC.course_id NOT IN (
-                SELECT DISTINCT C.id FROM courses C
-                    INNER JOIN student_courses SC ON C.id = SC.course_id AND SC.student_id = '$student_id'
-                    LEFT JOIN lessons L ON C.id = L.course_id
-                    LEFT JOIN student_lessons S ON c.id = S.course_id AND S.lesson_id = L.id AND s.student_id = '$student_id'
-                WHERE S.course_id IS NULL
-            ) AND C.assigned_id = '$teacher_id'
-             */
-            $courses = Course::select('courses.*')
-                ->join('student_courses', function ($join) use ($student_id) {
-                    $join->on('courses.id', '=', 'student_courses.course_id')
-                        ->where('student_courses.student_id', '=', $student_id);
+            $courses =  Course::select('C.*')
+                ->from('courses AS C')
+                ->joinSub(function ($subquery) use ($student_id) {
+                    $subquery->select('M.course_id')
+                        ->selectRaw('SUM(1) AS question_nums')
+                        ->selectRaw('SUM(M.is_passed) AS passed_question_nums')
+                        ->selectRaw('IF(SUM(1) = SUM(M.is_passed), 1, 0) AS is_completed')
+                        ->from(function ($subquery) use ($student_id) {
+                            $subquery->select('*')
+                                ->selectRaw('IF((R.question_type = "multi" OR R.question_type = "boolean") AND R.quiz_option_nums = R.correct_option_nums, 1, IF(R.question_type = "single" AND R.correct_option_nums = 1, 1, 0)) AS is_passed')
+                                ->from(function ($subquery) use ($student_id) {
+                                    $subquery->select('T.course_id', 'T.question_id', 'T.question_text', 'T.question_type', 'T.points')
+                                        ->selectRaw('SUM(1) AS quiz_option_nums')
+                                        ->selectRaw('SUM(exam_result) AS correct_option_nums')
+                                        ->from(function ($subquery) use ($student_id) {
+                                            $subquery->select('C.id AS course_id', 'Q.id AS question_id', 'Q.name AS question_text', 'Q.type AS question_type', 'Q.points', 'QO.description', 'QO.answer', 'SQ.question_id AS student_question_id')
+                                                ->selectRaw('SQ.answer AS student_answer')
+                                                ->selectRaw('IF(Q.id = SQ.question_id AND (Q.type = "multi" OR Q.type = "boolean") AND QO.answer = SQ.answer, 1, IF(Q.id = SQ.question_id AND Q.type = "single", QO.answer * SQ.answer, 0)) AS exam_result')
+                                                ->from('courses AS C')
+                                                ->join('student_courses AS SC', 'C.id', '=', 'SC.course_id')
+                                                ->leftJoin('questions AS Q', function ($join) {
+                                                    $join->on('C.id', '=', 'Q.course_id');
+                                                })
+                                                ->leftJoin('question_options AS QO', 'Q.id', '=', 'QO.question_id')
+                                                ->leftJoin('student_questions AS SQ', function ($join) use ($student_id) {
+                                                    $join->on('C.id', '=', 'SQ.course_id')
+                                                        ->on('Q.id', '=', 'SQ.question_id')
+                                                        ->on('QO.id', '=', 'SQ.question_option_id')
+                                                        ->where('SQ.student_id', $student_id);
+                                                });
+                                        }, 'T')
+                                        ->groupBy('T.course_id', 'T.question_id', 'T.question_text', 'T.question_type', 'T.points');
+                                }, 'R');
+                        }, 'M')
+                        ->groupBy('M.course_id');
+                }, 'P', function ($join) {
+                    $join->on('C.id', '=', 'P.course_id');
                 })
-                ->whereNotIn('courses.id', function ($query) use ($student_id) {
-                    $query->select('courses.id')
-                        ->from('courses')
-                        ->join('student_courses', function ($join) use ($student_id) {
-                            $join->on('courses.id', '=', 'student_courses.course_id')
-                                ->where('student_courses.student_id', '=', $student_id);
-                        })
-                        ->leftJoin('lessons', 'courses.id', '=', 'lessons.course_id')
-                        ->leftJoin('student_lessons', function ($join) use ($student_id) {
-                            $join->on('courses.id', '=', 'student_lessons.course_id')
-                                ->on('lessons.id', '=', 'student_lessons.lesson_id')
-                                ->where('student_lessons.student_id', '=', $student_id);
-                        })
-                        ->whereNull('student_lessons.course_id');
-                })
-                ->where('courses.assigned_id', auth()->user()->id)
+                ->where('P.is_completed', 1)
+                ->where('C.assigned_id', auth()->user()->id)
+                ->with('lessons')
+                ->with('questions')
+                ->with('assignedTeacher')
                 ->get();
         }
         else {
