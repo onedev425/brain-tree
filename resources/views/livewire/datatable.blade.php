@@ -11,7 +11,7 @@
             <thead class="">
                 @foreach ($columns as $column)
                     @if (!isset($column['can']) || auth()->user()->can($column['can']))
-                        <th class="capitalize p-4 whitespace-nowrap font-normal text-left">{{str_replace('_' , ' ', Str::snake( $column['name'] ??  $column['property']))}}</th>
+                        <th class="capitalize p-4 whitespace-nowrap text-left">{{str_replace('_' , ' ', Str::snake( $column['name'] ??  $column['property']))}}</th>
                     @endif
                 @endforeach
             </thead>

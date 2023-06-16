@@ -159,7 +159,7 @@
                                 <ul>
                                     @php
                                         $questions = $course->questions()->with('quiz_options')->get();
-                                        $prev_quiz_processed = true;
+                                        $prev_quiz_processed = $this->isAllLessonCompleted($course);
                                     @endphp
                                     @foreach($questions as $question)
                                         @php
@@ -172,14 +172,16 @@
                                         @endphp
                                         <li class="lesson-quiz-item {{ $prev_quiz_processed ? 'quiz-item hover:bg-gray-200 hover:rounded-2xl' : '' }} flex py-1 px-3 justify-between {{ $this->isQuestionCompleted($question->id) ? 'text-green-700' : '' }}">
                                             <div class="flex">
-                                                <svg class="mt-1" xmlns="http://www.w3.org/2000/svg" width="19.313" height="19.313" viewBox="0 0 19.313 19.313">
-                                                    <g transform="translate(-8.2 -8.2)">
-                                                        <g transform="translate(8.2 8.2)" fill="currentColor">
-                                                            <path d="M-160.144-250.487a9.656,9.656,0,0,1-9.656-9.656,9.656,9.656,0,0,1,9.656-9.656,9.656,9.656,0,0,1,9.656,9.656,9.656,9.656,0,0,1-9.656,9.656Zm0-18.262a8.639,8.639,0,0,0-8.606,8.606,8.639,8.639,0,0,0,8.606,8.606,8.639,8.639,0,0,0,8.606-8.606,8.613,8.613,0,0,0-8.606-8.606Z" transform="translate(169.8 269.8)"/>
-                                                            <path d="M-153.56-256.48a2.9,2.9,0,0,1,.646-1.091,3.159,3.159,0,0,1,1.05-.687,3.841,3.841,0,0,1,1.414-.242,3.754,3.754,0,0,1,1.172.2,3.719,3.719,0,0,1,.97.525,2.264,2.264,0,0,1,.646.848,2.637,2.637,0,0,1,.242,1.172,2.629,2.629,0,0,1-.364,1.414,6.008,6.008,0,0,1-.929,1.131l-.727.727a1.531,1.531,0,0,0-.4.525,1.339,1.339,0,0,0-.162.606,4.675,4.675,0,0,0-.04.848h-.929a3.04,3.04,0,0,1,.081-.929,3,3,0,0,1,.283-.848,4.1,4.1,0,0,1,.525-.727c.242-.242.485-.485.808-.768a2.765,2.765,0,0,0,.687-.848,1.958,1.958,0,0,0,.283-1.051,1.809,1.809,0,0,0-.162-.808,3.662,3.662,0,0,0-.444-.646,1.3,1.3,0,0,0-.687-.4,2.612,2.612,0,0,0-.808-.162,2.7,2.7,0,0,0-1.05.2,1.82,1.82,0,0,0-.768.566,2.138,2.138,0,0,0-.444.848,2.563,2.563,0,0,0-.121.97h-.929a3,3,0,0,1,.162-1.374Zm2.424,7.071H-150v1.131h-1.131Z" transform="translate(160.226 263.066)"/>
+                                                <span class="w-5">
+                                                    <svg class="mt-1" xmlns="http://www.w3.org/2000/svg" width="19.313" height="19.313" viewBox="0 0 19.313 19.313">
+                                                        <g transform="translate(-8.2 -8.2)">
+                                                            <g transform="translate(8.2 8.2)" fill="currentColor">
+                                                                <path d="M-160.144-250.487a9.656,9.656,0,0,1-9.656-9.656,9.656,9.656,0,0,1,9.656-9.656,9.656,9.656,0,0,1,9.656,9.656,9.656,9.656,0,0,1-9.656,9.656Zm0-18.262a8.639,8.639,0,0,0-8.606,8.606,8.639,8.639,0,0,0,8.606,8.606,8.639,8.639,0,0,0,8.606-8.606,8.613,8.613,0,0,0-8.606-8.606Z" transform="translate(169.8 269.8)"/>
+                                                                <path d="M-153.56-256.48a2.9,2.9,0,0,1,.646-1.091,3.159,3.159,0,0,1,1.05-.687,3.841,3.841,0,0,1,1.414-.242,3.754,3.754,0,0,1,1.172.2,3.719,3.719,0,0,1,.97.525,2.264,2.264,0,0,1,.646.848,2.637,2.637,0,0,1,.242,1.172,2.629,2.629,0,0,1-.364,1.414,6.008,6.008,0,0,1-.929,1.131l-.727.727a1.531,1.531,0,0,0-.4.525,1.339,1.339,0,0,0-.162.606,4.675,4.675,0,0,0-.04.848h-.929a3.04,3.04,0,0,1,.081-.929,3,3,0,0,1,.283-.848,4.1,4.1,0,0,1,.525-.727c.242-.242.485-.485.808-.768a2.765,2.765,0,0,0,.687-.848,1.958,1.958,0,0,0,.283-1.051,1.809,1.809,0,0,0-.162-.808,3.662,3.662,0,0,0-.444-.646,1.3,1.3,0,0,0-.687-.4,2.612,2.612,0,0,0-.808-.162,2.7,2.7,0,0,0-1.05.2,1.82,1.82,0,0,0-.768.566,2.138,2.138,0,0,0-.444.848,2.563,2.563,0,0,0-.121.97h-.929a3,3,0,0,1,.162-1.374Zm2.424,7.071H-150v1.131h-1.131Z" transform="translate(160.226 263.066)"/>
+                                                            </g>
                                                         </g>
-                                                    </g>
-                                                </svg>
+                                                    </svg>
+                                                </span>
                                                 <a href="javascript:;" class="ml-2" data-question-id="{{ $question->id }}" data-description="{!! htmlspecialchars($question->description) !!}" data-question-option-ids="{{ json_encode($quiz_option_id) }}" data-question-options="{{ json_encode($quiz_option_text) }}">{{ $question->name }}</a>
                                             </div>
                                             <div class="text-sm">{{ $question->points }} {{ __('Points') }}</div>
@@ -345,6 +347,11 @@
                                 $('div#congratulation_section').removeClass('hidden');
                                 return;
                             }
+                        }
+                        if ( ! $(next_lesson).hasClass('lesson-item')) {
+                            // if next lesson is not lesson and all lessons was completed, go to first question.
+                            if ($('li.lesson-quiz-item.lesson-item').length == $('li.lesson-quiz-item.lesson-item.text-green-700').length)
+                                $(next_lesson).addClass('quiz-item hover:bg-gray-200 hover:rounded-2xl');
                         }
                         $(next_lesson).click();
                     },
