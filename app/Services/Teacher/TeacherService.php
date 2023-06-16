@@ -100,7 +100,7 @@ class TeacherService
          */
         $teacher_id = auth()->user()->id;
         $students = DB::table('users as U')
-            ->select('U.id as student_id', 'U.name as student_name', 'U.profile_photo_path as student_photo', 'C.title as course_title', 'M.total_points', 'M.student_points')
+            ->select('U.id as student_id', 'U.name as student_name', 'U.profile_photo_path as student_photo', 'C.id as course_id', 'C.title as course_title', 'M.total_points', 'M.student_points')
             ->join(DB::raw('(
                     SELECT P.student_id, P.course_id, SUM(P.points) as total_points, SUM(P.points * P.is_passed) as student_points FROM (
                         SELECT *, IF((R.question_type = "multi" OR R.question_type = "boolean") AND R.quiz_option_nums = R.correct_option_nums, 1, IF(R.question_type = "single" AND R.correct_option_nums = 1, 1, 0)) as is_passed FROM (
