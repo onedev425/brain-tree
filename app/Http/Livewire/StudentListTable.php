@@ -33,6 +33,10 @@ class StudentListTable extends Component
 
     public function render()
     {
+        if (!isset($this->studentService)) {
+            $this->studentService = app(StudentService::class);
+        }
+
         $students = $this->studentService->getStudentsOfTeacher($this->search);
         $students = $students->paginate(10);
         return view('livewire.student-list-table', [
