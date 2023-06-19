@@ -19,7 +19,7 @@ class PricingPaypalForm extends Component
         $provider = new PayPalClient();
         $provider->setApiCredentials(config('paypal'));
         $paypalToken = $provider->getAccessToken();
-
+        $provider->setAccessToken($paypalToken);
         $response = $provider->createOrder([
             "intent" => "CAPTURE",
             "application_context" => [
@@ -30,7 +30,7 @@ class PricingPaypalForm extends Component
                 0 => [
                     "amount" => [
                         "currency_code" => "USD",
-                        "value" => "200.00"
+                        "value" => "155.00"
                     ]
                 ]
             ]
