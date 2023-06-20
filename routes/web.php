@@ -26,8 +26,8 @@ Route::get('/home', function () {
 
 //Paypal routes
 Route::get('/paypal/connect', ['App\Http\Controllers\PricingController', 'connect'])->name('paypal.connect');
-Route::get('/paypal/connect/callback', ['App\Http\Controllers\PricingController', 'connectCallback']);
 Route::get('/paypal/connect-success', ['App\Http\Controllers\PricingController', 'connectPaypalSuccess'])->name('paypal.connect_success');
+Route::get('/paypal/connect/callback', ['App\Http\Controllers\PricingController', 'connectCallback'])->name('paypal.callback');
 Route::get('/paypal/connect-cancel', ['App\Http\Controllers\PricingController', 'connectPaypalCancel'])->name('paypal.cancel');
 
 

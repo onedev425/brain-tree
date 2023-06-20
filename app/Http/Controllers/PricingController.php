@@ -61,6 +61,24 @@ class PricingController extends Controller
         return 'authorized successfully';
     }
 
+    public function connectCallback(Request $request)
+    {
+        $provider = new PayPalClient;
+        $provider->setApiCredentials(config('paypal'));
+        $provider->getAccessToken();
+        $response = $provider->capturePaymentOrder($request['token']);
+        if (isset($response['status']) && $response['status'] == 'COMPLETED') {
+            return redirect()
+                ->route('create.payment')
+                ->with('success', 'Transaction complete.');
+        } else {
+            return redirect()
+                ->route('create.payment')
+                ->with('error', $response['message'] ?? 'Something went wrong.');
+        }
+
+        //return 'Paid successfully';
+    }
     public function connectPaypalCancel()
     {
 

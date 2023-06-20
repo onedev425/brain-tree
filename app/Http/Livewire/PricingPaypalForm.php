@@ -28,9 +28,12 @@ class PricingPaypalForm extends Component
             ],
             "purchase_units" => [
                 0 => [
+                    "payee" => [
+                        "merchant_id" => '3HWTXNR8QJ3CL'
+                    ],
                     "amount" => [
                         "currency_code" => "USD",
-                        "value" => "155.00"
+                        "value" => "75.00"
                     ]
                 ]
             ]
