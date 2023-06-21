@@ -22,7 +22,7 @@
                         <td class="p-4 whitespace-nowrap text-left">
                             <div class="flex">
                                 <img width="50" height="50" class="rounded-full" src="{{ $course->image }}" onerror="this.src='{{ asset('images/logo/course.jpg') }}'" />
-                                <a href="javascript:" class="flex items-center gap-2 py-3 px-6">{{ $course->title }}</a>
+                                <span class="flex items-center gap-2 py-3 px-6">{{ $course->title }}</span>
                             </div>
 
                         </td>

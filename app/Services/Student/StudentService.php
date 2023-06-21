@@ -342,7 +342,7 @@ class StudentService
     public function getStudentUnpaidCourses(string $search)
     {
         $excluded_course_ids = DB::table('student_courses')
-            ->where('student_id', 31)
+            ->where('student_id', auth()->user()->id)
             ->pluck('course_id');
 
         $courses = Course::select('courses.*')
@@ -357,6 +357,23 @@ class StudentService
 
         return $courses->with('assignedTeacher');
     }
+
+    public function getStudentPaidCourses(string $search)
+    {
+        $courses = Course::select('courses.*', 'student_courses.created_at AS purchase_at')
+            ->join('student_courses', 'courses.id', '=', 'student_courses.course_id')
+            ->join('users', 'courses.assigned_id', '=', 'users.id')
+            ->where('student_id', auth()->user()->id);
+
+        if ($search != '')
+            $courses = $courses->where(function ($query) use ($search) {
+                $query->where('courses.title', 'LIKE', '%'. $search . '%')
+                    ->orWhere('users.name', 'LIKE', '%'. $search . '%');
+            });
+
+        return $courses->with('assignedTeacher');
+    }
+
 
     public function registerStudentCourse(int $course_id): void
     {
