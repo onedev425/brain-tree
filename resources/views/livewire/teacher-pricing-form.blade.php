@@ -15,13 +15,12 @@
 
             <div style="margin-top: 40px">
                 @if ($activeTab === 'histories')
-                    <livewire:pricing-histories-form />
+                    <livewire:teacher-pricing-histories />
                 @else
-                    <livewire:pricing-paypal-form />
+                    <livewire:teacher-pricing-payment-method />
                 @endif
             </div>
         </div>
 
     </div>
 </div>
-
