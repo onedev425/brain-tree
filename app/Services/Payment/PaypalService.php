@@ -3,6 +3,7 @@ namespace App\Services\Payment;
 
 use App\Models\Course;
 use App\Models\PaymentConnection;
+use App\Models\PaymentFee;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use Srmklive\PayPal\Services\PayPal as PayPalClient;
@@ -58,6 +59,8 @@ class PaypalService
 
     public function payToCourse(Course $course): array
     {
+        $course_fee = PaymentFee::all()->where('fee_type', 'teacher_course_fee')->first();
+
         $provider = new PayPalClient();
         $provider->setApiCredentials(config('paypal'));
         $paypalToken = $provider->getAccessToken();
@@ -72,7 +75,7 @@ class PaypalService
                 [
                     'amount' => [
                         'currency_code' => 'USD',
-                        'value' => env('TEACHER_COURSE_FEE')
+                        'value' => $course_fee->fee_value,
                     ],
                 ],
 
@@ -85,13 +88,12 @@ class PaypalService
                     return ['result' => 'success', 'redirect_url' => $links['href']];
                 }
             }
-            $course->delete();
-            return ['result' => 'error', 'redirect_url' => route('cancel.payment')];
         }
-        else {
-            $course->delete();
-            return ['result' => 'error', 'redirect_url' => route('home')];
-        }
+
+        $course->is_published = false;
+        $course->is_paid = false;
+        $course->save();
+        return ['result' => 'error', 'redirect_url' => route('home')];
     }
 
     public function capturePayment(string $token): bool
