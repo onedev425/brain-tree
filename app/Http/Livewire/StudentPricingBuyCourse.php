@@ -2,6 +2,8 @@
 
 namespace App\Http\Livewire;
 
+use App\Models\Course;
+use App\Services\Payment\PaypalService;
 use App\Services\Student\StudentService;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -17,6 +19,19 @@ class StudentPricingBuyCourse extends Component
     {
         $this->studentService = $studentService;
     }
+
+    public function BuyCourse(int $course_id, string $seller_account_id)
+    {
+        $course = Course::find($course_id);
+        $paypalService = new PaypalService();
+        $payment_result = $paypalService->buyCourse($course, $seller_account_id);
+
+        if ($payment_result['result'] == 'success')
+            return redirect()->away($payment_result['redirect_url']);
+        else
+            return redirect($payment_result['redirect_url'])->with('error', __('Something went wrong.'));
+    }
+
     public function paginationView()
     {
         return 'components.datatable-pagination-links-view';
@@ -24,11 +39,6 @@ class StudentPricingBuyCourse extends Component
 
     public function render()
     {
-
-//        $excludedCourseIds = StudentCourse::where('student_id', 31)->pluck('course_id');
-//        $courses = Course::whereNotIn('id', $excludedCourseIds)->with('assignedTeacher');
-//        $courses = $courses->paginate(10);
-
         if (!isset($this->studentService)) {
             $this->studentService = app(StudentService::class);
         }

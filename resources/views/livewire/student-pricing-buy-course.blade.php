@@ -22,7 +22,7 @@
                         <td class="p-4 whitespace-nowrap text-left">
                             <div class="flex">
                                 <img width="50" height="50" class="rounded-full" src="{{ $course->image }}" onerror="this.src='{{ asset('images/logo/course.jpg') }}'" />
-                                <a href="javascript:;" class="flex items-center gap-2 py-3 px-6 hover:bg-white hover:bg-opacity-20 text-purple-500">{{ $course->title }}</a>
+                                <a href="javascript:" class="flex items-center gap-2 py-3 px-6">{{ $course->title }}</a>
                             </div>
 
                         </td>
@@ -30,12 +30,12 @@
                         <td class="p-4 whitespace-nowrap">{{ $course->assignedTeacher->name }}</td>
                         <td class="p-4 whitespace-nowrap">{{ substr($course->created_at, 0, 10) }}</td>
                         <td class="p-4 whitespace-nowrap">
-                            <a href="javascript:;" class="open_quiz_dialog_link text-purple-500">{{ __('Buy Course') }}</a>
+                            <x-button wire:click="BuyCourse({{ $course->id }}, '{{ $course->assignedTeacher->payment_connection->paypal_account_id }}')" class="text-purple-500">{{ __('Buy Course') }}</x-button>
                         </td>
                     </tr>
                 @endforeach
             @else
-                <tr w-full>
+                <tr>
                     <td class="p-4 capitalize" colspan="100%">{{ __('No data to show') }}</td>
                 </tr>
             @endif

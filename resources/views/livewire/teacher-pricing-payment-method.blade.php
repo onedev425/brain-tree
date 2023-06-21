@@ -1,6 +1,4 @@
-<div wire:ignore>
-    <x-button wire:click="connectToPayPal" class="my-3 py-3 md:px-10 bg-red-700 text-white font-semibold border-transparent">Buy a course with $75</x-button>
-
+<div>
     @if ($connection_date != '')
         <p>{{ __('Your paypal account connected successfully at') }} {{ substr($connection_date, 0, 10) }}.</p>
     @else

@@ -4,8 +4,8 @@ namespace App\Services\Student;
 
 use App\Exceptions\InvalidValueException;
 use App\Models\Course;
+use App\Models\StudentCourse;
 use App\Models\User;
-use App\Services\MyClass\MyClassService;
 use App\Services\Print\PrintService;
 use App\Services\User\UserService;
 use Illuminate\Database\Eloquent\Collection;
@@ -356,5 +356,13 @@ class StudentService
             });
 
         return $courses->with('assignedTeacher');
+    }
+
+    public function registerStudentCourse(int $course_id): void
+    {
+        StudentCourse::create([
+            'student_id' => auth()->user()->id,
+            'course_id'  => $course_id,
+        ]);
     }
 }

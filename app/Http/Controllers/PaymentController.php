@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Course;
 use App\Services\Course\CourseService;
 use App\Services\Payment\PaypalService;
+use App\Services\Student\StudentService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
@@ -40,13 +41,28 @@ class PaymentController extends Controller
 
                 return redirect()->route('teacher.course.index', 'type=publish');
             }
+
+            if ($request['buyer'] == 'student') {
+                $studentService = app(StudentService::class);
+                $studentService->registerStudentCourse($request['course']);
+
+                return redirect()->route('student.course.index');
+            }
         }
         else {
             if ($request['buyer'] == 'teacher') {
-                $course = Course::find($request['course']);
-                $course->delete();
+                if ($request['course']) {
+                    $course = Course::find($request['course']);
+                    $course->is_published = false;
+                    $course->is_paid = false;
+                    $course->save();
+                }
 
                 return redirect()->route('teacher.course.index', 'type=publish')->with('danger', __('Something went wrong. Your payment failed.'));
+            }
+
+            if ($request['buyer'] == 'student') {
+                return redirect()->route('pricing.index')->with('danger', __('Something went wrong. Your payment failed.'));
             }
         }
 
@@ -56,10 +72,15 @@ class PaymentController extends Controller
         if ($request['buyer'] == 'teacher') {
             if ($request['course']) {
                 $course = Course::find($request['course']);
-                $course->delete();
+                $course->is_published = false;
+                $course->is_paid = false;
+                $course->save();
             }
             return redirect()->route('teacher.course.create')->with('danger', __('Payment cancelled by the user.'));
         }
-        return redirect()->route('teacher.course.create')->with('danger', __('Payment cancelled by the user.'));
+        else {
+            // go to the student pricing page
+            return redirect()->route('pricing.index')->with('danger', __('Payment cancelled by the user.'));
+        }
     }
 }
