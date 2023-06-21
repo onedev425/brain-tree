@@ -277,7 +277,7 @@ class CourseService
      *
      * @return void
      */
-    public function createCourse($data): void
+    public function createCourse($data): Course
     {
         $course = Course::create([
             'title' => $data['course_title'],
@@ -329,6 +329,8 @@ class CourseService
                 ]);
             }
         }
+
+        return $course;
     }
 
     public function updateCourse($data): void
@@ -454,6 +456,13 @@ class CourseService
             }
         }
 
+    }
+
+    public function setPaidFlag(int $course_id): void
+    {
+        $course = Course::find($course_id);
+        $course->is_paid = true;
+        $course->save();
     }
 
     public function deleteCourseImage($image_path): void

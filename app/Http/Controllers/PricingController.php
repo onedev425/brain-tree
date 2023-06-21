@@ -10,13 +10,4 @@ class PricingController extends Controller
         return view('pages.pricing.index');
     }
 
-    public function connectPaypalSuccess()
-    {
-
-    }
-
-    public function connectPaypalCancel()
-    {
-
-    }
 }

@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
             RunInProductionSeeder::class,
             UserSeeder::class,
             StudentSeeder::class,
+            PaymentFeesSeeder::class,
             SubjectSeeder::class,
             NoticeSeeder::class,
             FeeCategorySeeder::class,

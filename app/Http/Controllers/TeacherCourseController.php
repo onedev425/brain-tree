@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\Payment\PaypalService;
 use Illuminate\Http\RedirectResponse;
 use App\Services\Course\CourseService;
 use App\Models\Course;
@@ -25,8 +26,12 @@ class TeacherCourseController extends Controller
         return view('pages.teacher-course.index');
     }
 
-    public function create(): View
+    public function create()
     {
+        if ( ! auth()->user()->payment_connection) {
+            return redirect()->route('pricing.index', 'type=payment_method')->with('danger', __('In order to create a course, you must first connect to PayPal.'));
+        }
+
         $data['course'] = new Course();
         $data['topics'] = new Collection();
         $data['quizzes'] = new Collection();
@@ -52,9 +57,21 @@ class TeacherCourseController extends Controller
 
         if ( !array_key_exists('course_image', $data))
             $data['course_image'] = asset('images/logo/course.jpg');
-        $this->courseService->createCourse($data);
 
-        return redirect()->route('teacher.course.index', $data['is_published'] == 1 ? 'type=publish' : 'type=draft');
+        $course = $this->courseService->createCourse($data);
+
+        if ($data['is_published'] == 1) {
+            // if publish the course, go to the paypal payment page.
+            $paypalService = new PaypalService();
+            $payment_result = $paypalService->payToCourse($course);
+            if ($payment_result['result'] == 'success')
+                return redirect()->away($payment_result['redirect_url']);
+            else
+                return redirect($payment_result['redirect_url'])->with('error', __('Something went wrong.'));
+        }
+        else
+            return redirect()->route('teacher.course.index', 'type=draft');
+
     }
 
     public function update(TeacherCourseStoreRequest $request, Course $course): RedirectResponse
@@ -89,6 +106,16 @@ class TeacherCourseController extends Controller
         $publish_result = ! $request['is_published'];
         $course->is_published = $publish_result;
         $course->save();
+
+        if ($publish_result && $course->is_paid == false) {
+            // if publish the course, go to the paypal payment page.
+            $paypalService = new PaypalService();
+            $payment_result = $paypalService->payToCourse($course);
+            if ($payment_result['result'] == 'success')
+                return redirect()->away($payment_result['redirect_url']);
+            else
+                return redirect($payment_result['redirect_url'])->with('error', __('Something went wrong.'));
+        }
 
         return redirect()->route('teacher.course.index', $publish_result == 1 ? 'type=publish' : 'type=draft');
     }
