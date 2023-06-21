@@ -2,10 +2,10 @@
 
 namespace App\Http\Livewire;
 
-use Livewire\Component;
 use Illuminate\Support\Facades\Request;
+use Livewire\Component;
 
-class PricingForm extends Component
+class TeacherPricingForm extends Component
 {
     public $activeTab = 'histories';
 
@@ -21,6 +21,6 @@ class PricingForm extends Component
 
     public function render()
     {
-        return view('livewire.pricing-form');
+        return view('livewire.teacher-pricing-form');
     }
 }
