@@ -1,9 +1,11 @@
 <?php
 namespace App\Services\Payment;
 
+use App\Models\Course;
 use App\Models\PaymentConnection;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
+use Srmklive\PayPal\Services\PayPal as PayPalClient;
 
 class PaypalService
 {
@@ -52,6 +54,54 @@ class PaypalService
             'teacher_id' => auth()->user()->id,
             'paypal_account_id'  => $account_id,
         ]);
+    }
+
+    public function payToCourse(Course $course): array
+    {
+        $provider = new PayPalClient();
+        $provider->setApiCredentials(config('paypal'));
+        $paypalToken = $provider->getAccessToken();
+        $provider->setAccessToken($paypalToken);
+        $response = $provider->createOrder([
+            "intent" => "CAPTURE",
+            "application_context" => [
+                "return_url" => route('paypal.callback', 'buyer=teacher&course=' . $course->id),
+                "cancel_url" => route('paypal.cancel', 'buyer=teacher&course=' . $course->id),
+            ],
+            "purchase_units" => [
+                [
+                    'amount' => [
+                        'currency_code' => 'USD',
+                        'value' => env('TEACHER_COURSE_FEE')
+                    ],
+                ],
+
+            ]
+        ]);
+
+        if (isset($response['id']) && $response['id'] != null) {
+            foreach ($response['links'] as $links) {
+                if ($links['rel'] == 'approve') {
+                    return ['result' => 'success', 'redirect_url' => $links['href']];
+                }
+            }
+            $course->delete();
+            return ['result' => 'error', 'redirect_url' => route('cancel.payment')];
+        }
+        else {
+            $course->delete();
+            return ['result' => 'error', 'redirect_url' => route('home')];
+        }
+    }
+
+    public function capturePayment(string $token): bool
+    {
+        $provider = new PayPalClient;
+        $provider->setApiCredentials(config('paypal'));
+        $provider->getAccessToken();
+        $response = $provider->capturePaymentOrder($token);
+
+        return isset($response['status']) && $response['status'] == 'COMPLETED';
     }
 
     private function getPaypalAuthLink($token): array
