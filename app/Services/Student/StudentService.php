@@ -338,4 +338,23 @@ class StudentService
 
         return $correct_points;
     }
+
+    public function getStudentUnpaidCourses(string $search)
+    {
+        $excluded_course_ids = DB::table('student_courses')
+            ->where('student_id', 31)
+            ->pluck('course_id');
+
+        $courses = Course::select('courses.*')
+            ->leftJoin('users', 'courses.assigned_id', '=', 'users.id')
+            ->whereNotIn('courses.id', $excluded_course_ids);
+
+        if ($search != '')
+            $courses = $courses->where(function ($query) use ($search) {
+                $query->where('courses.title', 'LIKE', '%'. $search . '%')
+                    ->orWhere('users.name', 'LIKE', '%'. $search . '%');
+            });
+
+        return $courses->with('assignedTeacher');
+    }
 }
