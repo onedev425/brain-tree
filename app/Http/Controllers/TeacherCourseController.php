@@ -107,16 +107,6 @@ class TeacherCourseController extends Controller
         $course->is_published = $publish_result;
         $course->save();
 
-        if ($publish_result && $course->is_paid == false) {
-            // if publish the course, go to the paypal payment page.
-            $paypalService = new PaypalService();
-            $payment_result = $paypalService->payToCourse($course);
-            if ($payment_result['result'] == 'success')
-                return redirect()->away($payment_result['redirect_url']);
-            else
-                return redirect($payment_result['redirect_url'])->with('error', __('Something went wrong.'));
-        }
-
         return redirect()->route('teacher.course.index', $publish_result == 1 ? 'type=publish' : 'type=draft');
     }
 
