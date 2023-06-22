@@ -342,12 +342,22 @@ class StudentService
     public function getCourseCompletedDate(Course $course): string
     {
         $student = auth()->user();
-        return $student->student_questions()
+        $completed_date = $student->student_questions()
             ->where('course_id', $course->id)
             ->latest('created_at')
             ->value('created_at');
+        return $completed_date ?? 'unknown';
     }
-  
+
+    public function getCourseStartedDate(Course $course): string
+    {
+        $student = auth()->user();
+        $started_date = $student->student_lessons()
+            ->where('course_id', $course->id)
+            ->min('created_at');
+        return $started_date ?? 'unknown';
+    }
+
     public function getStudentUnpaidCourses(string $search)
     {
         $excluded_course_ids = DB::table('student_courses')

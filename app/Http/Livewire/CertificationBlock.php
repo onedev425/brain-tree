@@ -12,6 +12,7 @@ class CertificationBlock extends Component
     public int $marks;
     public int $course_points;
     public string $completed_date;
+    public string $started_date;
 
     public function render()
     {

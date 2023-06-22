@@ -12,10 +12,10 @@
                     <path id="Path_53" data-name="Path 53" d="M11.558,4.477A7.078,7.078,0,1,1,6.55,6.55a7.034,7.034,0,0,1,5.008-2.073m0-1.1a8.183,8.183,0,1,0,8.183,8.183,8.181,8.181,0,0,0-8.183-8.183Z" fill="#1ddc72"/>
                 </g>
             </svg>
-            <span class="text-xs ml-2">Completed | {{ substr($completed_date, 0, 10) }}</span>
+            <span class="text-xs ml-2">{{ __('Completed') }} | {{ substr($completed_date, 0, 10) }} {{ $started_date }}</span>
         </div>
     </div>
     <div class="flex flex-col justify-center">
-        <x-button id="open_topic_dialog_button" label="{{ __('Download Certificate') }}" icon="" class="py-2 md:px-5 bg-red-700 text-white font-semibold border-transparent" />
+        <a href="{{ route('certification.download', 'id=' . urlencode(base64_encode(date('s:i:H Y-m-d') . '&' . $course_id))) }}" class="py-2 md:px-5 bg-red-700 rounded text-white font-semibold border-transparent" >{{ __('Download Certificate') }}</a>
     </div>
 </div>

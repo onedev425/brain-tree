@@ -9,6 +9,7 @@
                     'marks' => $this->getPointsOfStudentExam($course),
                     'course_points' => $this->getCourseTotalPoints($course),
                     'completed_date' => $this->getCourseCompletedDate($course),
+                    'started_date' => $this->getCourseStartedDate($course),
                 ])
             @endforeach
         </div>
