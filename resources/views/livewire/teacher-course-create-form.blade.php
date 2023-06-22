@@ -10,9 +10,15 @@
             <input type="hidden" name="is_published">
             <input type="hidden" name="use_default_image">
             <div class="float-right my-3">
-                <button type="submit" id="save_course_button" class="py-3 px-8 inline-block text-center mb-3 rounded-lg leading-5 text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 hover:ring-0 hover:border-red-600 focus:bg-red-600 focus:border-red-600 focus:outline-none focus:ring-0">
-                    {{ __('Submit for Review') }}
-                </button>
+                @if (auth()->user()->hasRole('super-admin'))
+                    <button type="submit" id="publish_course_button" class="py-3 px-8 inline-block text-center mb-3 rounded-lg leading-5 text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 hover:ring-0 hover:border-red-600 focus:bg-red-600 focus:border-red-600 focus:outline-none focus:ring-0">
+                        {{ __('Publish') }}
+                    </button>
+                @else
+                    <button type="submit" id="save_course_button" class="py-3 px-8 inline-block text-center mb-3 rounded-lg leading-5 text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 hover:ring-0 hover:border-red-600 focus:bg-red-600 focus:border-red-600 focus:outline-none focus:ring-0">
+                        {{ __('Submit for Review') }}
+                    </button>
+                @endif
             </div>
 
             <!-- begin::Course Basic info -->
