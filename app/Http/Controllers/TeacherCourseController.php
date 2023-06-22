@@ -103,7 +103,7 @@ class TeacherCourseController extends Controller
 
     public function publish(Request $request, Course $course): RedirectResponse
     {
-        $publish_result = ! $request['is_published'];
+        $publish_result = $request['is_published'];
         $course->is_published = $publish_result;
         $course->save();
 

@@ -1,6 +1,6 @@
 <div>
     <div class="block">
-        <form id="course_form" action="{{ $course->title ? route('teacher.course.update', $course) : route('teacher.course.store') }}" method="POST" enctype="multipart/form-data">
+        <form id="course_form" action="{{ auth()->user()->hasRole('super-admin') ? route('teacher.course.publish', $course) : ($course->title ? route('teacher.course.update', $course) : route('teacher.course.store')) }}" method="POST" enctype="multipart/form-data">
             @csrf
             @if($course->title)
                 @method('PUT')
@@ -83,30 +83,32 @@
                                     <div class="image-input-wrapper w-72 h-52" id="course_image_container" style="background-image: url( {{ strpos($course->image, 'images/logo/course') > 0 || ! $course->title ? '' : $course->image }})"></div>
                                     <!--end::Preview existing avatar-->
                                     <!--begin::Label-->
-                                    <label class="btn btn-icon rounded-full hover:text-green-600 w-6 h-6 bg-white shadow" data-kt-image-input-action="change" title="Change company logo">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
-                                            <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/>
-                                        </svg>
-                                        <!--begin::Inputs-->
-                                        <input type="file" name="course_image" id="course_image_input" accept=".png, .jpg, .jpeg" />
-                                        <input type="hidden" name="course_image_remove" />
-                                        <!--end::Inputs-->
-                                    </label>
-                                    <!--end::Label-->
-                                    <!--begin::Cancel-->
-                                    <span class="btn btn-icon rounded-full hover:text-green-600 w-6 h-6 bg-white shadow" data-kt-image-input-action="cancel" title="Cancel company logo">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
-                                                              <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
-                                                            </svg>
-                                                        </span>
-                                    <!--end::Cancel-->
-                                    <!--begin::Remove-->
-                                    <span class="btn btn-icon rounded-full hover:text-green-600 w-6 h-6 bg-white shadow" id="course_image_remove" data-kt-image-input-action="remove" title="Remove company logo">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
-                                                              <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
-                                                            </svg>
-                                                        </span>
-                                    <!--end::Remove-->
+                                    @if (auth()->user()->hasRole('teacher'))
+                                        <label class="btn btn-icon rounded-full hover:text-green-600 w-6 h-6 bg-white shadow" data-kt-image-input-action="change" title="Change company logo">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                                                <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/>
+                                            </svg>
+                                            <!--begin::Inputs-->
+                                            <input type="file" name="course_image" id="course_image_input" accept=".png, .jpg, .jpeg" />
+                                            <input type="hidden" name="course_image_remove" />
+                                            <!--end::Inputs-->
+                                        </label>
+                                        <!--end::Label-->
+                                        <!--begin::Cancel-->
+                                        <span class="btn btn-icon rounded-full hover:text-green-600 w-6 h-6 bg-white shadow" data-kt-image-input-action="cancel" title="Cancel company logo">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
+                                                                  <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                                                                </svg>
+                                                            </span>
+                                        <!--end::Cancel-->
+                                        <!--begin::Remove-->
+                                        <span class="btn btn-icon rounded-full hover:text-green-600 w-6 h-6 bg-white shadow" id="course_image_remove" data-kt-image-input-action="remove" title="Remove company logo">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
+                                                                  <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                                                                </svg>
+                                                            </span>
+                                        <!--end::Remove-->
+                                    @endif
                                 </div>
                                 <div class="form-text">{{ __('Allowed file types: png, jpg, jpeg.') }}<br/>Max Size: 5MB, 1000 x 1000</div>
                             </div>
@@ -143,8 +145,10 @@
                                                         <span class="topic_info" data-uuid="{{ $uuid }}" data-topic-id="{{ $topic->id }}">{!! $topic->description  !!}</span>
                                                     </div>
                                                     <div class="flex">
-                                                        <x-edit-icon-button class="edit_topic_dialog_button" />
-                                                        <x-remove-icon-button class="remove_topic_button" />
+                                                        @if (auth()->user()->hasRole('teacher'))
+                                                            <x-edit-icon-button class="edit_topic_dialog_button" />
+                                                            <x-remove-icon-button class="remove_topic_button" />
+                                                        @endif
                                                     </div>
                                                 </a>
                                             </div>
@@ -156,26 +160,32 @@
                                                         <div class="lesson_info pt-1.5" data-lesson-id="{{ $lesson->id }}" data-description="{!! htmlspecialchars($lesson->description) !!}" data-video-source="{{ $lesson->video_type }}" data-video-url="{{ $lesson->video_link }}" data-uuid="{{ $uuid }}">{{ $lesson->title }}</div>
                                                         <div class="min-w-fit" >
                                                             <x-edit-icon-button class="edit_lesson_dialog_button"/>
-                                                            <x-remove-icon-button class="remove_lesson_button"/>
+                                                            @if (auth()->user()->hasRole('teacher'))
+                                                                <x-remove-icon-button class="remove_lesson_button"/>
+                                                            @endif
                                                         </div>
                                                     </div>
                                                 @endforeach
-                                                <button type="button" data-topic-uuid="{{ $uuid }}" class="open_lesson_dialog_button flex py-3 md:px-10 bg-white text-sm text-black font-semibold border border-red-300 uppercase inline-block py-2 px-4 border-2 rounded-lg my-3 hover:bg-gray-50" icon="">
-                                                    <i class="" aria-hidden="true"></i>
-                                                    <svg class="mr-3" xmlns="http://www.w3.org/2000/svg" width="20.376" height="18.538" viewBox="0 0 20.376 18.538">
-                                                        <g id="Icon_feather-book-open" data-name="Icon feather-book-open" transform="translate(-2 -3.5)">
-                                                            <path id="Path_64" data-name="Path 64" d="M3,4.5H8.513a3.675,3.675,0,0,1,3.675,3.675V21.038a2.756,2.756,0,0,0-2.756-2.756H3Z" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
-                                                            <path id="Path_65" data-name="Path 65" d="M27.188,4.5H21.675A3.675,3.675,0,0,0,18,8.175V21.038a2.756,2.756,0,0,1,2.756-2.756h6.431Z" transform="translate(-5.812)" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
-                                                        </g>
-                                                    </svg> {{ __('Add New Lesson') }}
-                                                </button>
+                                                @if (auth()->user()->hasRole('teacher'))
+                                                    <button type="button" data-topic-uuid="{{ $uuid }}" class="open_lesson_dialog_button flex py-3 md:px-10 bg-white text-sm text-black font-semibold border border-red-300 uppercase inline-block py-2 px-4 border-2 rounded-lg my-3 hover:bg-gray-50" icon="">
+                                                        <i class="" aria-hidden="true"></i>
+                                                        <svg class="mr-3" xmlns="http://www.w3.org/2000/svg" width="20.376" height="18.538" viewBox="0 0 20.376 18.538">
+                                                            <g id="Icon_feather-book-open" data-name="Icon feather-book-open" transform="translate(-2 -3.5)">
+                                                                <path id="Path_64" data-name="Path 64" d="M3,4.5H8.513a3.675,3.675,0,0,1,3.675,3.675V21.038a2.756,2.756,0,0,0-2.756-2.756H3Z" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                                                                <path id="Path_65" data-name="Path 65" d="M27.188,4.5H21.675A3.675,3.675,0,0,0,18,8.175V21.038a2.756,2.756,0,0,1,2.756-2.756h6.431Z" transform="translate(-5.812)" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                                                            </g>
+                                                        </svg> {{ __('Add New Lesson') }}
+                                                    </button>
+                                                @endif
                                             </div>
                                         </div>
                                     </div>
                                 @endforeach
                             </div>
 
-                            <x-button id="open_topic_dialog_button" label="{{ __('Add new Topic') }}" icon="fas fa-plus" class="py-3 md:px-10 bg-red-700 text-white font-semibold border-transparent" />
+                            @if (auth()->user()->hasRole('teacher'))
+                                <x-button id="open_topic_dialog_button" label="{{ __('Add new Topic') }}" icon="fas fa-plus" class="py-3 md:px-10 bg-red-700 text-white font-semibold border-transparent" />
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -195,7 +205,7 @@
                         <div class="card-body">
                             <div>
                                 <label class="relative inline-flex items-center cursor-pointer">
-                                    <input type="checkbox" class="sr-only peer" name="quiz_active" {{ $course->quiz_active == 1 || ! $course->title ? 'checked' : '' }} />
+                                    <input type="checkbox" class="sr-only peer" name="quiz_active" {{ $course->quiz_active == 1 || ! $course->title ? 'checked' : '' }} {{ auth()->user()->hasRole('teacher') ? '' : 'disabled' }} />
                                     <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-green-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600"></div>
                                     <span class="ml-3 text-sm font-medium text-gray-900">{{ __('Enable Quizzes') }}</span>
                                 </label>
@@ -224,12 +234,17 @@
                                         </div>
                                         <div class="min-w-fit" >
                                             <x-edit-icon-button class="edit_quiz_dialog_button"/>
-                                            <x-remove-icon-button class="remove_quiz_button"/>
+                                            @if (auth()->user()->hasRole('teacher'))
+                                                <x-remove-icon-button class="remove_quiz_button"/>
+                                            @endif
                                         </div>
                                     </div>
                                 @endforeach
                             </div>
-                            <div><x-button id="open_quiz_dialog_button" label="{{ __('Add new Question') }}" icon="fas fa-plus" class="py-3 md:px-10 bg-red-700 text-white font-semibold border-transparent" /></div>
+
+                            @if (auth()->user()->hasRole('teacher'))
+                                <div><x-button id="open_quiz_dialog_button" label="{{ __('Add new Question') }}" icon="fas fa-plus" class="py-3 md:px-10 bg-red-700 text-white font-semibold border-transparent" /></div>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -291,9 +306,11 @@
                     <input id="video_url" type="text" class="w-full leading-5 relative py-2 px-4 rounded text-gray-800 bg-white border border-gray-300 overflow-x-auto focus:outline-none focus:border-gray-400 focus:ring-0" required>
                 </div>
 
-                <div class="form-group flex-shrink max-w-full px-4 w-full">
-                    <x-button label="{{ __('Save') }}" type="submit" icon="" class="py-3 md:px-10 bg-red-700 text-white font-semibold border-transparent" />
-                </div>
+                @if (auth()->user()->hasRole('teacher'))
+                    <div class="form-group flex-shrink max-w-full px-4 w-full">
+                        <x-button label="{{ __('Save') }}" type="submit" icon="" class="py-3 md:px-10 bg-red-700 text-white font-semibold border-transparent" />
+                    </div>
+                @endif
             </form>
         </div>
     </div>
@@ -334,8 +351,10 @@
                             <div class="handle p-2 flex bg-gray-100 rounded-lg justify-between mb-2 w-full items-center">
                                 <input type="text" data-answer-id="0" class="boolean-answer-text leading-5 relative py-2 px-4 rounded-lg text-gray-800 bg-gray-100 w-full" value="True" readonly/>
                                 <div class="flex p-2 items-center">
-                                    <input type="radio" name="boolean_answer" class="boolean-answer-value h-5 w-5 text-indigo-500 border border-gray-300 rounded focus:outline-none mr-3 rounded-full">
-                                    <i class="fas fa-bars text-lg cursor-move"></i>
+                                    <input type="radio" name="boolean_answer" class="boolean-answer-value h-5 w-5 text-indigo-500 border border-gray-300 rounded focus:outline-none mr-3 rounded-full" {{ auth()->user()->hasRole('teacher') ? '' : 'disabled' }}>
+                                    @if (auth()->user()->hasRole('teacher'))
+                                        <i class="fas fa-bars text-lg cursor-move"></i>
+                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -344,8 +363,10 @@
                             <div class="handle p-2 flex bg-gray-100 rounded-lg justify-between mb-2 w-full items-center">
                                 <input type="text" data-answer-id="0" class="boolean-answer-text leading-5 relative py-2 px-4 rounded-lg text-gray-800 bg-gray-100 w-full" value="False" readonly />
                                 <div class="flex p-2 items-center">
-                                    <input type="radio" name="boolean_answer" class="boolean-answer-value h-5 w-5 text-indigo-500 border border-gray-300 rounded focus:outline-none mr-3 rounded-full">
-                                    <i class="fas fa-bars text-lg cursor-move"></i>
+                                    <input type="radio" name="boolean_answer" class="boolean-answer-value h-5 w-5 text-indigo-500 border border-gray-300 rounded focus:outline-none mr-3 rounded-full" {{ auth()->user()->hasRole('teacher') ? '' : 'disabled' }}>
+                                    @if (auth()->user()->hasRole('teacher'))
+                                        <i class="fas fa-bars text-lg cursor-move"></i>
+                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -356,10 +377,12 @@
                     <div id="multiple_answer_list" class="hidden"></div>
                 </div>
 
-                <div class="form-group flex max-w-full px-4 w-full justify-between">
-                    <x-light-button id="add_answer_button" label="{{ __('Add a Answer') }}" icon="fas fa-plus" class="py-3 md:px-10 bg-white text-black font-semibold border border-red-300" />
-                    <x-button id="add_quiz_button" label="{{ __('Add / Update to Question') }}" type="submit" icon="" class="py-3 md:px-10 bg-red-700 text-white font-semibold border-transparent" />
-                </div>
+                @if (auth()->user()->hasRole('teacher'))
+                    <div class="form-group flex max-w-full px-4 w-full justify-between">
+                        <x-light-button id="add_answer_button" label="{{ __('Add a Answer') }}" icon="fas fa-plus" class="py-3 md:px-10 bg-white text-black font-semibold border border-red-300" />
+                        <x-button id="add_quiz_button" label="{{ __('Add / Update to Question') }}" type="submit" icon="" class="py-3 md:px-10 bg-red-700 text-white font-semibold border-transparent" />
+                    </div>
+                @endif
             </form>
         </div>
     </div>
@@ -499,13 +522,17 @@
                                     <input type="text" name="single_answer_text[]" data-answer-id="0" class="single-answer-text leading-5 relative py-2 px-4 rounded-lg text-gray-800 bg-white border border-gray-300 w-full overflow-x-auto focus:outline-none focus:border-gray-400 focus:ring-0" placeholder="Answer" />
                                 </div>
                                 <div class="flex p-2 items-center">
-                                    <input type="radio" name="single-answer-value" class="single-answer-value h-5 w-5 text-indigo-500 border border-gray-300 rounded focus:outline-none mr-3 rounded-full">
-                                    <i class="fas fa-bars text-lg cursor-move"></i>
+                                    <input type="radio" name="single-answer-value" class="single-answer-value h-5 w-5 text-indigo-500 border border-gray-300 rounded focus:outline-none mr-3 rounded-full" {{ auth()->user()->hasRole('teacher') ? '' : 'disabled' }} >
+                                    @if (auth()->user()->hasRole('teacher'))
+                                        <i class="fas fa-bars text-lg cursor-move"></i>
+                                    @endif
                                 </div>
                             </div>
-                            <div class="p-4">
-                                <a href="javascript:;" class="remove-answer"><i class="fas fa-trash text-2xl text-red-500"></i></a>
-                            </div>
+                            @if (auth()->user()->hasRole('teacher'))
+                                <div class="p-4">
+                                    <a href="javascript:;" class="remove-answer"><i class="fas fa-trash text-2xl text-red-500"></i></a>
+                                </div>
+                            @endif
                         </div>
         `;
         const multi_answer_item = `
@@ -515,13 +542,17 @@
                                     <input type="text" name="multi_answer_text[]" data-answer-id="0" class="multi-answer-text leading-5 relative py-2 px-4 rounded-lg text-gray-800 bg-white border border-gray-300 w-full overflow-x-auto focus:outline-none focus:border-gray-400 focus:ring-0" placeholder="Answer" />
                                 </div>
                                 <div class="flex p-2 items-center">
-                                    <input type="checkbox" class="multi-answer-value h-5 w-5 text-indigo-500 border border-gray-300 rounded focus:outline-none mr-3">
-                                    <i class="fas fa-bars text-lg cursor-move"></i>
+                                    <input type="checkbox" class="multi-answer-value h-5 w-5 text-indigo-500 border border-gray-300 rounded focus:outline-none mr-3" {{ auth()->user()->hasRole('teacher') ? '' : 'disabled' }}>
+                                    @if (auth()->user()->hasRole('teacher'))
+                                        <i class="fas fa-bars text-lg cursor-move"></i>
+                                    @endif
                                 </div>
                             </div>
-                            <div class="p-4">
-                                <a href="javascript:;" class="remove-answer"><i class="fas fa-trash text-2xl text-red-500"></i></a>
-                            </div>
+                            @if (auth()->user()->hasRole('teacher'))
+                                <div class="p-4">
+                                    <a href="javascript:;" class="remove-answer"><i class="fas fa-trash text-2xl text-red-500"></i></a>
+                                </div>
+                            @endif
                         </div>
         `;
 

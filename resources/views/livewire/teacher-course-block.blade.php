@@ -63,7 +63,7 @@
                             <form action="{{ route('teacher.course.publish', $course_id) }}" method="POST">
                                 @csrf
                                 @method('put')
-                                <input type="hidden" name="is_published" value="{{ $is_published }}">
+                                <input type="hidden" name="is_published" value="{{ $is_published == 1 ? 0 : 1}}">
                                 <button type="submit" id="publish_course_button" class="w-full text-left block rounded-lg px-3 py-2 hover:bg-gray-100 focus:bg-gray-100 ">{{ $is_published == 1 ? __('Unpublish') : __('Publish') }}</button>
                             </form>
                         @endif
@@ -86,7 +86,7 @@
         $('button#publish_course_button').on('click', function(event) {
             event.preventDefault();
             const form = $(this).parent();
-            const published = $('input[name=is_published]').val() == 1 ? 'Unpublish' : 'Publish';
+            const published = $('input[name=is_published]').val() == 1 ? 'Publish' : 'UnPublish';
             Swal.fire({
                 html: `Are you sure you want to ${published.toLowerCase()} the course?`,
                 icon: "warning",
