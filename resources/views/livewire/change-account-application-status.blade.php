@@ -11,8 +11,7 @@
 
             @can('change account application status')
                 <form action="{{route('account-applications.change-status', $applicant->id)}}" method="POST" class="col-md-9 m-auto">
-                    <x-select id="name" name="status" label="Status" group-class=""
-                              wire:model="status" >
+                    <x-select id="name" name="status" label="Status" group-class="" wire:model="status" >
                         @foreach ($statuses as $status)
                             <option value="{{$status}}">{{ucwords($status)}}</option>
                         @endforeach

@@ -6,12 +6,12 @@
             <i class="fas fa-search"></i>
         </button>
     </div>
-    <div class="overflow-x-scroll beautify-scrollbar text-center my-4 border rounded-lg">
+    <div class="text-center my-4 border rounded-lg">
         <table class="w-full table-auto">
             <thead class="">
                 @foreach ($columns as $column)
                     @if (!isset($column['can']) || auth()->user()->can($column['can']))
-                        <th class="capitalize p-4 whitespace-nowrap text-left">{{str_replace('_' , ' ', Str::snake( $column['name'] ??  $column['property']))}}</th>
+                        <th class="capitalize p-4 whitespace-nowrap">{{str_replace('_' , ' ', Str::snake( $column['name'] ??  $column['property']))}}</th>
                     @endif
                 @endforeach
             </thead>
