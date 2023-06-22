@@ -1,5 +1,5 @@
 @extends('layouts.app', ['breadcrumbs' => [
-    ['href'=> route('dashboard'), 'text'=> 'Dashboard'],
+    ['href'=> route('home'), 'text'=> 'Dashboard'],
     ['href'=> route('account-applications.index'), 'text'=> 'Account Applications', 'active'],
 ]])
 

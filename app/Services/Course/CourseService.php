@@ -23,9 +23,15 @@ class CourseService
     public function getCourses($type): Collection
     {
         if ($type == 'publish')
-            $courses = Course::with('lessons')->where('is_published', 1)->where('assigned_id', auth()->user()->id)->get();
+            if (auth()->user()->hasRole('super-admin'))
+                $courses = Course::with('lessons')->where('is_published', 1)->get();
+            else
+                $courses = Course::with('lessons')->where('is_published', 1)->where('assigned_id', auth()->user()->id)->get();
         elseif ($type == 'draft')
-            $courses = Course::with('lessons')->where('is_published', 0)->where('assigned_id', auth()->user()->id)->get();
+            if (auth()->user()->hasRole('super-admin'))
+                $courses = Course::with('lessons')->where('is_published', 0)->get();
+            else
+                $courses = Course::with('lessons')->where('is_published', 0)->where('assigned_id', auth()->user()->id)->get();
         elseif ($type == 'progress') {
             /*
             SELECT C.* FROM courses C INNER JOIN
