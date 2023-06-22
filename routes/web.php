@@ -17,11 +17,11 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return redirect()->route('dashboard');
+    return redirect()->route('profile.show');
 })->name('home');
 
 Route::get('/home', function () {
-    return redirect()->route('dashboard');
+    return redirect()->route('profile.show');
 });
 
 //Payment routes
@@ -85,8 +85,8 @@ Route::middleware('auth:sanctum', 'verified', 'App\Http\Middleware\PreventLockAc
 Route::middleware('auth:sanctum', 'verified', 'App\Http\Middleware\PreventLockAccountAccess', 'App\Http\Middleware\EnsureDefaultPasswordIsChanged')->prefix('dashboard')->namespace('App\Http\Controllers')->group(function () {
     //dashboard route
     Route::get('/', function () {
-        return view('dashboard');
-    })->name('dashboard');
+        return view('profile.show');
+    })->name('profile.show');
 
     Route::get('account-applications/rejected-applications', ['App\Http\Controllers\AccountApplicationController', 'rejectedApplicationsView'])->name('account-applications.rejected-applications');
 
