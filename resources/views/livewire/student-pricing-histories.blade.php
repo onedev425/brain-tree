@@ -9,10 +9,10 @@
     <div class="overflow-x-scroll beautify-scrollbar text-center my-4 border rounded-lg">
         <table class="w-full table-auto">
             <thead class="">
-            <th class="capitalize p-4 whitespace-nowrap text-left">{{ __('Course') }}</th>
-            <th class="capitalize p-4 whitespace-nowrap text-left">{{ __('Price') }}</th>
-            <th class="capitalize p-4 whitespace-nowrap text-left">{{ __('Student') }}</th>
-            <th class="capitalize p-4 whitespace-nowrap text-left">{{ __('Purchase At') }}</th>
+                <th class="capitalize p-4 whitespace-nowrap text-left">{{ __('Course') }}</th>
+                <th class="capitalize p-4 whitespace-nowrap text-left">{{ __('Price') }}</th>
+                <th class="capitalize p-4 whitespace-nowrap text-left">{{ __('Teacher') }}</th>
+                <th class="capitalize p-4 whitespace-nowrap text-left">{{ __('Purchase At') }}</th>
             </thead>
             <tbody class="text-left">
             @if ($courses->isNotEmpty())
@@ -26,7 +26,7 @@
 
                         </td>
                         <td class="p-4 whitespace-nowrap">${{ $course->price }}</td>
-                        <td class="p-4 whitespace-nowrap">{{ $course->student_name }}</td>
+                        <td class="p-4 whitespace-nowrap">{{ $course->assignedTeacher->name }}</td>
                         <td class="p-4 whitespace-nowrap">{{ substr($course->purchase_at, 0, 10) }}</td>
                     </tr>
                 @endforeach
@@ -42,3 +42,4 @@
         {{ $courses->links() }}
     </div>
 </div>
+

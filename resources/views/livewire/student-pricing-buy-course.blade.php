@@ -1,7 +1,7 @@
 <div>
     <x-loading-spinner/>
     <div class="flex items-center justify-end">
-        <input id="datatable-search-student-purchase-history" type="search" wire:model.sebounce.500ms="search"  placeholder="Search" class="border border-gray-300 rounded-l py-2 px-4"/>
+        <input id="datatable-search-buy-course" type="search" wire:model.sebounce.500ms="search"  placeholder="Search" class="border border-gray-300 rounded-l py-2 px-4"/>
         <button class="bg-red-500 hover:bg-red-600 text-white rounded-r py-2 px-4 focus:outline-none focus:ring focus:border-red-300">
             <i class="fas fa-search"></i>
         </button>
@@ -11,8 +11,9 @@
             <thead class="">
             <th class="capitalize p-4 whitespace-nowrap text-left">{{ __('Course') }}</th>
             <th class="capitalize p-4 whitespace-nowrap text-left">{{ __('Price') }}</th>
-            <th class="capitalize p-4 whitespace-nowrap text-left">{{ __('Student') }}</th>
-            <th class="capitalize p-4 whitespace-nowrap text-left">{{ __('Purchase At') }}</th>
+            <th class="capitalize p-4 whitespace-nowrap text-left">{{ __('Teacher') }}</th>
+            <th class="capitalize p-4 whitespace-nowrap text-left">{{ __('Created At') }}</th>
+            <th class="capitalize p-4 whitespace-nowrap text-left">{{ __('Action') }}</th>
             </thead>
             <tbody class="text-left">
             @if ($courses->isNotEmpty())
@@ -26,8 +27,11 @@
 
                         </td>
                         <td class="p-4 whitespace-nowrap">${{ $course->price }}</td>
-                        <td class="p-4 whitespace-nowrap">{{ $course->student_name }}</td>
-                        <td class="p-4 whitespace-nowrap">{{ substr($course->purchase_at, 0, 10) }}</td>
+                        <td class="p-4 whitespace-nowrap">{{ $course->assignedTeacher->name }}</td>
+                        <td class="p-4 whitespace-nowrap">{{ substr($course->created_at, 0, 10) }}</td>
+                        <td class="p-4 whitespace-nowrap">
+                            <x-button wire:click="BuyCourse({{ $course->id }}, '{{ $course->assignedTeacher->payment_connection->paypal_account_id }}')" class="text-purple-500">{{ __('Buy Course') }}</x-button>
+                        </td>
                     </tr>
                 @endforeach
             @else
@@ -42,3 +46,4 @@
         {{ $courses->links() }}
     </div>
 </div>
+

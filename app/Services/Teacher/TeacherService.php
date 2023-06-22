@@ -3,6 +3,7 @@
 namespace App\Services\Teacher;
 
 use App\Models\User;
+use App\Models\Course;
 use App\Services\Print\PrintService;
 use App\Services\User\UserService;
 use Illuminate\Database\Eloquent\Collection;
@@ -125,5 +126,21 @@ class TeacherService
             });
 
         return $students;
+    }
+
+    public function getSoldCourses(string $search)
+    {
+        $courses = Course::select('courses.*', 'student_courses.created_at AS purchase_at', 'users.name AS student_name')
+            ->join('student_courses', 'courses.id', '=', 'student_courses.course_id')
+            ->join('users', 'student_courses.student_id', '=', 'users.id')
+            ->where('courses.assigned_id', auth()->user()->id);
+
+        if ($search != '')
+            $courses = $courses->where(function ($query) use ($search) {
+                $query->where('courses.title', 'LIKE', '%'. $search . '%')
+                    ->orWhere('users.name', 'LIKE', '%'. $search . '%');
+            });
+
+        return $courses->with('assignedTeacher');
     }
 }
