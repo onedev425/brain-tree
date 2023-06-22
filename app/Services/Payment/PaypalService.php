@@ -96,6 +96,56 @@ class PaypalService
         return ['result' => 'error', 'redirect_url' => route('home')];
     }
 
+
+    public function buyCourse(Course $course, string $seller_account_id): array
+    {
+        $course_fee = PaymentFee::all()->where('fee_type', 'student_course_fee_percent')->first();
+
+        $provider = new PayPalClient();
+        $provider->setApiCredentials(config('paypal'));
+        $paypalToken = $provider->getAccessToken();
+        $provider->setAccessToken($paypalToken);
+        $response = $provider->createOrder([
+            "intent" => "CAPTURE",
+            "application_context" => [
+                "return_url" => route('paypal.callback', 'buyer=student&course=' . $course->id),
+                "cancel_url" => route('paypal.cancel', 'buyer=student&course=' . $course->id),
+            ],
+            "purchase_units" => [
+                [
+                    'amount' => [
+                        'currency_code' => 'USD',
+                        'value' => $course->price,
+                    ],
+                    'payee' => [
+                        'merchant_id' => $seller_account_id,
+                    ],
+                    'payment_instruction' => [
+                        'disbursement_mode' => 'INSTANT',
+                        'platform_fees' => [
+                            [
+                                'amount' => [
+                                    'currency_code' => 'USD',
+                                    'value' => $course->price * $course_fee->fee_value / 100,
+                                ]
+                            ]
+                        ]
+                    ]
+                ],
+
+            ]
+        ]);
+
+        if (isset($response['id']) && $response['id'] != null) {
+            foreach ($response['links'] as $links) {
+                if ($links['rel'] == 'approve') {
+                    return ['result' => 'success', 'redirect_url' => $links['href']];
+                }
+            }
+        }
+        return ['result' => 'error', 'redirect_url' => route('home')];
+    }
+
     public function capturePayment(string $token): bool
     {
         $provider = new PayPalClient;
