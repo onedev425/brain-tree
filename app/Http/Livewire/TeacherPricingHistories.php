@@ -2,12 +2,39 @@
 
 namespace App\Http\Livewire;
 
+use App\Services\Teacher\TeacherService;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class TeacherPricingHistories extends Component
 {
+    use WithPagination;
+
+    public string $search = '';
+    private TeacherService $teacherService;
+
+
+    public function mount(TeacherService $teacherService)
+    {
+        $this->teacherService = $teacherService;
+    }
+
+    public function paginationView()
+    {
+        return 'components.datatable-pagination-links-view';
+    }
+
     public function render()
     {
-        return view('livewire.teacher-pricing-histories');
+        if (!isset($this->teacherService)) {
+            $this->teacherService = app(TeacherService::class);
+        }
+
+        $courses = $this->teacherService->getSoldCourses($this->search);
+        $courses = $courses->paginate(10);
+
+        return view('livewire.teacher-pricing-histories', [
+            'courses' => $courses,
+        ]);
     }
 }
