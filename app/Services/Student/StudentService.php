@@ -339,6 +339,15 @@ class StudentService
         return $correct_points;
     }
 
+    public function getCourseCompletedDate(Course $course): string
+    {
+        $student = auth()->user();
+        return $student->student_questions()
+            ->where('course_id', $course->id)
+            ->latest('created_at')
+            ->value('created_at');
+    }
+  
     public function getStudentUnpaidCourses(string $search)
     {
         $excluded_course_ids = DB::table('student_courses')
