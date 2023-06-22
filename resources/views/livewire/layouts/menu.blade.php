@@ -21,9 +21,11 @@
                 <div class="p-3">
                     <div class="text-center mb-10">
 
-                        <div class="hidden sm:inline-block image-input image-input-outline image-input-empty" data-kt-image-input="true" style="border-radius: 50%; background-image: url( {{ asset('images/logo/avatar.png') }} )">
+                        @php( $photo_path = auth()->user()->profile_photo_path)
+                        <div class="hidden sm:inline-block image-input image-input-outline {{ strpos($photo_path, 'images/logo/avatar') > 0 || ! $photo_path ? 'image-input-empty' : '' }}" data-kt-image-input="true" style="border-radius: 50%; background-image: url( {{ asset('images/logo/avatar.png') }} )">
+                            <input type="hidden" name="use_default_image">
                             <!--begin::Preview existing avatar-->
-                            <div class="image-input-wrapper w-56 h-56" id="avatar_image_container" style="border-radius: 50%; background-image: url( {{ asset('images/logo/avatar.png') }} )"></div>
+                            <div class="image-input-wrapper w-56 h-56" id="avatar_image_container" style="border-radius: 50%; background-image: url( {{ strpos($photo_path, 'images/logo/avatar') > 0 || ! $photo_path ? '' : $photo_path }})"></div>
                             <!--end::Preview existing avatar-->
                             <!--begin::Label-->
                             <label class="btn btn-icon rounded-full hover:text-green-600 w-6 h-6 bg-white shadow" data-kt-image-input-action="change" title="Change company logo" style="left:80%;margin-top:25px">
@@ -134,6 +136,46 @@
         avatarImageRemove.addEventListener('click', function() {
             avatarImageContainer.style.backgroundImage = 'none';
             avatarImageContainer.parentNode.classList.add('image-input-empty');
+
+            $.ajax({
+                url: '{{ route('user.avatar.remove') }}',
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(response) {
+                    // Handle the server response
+                },
+                error: function(xhr, status, error) {
+                    // Handle the AJAX error
+                }
+            });
+        });
+
+        $(document).on('change', '#avatar_image_input', function(e) {
+            e.preventDefault();
+
+            $('input[name=use_default_image]').val(($('div#avatar_image_container').css('background-image') == 'none' || $('div#avatar_image_container').css('background-image') == '') ? 1 : 0);
+            var formData = new FormData();
+            formData.append('avatar_image', $(this)[0].files[0]);
+            formData.append('use_default_image', $('input[name=use_default_image]').val());
+
+            $.ajax({
+                url: '{{ route('user.avatar.update') }}',
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    // Handle the server response
+                },
+                error: function(xhr, status, error) {
+                    // Handle the AJAX error
+                }
+            });
         });
     </script>
 </nav>
