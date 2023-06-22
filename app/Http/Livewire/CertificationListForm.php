@@ -33,9 +33,16 @@ class CertificationListForm extends Component
         $studentService = app(StudentService::class);
         return $studentService->getPointsOfStudentExam($course->id, auth()->user()->id);
     }
+
     public function getCourseCompletedDate(Course $course): string
     {
         $studentService = app(StudentService::class);
         return $studentService->getCourseCompletedDate($course);
+    }
+
+    public function getCourseStartedDate(Course $course): string
+    {
+        $studentService = app(StudentService::class);
+        return $studentService->getCourseStartedDate($course);
     }
 }

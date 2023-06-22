@@ -70,6 +70,7 @@ Route::middleware('auth:sanctum', 'verified', 'App\Http\Middleware\PreventLockAc
 
     // certificaiton routes
     Route::get('certification', ['App\Http\Controllers\CertificationController', 'index'])->name('certification.index');
+    Route::get('download_certification', ['App\Http\Controllers\CertificationController', 'download'])->name('certification.download');
 
     //Marks routes
     Route::get('marks', ['App\Http\Controllers\MarksController', 'index'])->name('marks.index');
