@@ -116,8 +116,10 @@ class TeacherService
                         ) R
                     ) P GROUP BY P.student_id, P.course_id
                 ) M'), 'U.id', '=', 'M.student_id')
-            ->join('courses as C', 'M.course_id', '=', 'C.id')
-            ->where('C.assigned_id', '=', $teacher_id);
+            ->join('courses as C', 'M.course_id', '=', 'C.id');
+
+        if (auth()->user()->hasRole('teacher'))
+            $students = $students->where('C.assigned_id', '=', $teacher_id);
 
         if ($search != '')
             $students = $students->where(function ($query) use ($search) {
