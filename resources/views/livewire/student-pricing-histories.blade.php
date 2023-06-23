@@ -11,7 +11,7 @@
             <thead class="">
                 <th class="capitalize p-4 whitespace-nowrap text-left">{{ __('Course') }}</th>
                 <th class="capitalize p-4 whitespace-nowrap text-left">{{ __('Price') }}</th>
-                <th class="capitalize p-4 whitespace-nowrap text-left">{{ __('Teacher') }}</th>
+                <th class="capitalize p-4 whitespace-nowrap text-left">{{ __('Instructor') }}</th>
                 <th class="capitalize p-4 whitespace-nowrap text-left">{{ __('Purchase At') }}</th>
             </thead>
             <tbody class="text-left">

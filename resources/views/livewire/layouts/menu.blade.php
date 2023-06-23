@@ -55,7 +55,7 @@
                         </div>
 
                         <div class="text-4xl font-bold mb-3">{{ auth()->user()->name }}</div>
-                        <div class="text-xl capitalize">{{ auth()->user()->roles[0]->name }}</div>
+                        <div class="text-xl capitalize">{{ auth()->user()->hasRole('teacher') ? 'Instructor' : auth()->user()->roles[0]->name }}</div>
                     </div>
                     @isset ($menu)
                         @foreach ($menu as $menuItem)
