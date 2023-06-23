@@ -116,8 +116,10 @@ class TeacherService
                         ) R
                     ) P GROUP BY P.student_id, P.course_id
                 ) M'), 'U.id', '=', 'M.student_id')
-            ->join('courses as C', 'M.course_id', '=', 'C.id')
-            ->where('C.assigned_id', '=', $teacher_id);
+            ->join('courses as C', 'M.course_id', '=', 'C.id');
+
+        if (auth()->user()->hasRole('teacher'))
+            $students = $students->where('C.assigned_id', '=', $teacher_id);
 
         if ($search != '')
             $students = $students->where(function ($query) use ($search) {
@@ -132,8 +134,10 @@ class TeacherService
     {
         $courses = Course::select('courses.*', 'student_courses.created_at AS purchase_at', 'users.name AS student_name')
             ->join('student_courses', 'courses.id', '=', 'student_courses.course_id')
-            ->join('users', 'student_courses.student_id', '=', 'users.id')
-            ->where('courses.assigned_id', auth()->user()->id);
+            ->join('users', 'student_courses.student_id', '=', 'users.id');
+
+        if (auth()->user()->hasRole('teacher'))
+            $courses = $courses->where('courses.assigned_id', auth()->user()->id);
 
         if ($search != '')
             $courses = $courses->where(function ($query) use ($search) {
