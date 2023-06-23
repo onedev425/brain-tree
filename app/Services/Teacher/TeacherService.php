@@ -134,8 +134,10 @@ class TeacherService
     {
         $courses = Course::select('courses.*', 'student_courses.created_at AS purchase_at', 'users.name AS student_name')
             ->join('student_courses', 'courses.id', '=', 'student_courses.course_id')
-            ->join('users', 'student_courses.student_id', '=', 'users.id')
-            ->where('courses.assigned_id', auth()->user()->id);
+            ->join('users', 'student_courses.student_id', '=', 'users.id');
+
+        if (auth()->user()->hasRole('teacher'))
+            $courses = $courses->where('courses.assigned_id', auth()->user()->id);
 
         if ($search != '')
             $courses = $courses->where(function ($query) use ($search) {

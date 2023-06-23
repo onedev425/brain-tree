@@ -8,16 +8,20 @@
                 <a href="javascript:;" wire:click="setTab('histories')" class="py-2 px-2 lg:px-4 w-full md:w-1/3 lg:w-1/3 xl:w-1/5 text-center text-black cursor-pointer block font-semibold {{ $activeTab === 'histories' ? 'border-b-2 border-purple-600 ' : '' }}"  style="{{ $activeTab === 'histories' ? '' : 'opacity: .5' }}">
                     {{ __('Purchase History') }}
                 </a>
-                <a href="javascript:;" wire:click="setTab('payment_method')" class="py-2 px-2 lg:px-4 w-full md:w-1/3 lg:w-1/3 xl:w-1/5 text-center text-black cursor-pointer block font-semibold {{ $activeTab === 'payment_method' ? 'border-b-2 border-purple-600 ' : '' }}"  style="{{ $activeTab === 'payment_method' ? '' : 'opacity: .5' }}">
-                    {{ __('Payment Methods') }}
-                </a>
+                @if (auth()->user()->hasRole('teacher'))
+                    <a href="javascript:;" wire:click="setTab('payment_method')" class="py-2 px-2 lg:px-4 w-full md:w-1/3 lg:w-1/3 xl:w-1/5 text-center text-black cursor-pointer block font-semibold {{ $activeTab === 'payment_method' ? 'border-b-2 border-purple-600 ' : '' }}"  style="{{ $activeTab === 'payment_method' ? '' : 'opacity: .5' }}">
+                        {{ __('Payment Methods') }}
+                    </a>
+                @endif
             </div>
 
             <div style="margin-top: 40px">
                 @if ($activeTab === 'histories')
                     <livewire:teacher-pricing-histories />
                 @else
-                    <livewire:teacher-pricing-payment-method />
+                    @if (auth()->user()->hasRole('teacher'))
+                        <livewire:teacher-pricing-payment-method />
+                    @endif
                 @endif
             </div>
         </div>
