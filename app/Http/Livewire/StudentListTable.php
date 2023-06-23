@@ -2,14 +2,11 @@
 
 namespace App\Http\Livewire;
 
-use App\Exceptions\InvalidClassException;
 use App\Services\Student\StudentService;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\Crypt;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Livewire\Component;
 use Livewire\WithPagination;
+use App\Models\User;
 
 class StudentListTable extends Component
 {
@@ -37,7 +34,7 @@ class StudentListTable extends Component
             $this->studentService = app(StudentService::class);
         }
 
-        $students = $this->studentService->getStudentsOfTeacher($this->search);
+        $students = auth()->user()->hasRole('super-admin') ? User::Role('student') : $this->studentService->getStudentsOfTeacher($this->search);
         $students = $students->paginate(10);
         return view('livewire.student-list-table', [
             'students' => $students,

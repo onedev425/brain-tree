@@ -27,7 +27,7 @@ class Course extends Model
      */
     public function assignedTeacher()
     {
-        return $this->belongsTo(User::class, 'assigned_id');
+        return $this->belongsTo(User::class, 'assigned_id')->with('payment_connection');
     }
 
     public function topics(): HasMany

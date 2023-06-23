@@ -236,9 +236,11 @@ class StudentService
                 }, 'P', function ($join) {
                     $join->on('C.id', '=', 'P.course_id');
                 })
-                ->where('P.is_completed', 0)
-                ->where('C.assigned_id', auth()->user()->id)
-                ->with('lessons')
+                ->where('P.is_completed', 0);
+
+            if (auth()->user()->hasRole('teacher')) $courses = $courses->where('C.assigned_id', auth()->user()->id);
+
+            $courses = $courses->with('lessons')
                 ->with('questions')
                 ->with('assignedTeacher')
                 ->get();
@@ -282,9 +284,11 @@ class StudentService
                 }, 'P', function ($join) {
                     $join->on('C.id', '=', 'P.course_id');
                 })
-                ->where('P.is_completed', 1)
-                ->where('C.assigned_id', auth()->user()->id)
-                ->with('lessons')
+                ->where('P.is_completed', 1);
+
+            if (auth()->user()->hasRole('teacher')) $courses = $courses->where('C.assigned_id', auth()->user()->id);
+
+            $courses = $courses->with('lessons')
                 ->with('questions')
                 ->with('assignedTeacher')
                 ->get();
@@ -295,6 +299,7 @@ class StudentService
 
         return $courses;
     }
+
 
     public function getStudentsOfTeacher(string $search)
     {
