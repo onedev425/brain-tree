@@ -36,10 +36,10 @@ class CourseService
             /*
             SELECT C.* FROM courses C INNER JOIN
             (
-                SELECT M.course_id, SUM(1) question_nums, SUM(M.is_passed) passed_question_nums, IF(SUM(1) = SUM(M.is_passed), 1, 0) is_completed FROM (
+                SELECT M.course_id, SUM(1) question_nums, SUM(M.is_passed) passed_question_nums, IF(SUM(M.is_passed) / SUM(1) * 100 > M.pass_percent, 1, 0) is_completed FROM (
                     SELECT *, IF((R.question_type = 'multi' OR R.question_type = 'boolean') AND R.quiz_option_nums = R.correct_option_nums, 1, IF(R.question_type = 'single' AND R.correct_option_nums = 1, 1, 0)) is_passed FROM (
-                        SELECT course_id, question_id, question_text, question_type, points, SUM(1) quiz_option_nums, SUM(exam_result) correct_option_nums FROM (
-                                SELECT C.id course_id, Q.id question_id, Q.name question_text, Q.type question_type, Q.points, QO.description, QO.answer, SQ.question_id student_question_id,
+                        SELECT course_id, pass_percent, question_id, question_text, question_type, points, SUM(1) quiz_option_nums, SUM(exam_result) correct_option_nums FROM (
+                                SELECT C.id course_id, C.pass_percent, Q.id question_id, Q.name question_text, Q.type question_type, Q.points, QO.description, QO.answer, SQ.question_id student_question_id,
                                         SQ.answer student_answer, IF(Q.id = SQ.question_id AND (Q.type = 'multi' OR Q.type = 'boolean') AND QO.answer = SQ.answer, 1,
                                             IF(Q.id = SQ.question_id AND Q.type = 'single', QO.answer * SQ.answer, 0)) exam_result
                                 FROM courses C
@@ -47,9 +47,9 @@ class CourseService
                                 LEFT JOIN questions Q ON C.id = Q.course_id
                                 LEFT JOIN question_options QO ON Q.id = QO.question_id
                                 LEFT JOIN student_questions SQ ON C.id = SQ.course_id AND Q.id = SQ.question_id AND QO.id = SQ.question_option_id AND SQ.student_id = '31'
-                        ) T GROUP BY T.course_id, T.question_id, T.question_text, T.question_type, T.points
+                        ) T GROUP BY T.course_id, T.pass_percent, T.question_id, T.question_text, T.question_type, T.points
                     ) R
-                ) M GROUP BY M.course_id
+                ) M GROUP BY M.course_id, M.pass_percent
             ) P ON C.id = P.course_id WHERE P.is_completed = 0
              */
             $student_id = auth()->user()->id;
@@ -59,16 +59,16 @@ class CourseService
                     $subquery->select('M.course_id')
                         ->selectRaw('SUM(1) AS question_nums')
                         ->selectRaw('SUM(M.is_passed) AS passed_question_nums')
-                        ->selectRaw('IF(SUM(1) = SUM(M.is_passed), 1, 0) AS is_completed')
+                        ->selectRaw('IF(SUM(M.is_passed) / SUM(1) * 100 > M.pass_percent, 1, 0) AS is_completed')
                         ->from(function ($subquery) use ($student_id) {
                             $subquery->select('*')
                                 ->selectRaw('IF((R.question_type = "multi" OR R.question_type = "boolean") AND R.quiz_option_nums = R.correct_option_nums, 1, IF(R.question_type = "single" AND R.correct_option_nums = 1, 1, 0)) AS is_passed')
                                 ->from(function ($subquery) use ($student_id) {
-                                    $subquery->select('T.course_id', 'T.question_id', 'T.question_text', 'T.question_type', 'T.points')
+                                    $subquery->select('T.course_id', 'T.pass_percent', 'T.question_id', 'T.question_text', 'T.question_type', 'T.points')
                                         ->selectRaw('SUM(1) AS quiz_option_nums')
                                         ->selectRaw('SUM(exam_result) AS correct_option_nums')
                                         ->from(function ($subquery) use ($student_id) {
-                                            $subquery->select('C.id AS course_id', 'Q.id AS question_id', 'Q.name AS question_text', 'Q.type AS question_type', 'Q.points', 'QO.description', 'QO.answer', 'SQ.question_id AS student_question_id')
+                                            $subquery->select('C.id AS course_id', 'C.pass_percent', 'Q.id AS question_id', 'Q.name AS question_text', 'Q.type AS question_type', 'Q.points', 'QO.description', 'QO.answer', 'SQ.question_id AS student_question_id')
                                                 ->selectRaw('SQ.answer AS student_answer')
                                                 ->selectRaw('IF(Q.id = SQ.question_id AND (Q.type = "multi" OR Q.type = "boolean") AND QO.answer = SQ.answer, 1, IF(Q.id = SQ.question_id AND Q.type = "single", QO.answer * SQ.answer, 0)) AS exam_result')
                                                 ->from('courses AS C')
@@ -84,10 +84,10 @@ class CourseService
                                                         ->where('SQ.student_id', $student_id);
                                                 });
                                         }, 'T')
-                                        ->groupBy('T.course_id', 'T.question_id', 'T.question_text', 'T.question_type', 'T.points');
+                                        ->groupBy('T.course_id', 'T.pass_percent', 'T.question_id', 'T.question_text', 'T.question_type', 'T.points');
                                 }, 'R');
                         }, 'M')
-                        ->groupBy('M.course_id');
+                        ->groupBy('M.course_id', 'M.pass_percent');
                 }, 'P', function ($join) {
                     $join->on('C.id', '=', 'P.course_id');
                 })
@@ -105,16 +105,16 @@ class CourseService
                     $subquery->select('M.course_id')
                         ->selectRaw('SUM(1) AS question_nums')
                         ->selectRaw('SUM(M.is_passed) AS passed_question_nums')
-                        ->selectRaw('IF(SUM(1) = SUM(M.is_passed), 1, 0) AS is_completed')
+                        ->selectRaw('IF(SUM(M.is_passed) / SUM(1) * 100 > M.pass_percent, 1, 0) AS is_completed')
                         ->from(function ($subquery) use ($student_id) {
                             $subquery->select('*')
                                 ->selectRaw('IF((R.question_type = "multi" OR R.question_type = "boolean") AND R.quiz_option_nums = R.correct_option_nums, 1, IF(R.question_type = "single" AND R.correct_option_nums = 1, 1, 0)) AS is_passed')
                                 ->from(function ($subquery) use ($student_id) {
-                                    $subquery->select('T.course_id', 'T.question_id', 'T.question_text', 'T.question_type', 'T.points')
+                                    $subquery->select('T.course_id', 'T.pass_percent', 'T.question_id', 'T.question_text', 'T.question_type', 'T.points')
                                         ->selectRaw('SUM(1) AS quiz_option_nums')
                                         ->selectRaw('SUM(exam_result) AS correct_option_nums')
                                         ->from(function ($subquery) use ($student_id) {
-                                            $subquery->select('C.id AS course_id', 'Q.id AS question_id', 'Q.name AS question_text', 'Q.type AS question_type', 'Q.points', 'QO.description', 'QO.answer', 'SQ.question_id AS student_question_id')
+                                            $subquery->select('C.id AS course_id', 'C.pass_percent', 'Q.id AS question_id', 'Q.name AS question_text', 'Q.type AS question_type', 'Q.points', 'QO.description', 'QO.answer', 'SQ.question_id AS student_question_id')
                                                 ->selectRaw('SQ.answer AS student_answer')
                                                 ->selectRaw('IF(Q.id = SQ.question_id AND (Q.type = "multi" OR Q.type = "boolean") AND QO.answer = SQ.answer, 1, IF(Q.id = SQ.question_id AND Q.type = "single", QO.answer * SQ.answer, 0)) AS exam_result')
                                                 ->from('courses AS C')
@@ -130,10 +130,10 @@ class CourseService
                                                         ->where('SQ.student_id', $student_id);
                                                 });
                                         }, 'T')
-                                        ->groupBy('T.course_id', 'T.question_id', 'T.question_text', 'T.question_type', 'T.points');
+                                        ->groupBy('T.course_id', 'T.pass_percent', 'T.question_id', 'T.question_text', 'T.question_type', 'T.points');
                                 }, 'R');
                         }, 'M')
-                        ->groupBy('M.course_id');
+                        ->groupBy('M.course_id', 'M.pass_percent');
                 }, 'P', function ($join) {
                     $join->on('C.id', '=', 'P.course_id');
                 })
