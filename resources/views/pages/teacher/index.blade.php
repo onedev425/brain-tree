@@ -1,11 +1,8 @@
-@extends('layouts.app', ['breadcrumbs' => [
-    ['href'=> route('dashboard'), 'text'=> 'Dashboard'],
-    ['href'=> route('teachers.index'), 'text'=> 'Teachers', 'active'],
-]])
+@extends('layouts.app')
 
-@section('title',  __('Teachers'))
+@section('title',  __('Instructors'))
 
-@section('page_heading',   __('Teachers'))
+@section('page_heading',   __('Instructors'))
 
 @section('content', )
     @livewire('list-teachers-table')

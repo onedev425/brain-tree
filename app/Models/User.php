@@ -250,4 +250,9 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasOne(PaymentConnection::class, 'teacher_id');
     }
+
+    public function assignedCourses(): HasMany
+    {
+        return $this->hasMany(Course::class, 'assigned_id');
+    }
 }
