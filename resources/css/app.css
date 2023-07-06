@@ -23,7 +23,7 @@
     }
 
     .card {
-        @apply  bg-white dark:bg-gray-800 rounded-xl shadow border my-6 p-5 md:p-10
+        @apply  bg-white rounded-xl shadow border my-6 p-5 md:p-10
     }
 
     .card-header {
