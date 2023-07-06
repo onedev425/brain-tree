@@ -38,6 +38,7 @@
                         </g>
                     </svg>
                 </a>
+                @if (auth()->user()->hasRole('super-admin') || (auth()->user()->hasRole('teacher') && $is_published == 0))
                 <div x-data="{ open: false }" class="relative mr-4">
                     <button @click="open = ! open" class="text-gray-500 hover:text-gray-600 dark:hover:text-gray-400 transition-colors duration-200 focus:outline-none hover:outline-none">
                         <svg xmlns="http://www.w3.org/2000/svg" width="4" height="18" viewBox="0 0 4 18">
@@ -67,14 +68,27 @@
                                 <button type="submit" id="publish_course_button" class="w-full text-left block rounded-lg px-3 py-2 hover:bg-gray-100 focus:bg-gray-100 ">{{ $is_published == 1 ? __('Unpublish') : __('Publish') }}</button>
                             </form>
                         @endif
-                        <form action="{{ route('teacher.course.destroy', $course_id) }}" method="POST">
-                            @csrf
-                            @method('delete')
-                            <input type="hidden" name="is_published" value="{{ $is_published }}">
-                            <button type="submit" id="delete_course_button" class="w-full text-left block rounded-lg px-3 py-2 hover:bg-gray-100 focus:bg-gray-100 ">{{ __('Delete') }}</button>
-                        </form>
+
+                        @if ($is_published == 0)
+                            @if (auth()->user()->hasRole('super-admin'))
+                                <form action="{{ route('teacher.course.destroy', $course_id) }}" method="POST">
+                                    @csrf
+                                    @method('post')
+                                    <input type="hidden" name="is_published" value="{{ $is_published }}">
+                                    <button type="submit" id="decline_course_button" class="w-full text-left block rounded-lg px-3 py-2 hover:bg-gray-100 focus:bg-gray-100 ">{{ __('Decline') }}</button>
+                                </form>
+                            @endif
+
+                            <form action="{{ route('teacher.course.destroy', $course_id) }}" method="POST">
+                                @csrf
+                                @method('delete')
+                                <input type="hidden" name="is_published" value="{{ $is_published }}">
+                                <button type="submit" id="delete_course_button" class="w-full text-left block rounded-lg px-3 py-2 hover:bg-gray-100 focus:bg-gray-100 ">{{ __('Delete') }}</button>
+                            </form>
+                        @endif
                     </div>
                 </div>
+                @endif
             </div>
         </div>
 
