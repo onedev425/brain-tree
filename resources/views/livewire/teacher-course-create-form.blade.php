@@ -10,10 +10,10 @@
             <input type="hidden" name="is_published">
             <input type="hidden" name="use_default_image">
             <div class="float-right my-3">
-                <button type="submit" id="publish_course_button" class="py-3 px-8 inline-block text-center mb-3 rounded-lg leading-5 text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 hover:ring-0 hover:border-red-600 focus:bg-red-600 focus:border-red-600 focus:outline-none focus:ring-0">
-                    {{ __('Publish') }}
-                </button>
-                <button type="submit" id="save_course_button" class="py-3 px-8 inline-block text-center mb-3 rounded-lg leading-5 text-gray-900 bg-gray-100 border border-gray-900 hover:text-white hover:bg-gray-500 hover:ring-0 hover:border-gray-500 focus:bg-gray-500 focus:border-gray-500 focus:outline-none focus:ring-0">
+{{--                <button type="submit" id="publish_course_button" class="py-3 px-8 inline-block text-center mb-3 rounded-lg leading-5 text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 hover:ring-0 hover:border-red-600 focus:bg-red-600 focus:border-red-600 focus:outline-none focus:ring-0">--}}
+{{--                    {{ __('Publish') }}--}}
+{{--                </button>--}}
+                <button type="submit" id="save_course_button" class="py-3 px-8 inline-block text-center mb-3 rounded-lg leading-5 text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 hover:ring-0 hover:border-red-600 focus:bg-red-600 focus:border-red-600 focus:outline-none focus:ring-0">
                     @if (auth()->user()->hasRole('super-admin'))
                         {{ __('Save as draft') }}
                     @else
@@ -48,6 +48,16 @@
                                     @endforeach
                                 </x-select>
                             </div>
+                            @if (auth()->user()->hasRole('super-admin'))
+                            <div class="mb-6">
+                                <label for="instructor" class="block mb-2 font-medium text-gray-900">{{ __('Instructor') }}</label>
+                                <x-select id="instructor" name="instructor" wire:model="state.instructor_id">
+                                    @foreach ($instructors as $instructor)
+                                        <option value="{{ $instructor->id }}">{{ $instructor->name }}</option>
+                                    @endforeach
+                                </x-select>
+                            </div>
+                            @endif
                             <div class="form-group mb-6">
                                 <label for="course_price" class="block mb-2 font-medium text-gray-900">{{ __('Pricing') }} ($)</label>
                                 <input type="number" id="course_price" name="course_price" wire:model="state.price" minlength="1" maxlength="10" class="shadow-sm border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="" required />

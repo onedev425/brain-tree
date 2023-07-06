@@ -298,7 +298,7 @@ class CourseService
             'industry_id'  => $data['industry_id'],
             'image'  => $data['course_image'],
             'created_by'  => auth()->user()->id,
-            'assigned_id'  => auth()->user()->id,
+            'assigned_id'  => $data['assigned_id'],
             'quiz_active'  => $data['quiz_active'],
             'is_published'  => $data['is_published'],
         ]);
@@ -354,6 +354,7 @@ class CourseService
             'pass_percent'  => $data['course_pass_percent'],
             'description'  => $data['course_description'],
             'industry_id'  => $data['industry_id'],
+            'assigned_id'  => $data['assigned_id'],
             'image'  => $data['course_image'],
             'quiz_active'  => $data['quiz_active'],
             'is_published'  => $data['is_published'],
