@@ -34,7 +34,7 @@
                     <div class="hidden text-xl capitalize text-white font-semibold p-3 md:px-8 md:text-2xl md:-mt-16 md:block lg:text-3xl lg:-mt-20">
                         @yield('page_heading')
                     </div>
-                    <div class="overflow-scroll beautify-scrollbar md:mt-1 lg:mt-3">
+                    <div class="beautify-scrollbar md:mt-1 lg:mt-3">
                         <main class="p-3 md:px-8 md:py-4" id="main">
                             @yield('content')
                         </main>

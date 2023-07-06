@@ -20,18 +20,23 @@ class CourseService
      *
      * @return \Illuminate\Database\Eloquent\Collection
      */
-    public function getCourses($type): Collection
+    public function getCourses(string $type, $assigned_teacher = null): Collection
     {
         if ($type == 'publish')
-            if (auth()->user()->hasRole('super-admin'))
+            if (auth()->user()->hasRole('super-admin') && $assigned_teacher == null)
                 $courses = Course::with('lessons')->where('is_published', 1)->get();
-            else
-                $courses = Course::with('lessons')->where('is_published', 1)->where('assigned_id', auth()->user()->id)->get();
+            else {
+                $assigned_id = $assigned_teacher == null ? auth()->user()->id : $assigned_teacher->id;
+                $courses = Course::with('lessons')->where('is_published', 1)->where('assigned_id', $assigned_id)->get();
+            }
         elseif ($type == 'draft')
-            if (auth()->user()->hasRole('super-admin'))
+            if (auth()->user()->hasRole('super-admin') && $assigned_teacher == null)
                 $courses = Course::with('lessons')->where('is_published', 0)->get();
-            else
-                $courses = Course::with('lessons')->where('is_published', 0)->where('assigned_id', auth()->user()->id)->get();
+            else {
+                $assigned_id = $assigned_teacher == null ? auth()->user()->id : $assigned_teacher->id;
+                $courses = Course::with('lessons')->where('is_published', 0)->where('assigned_id', $assigned_id)->get();
+            }
+
         elseif ($type == 'progress') {
             /*
             SELECT C.* FROM courses C INNER JOIN
