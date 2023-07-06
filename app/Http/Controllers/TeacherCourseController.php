@@ -28,7 +28,7 @@ class TeacherCourseController extends Controller
 
     public function create()
     {
-        if ( ! auth()->user()->payment_connection) {
+        if (auth()->user()->hasRole('teacher') && ! auth()->user()->payment_connection) {
             return redirect()->route('pricing.index', 'type=payment_method')->with('danger', __('In order to create a course, you must first connect to PayPal.'));
         }
 

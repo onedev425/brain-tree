@@ -39,7 +39,7 @@
                     </svg>
                 </a>
                 <div x-data="{ open: false }" class="relative mr-4">
-                    <button @click="open = ! open" class="text-gray-500 hover:text-gray-600 dark:hover:text-gray-400 transition-colors duration-200 focus:outline-none hover:outline-none">
+                    <button @click="open = ! open" class="text-gray-500 hover:text-gray-600 transition-colors duration-200 focus:outline-none hover:outline-none">
                         <svg xmlns="http://www.w3.org/2000/svg" width="4" height="18" viewBox="0 0 4 18">
                             <g id="Group_281" data-name="Group 281" transform="translate(-953 -528)">
                                 <g id="Ellipse_43" data-name="Ellipse 43" transform="translate(953 528)" stroke="#111" stroke-width="1">
