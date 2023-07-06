@@ -10,6 +10,7 @@
         <table class="w-full table-auto">
             <thead class="">
             <th class="capitalize p-4 whitespace-nowrap text-left">{{ __('Name') }}</th>
+            <th class="capitalize p-4 whitespace-nowrap text-center">{{ __('Courses') }}</th>
             <th class="capitalize p-4 whitespace-nowrap text-center">{{ __('Enrolled') }}</th>
             </thead>
             <tbody class="">
@@ -21,8 +22,8 @@
                                 <img width="50" height="50" class="rounded-full" src="{{ $teacher->profile_photo_path }}" onerror="this.src='{{ asset('images/logo/avatar.png') }}'" />
                                 <a href="{{ route('teachers.show', $teacher->id) }}" class="flex capitalize items-center justify-start gap-2 py-3 px-6 hover:bg-white hover:bg-opacity-20 text-purple-500">{{ $teacher->name }}</a>
                             </div>
-
                         </td>
+                        <td class="p-4 whitespace-nowrap">{{ $this->getAssignedCourses($teacher) }}</td>
                         <td class="p-4 whitespace-nowrap">{{ substr($teacher->created_at, 0, 10) }}</td>
                     </tr>
                 @endforeach

@@ -26,9 +26,13 @@ class TeacherListTable extends Component
         return 'components.datatable-pagination-links-view';
     }
 
+    public function getAssignedCourses(User $teacher)
+    {
+        return $teacher->assignedCourses->count();
+    }
     public function render()
     {
-        $teachers = User::Role('teacher');
+        $teachers = User::Role('teacher')->with('assignedCourses');
         $teachers = $teachers->paginate(10);
         return view('livewire.teacher-list-table', [
             'teachers' => $teachers,
