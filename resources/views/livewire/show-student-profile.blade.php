@@ -1,7 +1,7 @@
 <div>
     <livewire:show-user-profile :user="$student" />
 
-    <div class="card float-left w-full mt-0">
+    <div class="card float-left w-full mt-0 overflow-visible">
         <div class="card-body">
             <div class="block md:flex mt-4 md:mt-10 border-b-2 border-gray-300">
                 <a href="javascript:;" wire:click="setTab('progress')" class="py-2 px-2 lg:px-4 w-full md:w-1/3 lg:w-1/4 text-center text-black cursor-pointer block font-semibold {{ $activeTab === 'progress' ? 'border-b-4 border-green-600' : '' }}" style="{{ $activeTab === 'progress' ? '' : 'opacity: .5' }}">

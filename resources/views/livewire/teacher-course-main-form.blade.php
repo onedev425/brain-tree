@@ -5,7 +5,7 @@
             {{ __('Create new course') }}
         </a>
     </div>
-    <div class="card float-left w-full mt-2">
+    <div class="card float-left w-full mt-2 overflow-visible">
         <div class="card-body">
             <div class="block md:flex mt-4 border-b-2 border-gray-300">
                 <a href="javascript:;" wire:click="setTab('publish')" class="py-2 px-2 lg:px-4 w-full md:w-1/3 lg:w-1/4 text-center text-black cursor-pointer block font-semibold {{ $activeTab === 'publish' ? 'border-b-4 border-green-600' : '' }}" style="{{ $activeTab === 'publish' ? '' : 'opacity: .5' }}">
