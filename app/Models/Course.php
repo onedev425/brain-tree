@@ -11,7 +11,7 @@ class Course extends Model
     use HasFactory;
 
     protected $fillable = [
-        'title', 'price', 'pass_percent', 'description', 'image', 'user_id', 'created_by', 'assigned_id', 'industry_id', 'quiz_active', 'is_published', 'is_paid'
+        'title', 'price', 'pass_percent', 'description', 'image', 'user_id', 'created_by', 'assigned_id', 'industry_id', 'quiz_active', 'is_published', 'is_declined', 'is_paid'
     ];
 
     /**

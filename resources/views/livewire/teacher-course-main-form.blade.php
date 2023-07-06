@@ -27,6 +27,7 @@
                             'duration' => $this->getCourseVideoDuration($course),
                             'price' => $course->price,
                             'is_published' => $course->is_published,
+                            'is_declined' => $course->is_declined,
                         ])
                     @endforeach
                 @else
@@ -39,6 +40,7 @@
                             'duration' => $this->getCourseVideoDuration($course),
                             'price' => $course->price,
                             'is_published' => $course->is_published,
+                            'is_declined' => $course->is_declined,
                         ])
                     @endforeach
                 @endif

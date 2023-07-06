@@ -30,11 +30,13 @@ class CourseService
                 $courses = Course::with('lessons')->where('is_published', 1)->where('assigned_id', $assigned_id)->get();
             }
         elseif ($type == 'draft')
-            if (auth()->user()->hasRole('super-admin') && $assigned_teacher == null)
-                $courses = Course::with('lessons')->where('is_published', 0)->get();
+            if (auth()->user()->hasRole('super-admin'))
+                if ($assigned_teacher == null)
+                    $courses = Course::with('lessons')->where('is_published', 0)->where('is_declined', 0)->get();
+                else
+                    $courses = Course::with('lessons')->where('is_published', 0)->where('is_declined', 0)->where('assigned_id', $assigned_teacher->id)->get();
             else {
-                $assigned_id = $assigned_teacher == null ? auth()->user()->id : $assigned_teacher->id;
-                $courses = Course::with('lessons')->where('is_published', 0)->where('assigned_id', $assigned_id)->get();
+                $courses = Course::with('lessons')->where('is_published', 0)->where('assigned_id', auth()->user()->id)->get();
             }
 
         elseif ($type == 'progress') {
