@@ -3,7 +3,7 @@
     <label for="{{$id}}" class="my-3 font-bold ">{{$label}}</label>
     @endisset
     @if (!$attributes->has('multiple'))
-        <select name="{{$name}}" id="{{$id}}" @class(["$class p-2 border rounded-md border-gray-400 focus:border-blue-500 bg-inherit dark:bg-gray-800", 'border-red-500' => $errors->has($name)]) {{$attributes}}>
+        <select name="{{$name}}" id="{{$id}}" @class(["$class p-2 border rounded-md border-gray-400 focus:border-blue-500 bg-inherit", 'border-red-500' => $errors->has($name)]) {{$attributes}}>
             {{$slot}}
         </select>
     @else
@@ -20,7 +20,7 @@
                 </div>
                     <div class="flex flex-col items-center relative w-full">
                         <div x-on:click="open" class="w-full">
-                            <div class="my-2 p-1 flex border border-gray-400 focus:border-blue-500 bg-white dark:bg-gray-800 rounded">
+                            <div class="my-2 p-1 flex border border-gray-400 focus:border-blue-500 bg-white rounded">
                                 {{--display selected items--}}
                                 <div class="flex flex-auto flex-wrap">
                                     <template x-for="(option,index) in selected" :key="options[option].value">
@@ -50,12 +50,12 @@
                         </div>
                     </div>
                     <div class="w-full">
-                        <div x-show.transition.origin.top="isOpen()" class="absolute shadow top-100 bg-white dark:bg-gray-800 z-30 w-full rounded border max-h-60 overflow-y-scroll beautify-scrollbar" x-on:click.away="close">
+                        <div x-show.transition.origin.top="isOpen()" class="absolute shadow top-100 bg-white z-30 w-full rounded border max-h-60 overflow-y-scroll beautify-scrollbar" x-on:click.away="close">
                             <div class="flex flex-col w-full">
                                 <template x-for="(option,index) in options" :key="index">
                                     <div>
                                         <div class="cursor-pointer w-full border-gray-100 rounded-t border-b hover:bg-gray-500 hover:text-white bg-opacity-25" @click="select(index,$event)">
-                                            <div :class="(option.selected) ? 'bg-blue-300 dark:bg-blue-600' : ''" class="flex w-full items-center p-2 pl-2 border-transparent border-l-2 relative">
+                                            <div :class="(option.selected) ? 'bg-blue-300' : ''" class="flex w-full items-center p-2 pl-2 border-transparent border-l-2 relative">
                                                 <div class="w-full items-center flex">
                                                     <div class="mx-2 leading-6" x-model="option" x-text="option.text"></div>
                                                 </div>

@@ -10,7 +10,7 @@
             <span class="text-xs">{{ substr($created_at, 0, 10) }}</span>
         </div>
         <div class="">
-            <h3 class="text-lg leading-normal mb-3 font-bold text-gray-800 dark:text-gray-300">
+            <h3 class="text-lg leading-normal mb-3 font-bold text-gray-800">
                 <span>{{ $title }}</span>
             </h3>
             <div class="flex h-2 overflow-hidden bg-green-100 rounded mb-4">
