@@ -97,7 +97,7 @@ class PaypalService
     }
 
 
-    public function buyCourse(Course $course, string $seller_account_id): array
+    public function buyCourse(Course $course): array
     {
         $course_fee = PaymentFee::all()->where('fee_type', 'student_course_fee_percent')->first();
 
@@ -117,7 +117,7 @@ class PaypalService
                         'currency_code' => 'USD',
                         'value' => $course->price,
                     ],
-                    'payee' => [
+                    /*'payee' => [
                         'merchant_id' => $seller_account_id,
                     ],
                     'payment_instruction' => [
@@ -130,7 +130,7 @@ class PaypalService
                                 ]
                             ]
                         ]
-                    ]
+                    ]*/
                 ],
 
             ]

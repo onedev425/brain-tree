@@ -4,6 +4,7 @@ namespace App\Services\Student;
 
 use App\Exceptions\InvalidValueException;
 use App\Models\Course;
+use App\Models\PaymentPurchase;
 use App\Models\StudentCourse;
 use App\Models\User;
 use App\Services\Print\PrintService;
@@ -401,9 +402,18 @@ class StudentService
 
     public function registerStudentCourse(int $course_id): void
     {
+        $course = Course::find($course_id);
         StudentCourse::create([
             'student_id' => auth()->user()->id,
             'course_id'  => $course_id,
+        ]);
+
+        PaymentPurchase::create([
+            'student_id' => auth()->user()->id,
+            'course_id'  => $course_id,
+            'course_amount' => $course->price,
+            'paid_amount' => $course->price,
+            'payment_status' => 'completed'
         ]);
     }
 }

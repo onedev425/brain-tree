@@ -30,7 +30,7 @@
                         <td class="p-4 whitespace-nowrap">{{ $course->assignedTeacher->name }}</td>
                         <td class="p-4 whitespace-nowrap">{{ substr($course->created_at, 0, 10) }}</td>
                         <td class="p-4 whitespace-nowrap">
-                            <x-button wire:click="BuyCourse({{ $course->id }}, '{{ $course->assignedTeacher->payment_connection->paypal_account_id }}')" class="text-purple-500">{{ __('Buy Course') }}</x-button>
+                            <x-button wire:click="BuyCourse({{ $course->id }})" class="text-purple-500">{{ __('Buy Course') }}</x-button>
                         </td>
                     </tr>
                 @endforeach

@@ -20,11 +20,11 @@ class StudentPricingBuyCourse extends Component
         $this->studentService = $studentService;
     }
 
-    public function BuyCourse(int $course_id, string $seller_account_id)
+    public function BuyCourse(int $course_id)
     {
         $course = Course::find($course_id);
         $paypalService = new PaypalService();
-        $payment_result = $paypalService->buyCourse($course, $seller_account_id);
+        $payment_result = $paypalService->buyCourse($course);
 
         if ($payment_result['result'] == 'success')
             return redirect()->away($payment_result['redirect_url']);
