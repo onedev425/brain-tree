@@ -79,7 +79,10 @@ class CourseService
                                                 ->selectRaw('SQ.answer AS student_answer')
                                                 ->selectRaw('IF(Q.id = SQ.question_id AND (Q.type = "multi" OR Q.type = "boolean") AND QO.answer = SQ.answer, 1, IF(Q.id = SQ.question_id AND Q.type = "single", QO.answer * SQ.answer, 0)) AS exam_result')
                                                 ->from('courses AS C')
-                                                ->join('student_courses AS SC', 'C.id', '=', 'SC.course_id')
+                                                ->join('student_courses AS SC', function($join) use ($student_id) {
+                                                    $join->on('C.id', '=', 'SC.course_id')
+                                                        ->where('SC.student_id', $student_id);
+                                                })
                                                 ->leftJoin('questions AS Q', function ($join) {
                                                     $join->on('C.id', '=', 'Q.course_id');
                                                 })
@@ -125,7 +128,10 @@ class CourseService
                                                 ->selectRaw('SQ.answer AS student_answer')
                                                 ->selectRaw('IF(Q.id = SQ.question_id AND (Q.type = "multi" OR Q.type = "boolean") AND QO.answer = SQ.answer, 1, IF(Q.id = SQ.question_id AND Q.type = "single", QO.answer * SQ.answer, 0)) AS exam_result')
                                                 ->from('courses AS C')
-                                                ->join('student_courses AS SC', 'C.id', '=', 'SC.course_id')
+                                                ->join('student_courses AS SC', function($join) use ($student_id) {
+                                                    $join->on('C.id', '=', 'SC.course_id')
+                                                        ->where('SC.student_id', $student_id);
+                                                })
                                                 ->leftJoin('questions AS Q', function ($join) {
                                                     $join->on('C.id', '=', 'Q.course_id');
                                                 })
