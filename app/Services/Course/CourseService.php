@@ -30,11 +30,13 @@ class CourseService
                 $courses = Course::with('lessons')->where('is_published', 1)->where('assigned_id', $assigned_id)->get();
             }
         elseif ($type == 'draft')
-            if (auth()->user()->hasRole('super-admin') && $assigned_teacher == null)
-                $courses = Course::with('lessons')->where('is_published', 0)->get();
+            if (auth()->user()->hasRole('super-admin'))
+                if ($assigned_teacher == null)
+                    $courses = Course::with('lessons')->where('is_published', 0)->where('is_declined', 0)->get();
+                else
+                    $courses = Course::with('lessons')->where('is_published', 0)->where('is_declined', 0)->where('assigned_id', $assigned_teacher->id)->get();
             else {
-                $assigned_id = $assigned_teacher == null ? auth()->user()->id : $assigned_teacher->id;
-                $courses = Course::with('lessons')->where('is_published', 0)->where('assigned_id', $assigned_id)->get();
+                $courses = Course::with('lessons')->where('is_published', 0)->where('assigned_id', auth()->user()->id)->get();
             }
 
         elseif ($type == 'progress') {
@@ -298,7 +300,7 @@ class CourseService
             'industry_id'  => $data['industry_id'],
             'image'  => $data['course_image'],
             'created_by'  => auth()->user()->id,
-            'assigned_id'  => auth()->user()->id,
+            'assigned_id'  => $data['assigned_id'],
             'quiz_active'  => $data['quiz_active'],
             'is_published'  => $data['is_published'],
         ]);
@@ -354,6 +356,7 @@ class CourseService
             'pass_percent'  => $data['course_pass_percent'],
             'description'  => $data['course_description'],
             'industry_id'  => $data['industry_id'],
+            'assigned_id'  => $data['assigned_id'],
             'image'  => $data['course_image'],
             'quiz_active'  => $data['quiz_active'],
             'is_published'  => $data['is_published'],

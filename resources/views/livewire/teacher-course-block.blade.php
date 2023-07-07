@@ -1,6 +1,10 @@
 <div class="flex flex-col bg-white mb-12 md:mb-0 rounded-2xl border">
     <div class="relative border-b">
+
         <a href="{{ route('teacher.course.edit', $course_id) }}">
+            @if ($is_declined == 1)
+                <div class="absolute text-center text-white bg-red-500 w-24 h-7" style="top: 10px">Declined</div>
+            @endif
             <div class="absolute inset-0 hover:bg-white opacity-0 transition duration-700 hover:opacity-10"></div>
             <img class="w-full h-48 object-cover" src="{{ $image }}" alt="alt title">
         </a>
@@ -40,7 +44,7 @@
                 </a>
                 @if (auth()->user()->hasRole('super-admin') || (auth()->user()->hasRole('teacher') && $is_published == 0))
                 <div x-data="{ open: false }" class="relative mr-4">
-                    <button @click="open = ! open" class="text-gray-500 hover:text-gray-600 dark:hover:text-gray-400 transition-colors duration-200 focus:outline-none hover:outline-none">
+                    <button @click="open = ! open" class="text-gray-500 hover:text-gray-600 transition-colors duration-200 focus:outline-none hover:outline-none">
                         <svg xmlns="http://www.w3.org/2000/svg" width="4" height="18" viewBox="0 0 4 18">
                             <g id="Group_281" data-name="Group 281" transform="translate(-953 -528)">
                                 <g id="Ellipse_43" data-name="Ellipse 43" transform="translate(953 528)" stroke="#111" stroke-width="1">
@@ -71,10 +75,10 @@
 
                         @if ($is_published == 0)
                             @if (auth()->user()->hasRole('super-admin'))
-                                <form action="{{ route('teacher.course.destroy', $course_id) }}" method="POST">
+                                <form action="{{ route('teacher.course.decline', $course_id) }}" method="POST">
                                     @csrf
                                     @method('post')
-                                    <input type="hidden" name="is_published" value="{{ $is_published }}">
+                                    <input type="hidden" name="decline_reason" value="">
                                     <button type="submit" id="decline_course_button" class="w-full text-left block rounded-lg px-3 py-2 hover:bg-gray-100 focus:bg-gray-100 ">{{ __('Decline') }}</button>
                                 </form>
                             @endif
@@ -114,6 +118,37 @@
                 },
             }).then((result) => {
                 if (result.isConfirmed) {
+                    $(form).submit();
+                }
+            })
+        })
+
+        $('button#decline_course_button').on('click', function(event) {
+            event.preventDefault();
+            const form = $(this).parent();
+            Swal.fire({
+                html: "Are you sure you want to decline the course?" + "<br/>" + "Type the reason to decline this course.",
+                icon: "warning",
+                input: "textarea",
+                inputPlaceholder: "Type the reason here...",
+                inputAttributes: {
+                    "aria-label": "Type the reason here..."
+                },
+                showCancelButton: !0,
+                buttonsStyling: !1,
+                confirmButtonText: `Yes, Decline!`,
+                cancelButtonText: "No, Cancel",
+                customClass: {
+                    confirmButton: "py-2 px-4 inline-block text-center mb-3 rounded leading-5 text-gray-100 bg-green-500 border border-green-500 hover:text-white hover:bg-green-600 hover:ring-0 hover:border-green-600 focus:bg-green-600 focus:border-green-600 focus:outline-none focus:ring-0",
+                    cancelButton: "ml-3 py-2 px-4 inline-block text-center mb-3 rounded leading-5 text-gray-800 bg-gray-100 border border-gray-100 hover:text-gray-900 hover:bg-gray-200 hover:ring-0 hover:border-gray-200 focus:bg-gray-200 focus:border-gray-200 focus:outline-none focus:ring-0"
+                },
+                preConfirm: (result) => {
+                    if (result == '')
+                        Swal.showValidationMessage('Reasons for decline are required');
+                }
+            }).then((result) => {
+                if (result.isConfirmed && result.value != '') {
+                    $('input[name=decline_reason]').val(result.value);
                     $(form).submit();
                 }
             })

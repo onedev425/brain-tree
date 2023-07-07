@@ -45,6 +45,7 @@ Route::middleware('auth:sanctum', 'verified', 'App\Http\Middleware\PreventLockAc
     Route::get('pricing', ['App\Http\Controllers\PricingController', 'index'])->name('pricing.index');
 
     Route::put('teacher_course_publish/{course}', ['App\Http\Controllers\TeacherCourseController', 'publish'])->name('teacher.course.publish');
+    Route::post('teacher_course_decline/{course}', ['App\Http\Controllers\TeacherCourseController', 'decline'])->name('teacher.course.decline');
 
     Route::post('lesson_complete', ['App\Http\Controllers\StudentCourseController', 'lesson_complete'])->name('student.lesson.complete');
     Route::post('question_complete', ['App\Http\Controllers\StudentCourseController', 'question_complete'])->name('student.question.complete');

@@ -28,7 +28,7 @@ class TeacherListTable extends Component
 
     public function getAssignedCourses(User $teacher)
     {
-        return $teacher->assignedCourses->count();
+        return $teacher->assignedCourses->where('is_declined', 0)->count();
     }
     public function render()
     {

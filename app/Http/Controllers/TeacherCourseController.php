@@ -28,7 +28,7 @@ class TeacherCourseController extends Controller
 
     public function create()
     {
-        if ( ! auth()->user()->payment_connection) {
+        if (auth()->user()->hasRole('teacher') && ! auth()->user()->payment_connection) {
             return redirect()->route('pricing.index', 'type=payment_method')->with('danger', __('In order to create a course, you must first connect to PayPal.'));
         }
 
@@ -59,18 +59,19 @@ class TeacherCourseController extends Controller
             $data['course_image'] = asset('images/logo/course.jpg');
 
         $course = $this->courseService->createCourse($data);
+        return redirect()->route('teacher.course.index', 'type=draft');
 
-        if ($data['is_published'] == 1) {
-            // if publish the course, go to the paypal payment page.
-            $paypalService = new PaypalService();
-            $payment_result = $paypalService->payToCourse($course);
-            if ($payment_result['result'] == 'success')
-                return redirect()->away($payment_result['redirect_url']);
-            else
-                return redirect($payment_result['redirect_url'])->with('error', __('Something went wrong.'));
-        }
-        else
-            return redirect()->route('teacher.course.index', 'type=draft');
+//        if ($data['is_published'] == 1) {
+//            // if publish the course, go to the paypal payment page.
+//            $paypalService = new PaypalService();
+//            $payment_result = $paypalService->payToCourse($course);
+//            if ($payment_result['result'] == 'success')
+//                return redirect()->away($payment_result['redirect_url']);
+//            else
+//                return redirect($payment_result['redirect_url'])->with('error', __('Something went wrong.'));
+//        }
+//        else
+//            return redirect()->route('teacher.course.index', 'type=draft');
 
     }
 
@@ -110,10 +111,18 @@ class TeacherCourseController extends Controller
         return redirect()->route('teacher.course.index', $publish_result == 1 ? 'type=publish' : 'type=draft');
     }
 
+    public function decline(Request $request, Course $course): RedirectResponse
+    {
+        $course->is_declined = 1;
+        $course->save();
+        return redirect()->route('teacher.course.index',  'type=draft');
+    }
+
     private function getCourseData(TeacherCourseStoreRequest $request): array
     {
         $data['course_title'] = $request['course_title'];
         $data['industry_id'] = $request['industry'];
+        $data['assigned_id'] = auth()->user()->hasRole('super-admin') ? $request['instructor'] : auth()->user()->id;
         $data['course_price'] = $request['course_price'];
         $data['course_pass_percent'] = $request['course_pass_percent'];
         $data['course_description'] = $request['course_description'];
