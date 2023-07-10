@@ -17,7 +17,7 @@
             </div>
 
             <div style="margin-top: 40px">
-                @if ($activeTab === 'histories')
+                @if ($activeTab === 'purchase_histories')
                     <livewire:teacher-pricing-histories />
                 @elseif ($activeTab == 'payout')
                     <livewire:admin-payout />
