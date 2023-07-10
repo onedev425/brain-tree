@@ -68,8 +68,8 @@ class PaypalService
         $response = $provider->createOrder([
             "intent" => "CAPTURE",
             "application_context" => [
-                "return_url" => route('paypal.callback', 'buyer=teacher&course=' . $course->id),
-                "cancel_url" => route('paypal.cancel', 'buyer=teacher&course=' . $course->id),
+                "return_url" => route('paypal.callback', 'payer=teacher&course=' . $course->id),
+                "cancel_url" => route('paypal.cancel', 'payer=teacher&course=' . $course->id),
             ],
             "purchase_units" => [
                 [
@@ -108,8 +108,8 @@ class PaypalService
         $response = $provider->createOrder([
             "intent" => "CAPTURE",
             "application_context" => [
-                "return_url" => route('paypal.callback', 'buyer=student&course=' . $course->id),
-                "cancel_url" => route('paypal.cancel', 'buyer=student&course=' . $course->id),
+                "return_url" => route('paypal.callback', 'payer=student&course=' . $course->id),
+                "cancel_url" => route('paypal.cancel', 'payer=student&course=' . $course->id),
             ],
             "purchase_units" => [
                 [
@@ -117,10 +117,44 @@ class PaypalService
                         'currency_code' => 'USD',
                         'value' => $course->price,
                     ],
-                    /*'payee' => [
-                        'merchant_id' => $seller_account_id,
+                ],
+
+            ]
+        ]);
+
+        if (isset($response['id']) && $response['id'] != null) {
+            foreach ($response['links'] as $links) {
+                if ($links['rel'] == 'approve') {
+                    return ['result' => 'success', 'redirect_url' => $links['href']];
+                }
+            }
+        }
+        return ['result' => 'error', 'redirect_url' => route('home')];
+    }
+
+    public function PayoutToInstructor(int $teacher_id, int $course_amount, string $payee_account_id, int $amount): array
+    {
+        $provider = new PayPalClient();
+        $provider->setApiCredentials(config('paypal'));
+        $paypalToken = $provider->getAccessToken();
+        $provider->setAccessToken($paypalToken);
+
+        $response = $provider->createOrder([
+            "intent" => "CAPTURE",
+            "application_context" => [
+                "return_url" => route('paypal.callback', 'payer=super-admin&teacher=' . $teacher_id . '&course_amount=' . $course_amount . '&amount=' . $amount),
+                "cancel_url" => route('paypal.cancel', 'payer=super-admin&teacher=' . $teacher_id . '&course_amount=' . $course_amount . '&amount=' . $amount),
+            ],
+            "purchase_units" => [
+                [
+                    'amount' => [
+                        'currency_code' => 'USD',
+                        'value' => $amount
                     ],
-                    'payment_instruction' => [
+                    'payee' => [
+                        'merchant_id' => $payee_account_id,
+                    ],
+                    /*'payment_instruction' => [
                         'disbursement_mode' => 'INSTANT',
                         'platform_fees' => [
                             [

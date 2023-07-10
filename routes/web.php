@@ -70,7 +70,7 @@ Route::middleware('auth:sanctum', 'verified', 'App\Http\Middleware\PreventLockAc
     Route::resource('students', StudentController::class);
 
     //teacher routes
-    Route::resource('teachers', StudentController::class)->only(['index', 'show']);
+    Route::resource('teachers', TeacherController::class)->only(['index', 'show']);
 
     // certificaiton routes
     Route::get('certification', ['App\Http\Controllers\CertificationController', 'index'])->name('certification.index');
@@ -142,9 +142,6 @@ Route::middleware('auth:sanctum', 'verified', 'App\Http\Middleware\PreventLockAc
     });
 
     Route::get('students/{student}/print', ['App\Http\Controllers\StudentController', 'printProfile'])->name('students.print-profile');
-
-    //teacher routes
-    Route::resource('teachers', TeacherController::class);
 
     //lock account route
     Route::post('users/lock-account/{user}', 'App\Http\Controllers\LockUserAccountController')->name('user.lock-account');

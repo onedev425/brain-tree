@@ -13,8 +13,6 @@ class TeacherListTable extends Component
     public string $search = '';
     public int $per_page = 10;
 
-    private TeacherService $teacherService;
-
     public function mount($unique_id = null, $per_page = 10)
     {
         $this->unique_id = $unique_id ?? Str::random(10);

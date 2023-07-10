@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Course;
-use App\Services\Course\CourseService;
+use App\Services\Admin\AdminPricingService;
 use App\Services\Payment\PaypalService;
 use App\Services\Student\StudentService;
 use Illuminate\Http\RedirectResponse;
@@ -35,14 +34,17 @@ class PaymentController extends Controller
         $capture_result = $paypalService->capturePayment($request['token']);
 
         if ($capture_result) {
-            if ($request['buyer'] == 'teacher') {
-                $courseService = new CourseService();
-                $courseService->setPaidFlag($request['course']);
-
-                return redirect()->route('teacher.course.index', 'type=publish');
+            if ($request['payer'] == 'super-admin') {
+                $adminPricingService = app(AdminPricingService::class);
+                $adminPricingService->registerPayout(
+                    $request['teacher'],
+                    $request['course_amount'],
+                    $request['amount']
+                );
+                return redirect()->route('pricing.index', 'type=payout');
             }
 
-            if ($request['buyer'] == 'student') {
+            if ($request['payer'] == 'student') {
                 $studentService = app(StudentService::class);
                 $studentService->registerStudentCourse($request['course']);
 
@@ -50,18 +52,11 @@ class PaymentController extends Controller
             }
         }
         else {
-            if ($request['buyer'] == 'teacher') {
-                if ($request['course']) {
-                    $course = Course::find($request['course']);
-                    $course->is_published = false;
-                    $course->is_paid = false;
-                    $course->save();
-                }
-
-                return redirect()->route('teacher.course.index', 'type=publish')->with('danger', __('Something went wrong. Your payment failed.'));
+            if ($request['payer'] == 'super-admin') {
+                return redirect()->route('pricing.index', 'type=payout')->with('danger', __('Something went wrong. Your payment failed.'));
             }
 
-            if ($request['buyer'] == 'student') {
+            if ($request['payer'] == 'student') {
                 return redirect()->route('pricing.index')->with('danger', __('Something went wrong. Your payment failed.'));
             }
         }
@@ -69,14 +64,8 @@ class PaymentController extends Controller
     }
     public function connectCancel(Request $request): RedirectResponse
     {
-        if ($request['buyer'] == 'teacher') {
-            if ($request['course']) {
-                $course = Course::find($request['course']);
-                $course->is_published = false;
-                $course->is_paid = false;
-                $course->save();
-            }
-            return redirect()->route('teacher.course.create')->with('danger', __('Payment cancelled by the user.'));
+        if ($request['payer'] == 'super-admin') {
+            return redirect()->route('pricing.create')->with('danger', __('Payment cancelled by the user.'));
         }
         else {
             // go to the student pricing page
