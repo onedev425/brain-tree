@@ -53,7 +53,6 @@ class AdminPayout extends Component
 
     public function render()
     {
-//        $this->billing_period = '2023-07';
         $adminPricingService = app(AdminPricingService::class);
         $teachers = $adminPricingService->getSoldCoursesOfTeacher($this->billing_period, $this->search);
         $teachers = $teachers->paginate(10);

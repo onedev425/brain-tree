@@ -38,4 +38,15 @@ class AdminPricingService
             'payment_status' => 'completed'
         ]);
     }
+
+    public function getPayoutHistories($period, $search)
+    {
+        $payout_histories = User::select('users.id', 'users.name', 'users.profile_photo_path', 'payment_salaries.total_amount', 'payment_salaries.paid_amount', 'payment_salaries.created_at')
+            ->join('payment_salaries', 'users.id', '=', 'payment_salaries.teacher_id')
+            ->where('period',  $period);
+        if ($search != '') $payout_histories = $payout_histories->where('users.name', 'LIKE', '%'. $search . '%');
+
+        return $payout_histories;
+    }
+
 }
