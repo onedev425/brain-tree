@@ -4,6 +4,7 @@ namespace App\Services\Student;
 
 use App\Exceptions\InvalidValueException;
 use App\Models\Course;
+use App\Models\PaymentPurchase;
 use App\Models\StudentCourse;
 use App\Models\User;
 use App\Services\Print\PrintService;
@@ -217,7 +218,10 @@ class StudentService
                                                 ->selectRaw('SQ.answer AS student_answer')
                                                 ->selectRaw('IF(Q.id = SQ.question_id AND (Q.type = "multi" OR Q.type = "boolean") AND QO.answer = SQ.answer, 1, IF(Q.id = SQ.question_id AND Q.type = "single", QO.answer * SQ.answer, 0)) AS exam_result')
                                                 ->from('courses AS C')
-                                                ->join('student_courses AS SC', 'C.id', '=', 'SC.course_id')
+                                                ->join('student_courses AS SC', function($join) use ($student_id) {
+                                                    $join->on('C.id', '=', 'SC.course_id')
+                                                        ->where('SC.student_id', $student_id);
+                                                })
                                                 ->leftJoin('questions AS Q', function ($join) {
                                                     $join->on('C.id', '=', 'Q.course_id');
                                                 })
@@ -265,7 +269,10 @@ class StudentService
                                                 ->selectRaw('SQ.answer AS student_answer')
                                                 ->selectRaw('IF(Q.id = SQ.question_id AND (Q.type = "multi" OR Q.type = "boolean") AND QO.answer = SQ.answer, 1, IF(Q.id = SQ.question_id AND Q.type = "single", QO.answer * SQ.answer, 0)) AS exam_result')
                                                 ->from('courses AS C')
-                                                ->join('student_courses AS SC', 'C.id', '=', 'SC.course_id')
+                                                ->join('student_courses AS SC', function($join) use ($student_id) {
+                                                    $join->on('C.id', '=', 'SC.course_id')
+                                                        ->where('SC.student_id', $student_id);
+                                                })
                                                 ->leftJoin('questions AS Q', function ($join) {
                                                     $join->on('C.id', '=', 'Q.course_id');
                                                 })
@@ -401,9 +408,18 @@ class StudentService
 
     public function registerStudentCourse(int $course_id): void
     {
+        $course = Course::find($course_id);
         StudentCourse::create([
             'student_id' => auth()->user()->id,
             'course_id'  => $course_id,
+        ]);
+
+        PaymentPurchase::create([
+            'student_id' => auth()->user()->id,
+            'course_id'  => $course_id,
+            'course_amount' => $course->price,
+            'paid_amount' => $course->price,
+            'payment_status' => 'completed'
         ]);
     }
 }
