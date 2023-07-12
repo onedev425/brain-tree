@@ -1,8 +1,4 @@
-@extends('layouts.app', ['breadcrumbs' => [
-    ['href'=> route('dashboard'), 'text'=> 'Dashboard'],
-    ['href'=> route('account-applications.index'), 'text'=> 'Account Applications'],
-    ['href'=> route('account-applications.show', $applicant->id), 'text'=> "View $applicant->name", 'active'],
-]])
+@extends('layouts.app')
 
 @section('title', __("View $applicant->name's application"))
 

@@ -11,7 +11,7 @@ class ChangeAccountApplicationStatus extends Component
 
     public $statuses;
 
-    public $status;
+    public $status = 'approved';
 
     public bool $studentRecordFields = false;
 
