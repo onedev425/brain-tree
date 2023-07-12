@@ -21,6 +21,7 @@
         "livewire/livewire": "^2.5",
         "nnjeim/world": "^1.1",
         "opcodesio/log-viewer": "^1.7",
+        "sendinblue/api-v3-sdk": "^8.4",
         "spatie/laravel-model-status": "^1.11",
         "spatie/laravel-permission": "^5.5",
         "srmklive/paypal": "^3.0"

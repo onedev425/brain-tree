@@ -6,6 +6,7 @@
                     <a href="#"><img src="{{asset(config('app.logo'))}}" alt="" class="my-4"></a>
                 </div>
                 <form id="main_form" action="{{route('password.email')}}" class="p-7 border-b" method="POST">
+                    @csrf
                     <div class="flex mt-4">
                         <div class="w-full lg:w-3/5 mr-10">
                             <h1 class="font-bold text-4xl text-black">{{ __('Password Recovery') }}</h1>
@@ -40,7 +41,7 @@
                 const valid = pristine.validate();
 
                 if (valid) {
-                    $(this).submit();
+                    mainForm.submit();
                 }
             });
         };
