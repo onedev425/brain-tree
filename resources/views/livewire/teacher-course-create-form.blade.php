@@ -48,16 +48,6 @@
                                     @endforeach
                                 </x-select>
                             </div>
-                            @if (auth()->user()->hasRole('super-admin'))
-                            <div class="mb-6">
-                                <label for="instructor" class="block mb-2 font-medium text-gray-900">{{ __('Instructor') }}</label>
-                                <x-select id="instructor" name="instructor" wire:model="state.instructor_id">
-                                    @foreach ($instructors as $instructor)
-                                        <option value="{{ $instructor->id }}">{{ $instructor->name }}</option>
-                                    @endforeach
-                                </x-select>
-                            </div>
-                            @endif
                             <div class="form-group mb-6">
                                 <label for="course_price" class="block mb-2 font-medium text-gray-900">{{ __('Pricing') }} ($)</label>
                                 <input type="number" id="course_price" name="course_price" wire:model="state.price" minlength="1" maxlength="10" class="shadow-sm border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="" required />

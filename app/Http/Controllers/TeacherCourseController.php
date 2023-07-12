@@ -122,7 +122,7 @@ class TeacherCourseController extends Controller
     {
         $data['course_title'] = $request['course_title'];
         $data['industry_id'] = $request['industry'];
-        $data['assigned_id'] = auth()->user()->hasRole('super-admin') ? $request['instructor'] : auth()->user()->id;
+        $data['assigned_id'] = auth()->user()->id;
         $data['course_price'] = $request['course_price'];
         $data['course_pass_percent'] = $request['course_pass_percent'];
         $data['course_description'] = $request['course_description'];
