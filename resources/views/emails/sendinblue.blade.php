@@ -159,6 +159,12 @@
                                                 <h1 style="margin: 0px; line-height: 140%; text-align: center; word-wrap: break-word; font-family: arial,helvetica,sans-serif; font-size: 26px; font-weight: 400;">
                                                     @if ($email_data['email_type'] == 'email_confirmation')
                                                         {{ __('Verify your email address') }}
+
+                                                    @elseif ($email_data['email_type'] == 'course_publish')
+                                                        {{ $email_data['publish_result'] == 1 ? __('Your course published') : __('Your course unpublished') }}
+
+                                                    @elseif ($email_data['email_type'] == 'decline_reason')
+                                                        {{ __('Your course declined') }}
                                                     @endif
                                                 </h1>
 
@@ -224,11 +230,29 @@
                                                                 <span style="display:block;padding:12px 40px;line-height:120%;"><strong><span style="font-size: 14px; line-height: 16.8px; font-family: Lato, sans-serif;">{{ __('Confirm Email') }}</span></strong></span>
                                                             </a>
                                                         </p>
+                                                        <p style="font-size: 14px; line-height: 140%;"><br /><br />
+                                                            {{ __('If you did not request this change, please forward this email to ') }} <a href="mailto:btppro1@gmail.com">btppro1@gmail.com</a><br />
+                                                        </p>
+
+                                                    @elseif ($email_data['email_type'] == 'course_publish')
+                                                        @if ($email_data['publish_result'] == 1)
+                                                            <p style="font-size: 14px; line-height: 140%;"><br /><span style="font-size: 16px; line-height: 22.4px;">{{ __('Your course ') }} <strong>[{{ $email_data['course_name'] }}] </strong> {{ __(' was published successfully!') }}</span></p>
+                                                            {{ __('Starting now, students can purchase the course online.') }}
+                                                        @else
+                                                            <p style="font-size: 14px; line-height: 140%;"><br /><span style="font-size: 16px; line-height: 22.4px;">{{ __('Unfortunately, your course ') }} <strong>[{{ $email_data['course_name'] }}] </strong> {{ __(' was unpublished!') }}</span></p>
+                                                            {{ __('Starting now, students can\'t purchase the course online. Please contact ') }} <a href="mailto:btppro1@gmail.com">btppro1@gmail.com</a> {{ __('to publish the course again.') }}
+                                                        @endif
+
+                                                    @elseif ($email_data['email_type'] == 'course_decline')
+                                                        <p style="font-size: 14px; line-height: 140%;"><br /><span style="font-size: 16px; line-height: 22.4px;">{{ __('Unfortunately, your course ') }} <strong>[{{ $email_data['course_name'] }}] </strong> {{ __(' was declined!') }}</span></p>
+                                                        <p style="font-size: 14px; line-height: 140%;"><br />{{ __('Decline reason: ') }} <br />
+                                                            {{ $email_data['decline_reason'] }}
+                                                        </p><br />
+                                                        {{ __('Please contact ') }} <a href="mailto:btppro1@gmail.com">btppro1@gmail.com</a> {{ __('for more information.') }}
+
                                                     @endif
 
-                                                    <p style="font-size: 14px; line-height: 140%;"><br /><br />
-                                                        {{ __('If you did not request this change, please forward this email to admin@braintresspro.com') }} <br />
-                                                    </p>
+
                                                 </div>
 
                                             </td>

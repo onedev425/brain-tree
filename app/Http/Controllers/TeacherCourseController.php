@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\Payment\PaypalService;
 use Illuminate\Http\RedirectResponse;
 use App\Services\Course\CourseService;
 use App\Models\Course;
@@ -10,6 +9,9 @@ use App\Http\Requests\TeacherCourseStoreRequest;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Illuminate\Database\Eloquent\Collection;
+use App\Mail\SendinblueMail;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\URL;
 
 class TeacherCourseController extends Controller
 {
@@ -105,6 +107,17 @@ class TeacherCourseController extends Controller
     public function publish(Request $request, Course $course): RedirectResponse
     {
         $publish_result = $request['is_published'];
+        $email_data = [
+            'to' => $course->assignedTeacher->email,
+            'subject' => $publish_result == 1 ? __('Your course published') : __('Your course unpublished'),
+            'user_name' => $course->assignedTeacher->name,
+            'email_type' => 'course_publish',
+            'course_name' => $course->title,
+            'publish_result' => $publish_result
+        ];
+
+        Mail::to($email_data['to'])->send(new SendinblueMail($email_data));
+
         $course->is_published = $publish_result;
         $course->save();
 
@@ -113,6 +126,17 @@ class TeacherCourseController extends Controller
 
     public function decline(Request $request, Course $course): RedirectResponse
     {
+        $email_data = [
+            'to' => $course->assignedTeacher->email,
+            'subject' => __('Your course declined'),
+            'user_name' => $course->assignedTeacher->name,
+            'email_type' => 'course_decline',
+            'course_name' => $course->title,
+            'decline_reason' => $request['decline_reason']
+        ];
+
+        Mail::to($email_data['to'])->send(new SendinblueMail($email_data));
+
         $course->is_declined = 1;
         $course->save();
         return redirect()->route('teacher.course.index',  'type=draft');
