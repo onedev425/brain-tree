@@ -2,7 +2,10 @@
 
 namespace App\Actions\Fortify;
 
+use App\Mail\SendinblueMail;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Fortify\Contracts\UpdatesUserPasswords;
 
@@ -28,8 +31,22 @@ class UpdateUserPassword implements UpdatesUserPasswords
             }
         })->validateWithBag('updatePassword');
 
+        $new_password = Hash::make($input['password']);
         $user->forceFill([
-            'password' => Hash::make($input['password']),
+            'password' => $new_password,
         ])->save();
+
+        $email_data = [
+            'to' => $user->email,
+            'subject' => __('Your password updated'),
+            'user_name' => $user->name,
+            'email_type' => 'password_update',
+        ];
+        Mail::to($email_data['to'])->send(new SendinblueMail($email_data));
+
+        Auth::guard('web')->logoutOtherDevices($input['password']);
+        Auth::guard('web')->logout();
+
+        return redirect()->route('login');
     }
 }

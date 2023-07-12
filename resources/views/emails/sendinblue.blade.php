@@ -175,6 +175,9 @@
                                                     @elseif ($email_data['email_type'] == 'selling_course')
                                                         {{ __('A student purchased your course') }}
 
+                                                    @elseif ($email_data['email_type'] == 'password_update')
+                                                        {{ __('Your password updated') }}
+
                                                     @endif
                                                 </h1>
 
@@ -272,8 +275,14 @@
                                                         <p style="font-size: 14px; line-height: 140%;"><br /><span style="font-size: 16px; line-height: 22.4px;">{{ __('You just purchased a course successfully.') }} </span></p>
 
                                                     @elseif ($email_data['email_type'] == 'selling_course')
-                                                        <p style="font-size: 14px; line-height: 140%;"><br /><span style="font-size: 16px; line-height: 22.4px;">{{ __('A student purchased a your course successfully.') }} </span></p>
+                                                        <p style="font-size: 14px; line-height: 140%;"><br /><span style="font-size: 16px; line-height: 22.4px;">{{ __('Your course was successfully purchased by a student.') }} </span></p>
                                                         <p><br /><br />{{ __('Student Name: ') }} <strong>{{ $email_data['student_name'] }}</strong></p>
+
+                                                    @elseif ($email_data['email_type'] == 'password_update')
+                                                        <p style="font-size: 14px; line-height: 140%;"><br /><span style="font-size: 16px; line-height: 22.4px;">{{ __('You just updated your password successfully.') }} </span></p>
+                                                        <p style="font-size: 14px; line-height: 140%;"><br /><br />
+                                                            {{ __('If you did not request this change, please forward this email to ') }} <a href="mailto:btppro1@gmail.com">btppro1@gmail.com</a><br />
+                                                        </p>
 
                                                     @endif
 
