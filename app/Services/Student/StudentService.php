@@ -378,6 +378,7 @@ class StudentService
 
         $courses = Course::select('courses.*')
             ->leftJoin('users', 'courses.assigned_id', '=', 'users.id')
+            ->where('courses.is_published', 1)
             ->whereNotIn('courses.id', $excluded_course_ids);
 
         if ($search != '')
