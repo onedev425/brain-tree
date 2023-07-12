@@ -103,7 +103,7 @@ class StudentService
      */
     public function createStudentRecord(User $student, $record)
     {
-        $record['admission_number'] || $record['admission_number'] = $this->generateAdmissionNumber();
+        $record['admission_number'] || $record['admission_number'] = date('y') . "/" . \mt_rand('100000', '999999');
 
         $student->studentRecord()->firstOrCreate([
             'user_id' => $student->id,
