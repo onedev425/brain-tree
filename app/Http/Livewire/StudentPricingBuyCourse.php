@@ -2,9 +2,11 @@
 
 namespace App\Http\Livewire;
 
+use App\Mail\SendinblueMail;
 use App\Models\Course;
 use App\Services\Payment\PaypalService;
 use App\Services\Student\StudentService;
+use Illuminate\Support\Facades\Mail;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -26,8 +28,30 @@ class StudentPricingBuyCourse extends Component
         $paypalService = new PaypalService();
         $payment_result = $paypalService->buyCourse($course);
 
-        if ($payment_result['result'] == 'success')
+        if ($payment_result['result'] == 'success') {
+            $email_data = [
+                'to' => auth()->user()->email,
+                'subject' => __('Purchase a course'),
+                'user_name' => auth()->user()->name,
+                'email_type' => 'buy_course',
+                'course_name' => $course->title,
+                'course_price' => $course->price,
+            ];
+            Mail::to($email_data['to'])->send(new SendinblueMail($email_data));
+
+            $email_data = [
+                'to' => $course->assignedTeacher->email,
+                'subject' => __('Purchase a course'),
+                'user_name' => $course->assignedTeacher->name,
+                'email_type' => 'selling_course',
+                'student_name' => auth()->user()->name,
+                'course_name' => $course->title,
+                'course_price' => $course->price,
+            ];
+            Mail::to($email_data['to'])->send(new SendinblueMail($email_data));
+
             return redirect()->away($payment_result['redirect_url']);
+        }
         else
             return redirect($payment_result['redirect_url'])->with('error', __('Something went wrong.'));
     }

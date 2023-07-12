@@ -168,6 +168,13 @@
 
                                                     @elseif ($email_data['email_type'] == 'application_review')
                                                         {{ __('Your application was ') . $email_data['application_status'] }}
+
+                                                    @elseif ($email_data['email_type'] == 'buy_course')
+                                                        {{ __('You purchased a course') }}
+
+                                                    @elseif ($email_data['email_type'] == 'selling_course')
+                                                        {{ __('A student purchased your course') }}
+
                                                     @endif
                                                 </h1>
 
@@ -260,6 +267,14 @@
                                                                 {{ $email_data['application_reason'] }}
                                                             </p><br />
                                                         @endif
+
+                                                    @elseif ($email_data['email_type'] == 'buy_course')
+                                                        <p style="font-size: 14px; line-height: 140%;"><br /><span style="font-size: 16px; line-height: 22.4px;">{{ __('You just purchased a course successfully.') }} </span></p>
+
+                                                    @elseif ($email_data['email_type'] == 'selling_course')
+                                                        <p style="font-size: 14px; line-height: 140%;"><br /><span style="font-size: 16px; line-height: 22.4px;">{{ __('A student purchased a your course successfully.') }} </span></p>
+                                                        <p><br /><br />{{ __('Student Name: ') }} <strong>{{ $email_data['student_name'] }}</strong></p>
+
                                                     @endif
 
 
@@ -270,6 +285,20 @@
                                         </tbody>
                                     </table>
 
+                                    @if ($email_data['email_type'] == 'buy_course' || $email_data['email_type'] == 'selling_course')
+                                        <table style="font-family:arial,helvetica,sans-serif;" role="presentation" cellpadding="10" cellspacing="0" width="95%" border="0" align="center">
+                                            <tbody>
+                                                <tr style="border-bottom: 1px solid black">
+                                                    <td><strong>{{ __('Course Name') }}</strong></td>
+                                                    <td align="right"><strong>{{ __('Price') }}</strong></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>{{ $email_data['course_name'] }}</td>
+                                                    <td align="right">${{ $email_data['course_price'] }}</td>
+                                                </tr>
+                                            </tbody>
+                                    </table>
+                                    @endif
                                     <!--[if (!mso)&(!IE)]><!--></div><!--<![endif]-->
                             </div>
                         </div>
