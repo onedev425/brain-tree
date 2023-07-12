@@ -11,17 +11,8 @@
                     <p class="text-sm md:text-base">{{__('A new verification link has been sent to the email address you provided during registration.')}}</p>
                 </x-alert>
             @endif
-            <?php
-            $user = auth()->user();
-            $verification_url = URL::temporarySignedRoute(
-                'verification.verify',
-                now()->addMinutes(60),
-                ['id' => $user->id, 'hash' => sha1($user->email)]
-            )
-            ?>
             <div class="my-3 text-sm md:text-base">
                 {{ __('Thanks for signing up! Before getting started, could you verify your email address by clicking on the link we just emailed to you? If you didn\'t receive the email, we will gladly send you another.') }}
-                {{ $verification_url }}
             </div>
             <div class="mt-4 flex-col items-center flex justify-between">
                 <form method="POST" action="{{ route('verification.send') }}">
