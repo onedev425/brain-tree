@@ -3,11 +3,13 @@
 namespace App\Services\AccountApplication;
 
 use App\Events\AccountStatusChanged;
+use App\Mail\SendinblueMail;
 use App\Models\AccountApplication;
 use App\Models\User;
 use App\Services\Student\StudentService;
 use App\Services\User\UserService;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
 class AccountApplicationService
 {
@@ -122,6 +124,17 @@ class AccountApplicationService
                 $applicant->accountApplication->delete();
             }
         });
+
+        $email_data = [
+            'to' => $applicant->email,
+            'subject' => __('Your application ') . $record['status'],
+            'user_name' => $applicant->name,
+            'email_type' => 'application_review',
+            'application_status' => $record['status'],
+            'application_reason' => $record['reason'],
+        ];
+
+        Mail::to($email_data['to'])->send(new SendinblueMail($email_data));
 
         AccountStatusChanged::dispatch($applicant, $record['status'], $record['reason']);
     }

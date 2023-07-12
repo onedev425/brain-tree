@@ -165,6 +165,9 @@
 
                                                     @elseif ($email_data['email_type'] == 'decline_reason')
                                                         {{ __('Your course declined') }}
+
+                                                    @elseif ($email_data['email_type'] == 'application_review')
+                                                        {{ __('Your application was ') . $email_data['application_status'] }}
                                                     @endif
                                                 </h1>
 
@@ -250,6 +253,13 @@
                                                         </p><br />
                                                         {{ __('Please contact ') }} <a href="mailto:btppro1@gmail.com">btppro1@gmail.com</a> {{ __('for more information.') }}
 
+                                                    @elseif ($email_data['email_type'] == 'application_review')
+                                                        <p style="font-size: 14px; line-height: 140%;"><br /><span style="font-size: 16px; line-height: 22.4px;">{{ __('Your application was ') . $email_data['application_status'] }} </span></p>
+                                                        @if ($email_data['application_reason'])
+                                                            <p style="font-size: 14px; line-height: 140%;"><br />{{ __('Reason/Message: ') }} <br />
+                                                                {{ $email_data['application_reason'] }}
+                                                            </p><br />
+                                                        @endif
                                                     @endif
 
 
