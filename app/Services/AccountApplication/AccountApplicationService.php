@@ -6,6 +6,7 @@ use App\Events\AccountStatusChanged;
 use App\Mail\SendinblueMail;
 use App\Models\AccountApplication;
 use App\Models\User;
+use App\Services\EmailService;
 use App\Services\Student\StudentService;
 use App\Services\User\UserService;
 use Illuminate\Support\Facades\DB;
@@ -134,9 +135,12 @@ class AccountApplicationService
             'application_reason' => $record['reason'],
         ];
 
-        Mail::to($email_data['to'])->send(new SendinblueMail($email_data));
-
-        AccountStatusChanged::dispatch($applicant, $record['status'], $record['reason']);
+        $email_service = new EmailService($email_data);
+        $result = $email_service->sendEmail();
+        if ($result == 'success')
+            AccountStatusChanged::dispatch($applicant, $record['status'], $record['reason']);
+        else
+            return back()->with('danger', __('Email sending failed: ') . $result);
     }
 
     /**

@@ -3,6 +3,7 @@
 namespace App\Actions\Fortify;
 
 use App\Mail\SendinblueMail;
+use App\Services\EmailService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -42,11 +43,18 @@ class UpdateUserPassword implements UpdatesUserPasswords
             'user_name' => $user->name,
             'email_type' => 'password_update',
         ];
-        Mail::to($email_data['to'])->send(new SendinblueMail($email_data));
+        $email_service = new EmailService($email_data);
+        $result = $email_service->sendEmail();
+        if ($result == 'success') {
+            Auth::guard('web')->logoutOtherDevices($input['password']);
+            Auth::guard('web')->logout();
 
-        Auth::guard('web')->logoutOtherDevices($input['password']);
-        Auth::guard('web')->logout();
+            return redirect()->route('login');
+        }
+        else {
+            return back()->with('danger', __('Email sending failed: ') . $result);
+        }
 
-        return redirect()->route('login');
+
     }
 }

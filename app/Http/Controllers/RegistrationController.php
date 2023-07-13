@@ -6,6 +6,7 @@ use App\Events\AccountStatusChanged;
 use App\Http\Requests\RegistrationRequest;
 use App\Mail\SendinblueMail;
 use App\Services\AccountApplication\AccountApplicationService;
+use App\Services\EmailService;
 use App\Services\User\UserService;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\URL;
@@ -61,7 +62,11 @@ class RegistrationController extends Controller
             'verification_url' => $verification_url
         ];
 
-        Mail::to($email_data['to'])->send(new SendinblueMail($email_data));
-        return back()->with('success', 'Registration complete, you would receive an email to verify your account');
+        $email_service = new EmailService($email_data);
+        $result = $email_service->sendEmail();
+        if ($result == 'success')
+            return back()->with('success', 'Registration complete, you would receive an email to verify your account');
+        else
+            return back()->with('danger', __('Email sending failed: ') . $result);
     }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Livewire;
 
 use App\Mail\SendinblueMail;
 use App\Models\Course;
+use App\Services\EmailService;
 use App\Services\Payment\PaypalService;
 use App\Services\Student\StudentService;
 use Illuminate\Support\Facades\Mail;
@@ -37,20 +38,29 @@ class StudentPricingBuyCourse extends Component
                 'course_name' => $course->title,
                 'course_price' => $course->price,
             ];
-            Mail::to($email_data['to'])->send(new SendinblueMail($email_data));
+            $email_service = new EmailService($email_data);
+            $result = $email_service->sendEmail();
 
-            $email_data = [
-                'to' => $course->assignedTeacher->email,
-                'subject' => __('Purchase a course'),
-                'user_name' => $course->assignedTeacher->name,
-                'email_type' => 'selling_course',
-                'student_name' => auth()->user()->name,
-                'course_name' => $course->title,
-                'course_price' => $course->price,
-            ];
-            Mail::to($email_data['to'])->send(new SendinblueMail($email_data));
+            if ($result == 'success') {
+                $email_data = [
+                    'to' => $course->assignedTeacher->email,
+                    'subject' => __('Purchase a course'),
+                    'user_name' => $course->assignedTeacher->name,
+                    'email_type' => 'selling_course',
+                    'student_name' => auth()->user()->name,
+                    'course_name' => $course->title,
+                    'course_price' => $course->price,
+                ];
+                $email_service = new EmailService($email_data);
+                $result = $email_service->sendEmail();
+                if ($result == 'success')
+                    return redirect()->away($payment_result['redirect_url']);
+                else
+                    return back()->with('danger', __('Email sending failed: ') . $result);
+            }
+            else
+                return back()->with('danger', __('Email sending failed: ') . $result);
 
-            return redirect()->away($payment_result['redirect_url']);
         }
         else
             return redirect($payment_result['redirect_url'])->with('error', __('Something went wrong.'));

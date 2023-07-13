@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\EmailService;
 use Illuminate\Http\RedirectResponse;
 use App\Services\Course\CourseService;
 use App\Models\Course;
@@ -11,9 +12,6 @@ use Illuminate\View\View;
 use Illuminate\Database\Eloquent\Collection;
 use App\Mail\SendinblueMail;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\URL;
-use SendinBlue\Client\Api\TransactionalEmailsApi;
-use SendinBlue\Client\Configuration;
 
 class TeacherCourseController extends Controller
 {
@@ -118,33 +116,16 @@ class TeacherCourseController extends Controller
             'publish_result' => $publish_result
         ];
 
-//        Mail::to($email_data['to'])->send(new SendinblueMail($email_data));
+        $email_service = new EmailService($email_data);
+        $result = $email_service->sendEmail();
+        if ($result == 'success') {
+            $course->is_published = $publish_result;
+            $course->save();
 
-
-        $email = new SendinblueMail([]);
-        $toEmail = 'websoft.foryou0915@gmail.com';
-
-        $config = Configuration::getDefaultConfiguration()->setApiKey('api-key', env('SENDINBLUE_API_KEY'));
-        $apiInstance = new TransactionalEmailsApi(new \GuzzleHttp\Client(), $config);
-
-        $sendSmtpEmail = new \SendinBlue\Client\Model\SendSmtpEmail();
-        $sendSmtpEmail['sender'] = ['email' => 'latania@braintreespro.com'];
-        $sendSmtpEmail['to'] = [['email' => $toEmail]];
-        $sendSmtpEmail['subject'] = '--- test ---';
-        $sendSmtpEmail['htmlContent'] = 'hello';
-        try {
-            $result = $apiInstance->sendTransacEmail($sendSmtpEmail);
-            return redirect()->route('teacher.course.index', 'type=publish');
-        } catch (\Exception $e) {
-            return 'Email sending failed: ' . $e->getMessage();
+            return redirect()->route('teacher.course.index', $publish_result == 1 ? 'type=publish' : 'type=draft');
         }
-
-
-
-//        $course->is_published = $publish_result;
-//        $course->save();
-//
-//        return redirect()->route('teacher.course.index', $publish_result == 1 ? 'type=publish' : 'type=draft');
+        else
+            return back()->with('danger', __('Email sending failed: ') . $result);
     }
 
     public function decline(Request $request, Course $course): RedirectResponse
@@ -158,11 +139,16 @@ class TeacherCourseController extends Controller
             'decline_reason' => $request['decline_reason']
         ];
 
-        Mail::to($email_data['to'])->send(new SendinblueMail($email_data));
-
-        $course->is_declined = 1;
-        $course->save();
-        return redirect()->route('teacher.course.index',  'type=draft');
+        $email_service = new EmailService($email_data);
+        $result = $email_service->sendEmail();
+        if ($result == 'success') {
+            $course->is_declined = 1;
+            $course->save();
+            return redirect()->route('teacher.course.index', 'type=draft');
+        }
+        else {
+            return back()->with('danger', __('Email sending failed: ') . $result);
+        }
     }
 
     private function getCourseData(TeacherCourseStoreRequest $request): array
