@@ -5,13 +5,13 @@
                 <div class="flex flex-cols justify-center items-center">
                     <a href="#"><img src="{{asset(config('app.logo'))}}" alt="" class="my-4"></a>
                 </div>
-                <form id="main_form" action="{{route('password.email')}}" class="p-7 border-b" method="POST">
+                <form id="main_form" action="{{route('password.reset.email')}}" class="p-7 border-b" method="POST">
                     @csrf
                     <div class="flex mt-4">
                         <div class="w-full lg:w-3/5 mr-10">
                             <h1 class="font-bold text-4xl text-black">{{ __('Password Recovery') }}</h1>
                             <div class="form-group flex-shrink max-w-full my-7">
-                                <label for="quiz_title" class="inline-block mb-2">{{ __('Email') }}</label>
+                                <label for="email" class="inline-block mb-2">{{ __('Email') }}</label>
                                 <input type="email" name="email" class="w-full leading-5 relative py-2 px-4 rounded text-gray-800 bg-white border border-gray-300 overflow-x-auto focus:outline-none focus:border-gray-400 focus:ring-0" placeholder="" required>
                             </div>
 
