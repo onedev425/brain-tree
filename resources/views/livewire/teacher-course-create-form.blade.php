@@ -34,7 +34,7 @@
                         </div>
                         <div class="card-body">
                             <div class="form-group mb-6">
-                                <label for="course_title" class="block mb-2 font-medium text-gray-900">{{ __('Course Title') }}</label>
+                                <label for="course_title" class="block mb-2 font-medium text-gray-900">{{ __('Course Title') }} <span class="text-red-500">*</span></label>
                                 <input type="text" id="course_title" name="course_title" wire:model="state.course_title" minlength="3" maxlength="100" class="shadow-sm border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="" required />
                                 @error('course_title')
                                 <span class="text-red-500">{{ $message }}</span>
@@ -49,14 +49,14 @@
                                 </x-select>
                             </div>
                             <div class="form-group mb-6">
-                                <label for="course_price" class="block mb-2 font-medium text-gray-900">{{ __('Pricing') }} ($)</label>
+                                <label for="course_price" class="block mb-2 font-medium text-gray-900">{{ __('Pricing') }} ($)<span class="text-red-500">*</span> </label>
                                 <input type="number" id="course_price" name="course_price" wire:model="state.price" minlength="1" maxlength="10" class="shadow-sm border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="" required />
                                 @error('course_price')
                                 <span class="text-red-500">{{ $message }}</span>
                                 @enderror
                             </div>
                             <div class="form-group mb-6">
-                                <label for="course_pass_percent" class="block mb-2 font-medium text-gray-900">{{ __('Pass Percent') }} (%)</label>
+                                <label for="course_pass_percent" class="block mb-2 font-medium text-gray-900">{{ __('Pass Percent') }} (%)<span class="text-red-500">*</span></label>
                                 <input type="number" id="course_pass_percent" name="course_pass_percent" wire:model="state.pass_percent" minlength="1" maxlength="3" max="100" class="shadow-sm border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="" required />
                                 @error('course_pass_percent')
                                 <span class="text-red-500">{{ $message }}</span>
@@ -253,7 +253,7 @@
                 <input type="hidden" name="topic_edit_flag" value="new" />
                 <button id="close_topic_dialog" type="button" class="fill-current h-6 w-6 absolute right-0 top-0 m-4 text-3xl font-bold">×</button>
                 <div class="form-group flex-shrink max-w-full px-4 w-full mb-4">
-                    <label for="topic_name" class="inline-block mb-2">{{ __('Topic Name') }}</label>
+                    <label for="topic_name" class="inline-block mb-2">{{ __('Topic Name') }} <span class="text-red-500">*</span></label>
                     <input id="topic_name" type="text" class="w-full leading-5 relative py-2 px-4 rounded text-gray-800 bg-white border border-gray-300 overflow-x-auto focus:outline-none focus:border-gray-400 focus:ring-0" placeholder="" required>
                 </div>
 
@@ -273,7 +273,7 @@
                 <input type="hidden" name="topic_uuid" value="" />
                 <button id="close_lesson_dialog" type="button" class="fill-current h-6 w-6 absolute right-0 top-0 m-4 text-3xl font-bold">×</button>
                 <div class="form-group flex-shrink max-w-full px-4 w-full mb-4">
-                    <label for="lesson_name" class="inline-block mb-2">{{ __('Lesson Name') }}</label>
+                    <label for="lesson_name" class="inline-block mb-2">{{ __('Lesson Name') }} <span class="text-red-500">*</span></label>
                     <input id="lesson_name" type="text" class="w-full leading-5 relative py-2 px-4 rounded text-gray-800 bg-white border border-gray-300 overflow-x-auto focus:outline-none focus:border-gray-400 focus:ring-0" placeholder="" required>
                 </div>
                 <div class="form-group flex-shrink max-w-full px-4 w-full mb-4">
@@ -281,7 +281,7 @@
                     <textarea id="lesson_description" rows="8" class="w-full leading-5 relative py-2 px-4 rounded-lg text-gray-800 bg-white border border-gray-300 overflow-x-auto focus:outline-none focus:border-gray-400 focus:ring-0"></textarea>
                 </div>
                 <div class="form-group flex-shrink max-w-full px-4 w-full md:w-1/2 mb-4">
-                    <label for="video_source" class="inline-block mb-2">{{ __('Video Source') }}</label>
+                    <label for="video_source" class="inline-block mb-2">{{ __('Video Source') }} <span class="text-red-500">*</span></label>
                     <select id="video_source" class="inline-block w-full leading-5 relative py-2 pl-3 pr-8 rounded text-gray-800 bg-white border border-gray-300 overflow-x-auto focus:outline-none focus:border-gray-400 focus:ring-0 select-caret appearance-none" required>
                         <option value="">{{ __('Choose...') }}</option>
                         <option value="youtube">{{ __('Youtube') }}</option>
@@ -289,7 +289,7 @@
                     </select>
                 </div>
                 <div class="form-group flex-shrink max-w-full px-4 w-full md:w-1/2 mb-4">
-                    <label for="video_url" class="inline-block mb-2">{{ __('Video URL') }}</label>
+                    <label for="video_url" class="inline-block mb-2">{{ __('Video URL') }} <span class="text-red-500">*</span></label>
                     <input id="video_url" type="text" class="w-full leading-5 relative py-2 px-4 rounded text-gray-800 bg-white border border-gray-300 overflow-x-auto focus:outline-none focus:border-gray-400 focus:ring-0" required>
                 </div>
 
@@ -308,11 +308,11 @@
                 <input type="hidden" name="quiz_edit_flag" value="new" />
                 <button id="close_quiz_dialog" type="button" class="fill-current h-6 w-6 absolute right-0 top-0 m-4 text-3xl font-bold">×</button>
                 <div class="form-group flex-shrink max-w-full px-4 w-full mb-7">
-                    <label for="quiz_title" class="inline-block mb-2">{{ __('Write your question here') }}</label>
+                    <label for="quiz_title" class="inline-block mb-2">{{ __('Write your question here') }} <span class="text-red-500">*</span></label>
                     <input id="quiz_title" type="text" class="w-full leading-5 relative py-2 px-4 rounded text-gray-800 bg-white border border-gray-300 overflow-x-auto focus:outline-none focus:border-gray-400 focus:ring-0" placeholder="" required>
                 </div>
                 <div class="form-group flex-shrink px-4 w-full md:w-1/2 mb-7">
-                    <label for="quiz_type" class="inline-block mb-2">{{ __('Select your question type') }}</label>
+                    <label for="quiz_type" class="inline-block mb-2">{{ __('Select your question type') }} <span class="text-red-500">*</span></label>
                     <select id="quiz_type" class="inline-block w-full leading-5 relative py-2 pl-3 pr-8 rounded text-gray-800 bg-white border border-gray-300 overflow-x-auto focus:outline-none focus:border-gray-400 focus:ring-0 select-caret appearance-none" required>
                         <option value="">{{ __('Choose...') }}</option>
                         <option value="boolean">{{ __('True / False') }}</option>
@@ -321,7 +321,7 @@
                     </select>
                 </div>
                 <div class="form-group flex-shrink px-4 w-full md:w-1/2 mb-7">
-                    <label for="quiz_points" class="inline-block mb-2">{{ __('Points') }}</label>
+                    <label for="quiz_points" class="inline-block mb-2">{{ __('Points') }} <span class="text-red-500">*</span></label>
                     <input id="quiz_points" type="number" class="w-full leading-5 relative py-2 px-4 rounded text-gray-800 bg-white border border-gray-300 overflow-x-auto focus:outline-none focus:border-gray-400 focus:ring-0" placeholder="" required>
                 </div>
                 <div class="form-group flex-shrink max-w-full px-4 w-full mb-7">
