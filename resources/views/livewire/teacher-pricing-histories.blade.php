@@ -27,7 +27,7 @@
                         </td>
                         <td class="p-4 whitespace-nowrap">${{ $course->price }}</td>
                         <td class="p-4 whitespace-nowrap">{{ $course->student_name }}</td>
-                        <td class="p-4 whitespace-nowrap">{{ substr($course->purchase_at, 0, 10) }}</td>
+                        <td class="p-4 whitespace-nowrap">{{ date('m-d-Y', strtotime($course->purchase_at)) }}</td>
                     </tr>
                 @endforeach
             @else

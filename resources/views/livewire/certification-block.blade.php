@@ -12,7 +12,7 @@
                     <path id="Path_53" data-name="Path 53" d="M11.558,4.477A7.078,7.078,0,1,1,6.55,6.55a7.034,7.034,0,0,1,5.008-2.073m0-1.1a8.183,8.183,0,1,0,8.183,8.183,8.181,8.181,0,0,0-8.183-8.183Z" fill="#1ddc72"/>
                 </g>
             </svg>
-            <span class="text-xs ml-2">{{ __('Completed') }} | {{ substr($completed_date, 0, 10) }} {{ $started_date }}</span>
+            <span class="text-xs ml-2">{{ __('Completed') }} | {{ date('m-d-Y', strtotime($completed_date)) }} {{ date('m-d-Y', strtotime($started_date)) }}</span>
         </div>
     </div>
     <div class="flex flex-col justify-center">

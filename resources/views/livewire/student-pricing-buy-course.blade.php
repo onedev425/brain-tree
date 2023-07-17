@@ -28,7 +28,7 @@
                         </td>
                         <td class="p-4 whitespace-nowrap">${{ $course->price }}</td>
                         <td class="p-4 whitespace-nowrap">{{ $course->assignedTeacher->name }}</td>
-                        <td class="p-4 whitespace-nowrap">{{ substr($course->created_at, 0, 10) }}</td>
+                        <td class="p-4 whitespace-nowrap">{{ date('m-d-Y', strtotime($course->created_at)) }}</td>
                         <td class="p-4 whitespace-nowrap">
                             <x-button wire:click="BuyCourse({{ $course->id }})" class="text-purple-500">{{ __('Buy Course') }}</x-button>
                         </td>

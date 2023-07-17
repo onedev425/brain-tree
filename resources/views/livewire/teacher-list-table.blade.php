@@ -24,7 +24,7 @@
                             </div>
                         </td>
                         <td class="p-4 whitespace-nowrap">{{ $this->getAssignedCourses($teacher) }}</td>
-                        <td class="p-4 whitespace-nowrap">{{ substr($teacher->created_at, 0, 10) }}</td>
+                        <td class="p-4 whitespace-nowrap">{{ date('m-d-Y', strtotime($teacher->created_at)) }}</td>
                     </tr>
                 @endforeach
             @else

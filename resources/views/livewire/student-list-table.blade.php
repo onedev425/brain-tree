@@ -23,7 +23,7 @@
                                 </div>
 
                             </td>
-                            <td class="p-4 whitespace-nowrap">{{ substr($student->created_at, 0, 10) }}</td>
+                            <td class="p-4 whitespace-nowrap">{{ date('m-d-Y', strtotime($student->created_at)) }}</td>
                         </tr>
                     @endforeach
                 @else

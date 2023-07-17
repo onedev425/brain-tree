@@ -23,8 +23,8 @@ class CertificationController extends Controller
 
         $data['name'] = auth()->user()->name;
         $data['course_title'] = $course->title;
-        $data['course_started_date'] = substr($studentService->getCourseStartedDate($course), 0, 10);
-        $data['course_completed_date'] = substr($studentService->getCourseCompletedDate($course), 0, 10);
+        $data['course_started_date'] = date('m-d-Y', strtotime($studentService->getCourseStartedDate($course)));
+        $data['course_completed_date'] = date('m-d-Y', strtotime($studentService->getCourseCompletedDate($course)));
 
         // return view('pdf.certification', $data);
         $pdf = PDF::loadView('pdf.certification', $data);
