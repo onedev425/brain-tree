@@ -263,6 +263,9 @@ class PermissionSeeder extends Seeder
         Permission::firstOrCreate([
             'name' => 'settings',
         ]);
+        Permission::firstOrCreate([
+            'name' => 'menu-industry',
+        ]);
         /**
          * assign permissions to roles.
          */
@@ -332,6 +335,7 @@ class PermissionSeeder extends Seeder
             'assessments',
             'pricing',
             'settings',
+            'menu-industry',
         ]);
 
         //assign permissions to teacher

@@ -74,6 +74,9 @@ Route::middleware('auth:sanctum', 'verified', 'App\Http\Middleware\PreventLockAc
     //teacher routes
     Route::resource('teachers', TeacherController::class)->only(['index', 'show']);
 
+    // industry routes
+    Route::resource('industry', IndustryController::class);
+
     // certificaiton routes
     Route::get('certification', ['App\Http\Controllers\CertificationController', 'index'])->name('certification.index');
     Route::get('download_certification', ['App\Http\Controllers\CertificationController', 'download'])->name('certification.download');
