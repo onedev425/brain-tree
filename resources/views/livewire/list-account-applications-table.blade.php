@@ -12,7 +12,7 @@
             ['type' => 'dropdown', 'name' => 'actions','links' => [
                 ['href' => 'account-applications.edit', 'text' => 'Edit profile', 'icon' => 'fas fa-cog'],
                 ['href' => 'account-applications.show', 'text' => 'View profile', 'icon' => 'fas fa-eye'],
-                ['href' => 'account-applications.change-status', 'text' => 'Change Status ( make decision )', 'icon' => 'fas fa-balance-scale'],
+                ['href' => 'account-applications.change-status', 'text' => 'Make Decision', 'icon' => 'fas fa-balance-scale'],
                 ]],
                 ['type' => 'delete', 'name' => 'Delete', 'action' => 'account-applications.destroy']
         ]"/>
