@@ -77,20 +77,6 @@ class PermissionSeeder extends Seeder
             'name' => 'delete exam',
         ]);
 
-        //permission for exam records
-        Permission::firstOrCreate([
-            'name' => 'create exam record',
-        ]);
-        Permission::firstOrCreate([
-            'name' => 'read exam record',
-        ]);
-        Permission::firstOrCreate([
-            'name' => 'update exam record',
-        ]);
-        Permission::firstOrCreate([
-            'name' => 'delete exam record',
-        ]);
-
         //check result permission
         Permission::firstOrCreate([
             'name' => 'check result',
@@ -208,10 +194,6 @@ class PermissionSeeder extends Seeder
             'read exam',
             'update exam',
             'delete exam',
-            'create exam record',
-            'read exam record',
-            'update exam record',
-            'delete exam record',
             'create notice',
             'read notice',
             'update notice',
@@ -238,10 +220,6 @@ class PermissionSeeder extends Seeder
             'menu-student',
             'read student',
             'read exam',
-            'create exam record',
-            'read exam record',
-            'update exam record',
-            'delete exam record',
             'read notice',
             'check result',
             'marks',
