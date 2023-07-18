@@ -63,20 +63,6 @@ class PermissionSeeder extends Seeder
             'name' => 'delete subject',
         ]);
 
-        //exam permissions
-        Permission::firstOrCreate([
-            'name' => 'create exam',
-        ]);
-        Permission::firstOrCreate([
-            'name' => 'read exam',
-        ]);
-        Permission::firstOrCreate([
-            'name' => 'update exam',
-        ]);
-        Permission::firstOrCreate([
-            'name' => 'delete exam',
-        ]);
-
         //check result permission
         Permission::firstOrCreate([
             'name' => 'check result',
@@ -137,9 +123,6 @@ class PermissionSeeder extends Seeder
             'name' => 'menu-subject',
         ]);
         Permission::firstOrCreate([
-            'name' => 'menu-exam',
-        ]);
-        Permission::firstOrCreate([
             'name' => 'menu-notice',
         ]);
         Permission::firstOrCreate([
@@ -175,7 +158,6 @@ class PermissionSeeder extends Seeder
             'menu-student',
             'menu-teacher',
             'menu-subject',
-            'menu-exam',
             'menu-notice',
             'menu-account-application',
             'create student',
@@ -190,10 +172,6 @@ class PermissionSeeder extends Seeder
             'read subject',
             'update subject',
             'delete subject',
-            'create exam',
-            'read exam',
-            'update exam',
-            'delete exam',
             'create notice',
             'read notice',
             'update notice',
@@ -215,11 +193,9 @@ class PermissionSeeder extends Seeder
         $teacher->syncPermissions([
             'header-administrate',
             'teacher-courses',
-            'menu-exam',
             'menu-notice',
             'menu-student',
             'read student',
-            'read exam',
             'read notice',
             'check result',
             'marks',
@@ -234,7 +210,6 @@ class PermissionSeeder extends Seeder
             'header-administrate',
             'student-courses',
             'menu-notice',
-            'menu-exam',
             'read notice',
             'check result',
             'certification-marks',
