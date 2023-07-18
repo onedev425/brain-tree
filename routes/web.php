@@ -54,6 +54,7 @@ Route::middleware('auth:sanctum', 'verified', 'App\Http\Middleware\PreventLockAc
     Route::post('question_clear', ['App\Http\Controllers\StudentCourseController', 'question_clear'])->name('student.question.clear');
     Route::post('update_avatar', ['App\Http\Controllers\ProfileController', 'update_avatar'])->name('user.avatar.update');
     Route::post('remove_avatar', ['App\Http\Controllers\ProfileController', 'remove_avatar'])->name('user.avatar.remove');
+    Route::post('update_profile', ['App\Http\Controllers\ProfileController', 'update_profile'])->name('user.profile.update');
 
     //Teacher Courses routes
     Route::prefix('teacher')->group(function () {
