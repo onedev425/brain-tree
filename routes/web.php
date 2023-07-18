@@ -129,12 +129,7 @@ Route::middleware('auth:sanctum', 'verified', 'App\Http\Middleware\PreventLockAc
     //exam routes
     Route::resource('exams', ExamController::class);
 
-    //exam slot routes
-    Route::scopeBindings()->group(function () {
-        Route::resource('exams/{exam}/manage/exam-slots', ExamSlotController::class);
-    });
-
-    Route::get('students/{student}/print', ['App\Http\Controllers\StudentController', 'printProfile'])->name('students.print-profile');
+     Route::get('students/{student}/print', ['App\Http\Controllers\StudentController', 'printProfile'])->name('students.print-profile');
 
     //lock account route
     Route::post('users/lock-account/{user}', 'App\Http\Controllers\LockUserAccountController')->name('user.lock-account');

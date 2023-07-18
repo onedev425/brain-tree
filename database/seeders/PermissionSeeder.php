@@ -77,20 +77,6 @@ class PermissionSeeder extends Seeder
             'name' => 'delete exam',
         ]);
 
-        //permission for exam slots
-        Permission::firstOrCreate([
-            'name' => 'create exam slot',
-        ]);
-        Permission::firstOrCreate([
-            'name' => 'read exam slot',
-        ]);
-        Permission::firstOrCreate([
-            'name' => 'update exam slot',
-        ]);
-        Permission::firstOrCreate([
-            'name' => 'delete exam slot',
-        ]);
-
         //permission for exam records
         Permission::firstOrCreate([
             'name' => 'create exam record',
@@ -222,10 +208,6 @@ class PermissionSeeder extends Seeder
             'read exam',
             'update exam',
             'delete exam',
-            'create exam slot',
-            'read exam slot',
-            'update exam slot',
-            'delete exam slot',
             'create exam record',
             'read exam record',
             'update exam record',
@@ -256,7 +238,6 @@ class PermissionSeeder extends Seeder
             'menu-student',
             'read student',
             'read exam',
-            'read exam slot',
             'create exam record',
             'read exam record',
             'update exam record',
