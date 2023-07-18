@@ -119,11 +119,4 @@ Route::middleware('auth:sanctum', 'verified', 'App\Http\Middleware\PreventLockAc
     //lock account route
     Route::post('users/lock-account/{user}', 'App\Http\Controllers\LockUserAccountController')->name('user.lock-account');
 
-    //assign teachers to subject in class
-    Route::get('subjects/assign-teacher', ['App\Http\Controllers\SubjectController', 'assignTeacherVIew'])->name('subjects.assign-teacher');
-    Route::post('subjects/assign-teacher/{teacher}', ['App\Http\Controllers\SubjectController', 'assignTeacher'])->name('subjects.assign-teacher-to-subject');
-
-    //subject routes
-    Route::resource('subjects', SubjectController::class);
-
 });
