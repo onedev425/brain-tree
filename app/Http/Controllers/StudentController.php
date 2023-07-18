@@ -39,29 +39,6 @@ class StudentController extends Controller
         return view('pages.student.index');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create(): View
-    {
-        $this->authorize('create', [User::class, 'student']);
-
-        return view('pages.student.create');
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     *
-     * @throws \Illuminate\Auth\Access\AuthorizationException
-     */
-    public function store(StudentStoreRequest $request): RedirectResponse
-    {
-        $this->authorize('create', [User::class, 'student']);
-        $this->studentService->createStudent($request);
-
-        return back()->with('success', 'Student Created Successfully');
-    }
 
     /**
      * Display the specified resource.
@@ -74,61 +51,4 @@ class StudentController extends Controller
         return view('pages.student.show', compact('student'));
     }
 
-    /**
-     * Print student Profile.
-     */
-    public function printProfile(User $student): Response
-    {
-        $this->userService->verifyUserIsOfRoleElseNotFound($student, 'student');
-        $this->authorize('view', [$student, 'student']);
-        $data['student'] = $student;
-
-        return $this->studentService->printProfile($data['student']->name, 'pages.student.print-student-profile', $data);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     *
-     * @throws \Illuminate\Auth\Access\AuthorizationException
-     */
-    public function edit(User $student): View
-    {
-        $this->userService->verifyUserIsOfRoleElseNotFound($student, 'student');
-        $this->authorize('update', [$student, 'student']);
-        $data['student'] = $student;
-
-        return view('pages.student.edit', $data);
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     *
-     * @throws \Illuminate\Auth\Access\AuthorizationException
-     */
-    public function update(Request $request, User $student): RedirectResponse
-    {
-        $this->userService->verifyUserIsOfRoleElseNotFound($student, 'student');
-        $this->authorize('update', [$student, 'student']);
-        $data = $request->except('_token', '_method');
-        $this->studentService->updateStudent($student, $data);
-
-        return back()->with('success', 'Student Updated Successfully');
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     *
-     * @throws \Illuminate\Auth\Access\AuthorizationException
-     */
-    public function destroy(User $student): RedirectResponse
-    {
-        $this->userService->verifyUserIsOfRoleElseNotFound($student, 'student');
-        $this->authorize('delete', [$student, 'student']);
-        $this->studentService->deleteStudent($student);
-
-        return back()->with('success', 'Student Deleted Successfully');
-    }
 }

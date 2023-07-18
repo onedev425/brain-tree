@@ -135,16 +135,6 @@ class StudentService
         $student->delete();
     }
 
-    /**
-     * Print student profile.
-     *
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function printProfile(string $name, string $view, array $data)
-    {
-        return PrintService::createPdfFromView($view, $data)->download($name.'.pdf');
-    }
 
     /**
      * Graduate students.
