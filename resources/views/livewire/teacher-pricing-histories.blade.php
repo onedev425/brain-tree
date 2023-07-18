@@ -12,7 +12,7 @@
             <th class="capitalize p-4 whitespace-nowrap text-left">{{ __('Course') }}</th>
             <th class="capitalize p-4 whitespace-nowrap text-left">{{ __('Price') }}</th>
             <th class="capitalize p-4 whitespace-nowrap text-left">{{ __('Student') }}</th>
-            <th class="capitalize p-4 whitespace-nowrap text-left">{{ __('Purchase At') }}</th>
+            <th class="capitalize p-4 whitespace-nowrap text-left">{{ __('Date Purchased') }}</th>
             </thead>
             <tbody class="text-left">
             @if ($courses->isNotEmpty())
@@ -27,7 +27,7 @@
                         </td>
                         <td class="p-4 whitespace-nowrap">${{ $course->price }}</td>
                         <td class="p-4 whitespace-nowrap">{{ $course->student_name }}</td>
-                        <td class="p-4 whitespace-nowrap">{{ substr($course->purchase_at, 0, 10) }}</td>
+                        <td class="p-4 whitespace-nowrap">{{ date('m-d-Y', strtotime($course->purchase_at)) }}</td>
                     </tr>
                 @endforeach
             @else

@@ -1,6 +1,6 @@
 <div>
     @if ($connection_date != '')
-        <p>{{ __('Your paypal account connected successfully at') }} {{ substr($connection_date, 0, 10) }}.</p>
+        <p>{{ __('Your paypal account connected successfully at') }} {{ date('m-d-Y', strtotime($connection_date)) }}.</p>
     @else
         @if ($error_message != '')
             <p class="text-red-700 font-bold">{{ __('The action you took failed.') }}</p>

@@ -32,7 +32,7 @@
                         </td>
                         <td class="p-4 whitespace-nowrap">${{ $history->total_amount }}</td>
                         <td class="p-4 whitespace-nowrap">${{ $history->paid_amount }}</td>
-                        <td class="p-4 whitespace-nowrap">{{ substr($history->created_at, 0, 10) }}</td>
+                        <td class="p-4 whitespace-nowrap">{{ date('m-d-Y', strtotime($history->created_at)) }}</td>
                     </tr>
                 @endforeach
             @else

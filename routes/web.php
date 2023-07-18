@@ -29,7 +29,9 @@ Route::get('/paypal/connect', ['App\Http\Controllers\PaymentController', 'connec
 Route::get('/paypal/connect-success', ['App\Http\Controllers\PaymentController', 'connectSuccess'])->name('paypal.connect_success');
 Route::get('/paypal/connect/callback', ['App\Http\Controllers\PaymentController', 'connectCallback'])->name('paypal.callback');
 Route::get('/paypal/connect-cancel', ['App\Http\Controllers\PaymentController', 'connectCancel'])->name('paypal.cancel');
-
+Route::post('/verification_resend', ['App\Http\Controllers\RegistrationController', 'verification_resend'])->name('verification.resend');
+Route::post('/password_reset', ['App\Http\Controllers\RegistrationController', 'password_reset'])->name('password.reset.email');
+Route::post('/password_update', ['App\Http\Controllers\RegistrationController', 'password_update'])->name('password.change');
 
 Route::middleware(['guest'])->group(function () {
     Route::get('/register', ['App\Http\Controllers\RegistrationController', 'registerView'])->name('register');
@@ -52,6 +54,7 @@ Route::middleware('auth:sanctum', 'verified', 'App\Http\Middleware\PreventLockAc
     Route::post('question_clear', ['App\Http\Controllers\StudentCourseController', 'question_clear'])->name('student.question.clear');
     Route::post('update_avatar', ['App\Http\Controllers\ProfileController', 'update_avatar'])->name('user.avatar.update');
     Route::post('remove_avatar', ['App\Http\Controllers\ProfileController', 'remove_avatar'])->name('user.avatar.remove');
+    Route::post('update_profile', ['App\Http\Controllers\ProfileController', 'update_profile'])->name('user.profile.update');
 
     //Teacher Courses routes
     Route::prefix('teacher')->group(function () {
@@ -71,6 +74,9 @@ Route::middleware('auth:sanctum', 'verified', 'App\Http\Middleware\PreventLockAc
 
     //teacher routes
     Route::resource('teachers', TeacherController::class)->only(['index', 'show']);
+
+    // industry routes
+    Route::resource('industry', IndustryController::class);
 
     // certificaiton routes
     Route::get('certification', ['App\Http\Controllers\CertificationController', 'index'])->name('certification.index');
@@ -106,12 +112,7 @@ Route::middleware('auth:sanctum', 'verified', 'App\Http\Middleware\PreventLockAc
 
     Route::post('account-applications/change-status/{applicant}', ['App\Http\Controllers\AccountApplicationController', 'changeStatus']);
 
-    //fee categories routes
-    Route::resource('fees/fee-categories', FeeCategoryController::class);
 
-    //fee invoice record routes
-    Route::post('fees/fee-invoices/fee-invoice-records/{fee_invoice_record}/pay', ['App\Http\Controllers\FeeInvoiceRecordController', 'pay'])->name('fee-invoices-records.pay');
-    Route::resource('fees/fee-invoices/fee-invoice-records', FeeInvoiceRecordController::class);
 
     //fee incvoice routes
     Route::get('fees/fee-invoices/{fee_invoice}/pay', ['App\Http\Controllers\FeeInvoiceController', 'payView'])->name('fee-invoices.pay');

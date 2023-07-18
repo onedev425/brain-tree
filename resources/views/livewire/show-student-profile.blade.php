@@ -43,13 +43,13 @@
 
     <div class="card float-left w-full mt-2">
         <div class="card-body">
-            <h3 class="text text-2xl m-2 font-bold">Marks</h3>
+            <h3 class="text text-2xl m-2 font-bold">{{ __('Grades') }}</h3>
             <div class="overflow-x-scroll beautify-scrollbar text-center my-4 border rounded-lg">
                 <table class="w-full table-auto">
                     <thead class="">
                         <th class="capitalize p-4 whitespace-nowrap font-normal text-left">{{ __('Course') }}</th>
                         <th class="capitalize p-4 whitespace-nowrap font-normal text-left">{{ __('Progress') }}</th>
-                        <th class="capitalize p-4 whitespace-nowrap font-normal text-left">{{ __('Marked Scored') }}</th>
+                        <th class="capitalize p-4 whitespace-nowrap font-normal text-left">{{ __('Scored') }}</th>
                         <th class="capitalize p-4 whitespace-nowrap font-normal text-left">{{ __('Action') }}</th>
                     </thead>
                     <tbody class="">

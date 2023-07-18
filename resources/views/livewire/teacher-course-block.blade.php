@@ -11,7 +11,7 @@
     </div>
     <div class="p-4 flex-1">
         <div class="mb-2">
-            <span class="text-xs">{{ substr($created_at, 0, 10) }}</span>
+            <span class="text-xs">{{ date('m-d-Y', strtotime($created_at)) }}</span>
         </div>
         <div class="">
             <h3 class="text-lg leading-normal mb-3 font-bold text-gray-800">

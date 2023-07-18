@@ -9,6 +9,6 @@
             @livewire('application-history', ['applicant' => auth()->user()])
         @endif
         @if (Laravel\Fortify\Features::canUpdateProfileInformation())
-            @livewire('profile.update-profile-information-form')
+            @livewire('profile-information-form')
         @endif
 @endsection

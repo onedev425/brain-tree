@@ -160,6 +160,12 @@
                                                     @if ($email_data['email_type'] == 'email_confirmation')
                                                         {{ __('Verify your email address') }}
 
+                                                    @elseif ($email_data['email_type'] == 'email_verification')
+                                                        {{ __('Verify your email address') }}
+
+                                                    @elseif ($email_data['email_type'] == 'reset_password')
+                                                        {{ __('Reset Password') }}
+
                                                     @elseif ($email_data['email_type'] == 'course_publish')
                                                         {{ $email_data['publish_result'] == 1 ? __('Your course published') : __('Your course unpublished') }}
 
@@ -241,6 +247,30 @@
                                                         <p style="text-align: center"><br /><br/>
                                                             <a href="{{ $email_data['verification_url'] }}" target="_blank" class="v-button" style="box-sizing: border-box;display: inline-block;font-family:arial,helvetica,sans-serif;text-decoration: none;-webkit-text-size-adjust: none;text-align: center;color: #FFFFFF; background-color: #308f11; border-radius: 4px;-webkit-border-radius: 4px; -moz-border-radius: 4px; width:auto; max-width:100%; overflow-wrap: break-word; word-break: break-word; word-wrap:break-word; mso-border-alt: none;font-size: 14px;">
                                                                 <span style="display:block;padding:12px 40px;line-height:120%;"><strong><span style="font-size: 14px; line-height: 16.8px; font-family: Lato, sans-serif;">{{ __('Confirm Email') }}</span></strong></span>
+                                                            </a>
+                                                        </p>
+                                                        <p style="font-size: 14px; line-height: 140%;"><br /><br />
+                                                            {{ __('If you did not request this change, please forward this email to ') }} <a href="mailto:btppro1@gmail.com">btppro1@gmail.com</a><br />
+                                                        </p>
+
+                                                    @elseif ($email_data['email_type'] == 'email_verification')
+                                                        {{ __('Please click the button below to verify your email address.') }}
+
+                                                        <p style="text-align: center"><br /><br/>
+                                                            <a href="{{ $email_data['verification_url'] }}" target="_blank" class="v-button" style="box-sizing: border-box;display: inline-block;font-family:arial,helvetica,sans-serif;text-decoration: none;-webkit-text-size-adjust: none;text-align: center;color: #FFFFFF; background-color: #308f11; border-radius: 4px;-webkit-border-radius: 4px; -moz-border-radius: 4px; width:auto; max-width:100%; overflow-wrap: break-word; word-break: break-word; word-wrap:break-word; mso-border-alt: none;font-size: 14px;">
+                                                                <span style="display:block;padding:12px 40px;line-height:120%;"><strong><span style="font-size: 14px; line-height: 16.8px; font-family: Lato, sans-serif;">{{ __('Verify Email Address') }}</span></strong></span>
+                                                            </a>
+                                                        </p>
+                                                        <p style="font-size: 14px; line-height: 140%;"><br /><br />
+                                                            {{ __('If you did not request this change, please forward this email to ') }} <a href="mailto:btppro1@gmail.com">btppro1@gmail.com</a><br />
+                                                        </p>
+
+                                                    @elseif ($email_data['email_type'] == 'reset_password')
+                                                        {{ __('You are receiving this email because we received a password reset request for your account.') }}
+
+                                                        <p style="text-align: center"><br /><br/>
+                                                            <a href="{{ $email_data['reset_password_url'] }}" target="_blank" class="v-button" style="box-sizing: border-box;display: inline-block;font-family:arial,helvetica,sans-serif;text-decoration: none;-webkit-text-size-adjust: none;text-align: center;color: #FFFFFF; background-color: #308f11; border-radius: 4px;-webkit-border-radius: 4px; -moz-border-radius: 4px; width:auto; max-width:100%; overflow-wrap: break-word; word-break: break-word; word-wrap:break-word; mso-border-alt: none;font-size: 14px;">
+                                                                <span style="display:block;padding:12px 40px;line-height:120%;"><strong><span style="font-size: 14px; line-height: 16.8px; font-family: Lato, sans-serif;">{{ __('Reset Password') }}</span></strong></span>
                                                             </a>
                                                         </p>
                                                         <p style="font-size: 14px; line-height: 140%;"><br /><br />

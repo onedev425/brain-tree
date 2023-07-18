@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class ProfileController extends Controller
 {
@@ -48,5 +51,57 @@ class ProfileController extends Controller
 
         $user->profile_photo_path = null;
         $user->save();
+    }
+
+    public function update_profile(Request $request)
+    {
+        $user = auth()->user();
+        $input['name'] = $request['name'];
+        $input['email'] = $request['email'];
+        $input['phone'] = $request->input('phone');
+
+        var_dump($input);
+
+        $validation_rules = array(
+            'name'        => ['required', 'string', 'max:255'],
+            'email'       => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
+            'phone'       => ['required', 'string', 'max:20'],
+        );
+
+        if ($user->hasRole('student')) {
+            $input['birthday'] = $request['birthday'];
+            $validation_rules['birthday'] = ['required', 'string', 'max:20'];
+        }
+        Validator::make($input, $validation_rules)->validate();
+
+        if ($input['email'] !== $user->email &&
+            $user instanceof MustVerifyEmail) {
+            $this->updateVerifiedUser($user, $input);
+        }
+        else {
+            $input['country_id'] = $request['country'];
+            $input['language_id'] = $request['language'];
+            $input['industry_id'] = $request['industry'];
+
+
+            if (isset($request['experience'])) $input['experience'] = $request['experience'];
+            $user->forceFill($input)->save();
+        }
+
+        return back()->with('success', 'Your profile updated successfully');
+    }
+
+    protected function updateVerifiedUser($user, array $input)
+    {
+        $user->forceFill([
+            'name'              => $input['name'],
+            'email'             => $input['email'],
+            'email_verified_at' => null,
+            'phone'             => $input['phone'] ?? '',
+        ])->save();
+
+        // $user->sendEmailVerificationNotification();
+
+        return $user;
     }
 }
