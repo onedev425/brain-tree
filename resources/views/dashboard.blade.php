@@ -21,10 +21,6 @@
     </a>
 @endif
 
-@can('read notice') 
-    @livewire('list-notices-table')
-@endcan
-
 @if (auth()->user()->hasRole('applicant'))
     @livewire('application-history', ['applicant' => auth()->user()])
 @endif

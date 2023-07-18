@@ -19,7 +19,6 @@ class DatabaseSeeder extends Seeder
             StudentSeeder::class,
             PaymentFeesSeeder::class,
             SubjectSeeder::class,
-            NoticeSeeder::class,
         ]);
     }
 }

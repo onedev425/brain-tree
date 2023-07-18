@@ -68,24 +68,6 @@ class PermissionSeeder extends Seeder
             'name' => 'check result',
         ]);
 
-        //permission for notices
-
-        Permission::firstOrCreate([
-            'name' => 'create notice',
-        ]);
-
-        Permission::firstOrCreate([
-            'name' => 'read notice',
-        ]);
-
-        Permission::firstOrCreate([
-            'name' => 'update notice',
-        ]);
-
-        Permission::firstOrCreate([
-            'name' => 'delete notice',
-        ]);
-
         //permission for applicant
         Permission::firstOrCreate([
             'name' => 'read applicant',
@@ -123,9 +105,6 @@ class PermissionSeeder extends Seeder
             'name' => 'menu-subject',
         ]);
         Permission::firstOrCreate([
-            'name' => 'menu-notice',
-        ]);
-        Permission::firstOrCreate([
             'name' => 'menu-account-application',
         ]);
         Permission::firstOrCreate([
@@ -158,7 +137,6 @@ class PermissionSeeder extends Seeder
             'menu-student',
             'menu-teacher',
             'menu-subject',
-            'menu-notice',
             'menu-account-application',
             'create student',
             'read student',
@@ -172,10 +150,6 @@ class PermissionSeeder extends Seeder
             'read subject',
             'update subject',
             'delete subject',
-            'create notice',
-            'read notice',
-            'update notice',
-            'delete notice',
             'check result',
             'read applicant',
             'update applicant',
@@ -193,10 +167,8 @@ class PermissionSeeder extends Seeder
         $teacher->syncPermissions([
             'header-administrate',
             'teacher-courses',
-            'menu-notice',
             'menu-student',
             'read student',
-            'read notice',
             'check result',
             'marks',
             'assessments',
@@ -209,8 +181,6 @@ class PermissionSeeder extends Seeder
         $student->syncPermissions([
             'header-administrate',
             'student-courses',
-            'menu-notice',
-            'read notice',
             'check result',
             'certification-marks',
             'pricing',
