@@ -114,9 +114,6 @@ Route::middleware('auth:sanctum', 'verified', 'App\Http\Middleware\PreventLockAc
 
 
 
-    //fee routes
-    Route::resource('fees', FeeController::class);
-
     //set exam status
     Route::post('exams/{exam}/set--active-status', ['App\Http\Controllers\ExamController', 'setExamActiveStatus'])->name('exams.set-active-status');
 

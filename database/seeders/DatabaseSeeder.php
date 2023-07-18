@@ -20,7 +20,6 @@ class DatabaseSeeder extends Seeder
             PaymentFeesSeeder::class,
             SubjectSeeder::class,
             NoticeSeeder::class,
-            FeeSeeder::class,
         ]);
     }
 }

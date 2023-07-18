@@ -145,78 +145,6 @@ class PermissionSeeder extends Seeder
             'name' => 'change account application status',
         ]);
 
-        //permissions for fee categories
-
-        Permission::firstOrCreate([
-            'name' => 'create fee category',
-        ]);
-
-        Permission::firstOrCreate([
-            'name' => 'read fee category',
-        ]);
-
-        Permission::firstOrCreate([
-            'name' => 'update fee category',
-        ]);
-
-        Permission::firstOrCreate([
-            'name' => 'delete fee category',
-        ]);
-
-        //permissions for fees
-
-        Permission::firstOrCreate([
-            'name' => 'create fee',
-        ]);
-
-        Permission::firstOrCreate([
-            'name' => 'read fee',
-        ]);
-
-        Permission::firstOrCreate([
-            'name' => 'update fee',
-        ]);
-
-        Permission::firstOrCreate([
-            'name' => 'delete fee',
-        ]);
-
-        //permissions for fee invoices
-
-        Permission::firstOrCreate([
-            'name' => 'create fee invoice',
-        ]);
-
-        Permission::firstOrCreate([
-            'name' => 'read fee invoice',
-        ]);
-
-        Permission::firstOrCreate([
-            'name' => 'update fee invoice',
-        ]);
-
-        Permission::firstOrCreate([
-            'name' => 'delete fee invoice',
-        ]);
-
-        //fee invoice record
-
-        Permission::firstOrCreate([
-            'name' => 'create fee invoice record',
-        ]);
-
-        Permission::firstOrCreate([
-            'name' => 'read fee invoice record',
-        ]);
-
-        Permission::firstOrCreate([
-            'name' => 'update fee invoice record',
-        ]);
-
-        Permission::firstOrCreate([
-            'name' => 'delete fee invoice record',
-        ]);
-
         //header permissions (for controlling the menu headers)
         Permission::firstOrCreate([
             'name' => 'header-administrate',
@@ -244,9 +172,6 @@ class PermissionSeeder extends Seeder
         ]);
         Permission::firstOrCreate([
             'name' => 'menu-account-application',
-        ]);
-        Permission::firstOrCreate([
-            'name' => 'menu-fee',
         ]);
         Permission::firstOrCreate([
             'name' => 'certification-marks',
@@ -281,7 +206,6 @@ class PermissionSeeder extends Seeder
             'menu-exam',
             'menu-notice',
             'menu-account-application',
-            'menu-fee',
             'create student',
             'read student',
             'update student',
@@ -315,22 +239,6 @@ class PermissionSeeder extends Seeder
             'update applicant',
             'delete applicant',
             'change account application status',
-            'create fee',
-            'read fee',
-            'update fee',
-            'delete fee',
-            'create fee category',
-            'read fee category',
-            'update fee category',
-            'delete fee category',
-            'create fee invoice',
-            'read fee invoice',
-            'update fee invoice',
-            'delete fee invoice',
-            'create fee invoice record',
-            'read fee invoice record',
-            'update fee invoice record',
-            'delete fee invoice record',
             'marks',
             'assessments',
             'pricing',
@@ -366,11 +274,9 @@ class PermissionSeeder extends Seeder
         $student->syncPermissions([
             'header-administrate',
             'student-courses',
-            'menu-fee',
             'menu-notice',
             'menu-exam',
             'read notice',
-            'read fee invoice',
             'check result',
             'certification-marks',
             'pricing',
