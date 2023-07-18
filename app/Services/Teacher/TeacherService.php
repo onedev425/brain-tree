@@ -31,53 +31,6 @@ class TeacherService
         return $this->user->getUsersByRole('teacher')->load('teacherRecord');
     }
 
-    /**
-     * Create a new teacher.
-     *
-     * @param Collection|array $record
-     *
-     * @return void
-     */
-    public function createTeacher($record)
-    {
-        $teacher = $this->user->createUser($record);
-        $teacher->assignRole('teacher');
-    }
-
-    /**
-     * Update a teacher.
-     *
-     * @param array|object|collection $records
-     *
-     * @return void
-     */
-    public function updateTeacher(User $teacher, $records)
-    {
-        $this->user->updateUser($teacher, $records, 'teacher');
-    }
-
-    /**
-     * Delete teacher.
-     *
-     *
-     * @return void
-     */
-    public function deleteTeacher(User $teacher)
-    {
-        $this->user->deleteUser($teacher);
-    }
-
-    /**
-     * Print a user profile.
-     *
-     *
-     * @return mixed
-     */
-    public function printProfile(string $name, string $view, array $data)
-    {
-        return PrintService::createPdfFromView($view, $data);
-    }
-
     public function getStudentMarksOfTeacher(string $search)
     {
         /*
