@@ -38,7 +38,7 @@
                 </div>
 
                 <div class="col-span-6 flex flex-col my-2 country-list">
-                    <label class="font-bold my-3">Country</label>
+                    <label class="font-bold my-3">{{ __('Country') }} <span class='text-red-500'>*</span></label>
                     <input type="text" id="country-iti" name="country-iti" class="w-full">
                 </div>
 
