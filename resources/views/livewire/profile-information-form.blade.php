@@ -4,7 +4,7 @@
             @csrf
             <div class="md:grid grid-cols-12 gap-4">
                 <div class="col-span-12 flex flex-col my-2">
-                    <label class="font-bold my-3">{{ __('Full Name') }} <span class='text-red-500'>*</span></label>
+                    <label class="font-bold my-3">{{ __('Full name') }} <span class='text-red-500'>*</span></label>
                     <input id="name" name="name" placeholder="{{ __('Your full name') }}" class="border border-gray-500 p-2 rounded bg-inherit w-full" value="{{ auth()->user()->name }}" />
                     @error('name')<span class="text-red-500 font-medium block mt-1.5">{{ $message }}</span>@enderror
                 </div>
@@ -60,7 +60,7 @@
                     </select>
                 </div>
 
-                @if (auth()->user()->hasRole('teacher'))
+                @if (! auth()->user()->hasRole('student'))
                     <div class="col-span-6 flex flex-col my-2">
                         <label class="font-bold my-3">{{ __('Years of Experience') }} <span class='text-red-500'>*</span></label>
                         <select id="experience" name="experience" class="p-2 border rounded-md border-gray-400 focus:border-blue-500 bg-inherit">
