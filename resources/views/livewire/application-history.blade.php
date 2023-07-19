@@ -3,7 +3,7 @@
         @foreach ($applicant->accountApplication->statuses as $item)
             @if (!$loop->first)
                 <div class="m-auto col-md-9">
-                    <i class="fas fa-arrow-circle-up fa-2x"></i>  
+                    <i class="fas fa-arrow-circle-up fa-2x"></i>
                 </div>
             @endif
             <div class="card">
@@ -18,6 +18,6 @@
             </div>
         @endforeach
     @else
-        <p class="text-center">No status History</p>
+        <p class="text-center">{{ __('No status History') }}</p>
     @endif
 </div>

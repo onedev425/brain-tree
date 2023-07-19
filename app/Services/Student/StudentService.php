@@ -36,60 +36,6 @@ class StudentService
         return $this->userService->getUsersByRole('student')->load('studentRecord');
     }
 
-    /**
-     * Get all active students.
-     *
-     * @return \Illuminate\Database\Eloquent\Collection
-     */
-    public function getAllActiveStudents()
-    {
-        return $this->userService->getUsersByRole('student')->load('studentRecord')->filter(function ($student) {
-            if ($student->studentRecord) {
-                return $student->studentRecord->is_graduated == false;
-            }
-        });
-    }
-
-    /**
-     * Get all graduated students.
-     *
-     * @return \Illuminate\Database\Eloquent\Collection
-     */
-    public function getAllGraduatedStudents()
-    {
-        return $this->userService->getUsersByRole('student')->load('studentRecord')->filter(function ($student) {
-            return $student->studentRecord()->withoutGlobalScopes()->first()->is_graduated == true;
-        });
-    }
-
-    /**
-     * Get a student by id.
-     *
-     * @param array|int $id student id
-     *
-     * @return \App\Models\User
-     */
-    public function getStudentById($id)
-    {
-        return $this->userService->getUserById($id)->load('studentRecord');
-    }
-
-    /**
-     * Create student.
-     *
-     * @param array $record Array of student record
-     *
-     * @return void
-     */
-    public function createStudent($record)
-    {
-        DB::transaction(function () use ($record) {
-            $student = $this->userService->createUser($record);
-            $student->assignRole('student');
-
-            $this->createStudentRecord($student, $record);
-        });
-    }
 
     /**
      * Create record for student.
@@ -113,67 +59,7 @@ class StudentService
         ]);
     }
 
-    /**
-     * Update student.
-     *
-     *
-     * @return void
-     */
-    public function updateStudent(User $student, $records)
-    {
-        $student = $this->userService->updateUser($student, $records);
-    }
 
-    /**
-     * Delete student.
-     *
-     *
-     * @return void
-     */
-    public function deleteStudent(User $student)
-    {
-        $student->delete();
-    }
-
-    /**
-     * Print student profile.
-     *
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function printProfile(string $name, string $view, array $data)
-    {
-        return PrintService::createPdfFromView($view, $data)->download($name.'.pdf');
-    }
-
-    /**
-     * Graduate students.
-     *
-     * @param mixed $records
-     *
-     * @throws InvalidValueException
-     *
-     * @return void
-     */
-    public function graduateStudents($records)
-    {
-        //get all students for graduation
-        $students = $this->getAllActiveStudents()->whereIn('id', $records['student_id']);
-
-        // make sure there are students to graduate
-        if (!$students->count()) {
-            throw new InvalidValueException('No students to graduate');
-        }
-
-        // update each student's graduation status
-        foreach ($students as $student) {
-            if (in_array($student->id, $records['student_id'])) {
-                $student->studentRecord()->update([
-                    'is_graduated' => true,
-                ]);
-            }
-        }
-    }
 
     public function getCourses(User $student, string $type): Collection
     {

@@ -282,7 +282,7 @@ class CourseService
      * Get a course by Id.
      *
      *
-     * @return \App\Models\Subject
+     * @return \App\Models\Course
      */
     public function getCourseId(int $id): Course
     {

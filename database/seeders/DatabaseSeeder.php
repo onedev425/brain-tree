@@ -18,12 +18,6 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             StudentSeeder::class,
             PaymentFeesSeeder::class,
-            SubjectSeeder::class,
-            NoticeSeeder::class,
-            FeeCategorySeeder::class,
-            FeeSeeder::class,
-            FeeInvoiceSeeder::class,
-            FeeInvoiceRecordSeeder::class,
         ]);
     }
 }
