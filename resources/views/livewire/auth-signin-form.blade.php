@@ -9,8 +9,9 @@
         </div>
         <div class="w-full md:w-1/2 px-3 mb-3">
             <label for="" class="font-medium px-1 block mb-3">{{ __('Password') }} <span class="text-red-500">*</span></label>
-            <div class="block">
+            <div class="block relative">
                 <input type="password" name="password" id="password" class="w-full pl-2 pr-3 py-2 rounded border-2 text-black focus:border-indigo-500" placeholder="" value="{{ old('password') }}">
+                <span class="toggle-password absolute cursor-pointer"><i class="fa fa-eye"></i></span>
                 @error('password')<span class="text-red-700 font-medium block mt-1.5">{{ $message }}</span>@enderror
             </div>
         </div>

@@ -165,4 +165,9 @@
         @apply bg-purple-600 hover:bg-purple-700 text-white;
     }
 
+    span.toggle-password {
+        top: 50%;
+        right: 10px;
+        transform: translateY(-50%);
+    }
 }

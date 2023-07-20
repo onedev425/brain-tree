@@ -151,6 +151,6 @@ class AccountApplicationService
      */
     public function deleteAccountApplicant(User $applicant)
     {
-        $applicant->delete();
+        $applicant->forceDelete();
     }
 }
