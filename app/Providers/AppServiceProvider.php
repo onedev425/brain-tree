@@ -18,7 +18,6 @@ class AppServiceProvider extends ServiceProvider
     {
         Schema::defaultStringLength(100);
         Relation::enforceMorphMap([
-            'subject'                       => "App\Models\Subject",
             'App\Models\User'               => 'App\Models\User',
             'App\Models\AccountApplication' => 'App\Models\AccountApplication',
         ]);

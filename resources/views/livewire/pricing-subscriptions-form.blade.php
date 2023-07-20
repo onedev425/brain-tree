@@ -1,3 +1,0 @@
-<div>
-    Subscription List
-</div>

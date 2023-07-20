@@ -112,48 +112,7 @@ Route::middleware('auth:sanctum', 'verified', 'App\Http\Middleware\PreventLockAc
 
     Route::post('account-applications/change-status/{applicant}', ['App\Http\Controllers\AccountApplicationController', 'changeStatus']);
 
-
-
-    //fee incvoice routes
-    Route::get('fees/fee-invoices/{fee_invoice}/pay', ['App\Http\Controllers\FeeInvoiceController', 'payView'])->name('fee-invoices.pay');
-    Route::get('fees/fee-invoices/{fee_invoice}/print', ['App\Http\Controllers\FeeInvoiceController', 'print'])->name('fee-invoices.print');
-    Route::resource('fees/fee-invoices', FeeInvoiceController::class);
-
-    //fee routes
-    Route::resource('fees', FeeController::class);
-
-    //set exam status
-    Route::post('exams/{exam}/set--active-status', ['App\Http\Controllers\ExamController', 'setExamActiveStatus'])->name('exams.set-active-status');
-
-    // set publish result status
-    Route::post('exams/{exam}/set-publish-result-status', ['App\Http\Controllers\ExamController', 'setPublishResultStatus'])->name('exams.set-publish-result-status');
-
-    //exam tabulation sheet
-    Route::get('exams/tabulation-sheet', ['App\Http\Controllers\ExamController', 'examTabulation'])->name('exams.tabulation');
-
-    //result checker
-    Route::get('exams/result-checker', ['App\Http\Controllers\ExamController', 'resultChecker'])->name('exams.result-checker');
-
-    //exam routes
-    Route::resource('exams', ExamController::class);
-
-    //exam slot routes
-    Route::scopeBindings()->group(function () {
-        Route::resource('exams/{exam}/manage/exam-slots', ExamSlotController::class);
-    });
-
-    Route::get('students/{student}/print', ['App\Http\Controllers\StudentController', 'printProfile'])->name('students.print-profile');
-
     //lock account route
     Route::post('users/lock-account/{user}', 'App\Http\Controllers\LockUserAccountController')->name('user.lock-account');
 
-    //assign teachers to subject in class
-    Route::get('subjects/assign-teacher', ['App\Http\Controllers\SubjectController', 'assignTeacherVIew'])->name('subjects.assign-teacher');
-    Route::post('subjects/assign-teacher/{teacher}', ['App\Http\Controllers\SubjectController', 'assignTeacher'])->name('subjects.assign-teacher-to-subject');
-
-    //subject routes
-    Route::resource('subjects', SubjectController::class);
-
-    //notice routes
-    Route::resource('notices', NoticeController::class);
 });
