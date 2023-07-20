@@ -51,7 +51,7 @@
     @csrf
     <div class="flex gap-1 items-center">
         <div class="w-full px-3 mb-3">
-            <x-button type="submit" class="my-3 py-3 md:px-10 text-white font-semibold border-transparent">Register an account</x-button>
+            <x-button type="submit" class="my-3 py-3 md:px-10 text-white font-semibold border-transparent">{{ __('Register an account') }}</x-button>
         </div>
     </div>
 
