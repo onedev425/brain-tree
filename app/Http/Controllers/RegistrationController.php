@@ -8,6 +8,7 @@ use App\Services\AccountApplication\AccountApplicationService;
 use App\Services\EmailService;
 use App\Services\User\UserService;
 use Illuminate\Contracts\Auth\PasswordBroker;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
@@ -173,4 +174,8 @@ class RegistrationController extends Controller
         return redirect()->route('login')->with('status', __('Your password reset successfully.'));
     }
 
+    public function refresh_csrf_token(): JsonResponse
+    {
+        return response()->json(['token' => csrf_token()]);
+    }
 }

@@ -32,6 +32,7 @@ Route::get('/paypal/connect-cancel', ['App\Http\Controllers\PaymentController', 
 Route::post('/verification_resend', ['App\Http\Controllers\RegistrationController', 'verification_resend'])->name('verification.resend');
 Route::post('/password_reset', ['App\Http\Controllers\RegistrationController', 'password_reset'])->name('password.reset.email');
 Route::post('/password_update', ['App\Http\Controllers\RegistrationController', 'password_update'])->name('password.change');
+Route::get('/refresh_csrf_token', ['App\Http\Controllers\RegistrationController', 'refresh_csrf_token'])->name('refresh.token');
 
 Route::middleware(['guest'])->group(function () {
     Route::get('/register', ['App\Http\Controllers\RegistrationController', 'registerView'])->name('register');
