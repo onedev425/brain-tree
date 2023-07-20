@@ -44,4 +44,8 @@ class Course extends Model
         return $this->hasMany(Question::class);
     }
 
+    public function feedbacks(): HasMany
+    {
+        return $this->hasMany(CourseFeedbacks::class);
+    }
 }

@@ -12,6 +12,7 @@
                     </svg>
                 </a>
                 <h2 class="font-bold ml-3 text-lg">{{ $course->title }}</h2>
+                <button class="bg-red-500" id="btn_congratulation">Congratulations</button>
             </div>
         </div>
     </div>
@@ -247,6 +248,27 @@
     </div>
     <!-- End:Lesson content area -->
 
+    <!-- Overlay element -->
+    <div id="overlay" class="fixed hidden z-40 w-screen h-screen inset-0 bg-gray-900 bg-opacity-60"></div>
+
+    <!-- Feedback dialog -->
+    <div id="feedback_dialog" class="hidden fixed z-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full md:w-2/3 lg:w-1/2 xl:2/5 bg-white rounded-md px-8 py-6 space-y-5 drop-shadow-lg">
+        <h1 class="text-2xl font-semibold">{{ __('Feedback Form') }}</h1>
+        <div class="py-5">
+            <form id="feedback_form" class="valid-form flex flex-wrap flex-row -mx-4">
+                <button id="close_feedback_dialog" type="button" class="fill-current h-6 w-6 absolute right-0 top-0 m-4 text-3xl font-bold">×</button>
+                <div class="form-group flex-shrink max-w-full px-4 w-full mb-4">
+                    <label for="topic_name" class="inline-block mb-2">{{ __('Topic Name') }} <span class="text-red-500">*</span></label>
+                    <input id="topic_name" type="text" class="w-full leading-5 relative py-2 px-4 rounded text-gray-800 bg-white border border-gray-300 overflow-x-auto focus:outline-none focus:border-gray-400 focus:ring-0" placeholder="" required>
+                </div>
+
+                <div class="form-group flex-shrink max-w-full px-4 w-full">
+                    <x-button label="{{ __('Submit') }}" type="submit" id="save_feedback_button" icon="" class="py-3 md:px-10 bg-red-700 text-white font-semibold border-transparent" />
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script>
         $(document).ready(function() {
             // if student already took the exam, he can't take the exam anymore.
@@ -432,6 +454,14 @@
                         console.log('question clear - error: ' + data.toString());
                     }
                 })
+            })
+
+            $('button#btn_congratulation').on('click', function() {
+                $('div#lesson_quiz_section').addClass('hidden');
+                $('div#lesson_quiz_section').addClass('hidden');
+                $('div#congratulation_section').removeClass('hidden');
+                $('div#feedback_dialog').removeClass('hidden');
+                $('div#overlay').removeClass('hidden');
             })
         });
     </script>
