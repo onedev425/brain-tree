@@ -62,7 +62,7 @@ class RegistrationController extends Controller
         if ($request['role'] == 3) {
             $this->accountApplicationService->changeStatus($user, [
                 'status' => 'approved',
-                'admission_number' => '999',
+                'admission_number' => 'as-' . $user->id,
                 'admission_date' => date('Y-m-d H:i:s'),
                 'reason' => ''
             ]);
