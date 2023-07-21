@@ -16,23 +16,29 @@
                 @if ($activeTab === 'progress')
                     @foreach($progress_courses as $course)
                         @livewire('show-student-course-block', [
+                            'course_id' => $course->id,
                             'title' => $course->title,
                             'image' => $course->image,
                             'created_at' => $course->created_at,
                             'lesson_nums' => count($course->lessons),
                             'quiz_nums' => count($course->questions),
-                            'progress' => $this->getStudentCourseProgressPercent($course, $student)
+                            'progress' => $this->getStudentCourseProgressPercent($course, $student),
+                            'rate' => $course->course_rate(),
+                            'feedback_nums' => $course->course_feedback_nums(),
                         ])
                     @endforeach
                 @else
                     @foreach($completed_courses as $course)
                         @livewire('show-student-course-block', [
+                            'course_id' => $course->id,
                             'title' => $course->title,
                             'image' => $course->image,
                             'created_at' => $course->created_at,
                             'lesson_nums' => count($course->lessons),
                             'quiz_nums' => count($course->questions),
-                            'progress' =>  $this->getStudentCourseProgressPercent($course, $student)
+                            'progress' =>  $this->getStudentCourseProgressPercent($course, $student),
+                            'rate' => $course->course_rate(),
+                            'feedback_nums' => $course->course_feedback_nums(),
                         ])
                     @endforeach
                 @endif

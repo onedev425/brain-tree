@@ -132,6 +132,7 @@ class StudentService
 
             $courses = $courses->with('lessons')
                 ->with('questions')
+                ->with('course_feedback')
                 ->with('assignedTeacher')
                 ->get();
         }
@@ -183,6 +184,7 @@ class StudentService
 
             $courses = $courses->with('lessons')
                 ->with('questions')
+                ->with('course_feedback')
                 ->with('assignedTeacher')
                 ->get();
         }

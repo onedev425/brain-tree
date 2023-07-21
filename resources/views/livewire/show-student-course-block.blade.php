@@ -13,6 +13,12 @@
             <h3 class="text-lg leading-normal mb-3 font-bold text-gray-800">
                 <span>{{ $title }}</span>
             </h3>
+            <div class="flex mb-3">
+                <span class="text-white bg-orange-500 text-sm px-1 mr-1 h-5">{{ number_format(round($rate, 1), 1) }}</span>
+                <span id="course_{{$course_id}}_rating" class="rating-progress mt-0.5 mr-2"></span>
+                <span class="text-sm leading-4">({{ $feedback_nums }} {{ __('reviews') }})</span>
+                @php( $rating_progress = intval($rate / 5 * 100) . '%' ?? 0 )
+            </div>
             <div class="flex h-2 overflow-hidden bg-green-100 rounded mb-4">
                 <div class="flex flex-col justify-center overflow-hidden text-white text-center whitespace-nowrap bg-green-400" role="progressbar" style="width: {{ $progress }}%;" aria-valuenow="{{ $progress }}" aria-valuemin="0" aria-valuemax="100"></div>
             </div>
@@ -23,4 +29,8 @@
         </div>
     </div>
 </div><!-- end card -->
-
+<style>
+    span#course_{{$course_id}}_rating::after {
+        width: {{ $rating_progress }};
+    }
+</style>
