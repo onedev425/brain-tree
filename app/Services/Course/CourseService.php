@@ -104,6 +104,7 @@ class CourseService
                 ->where('P.is_completed', 0)
                 ->with('lessons')
                 ->with('questions')
+                ->with('course_feedback')
                 ->with('assignedTeacher')
                 ->get();
         }
@@ -153,6 +154,7 @@ class CourseService
                 ->where('P.is_completed', 1)
                 ->with('lessons')
                 ->with('questions')
+                ->with('course_feedback')
                 ->with('assignedTeacher')
                 ->get();
         }

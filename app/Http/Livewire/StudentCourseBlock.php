@@ -13,6 +13,8 @@ class StudentCourseBlock extends Component
     public $lesson_nums;
     public $quiz_nums;
     public $progress;
+    public $rate;
+    public int $feedback_nums;
 
     public function render()
     {
