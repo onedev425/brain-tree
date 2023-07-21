@@ -12,7 +12,6 @@
                     </svg>
                 </a>
                 <h2 class="font-bold ml-3 text-lg">{{ $course->title }}</h2>
-                <button class="bg-red-500" id="btn_congratulation">Congratulations</button>
             </div>
         </div>
     </div>
@@ -388,6 +387,8 @@
                             if ( ! next_lesson.hasClass('lesson-quiz-item') ) {
                                 $('div#lesson_quiz_section').addClass('hidden');
                                 $('div#congratulation_section').removeClass('hidden');
+                                $('div#feedback_dialog').removeClass('hidden');
+                                $('div#overlay').removeClass('hidden');
                                 return;
                             }
                         }
@@ -440,8 +441,12 @@
                         $(next_quiz).addClass('quiz-item hover:bg-gray-200 hover:rounded-2xl');
                         if ( is_latest_question ) {
                             $('div#lesson_quiz_section').addClass('hidden');
-                            if (response == 1)
+                            if (response == 1) {
+                                $('div#lesson_quiz_section').addClass('hidden');
                                 $('div#congratulation_section').removeClass('hidden');
+                                $('div#feedback_dialog').removeClass('hidden');
+                                $('div#overlay').removeClass('hidden');
+                            }
                             else
                                 $('div#bad_luck_section').removeClass('hidden');
                             return;
@@ -475,14 +480,6 @@
                         console.log('question clear - error: ' + data.toString());
                     }
                 })
-            })
-
-            $('button#btn_congratulation').on('click', function() {
-                $('div#lesson_quiz_section').addClass('hidden');
-                $('div#lesson_quiz_section').addClass('hidden');
-                $('div#congratulation_section').removeClass('hidden');
-                $('div#feedback_dialog').removeClass('hidden');
-                $('div#overlay').removeClass('hidden');
             })
 
             $(".star-icon").click(function() {
