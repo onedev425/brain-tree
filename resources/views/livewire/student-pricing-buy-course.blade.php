@@ -31,7 +31,6 @@
                                         @php( $rating_progress = intval($course->course_rate() / 5 * 100) . '%' ?? 0 )
                                     </div>
                                 </div>
-
                             </div>
 
                         </td>
