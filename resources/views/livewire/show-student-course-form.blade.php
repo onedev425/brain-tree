@@ -256,10 +256,33 @@
         <h1 class="text-2xl font-semibold">{{ __('Feedback Form') }}</h1>
         <div class="py-5">
             <form id="feedback_form" class="valid-form flex flex-wrap flex-row -mx-4">
+                <input type="hidden" name="star_nums" value="0" />
                 <button id="close_feedback_dialog" type="button" class="fill-current h-6 w-6 absolute right-0 top-0 m-4 text-3xl font-bold">×</button>
                 <div class="form-group flex-shrink max-w-full px-4 w-full mb-4">
-                    <label for="topic_name" class="inline-block mb-2">{{ __('Topic Name') }} <span class="text-red-500">*</span></label>
-                    <input id="topic_name" type="text" class="w-full leading-5 relative py-2 px-4 rounded text-gray-800 bg-white border border-gray-300 overflow-x-auto focus:outline-none focus:border-gray-400 focus:ring-0" placeholder="" required>
+                    <label for="" class="font-bold inline-block mb-2">{{ __('Overall Ratings') }}</label>
+                    <div class="flex">
+                        <svg id="star-1" class="star-icon unfilled-star cursor-pointer mr-1" width="32" height="32" viewBox="0 0 15.813 14.683">
+                            <path id="Icon_ionic-ios-star" data-name="Icon ionic-ios-star" d="M17.463,8.458H12.271L10.693,3.749a.572.572,0,0,0-1.073,0L8.042,8.458H2.815a.566.566,0,0,0-.565.565.415.415,0,0,0,.011.1.543.543,0,0,0,.236.4l4.267,3.007L5.127,17.285a.566.566,0,0,0,.194.635.546.546,0,0,0,.318.138.692.692,0,0,0,.353-.127l4.165-2.968,4.165,2.968a.661.661,0,0,0,.353.127.507.507,0,0,0,.314-.138.559.559,0,0,0,.194-.635l-1.638-4.761,4.232-3.035.1-.088a.54.54,0,0,0-.416-.942Z" transform="translate(-2.25 -3.375)" fill="currentColor"/>
+                        </svg>
+                        <svg id="star-2" class="star-icon unfilled-star cursor-pointer mr-1" width="32" height="32" viewBox="0 0 15.813 14.683">
+                            <path id="Icon_ionic-ios-star" data-name="Icon ionic-ios-star" d="M17.463,8.458H12.271L10.693,3.749a.572.572,0,0,0-1.073,0L8.042,8.458H2.815a.566.566,0,0,0-.565.565.415.415,0,0,0,.011.1.543.543,0,0,0,.236.4l4.267,3.007L5.127,17.285a.566.566,0,0,0,.194.635.546.546,0,0,0,.318.138.692.692,0,0,0,.353-.127l4.165-2.968,4.165,2.968a.661.661,0,0,0,.353.127.507.507,0,0,0,.314-.138.559.559,0,0,0,.194-.635l-1.638-4.761,4.232-3.035.1-.088a.54.54,0,0,0-.416-.942Z" transform="translate(-2.25 -3.375)" fill="currentColor"/>
+                        </svg>
+                        <svg id="star-3" class="star-icon unfilled-star cursor-pointer mr-1" width="32" height="32" viewBox="0 0 15.813 14.683">
+                            <path id="Icon_ionic-ios-star" data-name="Icon ionic-ios-star" d="M17.463,8.458H12.271L10.693,3.749a.572.572,0,0,0-1.073,0L8.042,8.458H2.815a.566.566,0,0,0-.565.565.415.415,0,0,0,.011.1.543.543,0,0,0,.236.4l4.267,3.007L5.127,17.285a.566.566,0,0,0,.194.635.546.546,0,0,0,.318.138.692.692,0,0,0,.353-.127l4.165-2.968,4.165,2.968a.661.661,0,0,0,.353.127.507.507,0,0,0,.314-.138.559.559,0,0,0,.194-.635l-1.638-4.761,4.232-3.035.1-.088a.54.54,0,0,0-.416-.942Z" transform="translate(-2.25 -3.375)" fill="currentColor"/>
+                        </svg>
+                        <svg id="star-4" class="star-icon unfilled-star cursor-pointer mr-1" width="32" height="32" viewBox="0 0 15.813 14.683">
+                            <path id="Icon_ionic-ios-star" data-name="Icon ionic-ios-star" d="M17.463,8.458H12.271L10.693,3.749a.572.572,0,0,0-1.073,0L8.042,8.458H2.815a.566.566,0,0,0-.565.565.415.415,0,0,0,.011.1.543.543,0,0,0,.236.4l4.267,3.007L5.127,17.285a.566.566,0,0,0,.194.635.546.546,0,0,0,.318.138.692.692,0,0,0,.353-.127l4.165-2.968,4.165,2.968a.661.661,0,0,0,.353.127.507.507,0,0,0,.314-.138.559.559,0,0,0,.194-.635l-1.638-4.761,4.232-3.035.1-.088a.54.54,0,0,0-.416-.942Z" transform="translate(-2.25 -3.375)" fill="currentColor"/>
+                        </svg>
+                        <svg id="star-5" class="star-icon unfilled-star cursor-pointer mr-1" width="32" height="32" viewBox="0 0 15.813 14.683">
+                            <path id="Icon_ionic-ios-star" data-name="Icon ionic-ios-star" d="M17.463,8.458H12.271L10.693,3.749a.572.572,0,0,0-1.073,0L8.042,8.458H2.815a.566.566,0,0,0-.565.565.415.415,0,0,0,.011.1.543.543,0,0,0,.236.4l4.267,3.007L5.127,17.285a.566.566,0,0,0,.194.635.546.546,0,0,0,.318.138.692.692,0,0,0,.353-.127l4.165-2.968,4.165,2.968a.661.661,0,0,0,.353.127.507.507,0,0,0,.314-.138.559.559,0,0,0,.194-.635l-1.638-4.761,4.232-3.035.1-.088a.54.54,0,0,0-.416-.942Z" transform="translate(-2.25 -3.375)" fill="currentColor"/>
+                        </svg>
+                    </div>
+
+                </div>
+
+                <div class="form-group flex-shrink max-w-full px-4 w-full mb-4">
+                    <label for="feedback_content" class="font-bold inline-block mb-2">{{ __('Write you thoughts') }}</label>
+                    <textarea id="feedback_content" name="feedback_content" rows="8" class="w-full leading-5 relative py-3 px-3 rounded-lg text-gray-800 bg-white border border-gray-300 overflow-x-auto focus:outline-none focus:border-gray-400 focus:ring-0" ></textarea>
                 </div>
 
                 <div class="form-group flex-shrink max-w-full px-4 w-full">
@@ -463,6 +486,48 @@
                 $('div#feedback_dialog').removeClass('hidden');
                 $('div#overlay').removeClass('hidden');
             })
+
+            $(".star-icon").click(function() {
+                const filled_star_nums = $('.star-icon.filled-star').length;
+                $(this).prevAll('.star-icon').removeClass('unfilled-star');
+                $(this).prevAll('.star-icon').addClass('filled-star');
+                $(this).nextAll('.star-icon').removeClass('filled-star');
+                $(this).nextAll('.star-icon').addClass('unfilled-star');
+
+                const clickedStarId = $(this).attr("id");
+                if (clickedStarId == 'star-1') {
+                    if ($(this).hasClass('filled-star')) {
+                        if (filled_star_nums == 1) {
+                            $(this).removeClass('filled-star');
+                            $(this).addClass('unfilled-star');
+                        }
+                    }
+                    else {
+                        $(this).addClass('filled-star');
+                        $(this).removeClass('unfilled-star');
+                    }
+                }
+                else {
+                    $(this).addClass('filled-star');
+                    $(this).removeClass('unfilled-star');
+                }
+
+                $('input[name=star_nums]').val($('.star-icon.filled-star').length);
+
+            });
+
+            $('button#close_feedback_dialog').on('click', function() {
+                closeFeedbackDialog();
+            });
+
+            $('div#overlay').on('click', function() {
+                closeFeedbackDialog();
+            });
+
+            function closeFeedbackDialog() {
+                $('div#feedback_dialog').addClass('hidden');
+                $('div#overlay').addClass('hidden');
+            }
         });
     </script>
 </div>

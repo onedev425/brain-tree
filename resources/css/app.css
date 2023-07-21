@@ -170,4 +170,11 @@
         right: 10px;
         transform: translateY(-50%);
     }
+
+    svg.filled-star {
+        @apply text-yellow-400
+    }
+    svg.unfilled-star {
+        @apply text-gray-300
+    }
 }
