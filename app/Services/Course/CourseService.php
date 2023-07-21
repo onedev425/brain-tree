@@ -24,10 +24,10 @@ class CourseService
     {
         if ($type == 'publish')
             if (auth()->user()->hasRole('super-admin') && $assigned_teacher == null)
-                $courses = Course::with('lessons')->where('is_published', 1)->get();
+                $courses = Course::with('lessons')->with('course_feedback')->where('is_published', 1)->get();
             else {
                 $assigned_id = $assigned_teacher == null ? auth()->user()->id : $assigned_teacher->id;
-                $courses = Course::with('lessons')->where('is_published', 1)->where('assigned_id', $assigned_id)->get();
+                $courses = Course::with('lessons')->with('course_feedback')->where('is_published', 1)->where('assigned_id', $assigned_id)->get();
             }
         elseif ($type == 'draft')
             if (auth()->user()->hasRole('super-admin'))

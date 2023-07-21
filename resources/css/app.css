@@ -177,4 +177,15 @@
     svg.unfilled-star {
         @apply text-gray-300
     }
+
+    span.rating-progress {
+        width: 80px;
+    }
+    span.rating-progress::before, span.rating-progress::after {
+        background-repeat: no-repeat;
+        height: 14px;
+        display: block;
+        content: "";
+    }
+
 }

@@ -3,7 +3,7 @@
 
         <a href="{{ route('teacher.course.edit', $course_id) }}">
             @if ($is_declined == 1)
-                <div class="absolute text-center text-white bg-red-500 w-24 h-7" style="top: 10px">Declined</div>
+                <div class="absolute text-center text-white bg-red-500 w-24 h-7" style="top: 10px">{{ __('Declined') }}</div>
             @endif
             <div class="absolute inset-0 hover:bg-white opacity-0 transition duration-700 hover:opacity-10"></div>
             <img class="w-full h-48 object-cover" src="{{ $image }}" alt="alt title">
@@ -14,9 +14,15 @@
             <span class="text-xs">{{ date('m-d-Y', strtotime($created_at)) }}</span>
         </div>
         <div class="">
-            <h3 class="text-lg leading-normal mb-3 font-bold text-gray-800">
+            <h3 class="text-lg leading-normal mb-1 font-bold text-gray-800">
                 <a href="{{ route('teacher.course.edit', $course_id) }}" class="hover:text-indigo-700">{{ $title }}</a>
             </h3>
+            <div class="flex mb-3">
+                <span class="text-white bg-orange-500 text-sm px-1 mr-1 h-5">{{ number_format(round($rate, 1), 1) }}</span>
+                <span id="course_{{$course_id}}_rating" class="rating-progress mt-0.5 mr-2"></span>
+                <span class="text-sm leading-4">({{ $feedback_nums }} {{ __('reviews') }})</span>
+                @php( $rating_progress = intval($rate / 5 * 100) . '%' ?? 0 )
+            </div>
             <div class="flex text-gray-500">
                 <svg xmlns="http://www.w3.org/2000/svg" width="14.997" height="15" viewBox="0 0 14.997 15">
                     <g id="Icon_ionic-ios-timer" data-name="Icon ionic-ios-timer" transform="translate(-3.938 -3.938)">
@@ -100,7 +106,11 @@
 
     </div>
 </div><!-- end card -->
-
+<style>
+    span#course_{{$course_id}}_rating::after {
+        width: {{ $rating_progress }};
+    }
+</style>
 <script>
     $(document).ready(function() {
         $('button#publish_course_button').on('click', function(event) {

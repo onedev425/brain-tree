@@ -14,7 +14,15 @@
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script src="https://cdn.jsdelivr.net/npm/pristinejs@1.1.0/dist/pristine.min.js"></script>
-
+        <style>
+            span.rating-progress::before {
+                background-image: url('/images/rating-background.svg');
+            }
+            span.rating-progress::after {
+                background-image: url('/images/rating-foreground.svg');
+                margin-top: -14px;
+            }
+        </style>
         <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
         <title>
             @yield('title', config('app.name', 'Braintree'))
