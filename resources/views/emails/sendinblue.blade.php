@@ -184,6 +184,9 @@
                                                     @elseif ($email_data['email_type'] == 'password_update')
                                                         {{ __('Your password updated') }}
 
+                                                    @elseif ($email_data['email_type'] == 'course_feedback')
+                                                        {{ __('Your course got feedback') }}
+
                                                     @endif
                                                 </h1>
 
@@ -239,7 +242,7 @@
                                             <td style="overflow-wrap:break-word;word-break:break-word;padding:10px 15px;font-family:arial,helvetica,sans-serif;" align="left">
 
                                                 <div style="font-size: 14px; line-height: 140%; text-align: left; word-wrap: break-word;">
-                                                    <p style="font-size: 14px; line-height: 140%;"><span style="font-size: 16px; line-height: 22.4px;"><strong>{{ __('Hi') }} {{ $email_data['user_name'] }},</strong></span></p>
+                                                    <p style="font-size: 14px; line-height: 140%;"><span style="font-size: 16px; line-height: 22.4px;"><strong>{{ __('Hi') }}, {{ $email_data['user_name'] }},</strong></span></p>
                                                     @if ($email_data['email_type'] == 'email_confirmation')
                                                         <p style="font-size: 14px; line-height: 140%;"><br /><span style="font-size: 16px; line-height: 22.4px;">{{ __('Your account was registered successfully!') }}</span></p>
                                                         {{ __('Thanks for signing up! Before getting started, you need to verify your email first.') }}
@@ -312,6 +315,14 @@
                                                         <p style="font-size: 14px; line-height: 140%;"><br /><span style="font-size: 16px; line-height: 22.4px;">{{ __('You just updated your password successfully.') }} </span></p>
                                                         <p style="font-size: 14px; line-height: 140%;"><br /><br />
                                                             {{ __('If you did not request this change, please forward this email to ') }} <a href="mailto:btppro1@gmail.com">btppro1@gmail.com</a><br />
+                                                        </p>
+
+                                                    @elseif ($email_data['email_type'] == 'course_feedback')
+                                                        <p style="font-size: 14px; line-height: 140%;"><br /><span style="font-size: 16px; line-height: 22.4px;">{{ __('Your course got feedback from a student.') }} </span></p>
+                                                        <p><br /><br />{{ __('Course Name: ') }} <strong>{{ $email_data['course_name'] }}</strong></p>
+                                                        <p>{{ __('Feedback Rate: ') }} <strong>{{ $email_data['feedback_rate'] }}</strong></p>
+                                                        <p><strong>{{ __('Feedback Content: ') }} </strong><br />
+                                                            {{ $email_data['feedback_content'] }}
                                                         </p>
 
                                                     @endif

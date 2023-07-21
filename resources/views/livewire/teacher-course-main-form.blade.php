@@ -28,6 +28,8 @@
                             'price' => $course->price,
                             'is_published' => $course->is_published,
                             'is_declined' => $course->is_declined,
+                            'rate' => $course->course_rate(),
+                            'feedback_nums' => $course->course_feedback_nums(),
                         ])
                     @endforeach
                 @else
@@ -41,6 +43,8 @@
                             'price' => $course->price,
                             'is_published' => $course->is_published,
                             'is_declined' => $course->is_declined,
+                            'rate' => $course->course_rate(),
+                            'feedback_nums' => $course->course_feedback_nums(),
                         ])
                     @endforeach
                 @endif

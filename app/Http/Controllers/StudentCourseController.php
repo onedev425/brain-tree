@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Course;
+use App\Models\CourseFeedback;
 use App\Services\Course\CourseService;
+use App\Services\EmailService;
 use Illuminate\View\View;
 
 class StudentCourseController extends Controller
@@ -53,5 +55,33 @@ class StudentCourseController extends Controller
     {
         $course_id = request('course_id');
         $this->courseService->clearQuestion($course_id);
+    }
+
+    public function feedback_register(): void
+    {
+        $course_id = request('course_id');
+        $star_nums = request('star_nums');
+        $feedback_content = request('feedback_content');
+
+        CourseFeedback::create([
+            'student_id' => auth()->user()->id,
+            'course_id' => $course_id,
+            'rate' => $star_nums,
+            'content' => $feedback_content
+        ]);
+
+        $course = Course::find($course_id);
+        $email_data = [
+            'to' => $course->assignedTeacher->email,
+            'subject' => __('Course Feedback'),
+            'user_name' => $course->assignedTeacher->name,
+            'email_type' => 'course_feedback',
+            'course_name' => $course->title,
+            'feedback_rate' => $star_nums,
+            'feedback_content' => $feedback_content
+        ];
+
+        $email_service = new EmailService($email_data);
+        $email_service->sendEmail();
     }
 }

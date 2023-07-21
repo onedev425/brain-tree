@@ -3,7 +3,7 @@
 
         <a href="{{ route('teacher.course.edit', $course_id) }}">
             @if ($is_declined == 1)
-                <div class="absolute text-center text-white bg-red-500 w-24 h-7" style="top: 10px">Declined</div>
+                <div class="absolute text-center text-white bg-red-500 w-24 h-7" style="top: 10px">{{ __('Declined') }}</div>
             @endif
             <div class="absolute inset-0 hover:bg-white opacity-0 transition duration-700 hover:opacity-10"></div>
             <img class="w-full h-48 object-cover" src="{{ $image }}" alt="alt title">
@@ -14,9 +14,15 @@
             <span class="text-xs">{{ date('m-d-Y', strtotime($created_at)) }}</span>
         </div>
         <div class="">
-            <h3 class="text-lg leading-normal mb-3 font-bold text-gray-800">
+            <h3 class="text-lg leading-normal mb-1 font-bold text-gray-800">
                 <a href="{{ route('teacher.course.edit', $course_id) }}" class="hover:text-indigo-700">{{ $title }}</a>
             </h3>
+            <div class="flex mb-3">
+                <span class="text-white bg-orange-500 text-sm px-1 mr-1 h-5">{{ number_format(round($rate, 1), 1) }}</span>
+                <span id="course_{{$course_id}}_rating" class="rating-progress mt-0.5 mr-2"></span>
+                <span class="text-sm leading-4">({{ $feedback_nums }} {{ __('reviews') }})</span>
+                @php( $rating_progress = intval($rate / 5 * 100) . '%' ?? 0 )
+            </div>
             <div class="flex text-gray-500">
                 <svg xmlns="http://www.w3.org/2000/svg" width="14.997" height="15" viewBox="0 0 14.997 15">
                     <g id="Icon_ionic-ios-timer" data-name="Icon ionic-ios-timer" transform="translate(-3.938 -3.938)">
@@ -34,14 +40,16 @@
                 <h3 class="text-base">{{ __('Price') }}: ${{ $price }}</h3>
             </div>
             <div class="flex">
-                <a href="{{ route('teacher.course.edit', $course_id) }}" class="mr-3">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18.906" height="18.906" viewBox="0 0 18.906 18.906">
-                        <g id="Icon_feather-edit" data-name="Icon feather-edit" transform="translate(-2 -1.818)">
-                            <path id="Path_56" data-name="Path 56" d="M10.562,6H4.68A1.68,1.68,0,0,0,3,7.68V19.443a1.68,1.68,0,0,0,1.68,1.68H16.443a1.68,1.68,0,0,0,1.68-1.68V13.562" transform="translate(0 -1.4)" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
-                            <path id="Path_57" data-name="Path 57" d="M20.822,3.34a1.782,1.782,0,1,1,2.521,2.521l-7.982,7.982L12,14.683l.84-3.361Z" transform="translate(-3.959)" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
-                        </g>
-                    </svg>
-                </a>
+                @if ($is_published == 0 || auth()->user()->hasRole('super-admin'))
+                    <a href="{{ route('teacher.course.edit', $course_id) }}" class="mr-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18.906" height="18.906" viewBox="0 0 18.906 18.906">
+                            <g id="Icon_feather-edit" data-name="Icon feather-edit" transform="translate(-2 -1.818)">
+                                <path id="Path_56" data-name="Path 56" d="M10.562,6H4.68A1.68,1.68,0,0,0,3,7.68V19.443a1.68,1.68,0,0,0,1.68,1.68H16.443a1.68,1.68,0,0,0,1.68-1.68V13.562" transform="translate(0 -1.4)" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+                                <path id="Path_57" data-name="Path 57" d="M20.822,3.34a1.782,1.782,0,1,1,2.521,2.521l-7.982,7.982L12,14.683l.84-3.361Z" transform="translate(-3.959)" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+                            </g>
+                        </svg>
+                    </a>
+                @endif
                 @if (auth()->user()->hasRole('super-admin') || (auth()->user()->hasRole('teacher') && $is_published == 0))
                 <div x-data="{ open: false }" class="relative mr-4">
                     <button @click="open = ! open" class="text-gray-500 hover:text-gray-600 transition-colors duration-200 focus:outline-none hover:outline-none">
@@ -98,7 +106,11 @@
 
     </div>
 </div><!-- end card -->
-
+<style>
+    span#course_{{$course_id}}_rating::after {
+        width: {{ $rating_progress }};
+    }
+</style>
 <script>
     $(document).ready(function() {
         $('button#publish_course_button').on('click', function(event) {

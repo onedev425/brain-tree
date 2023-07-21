@@ -10,6 +10,8 @@
                     'course_points' => $this->getCourseTotalPoints($course),
                     'completed_date' => $this->getCourseCompletedDate($course),
                     'started_date' => $this->getCourseStartedDate($course),
+                    'course_rate' => $course->course_rate(),
+                    'course_feedback_nums' => $course->course_feedback_nums(),
                 ])
             @endforeach
         </div>
