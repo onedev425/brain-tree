@@ -20,9 +20,18 @@
                 @foreach($courses as $course)
                     <tr class="border-t">
                         <td class="p-4 whitespace-nowrap text-left">
-                            <div class="flex">
-                                <img width="50" height="50" class="rounded-full" src="{{ $course->image }}" onerror="this.src='{{ asset('images/logo/course.jpg') }}'" />
-                                <span class="flex items-center gap-2 py-3 px-6">{{ $course->title }}</span>
+                            <div class="flex mt-3">
+                                <img class="rounded-full w-12 h-12" src="{{ $course->image }}" onerror="this.src='{{ asset('images/logo/course.jpg') }}'" />
+                                <div>
+                                    <span class="flex items-center gap-2 px-6">{{ $course->title }}</span>
+                                    <div class="flex px-6 pb-3">
+                                        <span class="text-white bg-orange-500 text-sm px-1 mr-1 h-5">{{ number_format(round($course->course_rate(), 1), 1) }}</span>
+                                        <span id="course_{{$course->id}}_rating" class="rating-progress mt-0.5 mr-2"></span>
+                                        <span class="text-sm leading-4 mt-0.5">({{ $course->course_feedback_nums() }} {{ __('reviews') }})</span>
+                                        @php( $rating_progress = intval($course->course_rate() / 5 * 100) . '%' ?? 0 )
+                                    </div>
+                                </div>
+
                             </div>
 
                         </td>
@@ -33,6 +42,11 @@
                             <x-button wire:click="BuyCourse({{ $course->id }})" class="text-purple-500">{{ __('Buy Course') }}</x-button>
                         </td>
                     </tr>
+                    <style>
+                        span#course_{{$course->id}}_rating::after {
+                            width: {{ $rating_progress }};
+                        }
+                    </style>
                 @endforeach
             @else
                 <tr>

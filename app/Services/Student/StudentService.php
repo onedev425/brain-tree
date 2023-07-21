@@ -273,7 +273,7 @@ class StudentService
                     ->orWhere('users.name', 'LIKE', '%'. $search . '%');
             });
 
-        return $courses->with('assignedTeacher');
+        return $courses->with('assignedTeacher')->with('course_feedback');
     }
 
     public function getStudentPaidCourses(string $search)
