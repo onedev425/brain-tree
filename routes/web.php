@@ -95,6 +95,10 @@ Route::middleware('auth:sanctum', 'verified', 'App\Http\Middleware\PreventLockAc
             'show' => 'student.course.show',
         ]);
     });
+
+    //lock account route
+    Route::post('users/lock-account/{user}', 'App\Http\Controllers\LockUserAccountController')->name('user.lock-account');
+    Route::delete('user/{user}', ['App\Http\Controllers\RegistrationController', 'destroy'])->name('user.destroy');
 });
 
 //user must be authenticated
@@ -114,8 +118,5 @@ Route::middleware('auth:sanctum', 'verified', 'App\Http\Middleware\PreventLockAc
     Route::get('account-applications/change-status/{applicant}', ['App\Http\Controllers\AccountApplicationController', 'changeStatusView'])->name('account-applications.change-status');
 
     Route::post('account-applications/change-status/{applicant}', ['App\Http\Controllers\AccountApplicationController', 'changeStatus']);
-
-    //lock account route
-    Route::post('users/lock-account/{user}', 'App\Http\Controllers\LockUserAccountController')->name('user.lock-account');
 
 });

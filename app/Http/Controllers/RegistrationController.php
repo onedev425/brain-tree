@@ -7,11 +7,10 @@ use App\Http\Requests\RegistrationRequest;
 use App\Services\AccountApplication\AccountApplicationService;
 use App\Services\EmailService;
 use App\Services\User\UserService;
-use Illuminate\Contracts\Auth\PasswordBroker;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
@@ -177,5 +176,12 @@ class RegistrationController extends Controller
     public function refresh_csrf_token(): JsonResponse
     {
         return response()->json(['token' => csrf_token()]);
+    }
+
+    public function destroy(User $user): RedirectResponse
+    {
+        $user->forceDelete();
+
+        return back()->with('success', __('The user deleted successfully'));
     }
 }
