@@ -96,6 +96,9 @@ class PermissionSeeder extends Seeder
         Permission::firstOrCreate([
             'name' => 'menu-industry',
         ]);
+        Permission::firstOrCreate([
+            'name' => 'lock user account',
+        ]);
         /**
          * assign permissions to roles.
          */
@@ -123,6 +126,7 @@ class PermissionSeeder extends Seeder
             'pricing',
             'settings',
             'menu-industry',
+            'lock user account'
         ]);
 
         //assign permissions to teacher

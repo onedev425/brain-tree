@@ -184,6 +184,9 @@
                                                     @elseif ($email_data['email_type'] == 'password_update')
                                                         {{ __('Your password updated') }}
 
+                                                    @elseif ($email_data['email_type'] == 'user_suspend')
+                                                        {{ $email_data['lock'] ? __('Your account suspended') : __('Your account activated') }}
+
                                                     @elseif ($email_data['email_type'] == 'course_feedback')
                                                         {{ __('Your course got feedback') }}
 
@@ -316,6 +319,15 @@
                                                         <p style="font-size: 14px; line-height: 140%;"><br /><br />
                                                             {{ __('If you did not request this change, please forward this email to ') }} <a href="mailto:btppro1@gmail.com">btppro1@gmail.com</a><br />
                                                         </p>
+
+                                                    @elseif ($email_data['email_type'] == 'user_suspend')
+                                                        @if ($email_data['lock'])
+                                                            <p style="font-size: 14px; line-height: 140%;"><br /><span style="font-size: 16px; line-height: 22.4px;">{{ __('Your account was suspended by some irregular activity on your account.') }}}</span></p>
+                                                            {{ __('You can\'t use our system anymore. Please contact ') }} <a href="mailto:btppro1@gmail.com">btppro1@gmail.com</a> {{ __('to reactive your account.') }}
+                                                        @else
+                                                            <p style="font-size: 14px; line-height: 140%;"><br /><span style="font-size: 16px; line-height: 22.4px;">{{ __('Your account was reactivated.') }}</span></p>
+                                                            {{ __('You can use our system now. But if there is any irregular activity, your account will be suspend permanently.') }}
+                                                        @endif
 
                                                     @elseif ($email_data['email_type'] == 'course_feedback')
                                                         <p style="font-size: 14px; line-height: 140%;"><br /><span style="font-size: 16px; line-height: 22.4px;">{{ __('Your course got feedback from a student.') }} </span></p>
