@@ -14,9 +14,11 @@ class RunInProductionSeeder extends Seeder
     public function run()
     {
         $this->call([
-            WeekdaySeeder::class,
+            WorldSeeder::class,
             RoleSeeder::class,
             PermissionSeeder::class,
+            AdminUserSeeder::class,
+            PaymentFeesSeeder::class
         ]);
     }
 }
