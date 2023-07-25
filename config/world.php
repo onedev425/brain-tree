@@ -30,10 +30,6 @@ return [
     |--------------------------------------------------------------------------
     */
     'modules' => [
-        'states'     => true,
-        'cities'     => true,
-        'timezones'  => true,
-        'currencies' => true,
         'languages'  => true,
     ],
     /*
@@ -90,58 +86,6 @@ return [
                     'type'     => 'string',
                 ],
             ],
-        ],
-        'states' => [
-            'table_name'      => 'states',
-            'optional_fields' => [
-                'country_code' => [
-                    'required' => true,
-                    'type'     => 'string',
-                    'length'   => 3,
-                ],
-                'state_code' => [
-                    'required' => false,
-                    'type'     => 'string',
-                    'length'   => 3,
-                ],
-                'latitude' => [
-                    'required' => false,
-                    'type'     => 'string',
-                ],
-                'longitude' => [
-                    'required' => false,
-                    'type'     => 'string',
-                ],
-            ],
-        ],
-        'cities' => [
-            'table_name'      => 'cities',
-            'optional_fields' => [
-                'country_code' => [
-                    'required' => true,
-                    'type'     => 'string',
-                    'length'   => 3,
-                ],
-                'state_code' => [
-                    'required' => false,
-                    'type'     => 'string',
-                    'length'   => 3,
-                ],
-                'latitude' => [
-                    'required' => false,
-                    'type'     => 'string',
-                ],
-                'longitude' => [
-                    'required' => false,
-                    'type'     => 'string',
-                ],
-            ],
-        ],
-        'timezones' => [
-            'table_name' => 'timezones',
-        ],
-        'currencies' => [
-            'table_name' => 'currencies',
         ],
         'languages' => [
             'table_name' => 'languages',

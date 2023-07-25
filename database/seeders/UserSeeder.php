@@ -17,21 +17,6 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('users')->delete();
-
-        $superAdmin = User::firstOrCreate([
-            'id'                => 1,
-            'name'              => 'John Doe',
-            'email'             => 'super@admin.com',
-            'password'          => Hash::make('password'),
-            'address'           => 'super admin street',
-            'birthday'          => '22/04/04',
-            'email_verified_at' => now(),
-        ]);
-
-        $superAdmin->assignRole('super-admin');
-        $superAdmin->save();
-
         $teacher = User::create([
             'id'                => 3,
             'name'              => 'John Doe',
