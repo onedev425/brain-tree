@@ -21,6 +21,8 @@
                             'lesson_nums' => count($course->lessons),
                             'quiz_nums' => count($course->questions),
                             'progress' => $this->getCourseProgressPercent($course),
+                            'rate' => $course->course_rate(),
+                            'feedback_nums' => $course->course_feedback_nums(),
                         ])
                     @endforeach
                 @else
@@ -33,6 +35,8 @@
                             'lesson_nums' => count($course->lessons),
                             'quiz_nums' => count($course->questions),
                             'progress' => $this->getCourseProgressPercent($course),
+                            'rate' => $course->course_rate(),
+                            'feedback_nums' => $course->course_feedback_nums(),
                         ])
                     @endforeach
                 @endif

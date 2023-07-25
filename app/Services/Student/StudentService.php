@@ -132,6 +132,7 @@ class StudentService
 
             $courses = $courses->with('lessons')
                 ->with('questions')
+                ->with('course_feedback')
                 ->with('assignedTeacher')
                 ->get();
         }
@@ -183,6 +184,7 @@ class StudentService
 
             $courses = $courses->with('lessons')
                 ->with('questions')
+                ->with('course_feedback')
                 ->with('assignedTeacher')
                 ->get();
         }
@@ -273,7 +275,7 @@ class StudentService
                     ->orWhere('users.name', 'LIKE', '%'. $search . '%');
             });
 
-        return $courses->with('assignedTeacher');
+        return $courses->with('assignedTeacher')->with('course_feedback');
     }
 
     public function getStudentPaidCourses(string $search)

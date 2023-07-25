@@ -44,4 +44,18 @@ class Course extends Model
         return $this->hasMany(Question::class);
     }
 
+    public function course_feedback(): HasMany
+    {
+        return $this->hasMany(CourseFeedback::class);
+    }
+
+    public function course_rate()
+    {
+        return $this->course_feedback->avg('rate');
+    }
+
+    public function course_feedback_nums()
+    {
+        return $this->course_feedback->count();
+    }
 }

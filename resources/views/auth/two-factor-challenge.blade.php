@@ -3,7 +3,7 @@
 @section('title', 'Two Factor Challenge')
 
 @section('body')
-    <x-partials.authentication-card>
+    <x-partials.authentication-card class="w-8/12 md:w-7/12 lg:w-6/12 xl:w-5/12">
         <div class="p-4">
             <x-display-validation-errors />
             <div x-data="{ recovery: false }">
@@ -54,4 +54,4 @@
         </div>
     </x-partials.authentication-card>
 @endsection
-           
+

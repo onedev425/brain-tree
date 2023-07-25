@@ -32,6 +32,7 @@ Route::get('/paypal/connect-cancel', ['App\Http\Controllers\PaymentController', 
 Route::post('/verification_resend', ['App\Http\Controllers\RegistrationController', 'verification_resend'])->name('verification.resend');
 Route::post('/password_reset', ['App\Http\Controllers\RegistrationController', 'password_reset'])->name('password.reset.email');
 Route::post('/password_update', ['App\Http\Controllers\RegistrationController', 'password_update'])->name('password.change');
+Route::get('/refresh_csrf_token', ['App\Http\Controllers\RegistrationController', 'refresh_csrf_token'])->name('refresh.token');
 
 Route::middleware(['guest'])->group(function () {
     Route::get('/register', ['App\Http\Controllers\RegistrationController', 'registerView'])->name('register');
@@ -52,6 +53,8 @@ Route::middleware('auth:sanctum', 'verified', 'App\Http\Middleware\PreventLockAc
     Route::post('lesson_complete', ['App\Http\Controllers\StudentCourseController', 'lesson_complete'])->name('student.lesson.complete');
     Route::post('question_complete', ['App\Http\Controllers\StudentCourseController', 'question_complete'])->name('student.question.complete');
     Route::post('question_clear', ['App\Http\Controllers\StudentCourseController', 'question_clear'])->name('student.question.clear');
+    Route::post('feedback_register', ['App\Http\Controllers\StudentCourseController', 'feedback_register'])->name('student.feedback.register');
+
     Route::post('update_avatar', ['App\Http\Controllers\ProfileController', 'update_avatar'])->name('user.avatar.update');
     Route::post('remove_avatar', ['App\Http\Controllers\ProfileController', 'remove_avatar'])->name('user.avatar.remove');
     Route::post('update_profile', ['App\Http\Controllers\ProfileController', 'update_profile'])->name('user.profile.update');
@@ -92,6 +95,10 @@ Route::middleware('auth:sanctum', 'verified', 'App\Http\Middleware\PreventLockAc
             'show' => 'student.course.show',
         ]);
     });
+
+    //lock account route
+    Route::post('users/lock-account/{user}', 'App\Http\Controllers\LockUserAccountController')->name('user.lock-account');
+    Route::delete('user/{user}', ['App\Http\Controllers\RegistrationController', 'destroy'])->name('user.destroy');
 });
 
 //user must be authenticated
@@ -111,8 +118,5 @@ Route::middleware('auth:sanctum', 'verified', 'App\Http\Middleware\PreventLockAc
     Route::get('account-applications/change-status/{applicant}', ['App\Http\Controllers\AccountApplicationController', 'changeStatusView'])->name('account-applications.change-status');
 
     Route::post('account-applications/change-status/{applicant}', ['App\Http\Controllers\AccountApplicationController', 'changeStatus']);
-
-    //lock account route
-    Route::post('users/lock-account/{user}', 'App\Http\Controllers\LockUserAccountController')->name('user.lock-account');
 
 });

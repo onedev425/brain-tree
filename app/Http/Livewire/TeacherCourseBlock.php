@@ -15,6 +15,8 @@ class TeacherCourseBlock extends Component
     public string $price;
     public int $is_published;
     public int $is_declined;
+    public $rate;
+    public int $feedback_nums;
 
     public function render(): View
     {

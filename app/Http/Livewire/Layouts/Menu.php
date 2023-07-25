@@ -54,7 +54,7 @@ class Menu extends Component
                 'icon'  => '<svg xmlns="http://www.w3.org/2000/svg" width="30.866" height="29" viewBox="0 0 30.866 29">
                               <path id="Icon_feather-bookmark" data-name="Icon feather-bookmark" d="M36.366,31.5,21.933,24,7.5,31.5V7.5c0-1.657,1.846-3,4.124-3H32.242c2.277,0,4.124,1.343,4.124,3Z" transform="translate(-6.5 -3.5)" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
                             </svg>',
-                'text'  => 'Certifications & Marks',
+                'text'  => 'Certifications & Grades',
                 'route' => 'certification.index',
                 'sub_routes' => ['certification.index'],
                 'can' => 'certification-marks'

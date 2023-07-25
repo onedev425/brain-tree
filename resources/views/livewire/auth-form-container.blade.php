@@ -32,3 +32,23 @@
         </div>
     </div>
 </div>
+<script>
+    $(document).ready(function () {
+        $(".toggle-password").click(function () {
+            const passwordInput = $(this).prev();
+            const type = passwordInput.attr("type");
+
+            // Toggle password visibility
+            if (type === "password") {
+                passwordInput.attr("type", "text");
+                $(this).find("i").removeClass("fa fa-eye");
+                $(this).find("i").addClass("fa fa-eye-slash");
+            } else {
+                passwordInput.attr("type", "password");
+                $(this).find("i").removeClass("fa fa-eye-slash");
+                $(this).find("i").addClass("fa fa-eye");
+            }
+
+        });
+    });
+</script>

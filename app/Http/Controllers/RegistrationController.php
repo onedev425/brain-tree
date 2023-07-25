@@ -7,10 +7,10 @@ use App\Http\Requests\RegistrationRequest;
 use App\Services\AccountApplication\AccountApplicationService;
 use App\Services\EmailService;
 use App\Services\User\UserService;
-use Illuminate\Contracts\Auth\PasswordBroker;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
@@ -46,15 +46,26 @@ class RegistrationController extends Controller
         $user = $this->userService->createUser($request);
 
         //assign applicant role
-        $user->assignRole('applicant');
+        if ($request['role'] == 3)
+            $user->assignRole('student');
+        else
+            $user->assignRole('applicant');
 
         $accountApplication = $this->accountApplicationService->createAccountApplication($user->id, $request->role);
-        $status = 'Application Received';
-        $reason = 'Application has been received, we would reach out to you for further information';
+        $status = __('Application Received');
+        $reason = __('Application has been received, we would reach out to you for further information');
         $accountApplication->setStatus($status, $reason);
 
         //dispatch event
         AccountStatusChanged::dispatch($user, $status, $reason);
+        if ($request['role'] == 3) {
+            $this->accountApplicationService->changeStatus($user, [
+                'status' => 'approved',
+                'admission_number' => Str::random(10),
+                'admission_date' => date('Y-m-d H:i:s'),
+                'reason' => ''
+            ]);
+        }
 
         $verification_url = URL::temporarySignedRoute(
             'verification.verify',
@@ -72,7 +83,7 @@ class RegistrationController extends Controller
         $email_service = new EmailService($email_data);
         $result = $email_service->sendEmail();
         if ($result == 'success')
-            return back()->with('success', 'Registration complete, you would receive an email to verify your account');
+            return back()->with('success', __('Registration complete, you would receive an email to verify your account'));
         else
             return back()->with('danger', __('Email sending failed: ') . $result);
     }
@@ -162,4 +173,15 @@ class RegistrationController extends Controller
         return redirect()->route('login')->with('status', __('Your password reset successfully.'));
     }
 
+    public function refresh_csrf_token(): JsonResponse
+    {
+        return response()->json(['token' => csrf_token()]);
+    }
+
+    public function destroy(User $user): RedirectResponse
+    {
+        $user->forceDelete();
+
+        return back()->with('success', __('The user deleted successfully'));
+    }
 }
