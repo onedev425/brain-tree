@@ -4,6 +4,7 @@ namespace App\Services\Course;
 
 use App\Models\Course;
 use App\Models\Topic;
+use App\Models\Industry;
 use App\Models\Lesson;
 use App\Models\Question;
 use App\Models\QuestionOption;
@@ -12,6 +13,7 @@ use Illuminate\Support\Facades\DB;
 use Google_Client;
 use Google_Service_YouTube;
 use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Log;
 
 class CourseService
 {
@@ -292,6 +294,84 @@ class CourseService
     }
 
     /**
+     * Sync course with wp_braintree
+     */
+    private function syncCourseWithWP($data)
+    {
+        $client = new Client();
+        $industry = Industry::find($data['industry_id']);
+
+        try {
+            $response = $client->request('POST', "https://braintreespro.com/wp-json/sync-api/v1/courses", [
+                'form_params' => [
+                    'title' => $data['course_title'],
+                    'description' => $data['course_description'],
+                    'post_excerpt' => $data['course_description'],
+                    'category' => $industry->name,
+                    'instructor' => auth()->user()->name,
+                    'cost' => $data['course_price'],
+                    'post_status' => 'draft',
+                    'featured_image' => $data['course_image'],
+                ],
+            ]);
+            $responseBody = $response->getBody()->getContents();
+            $data = json_decode($responseBody, true);
+            $courseId = null;
+
+            if (isset($data['course_id'])) {
+                $courseId = $data['course_id'];
+            }
+
+            return $courseId;
+        } catch(\Exception $e) {
+            Log::error('An error occurred: ' . $e->getMessage(), [
+                'exception' => $e,
+            ]);
+
+            return null;
+        }
+    }
+
+    /**
+     * Update course with wp_braintree
+     */
+    private function updateCourseWithWP($wp_course_id, $data)
+    {
+        $client = new Client();
+        $industry = Industry::find($data['industry_id']);
+
+        try {
+            $response = $client->request('POST', "https://braintreespro.com/wp-json/sync-api/v1/course/update", [
+                'form_params' => [
+                    'id' => $wp_course_id,
+                    'title' => $data['course_title'],
+                    'description' => $data['course_description'],
+                    'post_excerpt' => $data['course_description'],
+                    'category' => $industry->name,
+                    'cost' => $data['course_price'],
+                    'post_status' => $data['is_published'] ? 'publish' : 'draft',
+                    'featured_image' => $data['course_image'],
+                ],
+            ]);
+            $responseBody = $response->getBody()->getContents();
+            $data = json_decode($responseBody, true);
+            $courseId = null;
+
+            if (isset($data['course_id'])) {
+                $courseId = $data['course_id'];
+            }
+
+            return $courseId;
+        } catch(\Exception $e) {
+            Log::error('An error occurred: ' . $e->getMessage(), [
+                'exception' => $e,
+            ]);
+
+            return null;
+        }
+    }
+
+    /**
      * Create course.
      *
      * @param mixed $data
@@ -312,6 +392,14 @@ class CourseService
             'quiz_active'  => $data['quiz_active'],
             'is_published'  => $data['is_published'],
         ]);
+
+        $wp_course_id = $this->syncCourseWithWP($data);
+
+        if($wp_course_id != null) {
+            $course->forceFill([
+                'wp_course_id' => $wp_course_id
+            ])->save();
+        }
 
         foreach($data['topic_list'] as $topic_info) {
             $topic = $course->topics()->create([
@@ -371,7 +459,11 @@ class CourseService
         ]);
         $course->save();
 
-
+        if ($course->wp_course_id)
+        {
+            $this->updateCourseWithWP($course->wp_course_id, $data);
+        }
+        
         // if some topics removed from UI, remove the topics from database
         $topic_ids = [];
         foreach($data['topic_list'] as $topic_info) {
