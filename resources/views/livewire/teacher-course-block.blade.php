@@ -51,7 +51,7 @@
                     </a>
                 @endif
                 @if (auth()->user()->hasRole('super-admin') || (auth()->user()->hasRole('teacher') && $is_published == 0))
-                <div x-data="{ open: false }" class="relative px-3 mr-3 cursor-pointer hover:bg-gray-100" @click="open = ! open" >
+                <div x-data="{ open: false }" class="relative px-3 mr-3 cursor-pointer" @click="open = ! open" >
                     <button class="text-gray-500 hover:text-gray-600 transition-colors duration-200 focus:outline-none hover:outline-none">
                         <svg xmlns="http://www.w3.org/2000/svg" width="4" height="18" viewBox="0 0 4 18">
                             <g id="Group_281" data-name="Group 281" transform="translate(-953 -528)">
