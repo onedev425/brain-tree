@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Industry;
 use App\Services\EmailService;
 use Illuminate\Http\RedirectResponse;
 use App\Services\Course\CourseService;
@@ -12,6 +13,8 @@ use Illuminate\View\View;
 use Illuminate\Database\Eloquent\Collection;
 use App\Mail\SendinblueMail;
 use Illuminate\Support\Facades\Mail;
+use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Log;
 
 class TeacherCourseController extends Controller
 {
@@ -104,6 +107,36 @@ class TeacherCourseController extends Controller
         return redirect()->route('teacher.course.index', $request['is_published'] == 1 ? 'type=publish' : 'type=draft');
     }
 
+    /**
+     * Update course with wp_braintree
+     */
+    private function updateCourseWithWP($isPubished, Course $course)
+    {
+        $client = new Client();
+        $industry = Industry::find($course->industry_id);
+
+        try {
+            if ($course->wp_course_id) {
+                $client->request('POST', "https://braintreespro.com/wp-json/sync-api/v1/course/update", [
+                    'form_params' => [
+                        'id' => $course->wp_course_id,
+                        'title' => $course->title,
+                        'description' => $course->description,
+                        'post_excerpt' => $course->description,
+                        'category' => $industry->name,
+                        'cost' => $course->price,
+                        'post_status' => $isPubished ? 'publish' : 'draft',
+                        'featured_image' => $course->image,
+                    ],
+                ]);
+            }
+        } catch(\Exception $e) {
+            Log::error('An error occurred: ' . $e->getMessage(), [
+                'exception' => $e,
+            ]);
+        }
+    }
+
     public function publish(Request $request, Course $course)
     {
         $publish_result = $request['is_published'];
@@ -116,6 +149,7 @@ class TeacherCourseController extends Controller
             'publish_result' => $publish_result
         ];
 
+        $this->updateCourseWithWP($publish_result, $course);
         $email_service = new EmailService($email_data);
         $result = $email_service->sendEmail();
         if ($result == 'success') {
@@ -156,7 +190,7 @@ class TeacherCourseController extends Controller
         $data['course_title'] = $request['course_title'];
         $data['industry_id'] = $request['industry'];
         $data['assigned_id'] = auth()->user()->id;
-        $data['course_price'] = $request['course_price'];
+        $data['course_price'] = $request['course_price'];      
         $data['course_pass_percent'] = $request['course_pass_percent'];
         $data['course_description'] = $request['course_description'];
 
