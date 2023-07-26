@@ -41,7 +41,7 @@
             </div>
             <div class="flex">
                 @if ($is_published == 0 || auth()->user()->hasRole('super-admin'))
-                    <a href="{{ route('teacher.course.edit', $course_id) }}" class="mr-3">
+                    <a href="{{ route('teacher.course.edit', $course_id) }}" class="mr-1">
                         <svg xmlns="http://www.w3.org/2000/svg" width="18.906" height="18.906" viewBox="0 0 18.906 18.906">
                             <g id="Icon_feather-edit" data-name="Icon feather-edit" transform="translate(-2 -1.818)">
                                 <path id="Path_56" data-name="Path 56" d="M10.562,6H4.68A1.68,1.68,0,0,0,3,7.68V19.443a1.68,1.68,0,0,0,1.68,1.68H16.443a1.68,1.68,0,0,0,1.68-1.68V13.562" transform="translate(0 -1.4)" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
@@ -51,8 +51,8 @@
                     </a>
                 @endif
                 @if (auth()->user()->hasRole('super-admin') || (auth()->user()->hasRole('teacher') && $is_published == 0))
-                <div x-data="{ open: false }" class="relative mr-4">
-                    <button @click="open = ! open" class="text-gray-500 hover:text-gray-600 transition-colors duration-200 focus:outline-none hover:outline-none">
+                <div x-data="{ open: false }" class="relative px-3 mr-3 cursor-pointer hover:bg-gray-100" @click="open = ! open" >
+                    <button class="text-gray-500 hover:text-gray-600 transition-colors duration-200 focus:outline-none hover:outline-none">
                         <svg xmlns="http://www.w3.org/2000/svg" width="4" height="18" viewBox="0 0 4 18">
                             <g id="Group_281" data-name="Group 281" transform="translate(-953 -528)">
                                 <g id="Ellipse_43" data-name="Ellipse 43" transform="translate(953 528)" stroke="#111" stroke-width="1">
