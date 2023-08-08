@@ -403,8 +403,6 @@
                         console.log('lesson complete - error: ' + data.toString());
                     }
                 })
-
-
             });
 
             // next quiz

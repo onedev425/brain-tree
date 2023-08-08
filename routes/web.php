@@ -51,9 +51,12 @@ Route::middleware('auth:sanctum', 'verified', 'App\Http\Middleware\PreventLockAc
     Route::post('teacher_course_decline/{course}', ['App\Http\Controllers\TeacherCourseController', 'decline'])->name('teacher.course.decline');
 
     Route::post('lesson_complete', ['App\Http\Controllers\StudentCourseController', 'lesson_complete'])->name('student.lesson.complete');
+    Route::post('review_approve', ['App\Http\Controllers\StudentCourseController', 'review_approve'])->name('student.review.approve');
+    Route::post('review_trash', ['App\Http\Controllers\StudentCourseController', 'review_trash'])->name('student.review.trash');
     Route::post('question_complete', ['App\Http\Controllers\StudentCourseController', 'question_complete'])->name('student.question.complete');
     Route::post('question_clear', ['App\Http\Controllers\StudentCourseController', 'question_clear'])->name('student.question.clear');
     Route::post('feedback_register', ['App\Http\Controllers\StudentCourseController', 'feedback_register'])->name('student.feedback.register');
+    Route::get('reviews', ['App\Http\Controllers\StudentCourseController', 'reviews'])->name('student.course.reviews');
 
     Route::post('update_avatar', ['App\Http\Controllers\ProfileController', 'update_avatar'])->name('user.avatar.update');
     Route::post('remove_avatar', ['App\Http\Controllers\ProfileController', 'remove_avatar'])->name('user.avatar.remove');

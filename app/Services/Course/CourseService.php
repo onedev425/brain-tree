@@ -218,6 +218,22 @@ class CourseService
         return true;
     }
 
+    /**
+     * Sync completed quiz with wp_braintree
+     */
+    private function syncCompletedQuizWithWP()
+    {
+        $client = new Client();
+
+        try {
+            $response = $client->request('POST',env('WP_API_SYNC_BASE_URL') . "/wp-json/sync-api/v1/quizzes/increase");
+        } catch(\Exception $e) {
+            Log::error('An error occurred: ' . $e->getMessage(), [
+                'exception' => $e,
+            ]);
+        }
+    }
+
     public function isPassedFromCourseExam(Course $course): bool
     {
         $student_id = auth()->user()->id;
@@ -243,6 +259,7 @@ class CourseService
             $correct_points += $question->quiz_option_nums == $question->correct_option_nums ? $question->points : 0;
         }
         $student_exam_percent = $total_points == 0 ? 100 : intval($correct_points / $total_points * 100);
+        $this->syncCompletedQuizWithWP();
         return $student_exam_percent >= $course->pass_percent;
     }
 
@@ -302,7 +319,7 @@ class CourseService
         $industry = Industry::find($data['industry_id']);
 
         try {
-            $response = $client->request('POST', "https://braintreespro.com/wp-json/sync-api/v1/courses", [
+            $response = $client->request('POST',env('WP_API_SYNC_BASE_URL') . "/wp-json/sync-api/v1/courses", [
                 'form_params' => [
                     'title' => $data['course_title'],
                     'description' => $data['course_description'],
@@ -341,7 +358,7 @@ class CourseService
         $industry = Industry::find($data['industry_id']);
 
         try {
-            $response = $client->request('POST', "https://braintreespro.com/wp-json/sync-api/v1/course/update", [
+            $response = $client->request('POST',env('WP_API_SYNC_BASE_URL') . "/wp-json/sync-api/v1/course/update", [
                 'form_params' => [
                     'id' => $wp_course_id,
                     'title' => $data['course_title'],
