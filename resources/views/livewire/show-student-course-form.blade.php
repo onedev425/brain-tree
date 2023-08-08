@@ -36,7 +36,7 @@
             <div class="text-sm mt-4">{{ __("We regret to inform you that you did not pass the Web Design & Development Quiz. Please don't get disheartened and keep learning and practicing.") }}</div>
             <div class="flex justify-center mt-4">
                 <x-button id="main_try_again_button" label="{{ __('Try Again') }}" icon="" class="py-3 md:px-10 bg-red-700 text-white font-semibold border-transparent" />
-                <x-light-button label="{{ __('View Marks') }}" icon="" class="view_marks_button py-3 md:px-10 bg-white text-black font-semibold border border-red-300 ml-10" />
+                <a href="{{ route('certification.index', 'type=grade') }}" class="view_marks_button py-3 md:px-16 bg-white text-black font-semibold border border-red-300 ml-10 my-3" >{{ __('View Marks') }}</a>
             </div>
         </div>
     </div>
@@ -85,7 +85,7 @@
             <div class="text-sm mt-4">{{ __("You've successfully passed the Web Design & Development Quiz. Your hard work and dedication have paid off! To view your marks and download your certificate, please click the buttons below.") }}</div>
             <div class="flex justify-center mt-4">
                 <a href="{{ route('certification.download', 'id=' . urlencode(base64_encode(date('s:i:H Y-m-d') . '&' . $course->id))) }}" class="py-3 md:px-10 bg-red-700 text-white font-semibold border-transparent" >{{ __('Download Certificate') }}</a>
-                <a href="{{ route('certification.index') }}" class="view_marks_button py-3 md:px-20 bg-white text-black font-semibold border border-red-300 ml-10" >{{ __('View Marks') }}</a>
+                <a href="{{ route('certification.index', 'type=certification') }}" class="view_marks_button py-3 md:px-20 bg-white text-black font-semibold border border-red-300 ml-10" >{{ __('View Marks') }}</a>
             </div>
         </div>
     </div>
