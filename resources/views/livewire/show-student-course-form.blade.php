@@ -209,7 +209,7 @@
                         </div>
                     </div>
 
-                    <div class="flex justify-end mt-10">
+                    <div class="flex justify-end mt-10 {{ $passed_exam ? 'hidden' : '' }}">
                         <h2 class="font-bold mr-3 text-lg">{{ __('Next') }}</h2>
                         <a id="next_lesson" href="javascript:;">
                             <svg xmlns="http://www.w3.org/2000/svg" width="32.975" height="24.718" viewBox="0 0 32.975 24.718">
@@ -229,7 +229,7 @@
                     <div id="quiz_description" class="my-5 text-gray-400"></div>
                     <div id="question_list"></div>
 
-                    <div class="flex justify-end mt-10">
+                    <div class="flex justify-end mt-10 {{ $passed_exam ? 'hidden' : '' }}">
                         <h2 class="font-bold mr-3 text-lg">{{ __('Next') }}</h2>
                         <a id="next_quiz" href="javascript:;">
                             <svg xmlns="http://www.w3.org/2000/svg" width="32.975" height="24.718" viewBox="0 0 32.975 24.718">

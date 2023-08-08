@@ -166,7 +166,7 @@
     }
 
     span.toggle-password {
-        top: 50%;
+        top: 25px;
         right: 10px;
         transform: translateY(-50%);
     }
