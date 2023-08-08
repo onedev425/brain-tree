@@ -227,21 +227,25 @@ class CourseService
         $correct_points = 0;
 
         $query = "
-                SELECT id, points, SUM(1) quiz_option_nums, SUM(result) correct_option_nums FROM (
-                    SELECT C.title, Q.id, Q.name, Q.points, QO.description, QO.answer, SQ.question_id, SQ.answer student_answer,
-                        IF(Q.id = SQ.question_id AND QO.answer = SQ.answer, 1, 0) result
-                    FROM courses C
-                    INNER JOIN student_courses SC ON C.id = SC.course_id AND SC.student_id = '$student_id'
-                    LEFT JOIN questions Q ON C.id = Q.course_id
-                    LEFT JOIN question_options QO ON Q.id = QO.question_id
-                    LEFT JOIN student_questions SQ ON C.id = SQ.course_id AND Q.id = SQ.question_id AND QO.id = SQ.question_option_id AND SQ.student_id = '$student_id'
-                    WHERE C.id = '$course_id'
-                ) T GROUP BY T.id";
+                SELECT *, IF((R.question_type = 'multi' OR R.question_type = 'boolean') AND R.quiz_option_nums = R.correct_option_nums, 1, IF(R.question_type = 'single' AND R.correct_option_nums = 1, 1, 0)) is_passed FROM (
+                    SELECT course_id, pass_percent, question_id, question_text, question_type, points, SUM(1) quiz_option_nums, SUM(exam_result) correct_option_nums FROM (
+                        SELECT C.id course_id, C.pass_percent, Q.id question_id, Q.name question_text, Q.type question_type, Q.points, QO.description, QO.answer, SQ.question_id student_question_id,
+                            SQ.answer student_answer, IF(Q.id = SQ.question_id AND (Q.type = 'multi' OR Q.type = 'boolean') AND QO.answer = SQ.answer, 1,
+                            IF(Q.id = SQ.question_id AND Q.type = 'single', QO.answer * SQ.answer, 0)) exam_result
+                        FROM courses C
+                        INNER JOIN student_courses SC ON C.id = SC.course_id AND SC.student_id = '$student_id'
+                        LEFT JOIN questions Q ON C.id = Q.course_id
+                        LEFT JOIN question_options QO ON Q.id = QO.question_id
+                        LEFT JOIN student_questions SQ ON C.id = SQ.course_id AND Q.id = SQ.question_id AND QO.id = SQ.question_option_id AND SQ.student_id = '$student_id'
+                        WHERE C.id='$course_id'
+                    ) T GROUP BY T.course_id, T.pass_percent, T.question_id, T.question_text, T.question_type, T.points
+                ) R";
         $questions = DB::select($query);
         foreach($questions as $question) {
             $total_points += $question->points;
-            $correct_points += $question->quiz_option_nums == $question->correct_option_nums ? $question->points : 0;
+            $correct_points += $question->is_passed ? $question->points : 0;
         }
+
         $student_exam_percent = $total_points == 0 ? 100 : intval($correct_points / $total_points * 100);
         return $student_exam_percent >= $course->pass_percent;
     }
@@ -263,7 +267,7 @@ class CourseService
     {
         $student = auth()->user();
         $course_lesson_nums = $course->lessons->count();
-        $student_lesson_nums = $student->student_lessons->count();
+        $student_lesson_nums = $student->student_lessons->where('course_id', $course->id)->count();
         return $course_lesson_nums == $student_lesson_nums;
     }
 
@@ -463,7 +467,7 @@ class CourseService
         {
             $this->updateCourseWithWP($course->wp_course_id, $data);
         }
-        
+
         // if some topics removed from UI, remove the topics from database
         $topic_ids = [];
         foreach($data['topic_list'] as $topic_info) {
