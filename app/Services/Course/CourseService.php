@@ -226,7 +226,28 @@ class CourseService
         $client = new Client();
 
         try {
-            $response = $client->request('POST',env('WP_API_SYNC_BASE_URL') . "/wp-json/sync-api/v1/quizzes/increase");
+            $query = "
+                SELECT * FROM (
+                    SELECT *, IF((R.question_type = 'multi' OR R.question_type = 'boolean') AND R.quiz_option_nums = R.correct_option_nums, 1, IF(R.question_type = 'single' AND R.correct_option_nums = 1, 1, 0)) is_passed FROM (
+                            SELECT student_id, course_id, pass_percent, question_id, question_text, question_type, points, SUM(1) quiz_option_nums, SUM(exam_result) correct_option_nums FROM (
+                                    SELECT SC.student_id, C.id course_id, C.pass_percent, Q.id question_id, Q.name question_text, Q.type question_type, Q.points, QO.description, QO.answer, SQ.question_id student_question_id,
+                                            SQ.answer student_answer, IF(Q.id = SQ.question_id AND (Q.type = 'multi' OR Q.type = 'boolean') AND QO.answer = SQ.answer, 1,
+                                            IF(Q.id = SQ.question_id AND Q.type = 'single', QO.answer * SQ.answer, 0)) exam_result
+                                    FROM courses C
+                                    INNER JOIN student_courses SC ON C.id = SC.course_id
+                                    LEFT JOIN questions Q ON C.id = Q.course_id
+                                    LEFT JOIN question_options QO ON Q.id = QO.question_id
+                                    LEFT JOIN student_questions SQ ON C.id = SQ.course_id AND Q.id = SQ.question_id AND QO.id = SQ.question_option_id AND SQ.student_id = SC.student_id
+                                    
+                            ) T GROUP BY T.student_id, T.course_id, T.pass_percent, T.question_id, T.question_text, T.question_type, T.points
+                    ) R 
+                ) M WHERE is_passed=1";
+            $completed_course_nums = count(DB::select($query));
+            $client->request('POST',env('WP_API_SYNC_BASE_URL') . "/wp-json/sync-api/v1/quizzes/increase", [
+                'form_params' => [
+                    'count' => $completed_course_nums
+                ]
+            ]);
         } catch(\Exception $e) {
             Log::error('An error occurred: ' . $e->getMessage(), [
                 'exception' => $e,
