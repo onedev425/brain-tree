@@ -3,24 +3,31 @@
 namespace App\Http\Livewire;
 
 use App\Models\Course;
-use App\Models\User;
 use App\Services\Course\CourseService;
 use App\Services\Student\StudentService;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Request;
 use Livewire\Component;
 
-class CertificationListForm extends Component
+class CertificationGradeForm extends Component
 {
+    public string $activeTab = 'certification';
     public Collection $completed_courses;
 
     public function mount(CourseService $courseService): void
     {
+        $this->activeTab = (Request::has('type') && Request::filled('type')) ? Request::input('type') : 'certification';
         $this->completed_courses = $courseService->getCourses('completed');
+    }
+
+    public function setTab($tab): void
+    {
+        $this->activeTab = $tab;
     }
 
     public function render()
     {
-        return view('livewire.certification-list-form');
+        return view('livewire.certification-grade-form');
     }
 
     public function getCourseTotalPoints(Course $course): int
