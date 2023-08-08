@@ -8,5 +8,5 @@
     </div>
 </div>
 <footer>
-    <p class="text-center my-14">{{ __('©2021 BrainTreesPro Pty Ltd. Concept & Design by') }} <span class="uppercase underline">Kaveesha Perera</span></p>
+    <p class="text-center my-14">{{ __('COPYRIGHT ©2023 BRAINTREES PRO | POWERED BY BRAINTREES PRO') }}</p>
 </footer>
