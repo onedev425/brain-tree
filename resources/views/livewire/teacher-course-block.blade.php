@@ -14,7 +14,7 @@
             <span class="text-xs">{{ date('m-d-Y', strtotime($created_at)) }}</span>
         </div>
         <div class="">
-            <h3 class="text-lg leading-normal mb-1 font-bold text-gray-800">
+            <h3 class="course-title text-lg leading-normal mb-1 font-bold text-gray-800">
                 <a href="{{ route('teacher.course.edit', $course_id) }}" class="hover:text-indigo-700">{{ $title }}</a>
             </h3>
             <div class="flex mb-3">

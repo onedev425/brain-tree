@@ -427,7 +427,7 @@
                                             <td style="overflow-wrap:break-word;word-break:break-word;padding:10px 10px 15px;font-family:arial,helvetica,sans-serif;" align="left">
 
                                                 <div style="font-size: 14px; color: #1a202c; line-height: 180%; text-align: center; word-wrap: break-word;">
-                                                    <p style="font-size: 14px; line-height: 180%;">&copy;2021 BrainTreesPro Pty Ltd. Concept & Design by <span style="text-decoration-line:underline">KAVEESHA PERERA</span></p>
+                                                    <p style="font-size: 14px; line-height: 180%;">{{ __('COPYRIGHT ©2023 BRAINTREES PRO | POWERED BY BRAINTREES PRO') }}</p>
                                                 </div>
 
                                             </td>
