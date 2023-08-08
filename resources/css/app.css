@@ -187,5 +187,10 @@
         display: block;
         content: "";
     }
-
+    h3.course-title {
+        width: 100%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
 }

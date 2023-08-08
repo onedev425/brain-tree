@@ -10,7 +10,7 @@
             <span class="text-xs">{{ $teacher }}</span>
         </div>
         <div class="">
-            <h3 class="text-lg leading-normal mb-3 font-bold text-gray-800">
+            <h3 class="course-title text-lg leading-normal mb-3 font-bold text-gray-800">
                 <a href="{{ route('student.course.show', $course_id) }}" class="hover:text-indigo-700">{{ $title }}</a>
             </h3>
             <div class="flex mb-3">
