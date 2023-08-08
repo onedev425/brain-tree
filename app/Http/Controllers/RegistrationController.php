@@ -17,6 +17,7 @@ use Illuminate\Support\Str;
 use App\Models\User;
 use Laravel\Fortify\Fortify;
 use Illuminate\Support\Facades\DB;
+use GuzzleHttp\Client;
 
 class RegistrationController extends Controller
 {
@@ -39,6 +40,26 @@ class RegistrationController extends Controller
     public function registerView()
     {
         return view('auth.register');
+    }
+
+    /**
+     * Sync completed quiz with wp_braintree
+     */
+    private function syncRegisteredStudentsWithWP()
+    {
+        $client = new Client();
+
+        try {
+            $response = $client->request('POST', env('WP_API_SYNC_BASE_URL') . "/wp-json/sync-api/v1/students/increase", [
+                'form_params' => [
+                    'count' => count($this->userService->getUsersByRole('student')->load('studentRecord'))
+                ]
+            ]);
+        } catch(\Exception $e) {
+            Log::error('An error occurred: ' . $e->getMessage(), [
+                'exception' => $e,
+            ]);
+        }
     }
 
     public function register(RegistrationRequest $request)
@@ -65,6 +86,7 @@ class RegistrationController extends Controller
                 'admission_date' => date('Y-m-d H:i:s'),
                 'reason' => ''
             ]);
+            $this->syncRegisteredStudentsWithWP();
         }
 
         $verification_url = URL::temporarySignedRoute(

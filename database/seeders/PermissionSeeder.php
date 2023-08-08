@@ -73,6 +73,9 @@ class PermissionSeeder extends Seeder
             'name' => 'student-courses',
         ]);
         Permission::firstOrCreate([
+            'name' => 'student-reviews',
+        ]);
+        Permission::firstOrCreate([
             'name' => 'menu-student',
         ]);
         Permission::firstOrCreate([
@@ -126,7 +129,8 @@ class PermissionSeeder extends Seeder
             'pricing',
             'settings',
             'menu-industry',
-            'lock user account'
+            'lock user account',
+            'student-reviews'
         ]);
 
         //assign permissions to teacher

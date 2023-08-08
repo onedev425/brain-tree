@@ -51,4 +51,14 @@ class StudentController extends Controller
         return view('pages.student.show', compact('student'));
     }
 
+    /**
+     * Display the specified resource.
+     */
+    public function reviews(User $student): View|Response
+    {
+        $this->userService->verifyUserIsOfRoleElseNotFound($student, 'student');
+        $this->authorize('view', [$student, 'student']);
+
+        return view('pages.student.show', compact('student'));
+    }
 }

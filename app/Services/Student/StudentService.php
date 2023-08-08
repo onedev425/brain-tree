@@ -4,6 +4,7 @@ namespace App\Services\Student;
 
 use App\Exceptions\InvalidValueException;
 use App\Models\Course;
+use App\Models\CourseFeedback;
 use App\Models\PaymentPurchase;
 use App\Models\StudentCourse;
 use App\Models\User;
@@ -11,6 +12,7 @@ use App\Services\Print\PrintService;
 use App\Services\User\UserService;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
+use GuzzleHttp\Client;
 
 class StudentService
 {
@@ -85,7 +87,7 @@ class StudentService
             ) P ON C.id = P.course_id WHERE P.is_completed = 0 AND C.assigend_id = '$teacher_id'
              */
 
-            $courses =  Course::select('C.*')
+            $courses = Course::select('C.*')
                 ->from('courses AS C')
                 ->joinSub(function ($subquery) use ($student_id) {
                     $subquery->select('M.course_id')
@@ -137,7 +139,7 @@ class StudentService
                 ->get();
         }
         elseif ($type == 'completed') {
-            $courses =  Course::select('C.*')
+            $courses = Course::select('C.*')
                 ->from('courses AS C')
                 ->joinSub(function ($subquery) use ($student_id) {
                     $subquery->select('M.course_id')
@@ -294,6 +296,105 @@ class StudentService
         return $courses->with('assignedTeacher');
     }
 
+    public function getStudentReviews(string $search, string $status = 'all')
+    {
+        $courses_feedback = CourseFeedback::select('course_feedback.*',
+            'courses.title AS course_title',
+            'teacher.id as teacher_id',
+            'teacher.name as teacher_name',
+            'student.name as student_name',
+            'student.id as student_id',
+            'course_feedback.created_at AS feedback_at')
+            ->join('courses', 'courses.id', '=', 'course_feedback.course_id')
+            ->join('users AS student', 'course_feedback.student_id', '=', 'student.id')
+            ->join('users AS teacher', 'courses.assigned_id', '=', 'teacher.id');
+        
+        if ($search != '')
+            $courses_feedback = $courses_feedback->where(function ($query) use ($search) {
+                $query->where('courses.title', 'LIKE', '%'. $search . '%')
+                    ->orWhere('users.name', 'LIKE', '%'. $search . '%');
+            });
+
+        if ($status == 'trash') return $courses_feedback->onlyTrashed();
+
+        if ($status == 'approved') return $courses_feedback = $courses_feedback->where('is_approved', true);
+        if ($status == 'unapproved') return $courses_feedback = $courses_feedback->where('is_approved', false);
+
+        return $courses_feedback->withTrashed();
+    }
+
+    /**
+     * Sync comment with wordpress
+     */
+    private function syncCommentCourseWithWP($wp_course_id, $course_feedback_id, $author, $content, $rating)
+    {
+        $client = new Client();
+
+        try {
+            $response = $client->request('POST',env('WP_API_SYNC_BASE_URL') . "/wp-json/sync-api/v1/comments", [
+                'form_params' => [
+                    'comment_post_ID' => $wp_course_id,
+                    'comment_author' => $author->name,
+                    'comment_author_email' => $author->email,
+                    'comment_author_avatar' => $author->profile_photo_path,
+                    'comment_content' => $content,
+                    'rating' => $rating
+                ],
+            ]);
+            $responseBody = $response->getBody()->getContents();
+            $data = json_decode($responseBody, true);
+
+            if (isset($data['wp_comment_id'])) {
+                CourseFeedback::where('id', $course_feedback_id)->update(['wp_comment_id' => $data['wp_comment_id']]);
+            }
+        } catch(\Exception $e) {
+            Log::error('An error occurred: ' . $e->getMessage(), [
+                'exception' => $e,
+            ]);
+        }
+    }
+
+    /**
+     * Delete comment from wordpress
+     */
+    private function removeCommentCourseWithWP($wp_course_ids)
+    {
+        $client = new Client();
+
+        try {
+            $client->request('DELETE',env('WP_API_SYNC_BASE_URL') . "/wp-json/sync-api/v1/comments", [
+                'form_params' => ['wp_course_ids' => $wp_course_ids],
+            ]);
+        } catch(\Exception $e) {
+            Log::error('An error occurred: ' . $e->getMessage(), [
+                'exception' => $e,
+            ]);
+        }
+    }
+
+    public function approveReview(array $review_ids, bool $is_approved)
+    {
+        CourseFeedback::whereIn('id', $review_ids)->update(['is_approved' => $is_approved]);
+
+        $course_feedbacks = CourseFeedback::whereIn('id', $review_ids)->get();
+
+        foreach($course_feedbacks as $feedback) {
+            $student = User::find($feedback->student_id);
+            $course = Course::find($feedback->course_id);
+
+            if ($course->wp_course_id)
+            {
+                $this->syncCommentCourseWithWP($course->wp_course_id, $feedback->id, $student, $feedback->content, $feedback->rate);
+            }
+        }
+    }
+
+    public function trashReview(array $review_ids)
+    {
+        $course_feedbacks = CourseFeedback::whereIn('id', $review_ids)->pluck('wp_comment_id')->toArray();
+
+        $this->removeCommentCourseWithWP($course_feedbacks);
+    }
 
     public function registerStudentCourse(int $course_id): void
     {

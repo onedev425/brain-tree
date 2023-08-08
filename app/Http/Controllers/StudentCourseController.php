@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Course;
 use App\Models\CourseFeedback;
 use App\Services\Course\CourseService;
+use App\Services\Student\StudentService;
 use App\Services\EmailService;
 use Illuminate\View\View;
 use GuzzleHttp\Client;
@@ -12,10 +13,12 @@ use GuzzleHttp\Client;
 class StudentCourseController extends Controller
 {
     public CourseService $courseService;
+    public StudentService $studentService;
 
-    public function __construct(CourseService $courseService)
+    public function __construct(CourseService $courseService, StudentService $studentService)
     {
         $this->courseService = $courseService;
+        $this->studentService = $studentService;
         $this->authorizeResource(Course::class);
     }
 
@@ -42,6 +45,21 @@ class StudentCourseController extends Controller
         $this->courseService->completeLesson($course_id, $lesson_id);
     }
 
+    public function review_approve(): void
+    {
+        $review_ids = request('review_ids');
+        $is_approved = request('is_approved');
+
+        $this->studentService->approveReview($review_ids, $is_approved);
+    }
+
+    public function review_trash(): void
+    {
+        $review_ids = request('review_ids');
+
+        $this->studentService->trashReview($review_ids);
+    }
+
     public function question_complete(): bool
     {
         $course_id = request('course_id');
@@ -58,53 +76,18 @@ class StudentCourseController extends Controller
         $this->courseService->clearQuestion($course_id);
     }
 
-    /**
-     * Comment on the course
-     */
-    private function commentCourseWithWP($wp_course_id, $auther, $email, $content, $rating)
-    {
-        $client = new Client();
-        $industry = Industry::find($data['industry_id']);
-
-        try {
-            $response = $client->request('POST', "https://braintreespro.com/wp-json/sync-api/v1/comments", [
-                'form_params' => [
-                    'comment_post_ID' => $wp_course_id,
-                    'comment_author' => $auther,
-                    'comment_author_email' => $email,
-                    'comment_content' => $content,
-                    'rating' => $rating
-                ],
-            ]);
-            $responseBody = $response->getBody()->getContents();
-            $data = json_decode($responseBody, true);
-            $courseId = null;
-
-            if (isset($data['course_id'])) {
-                $courseId = $data['course_id'];
-            }
-
-            return $courseId;
-        } catch(\Exception $e) {
-            Log::error('An error occurred: ' . $e->getMessage(), [
-                'exception' => $e,
-            ]);
-
-            return null;
-        }
-    }
-
     public function feedback_register(): void
     {
         $course_id = request('course_id');
         $star_nums = request('star_nums');
         $feedback_content = request('feedback_content');
 
-        CourseFeedback::create([
+        $course_feedback = CourseFeedback::create([
             'student_id' => auth()->user()->id,
             'course_id' => $course_id,
             'rate' => $star_nums,
-            'content' => $feedback_content
+            'content' => $feedback_content,
+            'is_approved' => false
         ]);
 
         $course = Course::find($course_id);
@@ -118,12 +101,12 @@ class StudentCourseController extends Controller
             'feedback_content' => $feedback_content
         ];
 
-        if ($course->wp_course_id)
-        {
-            $this->commentCourseWithWP($course->wp_course_id, auth()->user()->name, auth()->user()->email, $feedback_content, $star_nums);
-        }
-
         $email_service = new EmailService($email_data);
         $email_service->sendEmail();
+    }
+
+    public function reviews(): View
+    {
+        return view('pages.student.reviews');
     }
 }

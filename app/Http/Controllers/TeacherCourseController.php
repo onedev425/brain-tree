@@ -117,7 +117,7 @@ class TeacherCourseController extends Controller
 
         try {
             if ($course->wp_course_id) {
-                $client->request('POST', "https://braintreespro.com/wp-json/sync-api/v1/course/update", [
+                $client->request('POST', env('WP_API_SYNC_BASE_URL') . "/wp-json/sync-api/v1/course/update", [
                     'form_params' => [
                         'id' => $course->wp_course_id,
                         'title' => $course->title,
