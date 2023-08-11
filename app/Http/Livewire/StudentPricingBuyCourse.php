@@ -10,6 +10,8 @@ use App\Services\Student\StudentService;
 use Illuminate\Support\Facades\Mail;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Illuminate\Support\Facades\DB;
+use GuzzleHttp\Client;
 
 class StudentPricingBuyCourse extends Component
 {
@@ -23,6 +25,21 @@ class StudentPricingBuyCourse extends Component
         $this->studentService = $studentService;
     }
 
+    private function syncMostPurchasedCourses()
+    {
+        $client = new Client();
+        $query = "
+            SELECT C.wp_course_id, paid_nums FROM (
+                SELECT course_id, SUM(1) paid_nums, SUM(paid_amount) paid_amount FROM payment_purchases GROUP BY course_id
+            ) T INNER JOIN courses C ON T.course_id = C.id 
+            ORDER BY paid_nums DESC LIMIT 9";
+        
+        $courses = DB::select($query);
+        $response = $client->request('POST',env('WP_API_SYNC_BASE_URL') . "/wp-json/sync-api/v1/courses/most", [
+            'form_params' => [ 'courses' => $courses ]
+        ]);
+    }
+
     public function BuyCourse(int $course_id)
     {
         $course = Course::find($course_id);
@@ -30,6 +47,7 @@ class StudentPricingBuyCourse extends Component
         $payment_result = $paypalService->buyCourse($course);
 
         if ($payment_result['result'] == 'success') {
+            $this->syncMostPurchasedCourses();
             $email_data = [
                 'to' => auth()->user()->email,
                 'subject' => __('Purchase a course'),
