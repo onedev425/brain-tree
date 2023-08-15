@@ -21,7 +21,7 @@ class EnsureDefaultPasswordIsChanged
             return $next($request);
         }
         if (Hash::check('password', auth()->user()->password)) {
-            session()->flash('danger', 'Please change your password to proceed.');
+            session()->flash('notify', 'Please change your password to proceed.');
 
             //return redirect()->route('settings.index');
         }
