@@ -23,6 +23,7 @@
         <link rel="shortcut icon" href="favicons/favicon.ico" type="image/x-icon">
     </head>
     <body class="bg-gray-100">
+        <livewire:layouts.header/>
         @yield('body')
         <livewire:display-status />
     </body>
