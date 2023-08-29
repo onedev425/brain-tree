@@ -43,7 +43,7 @@
                 </div>
 
                 <div class="col-span-6 flex flex-col my-2">
-                    <label class="font-bold my-3">{{ __('Industry') }} <span class='text-red-500'>*</span></label>
+                    <label class="font-bold my-3">{{ __('Category') }} <span class='text-red-500'>*</span></label>
                     <select id="industry" name="industry" class="p-2 border rounded-md border-gray-400 focus:border-blue-500 bg-inherit">
                         @foreach ($industries as $industry)
                             <option value="{{ $industry->id }}" {{ $industry->id == $user_industry_id ? 'selected' : '' }}>{{ $industry->name }}</option>

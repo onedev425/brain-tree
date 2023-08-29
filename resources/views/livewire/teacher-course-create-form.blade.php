@@ -41,7 +41,7 @@
                                 @enderror
                             </div>
                             <div class="mb-6">
-                                <label for="industry" class="block mb-2 font-medium text-gray-900">{{ __('Industry') }}</label>
+                                <label for="industry" class="block mb-2 font-medium text-gray-900">{{ __('Category') }}</label>
                                 <x-select id="industry" name="industry" wire:model="state.industry_id">
                                     @foreach ($industries as $industry)
                                         <option value="{{ $industry->id }}">{{ $industry->name }}</option>

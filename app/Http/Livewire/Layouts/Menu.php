@@ -140,7 +140,7 @@ class Menu extends Component
             ],
             [
                 'type'    => 'menu-item',
-                'text'    => 'Industries',
+                'text'    => 'Categories',
                 'icon'    => '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" x="0" y="0" viewBox="0 0 512 512" class="">
                                 <g>
                                     <path d="M209.067 341.333h-34.133a8.533 8.533 0 0 0 0 17.066h34.133a8.533 8.533 0 0 0 0-17.066zM209.067 375.467h-34.133a8.533 8.533 0 0 0 0 17.066h34.133a8.533 8.533 0 0 0 0-17.066zM209.067 409.6h-34.133a8.533 8.533 0 0 0 0 17.066h34.133a8.533 8.533 0 0 0 0-17.066zM209.067 443.733h-34.133a8.533 8.533 0 0 0 0 17.066h34.133a8.533 8.533 0 0 0 0-17.066z" fill="currentColor" data-original="#000000" class=""></path>

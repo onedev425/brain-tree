@@ -1,6 +1,6 @@
 <div class="card">
     <div class="card-header">
-        <h2 class="card-titile">{{ $industry->name ? __('Edit Industry') : __('Create Industry') }}</h2>
+        <h2 class="card-titile">{{ $industry->name ? __('Edit Category') : __('Create Category') }}</h2>
     </div>
     <div class="card-body">
         <form action="{{ $industry->name ? route('industry.update', $industry->id) : route('industry.store') }}" method="POST" enctype="multipart/form-data" class="md:w-6/12">
