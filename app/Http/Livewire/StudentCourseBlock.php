@@ -15,6 +15,7 @@ class StudentCourseBlock extends Component
     public $progress;
     public $rate;
     public int $feedback_nums;
+    public bool $available;
 
     public function render()
     {

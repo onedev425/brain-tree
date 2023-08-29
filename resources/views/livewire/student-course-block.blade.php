@@ -11,7 +11,12 @@
         </div>
         <div class="">
             <h3 class="course-title text-lg leading-normal mb-3 font-bold text-gray-800">
-                <a href="{{ route('student.course.show', $course_id) }}" class="hover:text-indigo-700">{{ $title }}</a>
+                @if ($available)
+                    <a href="{{ route('student.course.buy', $course_id) }}" class="hover:text-indigo-700">{{ $title }}</a>
+                @else
+                    <a href="{{ route('student.course.show', $course_id) }}" class="hover:text-indigo-700">{{ $title }}</a>
+                @endif
+                
             </h3>
             <div class="flex mb-3">
                 <span class="text-white bg-orange-500 text-sm px-1 mr-1 h-5">{{ number_format(round($rate, 1), 1) }}</span>
@@ -27,9 +32,15 @@
                 <span class="text-xs">{{ $progress }}%</span>
             </div>
             <div class="mt-6">
-                <a  href="{{ route('student.course.show', $course_id) }}" class="md:px-5 bg-red-700 text-xs font-semibold border-transparent uppercase hover:bg-opacity-90 active:bg-opacity-70 text-white py-2 px-4 border-2 rounded-md my-3">
-                    {{ __('Enter Course') . ' >' }}
-                </a>
+                @if ($available)
+                    <a  href="{{ route('student.course.buy', $course_id) }}" class="md:px-5 bg-red-700 text-xs font-semibold border-transparent uppercase hover:bg-opacity-90 active:bg-opacity-70 text-white py-2 px-4 border-2 rounded-md my-3">
+                        {{ __('Learn More') . ' >' }}
+                    </a>
+                @else
+                    <a  href="{{ route('student.course.show', $course_id) }}" class="md:px-5 bg-red-700 text-xs font-semibold border-transparent uppercase hover:bg-opacity-90 active:bg-opacity-70 text-white py-2 px-4 border-2 rounded-md my-3">
+                        {{ __('Enter Course') . ' >' }}
+                    </a>
+                @endif
             </div>
         </div>
     </div>

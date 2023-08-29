@@ -110,6 +110,18 @@ class CourseService
                 ->with('assignedTeacher')
                 ->get();
         }
+        elseif ($type == 'available') {
+            $excluded_course_ids = DB::table('student_courses')
+                ->where('student_id', auth()->user()->id)
+                ->pluck('course_id');
+
+            $courses = Course::select('courses.*')
+                ->leftJoin('users', 'courses.assigned_id', '=', 'users.id')
+                ->where('courses.is_published', 1)
+                ->whereNotIn('courses.id', $excluded_course_ids);
+
+            return $courses->with('assignedTeacher')->with('course_feedback')->get();
+        }
         else {
             $student_id = auth()->user()->id;
             $courses =  Course::select('C.*')

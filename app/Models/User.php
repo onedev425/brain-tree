@@ -226,7 +226,8 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function student_courses(): HasMany
     {
-        return $this->hasMany(StudentCourse::class, 'student_id');
+        // return $this->hasMany(StudentCourse::class, 'student_id');
+        return $this->belongsToMany(Course::class, 'student_courses', 'student_id', 'course_id');
     }
 
     public function student_lessons(): HasMany

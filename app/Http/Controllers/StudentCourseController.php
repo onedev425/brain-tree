@@ -37,6 +37,25 @@ class StudentCourseController extends Controller
         return view('pages.student-course.show', $data);
     }
 
+    public function buy(Course $course): View
+    {
+        $data['course'] = $course;
+        $data['lessons'] = [];
+        $data['questions'] = [];
+        $lessons = $course->lessons()->get();
+        $questions = $course->questions()->get();
+
+        foreach($lessons as $lesson) {
+            $data['lessons'][] = $lesson->title;
+        }
+
+        foreach($questions as $question) {
+            $data['questions'][] = $question->title;
+        }
+
+        return view('pages.student-course.buy', $data);
+    }
+
     public function lesson_complete(): void
     {
         $course_id = request('course_id');

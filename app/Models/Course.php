@@ -58,4 +58,9 @@ class Course extends Model
     {
         return $this->course_feedback->count();
     }
+
+    public function course_students()
+    {
+        return $this->belongsToMany(User::class, 'student_courses', 'course_id', 'student_id');
+    }
 }

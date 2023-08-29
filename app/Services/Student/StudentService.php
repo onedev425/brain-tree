@@ -13,6 +13,9 @@ use App\Services\User\UserService;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
 use GuzzleHttp\Client;
+use App\Mail\SendinblueMail;
+use App\Services\EmailService;
+use Illuminate\Support\Facades\Mail;
 
 class StudentService
 {
@@ -396,6 +399,21 @@ class StudentService
         $this->removeCommentCourseWithWP($course_feedbacks);
     }
 
+    private function syncMostPurchasedCourses()
+    {
+        $client = new Client();
+        $query = "
+            SELECT C.wp_course_id, paid_nums FROM (
+                SELECT course_id, SUM(1) paid_nums, SUM(paid_amount) paid_amount FROM payment_purchases GROUP BY course_id
+            ) T INNER JOIN courses C ON T.course_id = C.id 
+            ORDER BY paid_nums DESC LIMIT 9";
+        
+        $courses = DB::select($query);
+        $response = $client->request('POST',env('WP_API_SYNC_BASE_URL') . "/wp-json/sync-api/v1/courses/most", [
+            'form_params' => [ 'courses' => $courses ]
+        ]);
+    }
+
     public function registerStudentCourse(int $course_id): void
     {
         $course = Course::find($course_id);
@@ -411,5 +429,31 @@ class StudentService
             'paid_amount' => $course->price,
             'payment_status' => 'completed'
         ]);
+
+        $this->syncMostPurchasedCourses();
+        $email_data = [
+            'to' => auth()->user()->email,
+            'subject' => __('Purchase a course'),
+            'user_name' => auth()->user()->name,
+            'email_type' => 'buy_course',
+            'course_name' => $course->title,
+            'course_price' => $course->price,
+        ];
+        $email_service = new EmailService($email_data);
+        $result = $email_service->sendEmail();
+
+        if ($result == 'success') {
+            $email_data = [
+                'to' => $course->assignedTeacher->email,
+                'subject' => __('Purchase a course'),
+                'user_name' => $course->assignedTeacher->name,
+                'email_type' => 'selling_course',
+                'student_name' => auth()->user()->name,
+                'course_name' => $course->title,
+                'course_price' => $course->price,
+            ];
+            $email_service = new EmailService($email_data);
+            $result = $email_service->sendEmail();
+        }
     }
 }

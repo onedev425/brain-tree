@@ -8,6 +8,9 @@
                 <a href="javascript:;" wire:click="setTab('completed')" class="py-2 px-2 lg:px-4 w-full md:w-1/3 lg:w-1/4 text-center text-black cursor-pointer block font-semibold {{ $activeTab === 'completed' ? 'border-b-4 border-green-600' : '' }}"  style="{{ $activeTab === 'completed' ? '' : 'opacity: .5' }}">
                     {{ __('Completed') }} ( {{ count($completed_courses) }} )
                 </a>
+                <a href="javascript:;" wire:click="setTab('available')" class="py-2 px-2 lg:px-4 w-full md:w-1/3 lg:w-1/4 text-center text-black cursor-pointer block font-semibold {{ $activeTab === 'available' ? 'border-b-4 border-green-600' : '' }}"  style="{{ $activeTab === 'available' ? '' : 'opacity: .5' }}">
+                    {{ __('Available') }} ( {{ count($available_courses) }} )
+                </a>
             </div>
 
             <div class="mt-8 lg:mt-0 lg:grid lg:gap-4 lg:grid-cols-2 lg:p-4 xl:grid-cols-3 xl:gap-4 xl:p-8 2xl:grid-cols-4 2xl:gap-8">
@@ -23,10 +26,11 @@
                             'progress' => $this->getCourseProgressPercent($course),
                             'rate' => $course->course_rate(),
                             'feedback_nums' => $course->course_feedback_nums(),
+                            'available' => false
                         ])
                     @endforeach
-                @else
-                    @foreach($completed_courses as $course)
+                @elseif ($activeTab === 'completed')
+                    @foreach($progress_courses as $course)
                         @livewire('student-course-block', [
                             'course_id' => $course->id,
                             'title' => $course->title,
@@ -37,6 +41,22 @@
                             'progress' => $this->getCourseProgressPercent($course),
                             'rate' => $course->course_rate(),
                             'feedback_nums' => $course->course_feedback_nums(),
+                            'available' => false
+                        ])
+                    @endforeach
+                @else
+                    @foreach($available_courses as $course)
+                        @livewire('student-course-block', [
+                            'course_id' => $course->id,
+                            'title' => $course->title,
+                            'image' => $course->image,
+                            'teacher' => $course->assignedTeacher->name,
+                            'lesson_nums' => count($course->lessons),
+                            'quiz_nums' => count($course->questions),
+                            'progress' => 0,
+                            'rate' => $course->course_rate(),
+                            'feedback_nums' => $course->course_feedback_nums(),
+                            'available' => true
                         ])
                     @endforeach
                 @endif
