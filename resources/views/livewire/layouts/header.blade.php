@@ -7,7 +7,7 @@
 			<a href="https://braintreespro.com/home/about-us" class="p-3 md:p-5">ABOUT US</a>
 			<a href="https://braintreespro.com/home/contact-us" class="p-3 md:p-5">CONTACT</a>
 			@if(auth()->user())
-				<form id="logout_form" action="{{route('logout')}}" class="p-3 md:p-5" method="POST">
+				<form id="logout_form" action="{{route('logout')}}" class="p-3 md:p-5 m-auto" method="POST">
 						@csrf
 						<button name="logout_button" class="text-dark gap-2 text-center">
 							{{ __('LOGOUT') }}
