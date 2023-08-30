@@ -35,36 +35,36 @@
                         <div class="card-body">
                             <div class="form-group mb-6">
                                 <label for="course_title" class="block mb-2 font-medium text-gray-900">{{ __('Course Title') }} <span class="text-red-500">*</span></label>
-                                <input type="text" id="course_title" name="course_title" wire:model="state.course_title" minlength="3" maxlength="100" class="shadow-sm border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="" required />
+                                <input type="text" id="course_title" name="course_title" value="{{ $course->title }}" minlength="3" maxlength="100" class="shadow-sm border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="" required />
                                 @error('course_title')
                                 <span class="text-red-500">{{ $message }}</span>
                                 @enderror
                             </div>
                             <div class="mb-6">
                                 <label for="industry" class="block mb-2 font-medium text-gray-900">{{ __('Category') }}</label>
-                                <x-select id="industry" name="industry" wire:model="state.industry_id">
+                                <x-select id="industry" name="industry">
                                     @foreach ($industries as $industry)
-                                        <option value="{{ $industry->id }}">{{ $industry->name }}</option>
+                                        <option value="{{ $industry->id }}" {{ $industry->id == $course->industry_id ? 'selected' : '' }}>{{ $industry->name }}</option>
                                     @endforeach
                                 </x-select>
                             </div>
                             <div class="form-group mb-6">
                                 <label for="course_price" class="block mb-2 font-medium text-gray-900">{{ __('Pricing') }} ($)<span class="text-red-500">*</span> </label>
-                                <input type="text" id="course_price" name="course_price" wire:model="state.price" minlength="1" maxlength="10" class="shadow-sm border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="" required />
+                                <input type="text" id="course_price" name="course_price" value="{{ $course->price }}" minlength="1" maxlength="10" class="shadow-sm border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="" required />
                                 @error('course_price')
                                 <span class="text-red-500">{{ $message }}</span>
                                 @enderror
                             </div>
                             <div class="form-group mb-6">
                                 <label for="course_pass_percent" class="block mb-2 font-medium text-gray-900">{{ __('Pass Percent') }} (%)<span class="text-red-500">*</span></label>
-                                <input type="number" id="course_pass_percent" name="course_pass_percent" wire:model="state.pass_percent" minlength="1" maxlength="3" max="100" class="shadow-sm border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="" required />
+                                <input type="number" id="course_pass_percent" name="course_pass_percent" value="{{ $course->pass_percent }}" minlength="1" maxlength="3" max="100" class="shadow-sm border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="" required />
                                 @error('course_pass_percent')
                                 <span class="text-red-500">{{ $message }}</span>
                                 @enderror
                             </div>
                             <div class="mb-6">
                                 <label for="course_description" class="inline-block mb-2">{{ __('Description') }}</label>
-                                <textarea id="course_description" name="course_description" wire:model="state.course_description" rows="8" class="course_description w-full leading-5 relative py-3 px-3 rounded-lg text-gray-800 bg-white border border-gray-300 overflow-x-auto focus:outline-none focus:border-gray-400 focus:ring-0" ></textarea>
+                                <textarea id="course_description" name="course_description" value="{{ $course->description }}" rows="8" class="course_description w-full leading-5 relative py-3 px-3 rounded-lg text-gray-800 bg-white border border-gray-300 overflow-x-auto focus:outline-none focus:border-gray-400 focus:ring-0" ></textarea>
                             </div>
                         </div>
                     </div>
@@ -379,10 +379,10 @@
 
             if (file) {
                 const reader = new FileReader();
-
                 reader.onload = function(e) {
                     const imageData = e.target.result;
                     imageContainer.style.backgroundImage = `url(${imageData})`;
+                    //Livewire.emit('courseImageChanged', true, imageData);
                 };
 
                 reader.readAsDataURL(file);
@@ -393,6 +393,7 @@
         imageRemove.addEventListener('click', function() {
             imageContainer.style.backgroundImage = 'none';
             imageContainer.parentNode.classList.add('image-input-empty');
+            //Livewire.emit('courseImageChanged', false, '');
         });
     </script>
 
@@ -821,59 +822,72 @@
                 event.preventDefault();
                 const valid = pristine.validate();
 
-                if (valid) {
-                    if ($('div#topic_list div.lesson_info').length == 0) {
-                        toastr.error('You need at least one topic and lesson.');
-                        return false;
-                    }
-                    else if ($('div#quiz_list div.quiz_info').length == 0) {
-                        toastr.error('You need at least one question.');
-                        return false;
-                    }
-                    else {
-                        let topic_list = [];
-                        $.each($('div#topic_list span.topic_info'), function(index, topic_obj) {
-                            let lesson_list = [];
-                            $.each($(topic_obj).parent().parent().parent().parent().next().find('div.lesson_info'), function(index, lesson_obj) {
-                                const lesson = {
-                                    id: $(lesson_obj).attr('data-lesson-id'),
-                                    title: $(lesson_obj).html(),
-                                    description: $(lesson_obj).attr('data-description'),
-                                    video_source: $(lesson_obj).attr('data-video-source'),
-                                    video_url: $(lesson_obj).attr('data-video-url'),
-                                };
-                                lesson_list.push(lesson);
-                            });
-                            const topic_info = {
-                                id: $(topic_obj).attr('data-topic-id'),
-                                title: $(topic_obj).html(),
-                                lessons: lesson_list
-                            }
-                            topic_list.push(topic_info);
+                if ($('input#course_title').val() == '') {
+                    toastr.error('The course title is required.');
+                    return false;
+                }
+                else if ($('input#course_price').val() == '') {
+                    toastr.error('The course price is required.');
+                    return false;
+                }
+                else if ($('input#course_pass_percent').val() == '') {
+                    toastr.error('The course pass percent is required.');
+                    return false;
+                }
+                else if (isNaN($('input#course_price').val())) {
+                    toastr.error('The course price must be a number.');
+                    return false;
+                }
+                else if ($('div#topic_list div.lesson_info').length == 0) {
+                    toastr.error('You need at least one topic and lesson.');
+                    return false;
+                }
+                else if ($('div#quiz_list div.quiz_info').length == 0) {
+                    toastr.error('You need at least one question.');
+                    return false;
+                }
+                else {
+                    let topic_list = [];
+                    $.each($('div#topic_list span.topic_info'), function(index, topic_obj) {
+                        let lesson_list = [];
+                        $.each($(topic_obj).parent().parent().parent().parent().next().find('div.lesson_info'), function(index, lesson_obj) {
+                            const lesson = {
+                                id: $(lesson_obj).attr('data-lesson-id'),
+                                title: $(lesson_obj).html(),
+                                description: $(lesson_obj).attr('data-description'),
+                                video_source: $(lesson_obj).attr('data-video-source'),
+                                video_url: $(lesson_obj).attr('data-video-url'),
+                            };
+                            lesson_list.push(lesson);
                         });
+                        const topic_info = {
+                            id: $(topic_obj).attr('data-topic-id'),
+                            title: $(topic_obj).html(),
+                            lessons: lesson_list
+                        }
+                        topic_list.push(topic_info);
+                    });
 
-                        let quiz_list = [];
-                        $.each($('div.quiz_info'), function(index, quiz_obj) {
-                            const quiz = {
-                                id: $(quiz_obj).attr('data-quiz-id'),
-                                title: $(quiz_obj).html(),
-                                description: $(quiz_obj).attr('data-description'),
-                                type: $(quiz_obj).attr('data-type'),
-                                points: $(quiz_obj).attr('data-points'),
-                                answer_id: $(quiz_obj).attr('data-answer-id'),
-                                answer: $(quiz_obj).attr('data-answer'),
-                                answer_values: $(quiz_obj).attr('data-answer-value'),
-                            }
-                            quiz_list.push(quiz);
-                        })
+                    let quiz_list = [];
+                    $.each($('div.quiz_info'), function(index, quiz_obj) {
+                        const quiz = {
+                            id: $(quiz_obj).attr('data-quiz-id'),
+                            title: $(quiz_obj).html(),
+                            description: $(quiz_obj).attr('data-description'),
+                            type: $(quiz_obj).attr('data-type'),
+                            points: $(quiz_obj).attr('data-points'),
+                            answer_id: $(quiz_obj).attr('data-answer-id'),
+                            answer: $(quiz_obj).attr('data-answer'),
+                            answer_values: $(quiz_obj).attr('data-answer-value'),
+                        }
+                        quiz_list.push(quiz);
+                    })
 
-                        $('input[name=use_default_image]').val(($('div#course_image_container').css('background-image') == 'none' || $('div#course_image_container').css('background-image') == '') ? 1 : 0);
-                        $('input[name=topic_list]').val(JSON.stringify(topic_list));
-                        $('input[name=quiz_list]').val(JSON.stringify(quiz_list));
-                        courseForm.submit();
-                        return true;
-                    }
-
+                    $('input[name=use_default_image]').val(($('div#course_image_container').css('background-image') == 'none' || $('div#course_image_container').css('background-image') == '') ? 1 : 0);
+                    $('input[name=topic_list]').val(JSON.stringify(topic_list));
+                    $('input[name=quiz_list]').val(JSON.stringify(quiz_list));
+                    courseForm.submit();
+                    return true;
                 }
                 // toastr.warning('You clicked Success toast');
             });
