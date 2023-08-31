@@ -34,11 +34,11 @@ class CourseService
         elseif ($type == 'draft')
             if (auth()->user()->hasRole('super-admin'))
                 if ($assigned_teacher == null)
-                    $courses = Course::with('lessons')->where('is_published', 0)->where('is_declined', 0)->get();
+                    $courses = Course::with('lessons')->where('is_published', 0)->where('is_declined', 0)->with('course_feedback')->get();
                 else
-                    $courses = Course::with('lessons')->where('is_published', 0)->where('is_declined', 0)->where('assigned_id', $assigned_teacher->id)->get();
+                    $courses = Course::with('lessons')->where('is_published', 0)->where('is_declined', 0)->where('assigned_id', $assigned_teacher->id)->with('course_feedback')->get();
             else {
-                $courses = Course::with('lessons')->where('is_published', 0)->where('assigned_id', auth()->user()->id)->get();
+                $courses = Course::with('lessons')->where('is_published', 0)->where('assigned_id', auth()->user()->id)->with('course_feedback')->get();
             }
 
         elseif ($type == 'progress') {
@@ -182,7 +182,7 @@ class CourseService
             ->where('course_id', $course->id)
             ->value('total_duration');
 
-        return $this->convertDurationFromSeconds($video_duration);
+        return is_null($video_duration) ? 0 : $this->convertDurationFromSeconds($video_duration);
     }
 
     public function getTopicVideoDuration(Topic $topic): string
