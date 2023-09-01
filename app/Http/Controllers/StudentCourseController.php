@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Course;
 use App\Models\CourseFeedback;
+use App\Models\Lesson;
 use App\Services\Course\CourseService;
 use App\Services\Student\StudentService;
 use App\Services\EmailService;
@@ -40,10 +41,30 @@ class StudentCourseController extends Controller
     public function buy(Course $course): View
     {
         $data['course'] = $course;
+        $data['topics'] = [];
         $data['lessons'] = [];
         $data['questions'] = [];
+        $topics = $course->topics()->with('lessons')->get();
         $lessons = $course->lessons()->get();
         $questions = $course->questions()->get();
+
+        $video_duration = Lesson::selectRaw('SUM(video_duration) as total_duration')
+            ->where('course_id', $course->id)
+            ->value('total_duration');
+        $courseService = new CourseService();
+        $data['video_duration'] = is_null($video_duration) ? 0 : $courseService->convertDurationFromSeconds($video_duration);
+
+        foreach($topics as $topic) {
+            $topic_lessons = [];
+            foreach($topic->lessons as $lesson) {
+                $topic_lessons[] = $lesson->title;        
+            }
+            $topic_info = [
+                'title' => $topic->description,
+                'lessons' => $topic_lessons
+            ];
+            $data['topics'][] = $topic_info;
+        }
 
         foreach($lessons as $lesson) {
             $data['lessons'][] = $lesson->title;

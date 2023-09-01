@@ -652,7 +652,7 @@ class CourseService
         return 'https://player.vimeo.com/video/' . $video_id;
     }
 
-    private function convertDurationFromSeconds(int $video_duration): string
+    public function convertDurationFromSeconds(int $video_duration): string
     {
         $hours = floor($video_duration / 3600);
         $minutes = floor(($video_duration / 60) % 60);

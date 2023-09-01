@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire;
 
+use App\Services\Course\CourseService;
 use Livewire\Component;
 use App\Services\Payment\PaypalService;
 use Illuminate\Support\Facades\DB;
@@ -10,8 +11,10 @@ use GuzzleHttp\Client;
 class BuyCourseView extends Component
 {
     public $course;
+    public $topics;
     public $lessons;
     public $questions;
+    public $video_duration;
 
     public function buyCourse()
     {

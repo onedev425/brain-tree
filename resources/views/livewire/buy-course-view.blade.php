@@ -1,14 +1,38 @@
-<div class="flex w-full h-4/5 relative">
+<div class="flex w-full relative">
     <x-loading-spinner/>
     <div class="card w-3/5 ml-auto relative overflow-hidden">
         <div class="w-full absolute top-0 left-0 right-0 text-center p-4 bg-red-500 text-2xl font-bold text-white" >{{ __('Information') }}</div>
-        <div class="card-body pt-10 w-full">
+        <div class="card-body pt-10 w-full h-full flex flex-col">
             <span class="text-2xl font-bold">{{ $course->title }}</span>
             <div class="w-full text-lg pt-4 pb-4">
                 {{ $course->description }}
             </div>
-            <div class="w-full text-lg">
-
+            <div class="w-full flex flex-col mt-auto">
+                <h3 class="text-xl md:text-2xl font-bold mb-4">
+                    {{ __('Course Contents') }}
+                </h3>
+                <div id="topic_list" x-data="{selected:0}">
+                    @foreach($topics as $topic)
+                        @php $uuid = Illuminate\Support\Str::uuid()->toString() @endphp
+                        <div class="relative flex flex-wrap flex-col shadow mb-4 bg-white">
+                            <a href="javascript:;" class="flex border-b border-gray-200 mb-0 bg-gray-100 py-2 px-4 w-full rounded leading-5 font-medium flex focus:outline-none focus:ring-0" @click="selected !== '{{ $uuid }}' ? selected = '{{ $uuid }}' : selected = null">
+                                <span class="mr-3">
+                                    <svg class="transform transition duration-500 -rotate-180" :class="{ '-rotate-180': selected == '{{ $uuid }}' }" width="1rem" height="1rem" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 01.708 0L8 10.293l5.646-5.647a.5.5 0 01.708.708l-6 6a.5.5 0 01-.708 0l-6-6a.5.5 0 010-.708z" clip-rule="evenodd"></path>
+                                    </svg>
+                                </span>
+                                <span class="topic_info" data-uuid="{{ $uuid }}">{!! $topic['title'] !!}</span>
+                            </a>
+                            <div x-show="selected == '{{ $uuid }}'" class="flex-1 py-4 px-7">
+                                @foreach($topic['lessons'] as $lesson_title)
+                                    <div class="flex pt-4 justify-between">
+                                        <div class="lesson_info pt-1.5" data-uuid="{{ $uuid }}">{{ $lesson_title }}</div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
             </div>
         </div>
     </div>
@@ -49,7 +73,7 @@
                         <path id="路径_24" data-name="路径 24" d="M11.912,11.33,16.051,14.3a1.252,1.252,0,1,1-1.456,2.038,1.209,1.209,0,0,1-.291-.291L11.33,11.912a.417.417,0,0,1,.582-.582Z" transform="translate(-2.988 -2.988)"/>
                     </g>
                 </svg>
-                <span class="text-sm font-bold">{{ count($lessons) . " " .  __('Lessons') . " | " . count($questions) . " " .  __('Questions')}}</span>
+                <span class="text-sm font-bold">{{ $video_duration . " | " . count($lessons) . " " .  __('Lessons') . " | " . count($questions) . " " .  __('Questions')}}</span>
             </div>
         </div>
         

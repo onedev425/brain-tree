@@ -64,7 +64,7 @@
                             </div>
                             <div class="mb-6">
                                 <label for="course_description" class="inline-block mb-2">{{ __('Description') }}</label>
-                                <textarea id="course_description" name="course_description" value="{{ $course->description }}" rows="8" class="course_description w-full leading-5 relative py-3 px-3 rounded-lg text-gray-800 bg-white border border-gray-300 overflow-x-auto focus:outline-none focus:border-gray-400 focus:ring-0" ></textarea>
+                                <textarea id="course_description" name="course_description" rows="8" class="course_description w-full leading-5 relative py-3 px-3 rounded-lg text-gray-800 bg-white border border-gray-300 overflow-x-auto focus:outline-none focus:border-gray-400 focus:ring-0" >{{ $course->description }}</textarea>
                             </div>
                         </div>
                     </div>
