@@ -1,6 +1,10 @@
 <div class="flex flex-col bg-white mb-12 md:mb-0 rounded-2xl border overflow-hidden">
     <div class="relative border-b">
-        <a href="{{ route('student.course.show', $course_id) }}">
+        @if ($available)
+            <a  href="{{ route('student.course.buy', $course_id) }}">
+        @else
+            <a href="{{ route('student.course.show', $course_id) }}">
+        @endif
             <div class="absolute inset-0 hover:bg-white opacity-0 transition duration-700 hover:opacity-10"></div>
             <img class="w-full h-48 object-cover" src="{{ $image }}" alt="alt title">
         </a>
