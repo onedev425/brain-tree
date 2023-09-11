@@ -38,7 +38,7 @@ class StudentCourseController extends Controller
                 break;
             }
         }
-        if (! $is_buy_course) return redirect()->route('home');
+        if (! $is_buy_course) return redirect()->route('student.course.buy', $course->id);
 
         $data['course'] = $course;
         $data['topics'] = $course->topics()->with('lessons')->get();
