@@ -18,6 +18,15 @@ use Illuminate\Support\Facades\Log;
 class CourseService
 {
     /**
+     * Get the course index by wp_id
+     */
+    public function getCourseIndex(int $wp_id)
+    {
+        $course = Course::where('wp_course_id', $wp_id)->first();
+
+        return $course->id;
+    }
+    /**
      * Get courses.
      *
      * @return \Illuminate\Database\Eloquent\Collection

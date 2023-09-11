@@ -15,6 +15,8 @@ use App\Mail\SendinblueMail;
 use Illuminate\Support\Facades\Mail;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Http\JsonResponse;
+use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class TeacherCourseController extends Controller
 {
@@ -183,6 +185,14 @@ class TeacherCourseController extends Controller
         else {
             return back()->with('danger', __('Email sending failed: ') . $result);
         }
+    }
+
+    public function getCourseIndexByWPIndex(Request $request, int $wp_id): JsonResponse
+    {
+        $course_id = $wp_id ? $this->courseService->getCourseIndex($wp_id) : 0;
+
+        return response()->json(['id' => $course_id,], ResponseAlias::HTTP_OK);
+
     }
 
     private function getCourseData(TeacherCourseStoreRequest $request): array
