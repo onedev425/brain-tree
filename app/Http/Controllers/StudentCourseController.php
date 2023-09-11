@@ -28,8 +28,18 @@ class StudentCourseController extends Controller
         return view('pages.student-course.index');
     }
 
-    public function show(Course $course): View
+    public function show(Course $course)
     {
+        $available_courses = $this->studentService->getStudentPaidCourses('')->get();
+        $is_buy_course = false;
+        foreach($available_courses as $available_course) {
+            if ($course->id == $available_course->id) {
+                $is_buy_course = true;
+                break;
+            }
+        }
+        if (! $is_buy_course) return redirect()->route('home');
+
         $data['course'] = $course;
         $data['topics'] = $course->topics()->with('lessons')->get();
         $data['quizzes'] = $course->questions()->with('quiz_options')->get();
@@ -57,7 +67,7 @@ class StudentCourseController extends Controller
         foreach($topics as $topic) {
             $topic_lessons = [];
             foreach($topic->lessons as $lesson) {
-                $topic_lessons[] = $lesson->title;        
+                $topic_lessons[] = $lesson->title;
             }
             $topic_info = [
                 'title' => $topic->description,
