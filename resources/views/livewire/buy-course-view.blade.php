@@ -22,11 +22,18 @@
                                     </svg>
                                 </span>
                                 <span class="topic_info" data-uuid="{{ $uuid }}">{!! $topic['title'] !!}</span>
+                                <span class="ml-auto">{{ count($topic['lessons']) }} {{ __('Lectures') }}  • {{ $topic['duration'] }}</span>
                             </a>
                             <div x-show="selected == '{{ $uuid }}'" class="flex-1 py-4 px-7">
-                                @foreach($topic['lessons'] as $lesson_title)
-                                    <div class="flex pt-4 justify-between">
-                                        <div class="lesson_info pt-1.5" data-uuid="{{ $uuid }}">{{ $lesson_title }}</div>
+                                @foreach($topic['lessons'] as $lesson)
+                                    <div class="flex justify-between">
+                                        <span class="w-5 mr-1">
+                                            <svg class="mt-1" xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 19 19">
+                                                <path fill="currentColor" d="M13.724,10.568,10.771,8.351v8.712l2.953-2.217,2.856-2.139Zm0,0L10.771,8.351v8.712l2.953-2.217,2.856-2.139Zm0,0L10.771,8.351v8.712l2.953-2.217,2.856-2.139ZM11.739,5.03V3.075a9.631,9.631,0,0,0-5.15,2.139L7.964,6.6A7.687,7.687,0,0,1,11.739,5.03ZM6.6,7.964,5.214,6.589a9.631,9.631,0,0,0-2.139,5.15H5.03A7.687,7.687,0,0,1,6.6,7.964ZM5.03,13.675H3.075a9.631,9.631,0,0,0,2.139,5.15L6.6,17.441A7.617,7.617,0,0,1,5.03,13.675ZM6.589,20.2a9.662,9.662,0,0,0,5.15,2.139V20.384a7.687,7.687,0,0,1-3.775-1.568L6.589,20.2Zm15.8-7.493a9.7,9.7,0,0,1-8.664,9.632V20.384a7.744,7.744,0,0,0,0-15.353V3.075A9.7,9.7,0,0,1,22.388,12.707Z" transform="translate(-3.075 -3.075)"/>
+                                            </svg>
+                                        </span>
+                                        <div class="lesson_info" data-uuid="{{ $uuid }}">{{ $lesson['title'] }}</div>
+                                        <span class="ml-auto">{{ $lesson['duration'] }}</span>
                                     </div>
                                 @endforeach
                             </div>

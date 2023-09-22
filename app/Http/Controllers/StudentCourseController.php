@@ -67,11 +67,17 @@ class StudentCourseController extends Controller
         foreach($topics as $topic) {
             $topic_lessons = [];
             foreach($topic->lessons as $lesson) {
-                $topic_lessons[] = $lesson->title;
+                $lesson_info = [
+                    'title' => $lesson->title,
+                    'duration' => $courseService->getLessonVideoDuration($lesson->video_duration)
+                ];
+
+                $topic_lessons[] = $lesson_info;
             }
             $topic_info = [
                 'title' => $topic->description,
-                'lessons' => $topic_lessons
+                'lessons' => $topic_lessons,
+                'duration' => $courseService->getTopicVideoDuration($topic)
             ];
             $data['topics'][] = $topic_info;
         }
