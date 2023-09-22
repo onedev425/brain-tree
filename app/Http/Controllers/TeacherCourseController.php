@@ -192,7 +192,13 @@ class TeacherCourseController extends Controller
         $course_id = $wp_id ? $this->courseService->getCourseIndex($wp_id) : 0;
 
         return response()->json(['id' => $course_id,], ResponseAlias::HTTP_OK);
+    }
 
+    public function getCourseContent(Request $request, int $wp_id): JsonResponse
+    {
+        $topcis = $wp_id ? $this->courseService->getCourseContent($wp_id) : [];
+
+        return response()->json(['topics' => $topcis,], ResponseAlias::HTTP_OK);
     }
 
     private function getCourseData(TeacherCourseStoreRequest $request): array

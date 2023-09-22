@@ -19,4 +19,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('/course/index/{wp_id}',  ['App\Http\Controllers\TeacherCourseController', 'getCourseIndexByWPIndex']);
+Route::get('/course/{wp_id}',  ['App\Http\Controllers\TeacherCourseController', 'getCourseContent']);
 

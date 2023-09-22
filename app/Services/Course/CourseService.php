@@ -26,6 +26,36 @@ class CourseService
 
         return $course->id;
     }
+
+    /**
+     * Get the course content by wp_id
+     */
+    public function getCourseContent(int $wp_id)
+    {
+        $course = Course::where('wp_course_id', $wp_id)->first();
+        $course_topics = $course->topics()->with('lessons')->get();
+        
+        $topics = [];
+        foreach($course_topics as $topic) {
+            $topic_lessons = [];
+            foreach($topic->lessons as $lesson) {
+                $lession_info = [
+                    'title' => $lesson->title,
+                    'duration' => $this->getLessonVideoDuration($lesson->video_duration)
+                ];
+                $topic_lessons[] = $lession_info;
+            }
+            $topic_info = [
+                'title' => $topic->description,
+                'lessons' => $topic_lessons,
+                'duration' => $this->getTopicVideoDuration($topic)
+            ];
+            $topics[] = $topic_info;
+        }
+
+        return $topics;
+    }
+
     /**
      * Get courses.
      *
