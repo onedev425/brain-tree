@@ -2,6 +2,7 @@
 		<div class="md:h-full flex flex-row md:font-lg font-medium items-center h-20 text-white w-full md:h-20 bg-green-700">
 			<a href="https://braintreespro.com" class="ml-auto p-3 md:p-5">HOME</a>
 			<a href="https://braintreespro.com/home/about-us" class="p-3 md:p-5">ABOUT US</a>
+			<a href="https://braintreespro.com/home/services" class="p-3 md:p-5">SERVICES</a>
 			<a href="https://braintreespro.com/home/blogs" class="p-3 md:p-5">BLOGS</a>
 			<a href="https://braintreespro.com/home/contact-us" class="p-3 md:p-5">CONTACT</a>
 			@if(auth()->user())
