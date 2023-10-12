@@ -224,10 +224,10 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->belongsTo(Industry::class);
     }
 
-    public function student_courses(): BelongsToMany
+    public function student_courses(): HasMany // BelongsToMany
     {
-        // return $this->hasMany(StudentCourse::class, 'student_id');
-        return $this->belongsToMany(Course::class, 'student_courses', 'student_id', 'course_id');
+        return $this->hasMany(StudentCourse::class, 'student_id');
+        //return $this->belongsToMany(Course::class, 'student_courses', 'student_id', 'course_id');
     }
 
     public function student_lessons(): HasMany

@@ -129,7 +129,7 @@ class RegistrationController extends Controller
         $result = $email_service->sendEmail();
 
         if ($result == 'success')
-            return back()->with('status', __('We sent an email to you.'));
+            return back()->with('status', __('Successfully sent Email!'));
         else
             return back()->with('danger', __('Email sending failed: ') . $result);
     }
@@ -142,7 +142,7 @@ class RegistrationController extends Controller
         // get user from email
         $user_exist = User::where('email', $email)->count();
         if (! $user_exist) {
-            return back()->with('danger', __('The email doesn\'t exist in our system'));
+            return back()->with('notify', __('The email doesn\'t exist in our system'));
         }
         $user = User::where('email', $email)->first();
 

@@ -195,6 +195,7 @@ class StudentService
         }
         else {
             $courses = $student->student_courses->load('course.lessons', 'course.questions');
+            //$courses = $student->student_courses;
         }
 
         return $courses;
