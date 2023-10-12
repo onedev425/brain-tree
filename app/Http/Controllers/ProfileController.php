@@ -60,8 +60,6 @@ class ProfileController extends Controller
         $input['email'] = $request['email'];
         $input['phone'] = $request->input('phone');
 
-        var_dump($input);
-
         $validation_rules = array(
             'name'        => ['required', 'string', 'max:255'],
             'email'       => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
@@ -85,6 +83,7 @@ class ProfileController extends Controller
 
 
             if (isset($request['experience'])) $input['experience'] = $request['experience'];
+            if (isset($request['description'])) $input['description'] = $request['description'];
             $user->forceFill($input)->save();
         }
 
