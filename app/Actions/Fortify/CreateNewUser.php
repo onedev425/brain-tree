@@ -25,15 +25,28 @@ class CreateNewUser implements CreatesNewUsers
         Validator::make($input, [
             'name'     => ['required', 'string', 'max:100'],
             'email'    => ['required', 'string', 'email:rfc,dns', 'max:100', 'unique:users'],
+            'phone'     => ['required', 'string', 'max:20'],
             'photo'    => ['nullable', 'mimes:jpg,jpeg,png', 'max:1024'],
             'password' => $this->passwordRules(),
         ])->validate();
 
-        $user = User::create([
+        $user_data = [
             'name'        => $input['name'],
             'email'       => $input['email'],
             'password'    => Hash::make($input['password']),
-        ]);
+            'phone'       => $input['phone'],
+            'country_id'  => $input['country_id'],
+            'language_id' => $input['language_id'],
+            'industry_id' => $input['industry_id'],
+            'description' => $input['description'],
+        ];
+
+        if ($input['role'] == 3)
+            $user_data['birthday'] = $input['birthday'];
+        else
+            $user_data['experience'] = $input['experience'];
+
+        $user = User::create($user_data);
 
         if (isset($input['photo'])) {
             $user->updateProfilePhoto($input['photo']);

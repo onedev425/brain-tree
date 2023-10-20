@@ -71,7 +71,7 @@
                         </select>
                     </div>
                     <div class="col-span-12 flex flex-col my-2">
-                        <label class="font-bold my-3">{{ __('Tell us about your skills and goals') }} <span class='text-red-500'>*</span></label>
+                        <label class="font-bold my-3">{{ __('Tell us about your skills and goals') }}</label>
                         <textarea id="description" name="description" class="border border-gray-500 p-2 rounded bg-inherit w-full" rows="5" >{{ auth()->user()->description }}</textarea>
                     </div>
                 @endif

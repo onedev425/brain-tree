@@ -14,9 +14,7 @@ class RegistrationRequest extends FormRequest
      */
     public function rules()
     {
-        $roles = Role::whereIn('name', ['teacher', 'student'])->get();
-
-        return [
+        $roles = [
             'user_name' => [
                 'required',
                 'max:100'
@@ -36,5 +34,9 @@ class RegistrationRequest extends FormRequest
                 'max:100'
             ],
         ];
+
+        if ($this->input('role') == 3) $roles['birthday'] = ['required'];
+
+        return $roles;
     }
 }
