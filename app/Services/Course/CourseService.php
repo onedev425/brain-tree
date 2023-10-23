@@ -633,7 +633,12 @@ class CourseService
             $data['duration'] = $total_duration;
             $data['lessons'] = $total_lessons;
             $data['questions'] = count($data['quiz_list']);
-            $this->updateCourseWithWP($course->wp_course_id, $data);
+            $wp_course_id = $this->updateCourseWithWP($course->wp_course_id, $data);
+            if($wp_course_id != null) {
+                $course->forceFill([
+                    'wp_course_id' => $wp_course_id
+                ])->save();
+            }
         }
 
         // if some quizzes removed from UI, remove the quizzes from database
