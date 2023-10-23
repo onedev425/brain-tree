@@ -405,6 +405,10 @@ class CourseService
                     'cost' => $data['course_price'],
                     'post_status' => 'draft',
                     'featured_image' => $data['course_image'],
+                    'duration' => $data['duration'],
+                    'lessons' => $data['lessons'],
+                    'questions' => $data['questions']
+
                 ],
             ]);
             $responseBody = $response->getBody()->getContents();
@@ -444,6 +448,9 @@ class CourseService
                     'cost' => $data['course_price'],
                     'post_status' => $data['is_published'] ? 'publish' : 'draft',
                     'featured_image' => $data['course_image'],
+                    'duration' => $data['duration'],
+                    'lessons' => $data['lessons'],
+                    'questions' => $data['questions']
                 ],
             ]);
             $responseBody = $response->getBody()->getContents();
@@ -473,6 +480,8 @@ class CourseService
      */
     public function createCourse($data): Course
     {
+        $total_duration = 0;
+        $total_lessons = 0;
         $course = Course::create([
             'title' => $data['course_title'],
             'price'  => $data['course_price'],
@@ -483,16 +492,8 @@ class CourseService
             'created_by'  => auth()->user()->id,
             'assigned_id'  => $data['assigned_id'],
             'quiz_active'  => $data['quiz_active'],
-            'is_published'  => $data['is_published'],
+            'is_published'  => $data['is_published']
         ]);
-
-        $wp_course_id = $this->syncCourseWithWP($data);
-
-        if($wp_course_id != null) {
-            $course->forceFill([
-                'wp_course_id' => $wp_course_id
-            ])->save();
-        }
 
         foreach($data['topic_list'] as $topic_info) {
             $topic = $course->topics()->create([
@@ -501,16 +502,30 @@ class CourseService
             ]);
 
             foreach($topic_info['lessons'] as $lesson_info) {
+                $duration = $this->getVideoLength($lesson_info['video_source'], $lesson_info['video_url']);
                 $topic->lessons()->create([
                     'title' => $lesson_info['title'],
                     'description' => $lesson_info['description'],
                     'video_type' => $lesson_info['video_source'],
                     'video_link' => $lesson_info['video_url'],
-                    'video_duration' => $this->getVideoLength($lesson_info['video_source'], $lesson_info['video_url']),
+                    'video_duration' => $duration,
                     'user_id' => auth()->user()->id,
                     'course_id' => $course->id,
                 ]);
+                $total_duration += $duration;
+                $total_lessons += 1;
             }
+        }
+
+        $data['duration'] = $total_duration;
+        $data['lessons'] = $total_lessons;
+        $data['questions'] = count($data['quiz_list']);
+        $wp_course_id = $this->syncCourseWithWP($data);
+
+        if($wp_course_id != null) {
+            $course->forceFill([
+                'wp_course_id' => $wp_course_id
+            ])->save();
         }
 
         foreach ($data['quiz_list'] as $quiz_info) {
@@ -537,6 +552,8 @@ class CourseService
 
     public function updateCourse($data): void
     {
+        $total_duration = 0;
+        $total_lessons = 0;
         // update a selected course
         $course = $data['course'];
         $course->fill([
@@ -551,11 +568,6 @@ class CourseService
             'is_published'  => $data['is_published'],
         ]);
         $course->save();
-
-        if ($course->wp_course_id)
-        {
-            $this->updateCourseWithWP($course->wp_course_id, $data);
-        }
 
         // if some topics removed from UI, remove the topics from database
         $topic_ids = [];
@@ -586,29 +598,42 @@ class CourseService
             $topic->lessons()->whereNotIn('id', $lesson_ids)->delete();
 
             foreach($topic_info['lessons'] as $lesson_info) {
+                $duration = 0;
                 if ($lesson_info['id'] == 0) {
+                    $duration = $this->getVideoLength($lesson_info['video_source'], $lesson_info['video_url']);
                     $topic->lessons()->create([
                         'title' => $lesson_info['title'],
                         'description' => $lesson_info['description'],
                         'video_type' => $lesson_info['video_source'],
                         'video_link' => $lesson_info['video_url'],
-                        'video_duration' => $this->getVideoLength($lesson_info['video_source'], $lesson_info['video_url']),
+                        'video_duration' => $duration,
                         'user_id' => auth()->user()->id,
                         'course_id' => $course->id,
                     ]);
                 }
                 else {
+                    $duration = $this->getVideoLength($lesson_info['video_source'], $lesson_info['video_url']);
                     $lesson = Lesson::find($lesson_info['id']);
                     $lesson->fill([
                         'title' => $lesson_info['title'],
                         'description' => $lesson_info['description'],
                         'video_type' => $lesson_info['video_source'],
                         'video_link' => $lesson_info['video_url'],
-                        'video_duration' => $this->getVideoLength($lesson_info['video_source'], $lesson_info['video_url']),
+                        'video_duration' => $duration,
                     ]);
                     $lesson->save();
                 }
+                $total_duration += $duration;
+                $total_lessons += 1;
             }
+        }
+        
+        if ($course->wp_course_id)
+        {
+            $data['duration'] = $total_duration;
+            $data['lessons'] = $total_lessons;
+            $data['questions'] = count($data['quiz_list']);
+            $this->updateCourseWithWP($course->wp_course_id, $data);
         }
 
         // if some quizzes removed from UI, remove the quizzes from database
