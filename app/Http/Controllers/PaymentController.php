@@ -82,4 +82,11 @@ class PaymentController extends Controller
 
         return $paypalService->buyCourse($course);
     }
+
+    public function approveOrder(Request $request): bool
+    {
+        $data = $request->json()->all();
+        $paypalService = new PaypalService();
+        return $paypalService->capturePayment($data['order_id']);
+    }
 }

@@ -102,15 +102,30 @@
                             },
                             body: JSON.stringify({ course_id: '{{$course->id}}' }),
                         })
-                        .then((response) => response.json())
-                        .then((order) => order.id);
+                            .then((response) => response.json())
+                            .then((order) => order.id);
+
                     } catch (error) {
                         toastr.error('Something went wrong. Your payment failed.');
                     }
                 },
                 async onApprove(data, actions) {
                     console.log('onapprove');
-
+                    try {
+                        return await fetch("{{ route('paypal.approve_order') }}", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content')
+                            },
+                            body: JSON.stringify({ order_id: data.orderID }),
+                        }).then(function(response) {
+                            console.log('response1=>', response);
+                            console.log('response2=>', response.json());
+                        })
+                    } catch (error) {
+                        toastr.error('Something went wrong. Your payment failed.');
+                    }
                 },
             })
             .render("#paypal-button-container");
