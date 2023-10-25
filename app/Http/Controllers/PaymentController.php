@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Course;
 use App\Services\Admin\AdminPricingService;
 use App\Services\Payment\PaypalService;
 use App\Services\Student\StudentService;
@@ -71,5 +72,14 @@ class PaymentController extends Controller
             // go to the student pricing page
             return redirect()->route('pricing.index')->with('danger', __('Payment cancelled by the user.'));
         }
+    }
+
+    public function createOrder(Request $request): array
+    {
+        $data = $request->json()->all();
+        $course = Course::find($data['course_id']);
+        $paypalService = new PaypalService();
+
+        return $paypalService->buyCourse($course);
     }
 }

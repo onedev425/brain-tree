@@ -125,11 +125,11 @@ class PaypalService
         if (isset($response['id']) && $response['id'] != null) {
             foreach ($response['links'] as $links) {
                 if ($links['rel'] == 'approve') {
-                    return ['result' => 'success', 'redirect_url' => $links['href']];
+                    return ['result' => 'success', 'redirect_url' => $links['href'], 'id' => $response['id']];
                 }
             }
         }
-        return ['result' => 'error', 'redirect_url' => route('home')];
+        return ['result' => 'error', 'redirect_url' => route('home'), 'id' => 0];
     }
 
     public function PayoutToInstructor(int $teacher_id, int $course_amount, string $payee_account_id, int $amount): array

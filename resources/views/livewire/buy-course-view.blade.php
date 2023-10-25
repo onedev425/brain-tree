@@ -53,6 +53,9 @@
                 </svg>
                 {{ __('Buy now') }}
             </x-button>
+
+            <div id="paypal-button-container"></div>
+
             <span class="text-sm">{{ __('by ') . $course->assignedTeacher->name }}</span>
             <span class="text-2xl font-bold mt-4 break-words">{{ $course->title }}</span>
             <div class="flex mt-4 items-center">
@@ -67,8 +70,8 @@
             <div class="flex mt-4 items-center">
                 <svg class="mr-2" xmlns="http://www.w3.org/2000/svg" width="16.775" height="19.824" viewBox="0 0 16.775 19.824">
                     <g id="user_people_person_users_man" data-name="user people person users man" transform="translate(-5 -3)">
-                        <path id="路径_21" data-name="路径 21" d="M19.289,16.111a.763.763,0,1,0-1.075,1.083,6.862,6.862,0,0,1,2.036,4.88c0,.93-2.676,2.287-6.862,2.287S6.525,23,6.525,22.074A6.862,6.862,0,0,1,8.53,17.217a.76.76,0,0,0-1.075-1.075A8.326,8.326,0,0,0,5,22.074c0,2.478,4.323,3.812,8.387,3.812s8.387-1.334,8.387-3.812a8.341,8.341,0,0,0-2.486-5.963Z" transform="translate(0 -3.062)"/>
-                        <path id="路径_22" data-name="路径 22" d="M14.337,13.675A5.337,5.337,0,1,0,9,8.337,5.337,5.337,0,0,0,14.337,13.675Zm0-9.15a3.812,3.812,0,1,1-3.812,3.812A3.812,3.812,0,0,1,14.337,4.525Z" transform="translate(-0.95)"/>
+                        <path id="student_21" data-name="student 21" d="M19.289,16.111a.763.763,0,1,0-1.075,1.083,6.862,6.862,0,0,1,2.036,4.88c0,.93-2.676,2.287-6.862,2.287S6.525,23,6.525,22.074A6.862,6.862,0,0,1,8.53,17.217a.76.76,0,0,0-1.075-1.075A8.326,8.326,0,0,0,5,22.074c0,2.478,4.323,3.812,8.387,3.812s8.387-1.334,8.387-3.812a8.341,8.341,0,0,0-2.486-5.963Z" transform="translate(0 -3.062)"/>
+                        <path id="student_22" data-name="student 22" d="M14.337,13.675A5.337,5.337,0,1,0,9,8.337,5.337,5.337,0,0,0,14.337,13.675Zm0-9.15a3.812,3.812,0,1,1-3.812,3.812A3.812,3.812,0,0,1,14.337,4.525Z" transform="translate(-0.95)"/>
                     </g>
                 </svg>
                 <span class="text-sm font-bold">{{ count($course->course_students) . " " . __('students')}}</span>
@@ -83,6 +86,34 @@
                 <span class="text-sm font-bold">{{ $video_duration . " | " . count($lessons) . " " .  __('Lessons') . " | " . count($questions) . " " .  __('Questions')}}</span>
             </div>
         </div>
-        
+
     </div>
+    <script src="https://www.paypal.com/sdk/js?client-id=AThEmAKnFG2Ar9HwwNZrwcaBPnydWmMAptRDTiB1tSQsCEnh7sgEA8ePom5jaJGpFpbrQd4sTsWtTocf"></script>
+    <script>
+        window.paypal
+            .Buttons({
+                async createOrder() {
+                    try {
+                        return await fetch("{{ route('paypal.create_order') }}", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content')
+                            },
+                            body: JSON.stringify({ course_id: '{{$course->id}}' }),
+                        })
+                        .then((response) => response.json())
+                        .then((order) => order.id);
+                    } catch (error) {
+                        toastr.error('Something went wrong. Your payment failed.');
+                    }
+                },
+                async onApprove(data, actions) {
+                    console.log('onapprove');
+
+                },
+            })
+            .render("#paypal-button-container");
+
+    </script>
 </div>
