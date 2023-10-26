@@ -30,7 +30,8 @@ Route::get('/paypal/connect-success', ['App\Http\Controllers\PaymentController',
 Route::get('/paypal/connect/callback', ['App\Http\Controllers\PaymentController', 'connectCallback'])->name('paypal.callback');
 Route::get('/paypal/connect-cancel', ['App\Http\Controllers\PaymentController', 'connectCancel'])->name('paypal.cancel');
 Route::post('/paypal/create-order', ['App\Http\Controllers\PaymentController', 'createOrder'])->name('paypal.create_order');
-Route::post('/paypal/create-order', ['App\Http\Controllers\PaymentController', 'approveOrder'])->name('paypal.approve_order');
+Route::post('/paypal/approve-order', ['App\Http\Controllers\PaymentController', 'approveOrder'])->name('paypal.approve_order');
+Route::get('/paypal/complete-order', ['App\Http\Controllers\PaymentController', 'completeOrder'])->name('paypal.complete_order');
 
 Route::post('/verification_resend', ['App\Http\Controllers\RegistrationController', 'verification_resend'])->name('verification.resend');
 Route::post('/password_reset', ['App\Http\Controllers\RegistrationController', 'password_reset'])->name('password.reset.email');

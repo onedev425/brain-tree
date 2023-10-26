@@ -70,7 +70,7 @@ class PaymentController extends Controller
         }
         else {
             // go to the student pricing page
-            return redirect()->route('pricing.index')->with('danger', __('Payment cancelled by the user.'));
+            return redirect()->route('pricing.index')->with('danger', __('Payment cancelled by the user or something went wrong.'));
         }
     }
 
@@ -83,10 +83,25 @@ class PaymentController extends Controller
         return $paypalService->buyCourse($course);
     }
 
-    public function approveOrder(Request $request): bool
+    public function approveOrder(Request $request): array
     {
         $data = $request->json()->all();
         $paypalService = new PaypalService();
-        return $paypalService->capturePayment($data['order_id']);
+
+        $request->session()->put('transaction_id', $data['order_id']);
+        return ['result' => $paypalService->capturePayment($data['order_id'])];
+    }
+
+    public function completeOrder(Request $request): RedirectResponse
+    {
+        if ($request->session()->get('transaction_id') == $request->input('id')) {
+            $studentService = app(StudentService::class);
+            $studentService->registerStudentCourse($request->input('course'));
+
+            return redirect()->route('student.course.index');
+        }
+        else {
+            return redirect()->route('student.course.index')->with('danger', __('Something went wrong. Your payment failed.'));
+        }
     }
 }

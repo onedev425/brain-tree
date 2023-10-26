@@ -47,14 +47,42 @@
         <div class="card-body flex flex-col">
             <img src="{{ $course->image }}" class="rounded-lg"/>
             <span class="mt-4 text-2xl font-bold">$ {{ $course->price }}</span>
-            <x-button class="flex items-center justify-center !bg-red-500 font-semibold border-transparent" wire:click="buyCourse({{ $course->id }})" >
-                <svg class="mr-2" xmlns="http://www.w3.org/2000/svg" width="19.514" height="17.346" viewBox="0 0 19.514 17.346">
-                    <path id="Icon_awesome-shopping-cart" data-name="Icon awesome-shopping-cart" d="M17.892,10.208l1.6-7.047a.813.813,0,0,0-.793-.993H5.394L5.083.65a.813.813,0,0,0-.8-.65H.813A.813.813,0,0,0,0,.813v.542a.813.813,0,0,0,.813.813H3.181L5.561,13.8a1.9,1.9,0,1,0,2.271.29h7.1a1.9,1.9,0,1,0,2.155-.353l.187-.822a.813.813,0,0,0-.793-.993H7.39l-.222-1.084H17.1A.813.813,0,0,0,17.892,10.208Z" fill="#fff"/>
-                </svg>
-                {{ __('Buy now') }}
-            </x-button>
 
-            <div id="paypal-button-container"></div>
+
+            <div x-data="{ open: false }">
+                <!-- Button trigger modal -->
+
+                <x-button @click="open = true" class="flex items-center justify-center w-full !bg-red-500 font-semibold border-transparent" >
+                    <svg class="mr-2" xmlns="http://www.w3.org/2000/svg" width="19.514" height="17.346" viewBox="0 0 19.514 17.346">
+                        <path id="Icon_awesome-shopping-cart" data-name="Icon awesome-shopping-cart" d="M17.892,10.208l1.6-7.047a.813.813,0,0,0-.793-.993H5.394L5.083.65a.813.813,0,0,0-.8-.65H.813A.813.813,0,0,0,0,.813v.542a.813.813,0,0,0,.813.813H3.181L5.561,13.8a1.9,1.9,0,1,0,2.271.29h7.1a1.9,1.9,0,1,0,2.155-.353l.187-.822a.813.813,0,0,0-.793-.993H7.39l-.222-1.084H17.1A.813.813,0,0,0,17.892,10.208Z" fill="#fff"/>
+                    </svg>
+                    {{ __('Buy now') }}
+                </x-button>
+
+                <!-- Modal -->
+                <div x-show="open" tabindex="0" class="z-50 overflow-auto inset-0 w-full h-full fixed py-6">
+                    <div @click.away="open = false" class="z-50 relative p-3 mx-auto my-0 max-w-full" style="max-width:800px;min-width: 500px;display: none" x-show="open" x-transition:enter="transition duration-500" x-transition:enter-start="transform opacity-0 -translate-y-4" x-transition:enter-end="transform opacity-100 translate-y-0" x-transition:leave="transition -translate-y-4" x-transition:leave-start="transform opacity-100 translate-y-0" x-transition:leave-end="transform opacity-0 -translate-y-4">
+                        <div class="bg-white rounded shadow-lg border flex flex-col overflow-hidden">
+                            <button @click="open = false" class="fill-current h-6 w-6 absolute right-0 top-0 m-6 font-3xl font-bold">×</button>
+                            <!-- modal title -->
+                            <div class="px-6 py-3 text-xl border-b dark:border-gray-700 font-bold">Checkout</div>
+                            <!-- modal content -->
+                            <div class="p-12 flex-grow">
+                                <img src="{{ $course->image }}" class="rounded-lg hidden"/>
+                                <p><span class="mt-4 text-2xl font-bold">{{ $course->title }}</span></p>
+                                <p><span class="mt-8 text-xl font-semibold">Price: ${{ $course->price }}</span></p>
+                            </div>
+                            <div class="px-10" id="paypal-button-container"></div>
+                            <div class="px-6 py-3 border-t flex justify-end">
+                                <button @click="open = false" type="button" class="py-2 px-4 inline-block text-center rounded leading-5 text-gray-800 bg-gray-100 border border-gray-100 hover:text-gray-900 hover:bg-gray-200 hover:ring-0 hover:border-gray-200 focus:bg-gray-200 focus:border-gray-200 focus:outline-none focus:ring-0 ltr:mr-2 rtl:ml-2">Close</Button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="z-40 overflow-auto left-0 top-0 bottom-0 right-0 w-full h-full fixed bg-black opacity-50"></div>
+                </div>
+            </div>
+
+
 
             <span class="text-sm">{{ __('by ') . $course->assignedTeacher->name }}</span>
             <span class="text-2xl font-bold mt-4 break-words">{{ $course->title }}</span>
@@ -94,7 +122,7 @@
             .Buttons({
                 async createOrder() {
                     try {
-                        return await fetch("{{ route('paypal.create_order') }}", {
+                        return await fetch('{{ route('paypal.create_order') }}', {
                             method: "POST",
                             headers: {
                                 "Content-Type": "application/json",
@@ -110,19 +138,29 @@
                     }
                 },
                 async onApprove(data, actions) {
-                    console.log('onapprove');
+                    // if clicked 'Pay' or 'Pay Now' button
                     try {
-                        return await fetch("{{ route('paypal.approve_order') }}", {
+                        const res = await fetch("{{ route('paypal.approve_order') }}", {
                             method: "POST",
                             headers: {
                                 "Content-Type": "application/json",
                                 "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content')
                             },
                             body: JSON.stringify({ order_id: data.orderID }),
-                        }).then(function(response) {
-                            console.log('response1=>', response);
-                            console.log('response2=>', response.json());
-                        })
+                        }).then((response) => response.json())
+
+                        const result = res.result;
+                        if (result) {
+                            // if the payment is success
+                            const url = `{{ route('paypal.complete_order') }}?id=${data.orderID}&course={{ $course->id }}`;
+                            window.location.href = url;
+                        }
+                        else {
+                            // if the payment is failure
+                            const url = `{{ route('paypal.cancel') }}?payer=student&course={{ $course->id }}`;
+                            window.location.href = url;
+                        }
+
                     } catch (error) {
                         toastr.error('Something went wrong. Your payment failed.');
                     }
