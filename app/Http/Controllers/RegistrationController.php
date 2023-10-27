@@ -105,7 +105,7 @@ class RegistrationController extends Controller
         $email_service = new EmailService($email_data);
         $result = $email_service->sendEmail();
         if ($result == 'success')
-            return back()->with('success', __('Registration complete, you would receive an email to verify your account'));
+            return redirect()->route('login')->with('success', __('Registration complete, you would receive an email to verify your account'));
         else
             return back()->with('danger', __('Email sending failed: ') . $result);
     }
