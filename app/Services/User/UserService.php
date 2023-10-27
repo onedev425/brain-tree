@@ -74,19 +74,13 @@ class UserService
             'password'              => $record['password'],
             'password_confirmation' => $record['password_confirmation'],
             'phone'                 => $record['phone'],
-            'country_id'            => $record['country'],
-            'language_id'           => $record['language'],
-            'industry_id'           => $record['industry'],
+            'country_id'            => $record['role'] == 3 ? null : $record['country'],
+            'language_id'           => $record['role'] == 3 ? null : $record['language'],
+            'industry_id'           => $record['role'] == 3 ? null : $record['industry'],
+            'experience'           => $record['role'] == 3 ? null : $record['experience'],
             'description'           => '',
         ];
-        if ($record['role'] == 3)
-            $user_data['birthday'] = $record['birthday'];
-        else
-            $user_data['experience'] = $record['experience'];
 
-        $fp = fopen('tmp.txt', 'w');
-        fwrite($fp, json_encode($user_data));
-        fclose($fp);
         $user = $this->createUserAction->create($user_data);
 
         return $user;

@@ -19,7 +19,7 @@
             </div>
         </div>
         <div class="w-full md:w-1/2 px-3">
-            <label class="font-medium px-1 block mb-1">{{ __('Phone number') }} <span class='text-red-500'>*</span></label>
+            <label class="font-medium px-1 block mb-1">{{ __('Phone number') }}</label>
             <input id="phone" name="phone" placeholder="{{ __('Your phone number') }}" class="border border-gray-500 p-2 rounded bg-inherit w-full" value="{{ old('phone') }}" />
             @error('phone')<span class="text-red-500 font-medium block mt-1.5">{{ $message }}</span>@enderror
         </div>
@@ -45,12 +45,6 @@
     </div>
 
     <div class="md:grid grid-cols-12 gap-4 mt-4">
-        <div class="col-span-6 flex flex-col px-3 birthday-section {{ old('role') == 3 ? '' : 'hidden' }}">
-            <label class="font-medium block px-1 mb-1">{{ __('Date of Birth') }} <span class='text-red-500'>*</span></label>
-            <input type="date" name="birthday" placeholder="{{ __('Your birthday...') }}" class="border border-gray-500 p-2 rounded bg-inherit w-full" value="{{ old('birthday') }}" />
-            @error('birthday')<span class="text-red-700 font-medium block mt-1.5">{{ $message }}</span>@enderror
-        </div>
-
         <div class="col-span-6 flex flex-col px-3 hidden">
             <label class="font-medium block px-1 mb-1">{{ __('Country') }} <span class='text-red-500'>*</span></label>
             <select id="country" name="country" class="w-full p-2 border rounded-md border-gray-400 focus:border-blue-500 bg-inherit">
@@ -59,11 +53,11 @@
                 @endforeach
             </select>
         </div>
-        <div class="col-span-6 flex flex-col px-3 country-list">
+        <div class="col-span-6 flex flex-col px-3 country-list {{ old('role') == 3 ? 'hidden' : '' }}">
             <label class="font-medium block px-1 mb-1">{{ __('Country') }} <span class='text-red-500'>*</span></label>
             <input type="text" id="country-iti" name="country-iti" class="w-full">
         </div>
-        <div class="col-span-6 flex flex-col px-3">
+        <div class="col-span-6 flex flex-col px-3 category-section {{ old('role') == 3 ? 'hidden' : '' }}">
             <label class="font-medium block px-1 mb-1">{{ __('Category') }} <span class='text-red-500'>*</span></label>
             <select id="industry" name="industry" class="w-full p-2 border rounded-md border-gray-400 focus:border-blue-500 bg-inherit">
                 @foreach ($industries as $industry)
@@ -72,7 +66,7 @@
             </select>
         </div>
 
-        <div class="col-span-6 flex flex-col px-3">
+        <div class="col-span-6 flex flex-col px-3 language-section {{ old('role') == 3 ? 'hidden' : '' }}">
             <label class="font-medium block px-1 mb-1">{{ __('Language') }} <span class='text-red-500'>*</span></label>
             <select id="language" name="language" class="w-full p-2 border rounded-md border-gray-400 focus:border-blue-500 bg-inherit">
                 @foreach ($languages as $language)
@@ -202,11 +196,17 @@
             $('#opt_studio').on('click', function() {
                 $('div.birthday-section').removeClass('hidden');
                 $('div.experience-section').addClass('hidden');
+                $('div.category-section').addClass('hidden');
+                $('div.country-list').addClass('hidden');
+                $('div.language-section').addClass('hidden');
             })
 
             $('#opt_instructor').on('click', function() {
                 $('div.birthday-section').addClass('hidden');
                 $('div.experience-section').removeClass('hidden');
+                $('div.category-section').removeClass('hidden');
+                $('div.country-list').removeClass('hidden');
+                $('div.language-section').removeClass('hidden');
             })
         });
 
