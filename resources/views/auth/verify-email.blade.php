@@ -12,7 +12,7 @@
                 </x-alert>
             @endif
             <div class="my-3 text-sm md:text-base">
-                {{ __(' Please check your email inbox for a verification link sent to you. This is important for verifying your email address. If you can\'t find the email, please check your spam folder. If you did receive it press resend to try again.') }}
+                {{ __('Please check your email inbox for the verification link that has been sent to you. It is important to complete this step to confirm your email address. If you are unable to find the email, please check your spam folder. If you have received it, please click "resend" to try again.') }}
             </div>
             <div class="mt-4 flex-col items-center flex justify-between">
                 <form method="POST" action="{{ route('verification.resend') }}">

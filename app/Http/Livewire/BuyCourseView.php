@@ -15,6 +15,7 @@ class BuyCourseView extends Component
     public $lessons;
     public $questions;
     public $video_duration;
+    public $showModal = false;
 
     public function buyCourse()
     {

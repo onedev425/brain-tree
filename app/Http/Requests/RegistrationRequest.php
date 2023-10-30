@@ -35,8 +35,6 @@ class RegistrationRequest extends FormRequest
             ],
         ];
 
-        if ($this->input('role') == 3) $roles['birthday'] = ['required'];
-
         return $roles;
     }
 }
