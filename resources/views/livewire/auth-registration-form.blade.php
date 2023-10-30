@@ -1,16 +1,13 @@
 <form action="{{ route('register') }}" method="POST" class="w-full">
 
     <div class="block md:flex">
-        <div class="w-full px-3">
+        <div class="w-full md:w-1/2 px-3">
             <label for="" class="font-medium px-1 block mb-1">{{ __('Full name') }} <span class="text-red-500">*</span></label>
             <div class="block">
                 <input type="text" name="user_name" id="user_name" class="w-full pl-2 pr-3 py-2 rounded border-2 text-black focus:border-indigo-500" placeholder="" value="{{ old('user_name') }}">
                 @error('user_name')<span class="text-red-700 font-medium block mt-1.5">{{ $message }}</span>@enderror
             </div>
         </div>
-    </div>
-
-    <div class="block md:flex mt-4">
         <div class="w-full md:w-1/2 px-3">
             <label for="" class="font-medium px-1 block mb-1">{{ __('Email') }} <span class="text-red-500">*</span></label>
             <div class="block">
@@ -18,13 +15,7 @@
                 @error('email')<span class="text-red-700 font-medium block mt-1.5">{{ $message }}</span>@enderror
             </div>
         </div>
-        <div class="w-full md:w-1/2 px-3">
-            <label class="font-medium px-1 block mb-1">{{ __('Phone number') }}</label>
-            <input id="phone" name="phone" placeholder="{{ __('Your phone number') }}" class="border border-gray-500 p-2 rounded bg-inherit w-full" value="{{ old('phone') }}" />
-            @error('phone')<span class="text-red-500 font-medium block mt-1.5">{{ $message }}</span>@enderror
-        </div>
     </div>
-
     <div class="block md:flex mt-4">
         <div class="w-full md:w-1/2 px-3">
             <label for="" class="font-medium px-1 block mb-1">{{ __('Password') }} <span class="text-red-500">*</span></label>
@@ -78,7 +69,7 @@
         <div class="col-span-6 flex flex-col px-3 mb-7 experience-section {{ old('role') == 3 ? 'hidden' : '' }}">
             <label class="font-medium block px-1 mb-1">{{ __('Years of Experience') }} <span class='text-red-500'>*</span></label>
             <select id="experience" name="experience" class="w-full p-2 border rounded-md border-gray-400 focus:border-blue-500 bg-inherit">
-                @php ($experiences = ['1', '2', '3', '4', '5', '5+'])
+                @php ($experiences = ['1-3 years', '4-7 years', '8-10 years', '11-15 years'])
                 @foreach ($experiences as $experience)
                     <option value="{{$experience}}">{{$experience}} {{ $experience == 1 ? __('Year') : __('Years') }}</option>
                 @endforeach
