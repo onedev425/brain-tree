@@ -66,24 +66,24 @@
             </select>
         </div>
 
-        <div class="col-span-6 flex flex-col px-3 mb-7 experience-section {{ old('role') == 3 ? 'hidden' : '' }}">
+        <div class="col-span-6 flex flex-col px-3 experience-section {{ old('role') == 3 ? 'hidden' : '' }}">
             <label class="font-medium block px-1 mb-1">{{ __('Years of Experience') }} <span class='text-red-500'>*</span></label>
             <select id="experience" name="experience" class="w-full p-2 border rounded-md border-gray-400 focus:border-blue-500 bg-inherit">
-                @php ($experiences = ['1-3 years', '4-7 years', '8-10 years', '11-15 years'])
+                @php ($experiences = ['1-3', '4-7', '8-10', '11-15'])
                 @foreach ($experiences as $experience)
                     <option value="{{$experience}}">{{$experience}} {{ $experience == 1 ? __('Year') : __('Years') }}</option>
                 @endforeach
             </select>
         </div>
 
-        <div class="col-span-12 flex flex-col px-3 mb-7 {{ old('role') == 3 ? 'hidden' : '' }}">
-            <label class="font-bold my-3">{{ __('List your Skill here:') }}</label>
-            <textarea id="skills" name="skills" class="border border-gray-500 p-2 rounded bg-inherit w-full" rows="3" >{{ auth()->user()->skill }}</textarea>
+        <div class="col-span-12 flex flex-col px-3 skills-section {{ old('role') == 3 ? 'hidden' : '' }}">
+            <label class="font-medium block px-1 mb-1">{{ __('List your Skill here:') }}</label>
+            <textarea id="skills" name="skills" class="border border-gray-500 p-2 rounded bg-inherit w-full" rows="3" ></textarea>
         </div>
 
-        <div class="col-span-12 flex flex-col px-3 mb-7 {{ old('role') == 3 ? 'hidden' : '' }}">
-            <label class="font-bold my-3">{{ __('What are your goals for this course?') }}</label>
-            <textarea id="description" name="description" class="border border-gray-500 p-2 rounded bg-inherit w-full" rows="5" >{{ auth()->user()->description }}</textarea>
+        <div class="col-span-12 flex flex-col px-3 mb-7 description-section {{ old('role') == 3 ? 'hidden' : '' }}">
+            <label class="font-medium block px-1 mb-1">{{ __('What are your goals for this course?') }}</label>
+            <textarea id="description" name="description" class="border border-gray-500 p-2 rounded bg-inherit w-full" rows="5" ></textarea>
         </div>
     </div>
 
@@ -200,6 +200,8 @@
                 $('div.category-section').addClass('hidden');
                 $('div.country-list').addClass('hidden');
                 $('div.language-section').addClass('hidden');
+                $('div.skills-section').addClass('hidden');
+                $('div.description-section').addClass('hidden');
             })
 
             $('#opt_instructor').on('click', function() {
@@ -208,6 +210,8 @@
                 $('div.category-section').removeClass('hidden');
                 $('div.country-list').removeClass('hidden');
                 $('div.language-section').removeClass('hidden');
+                $('div.skills-section').removeClass('hidden');
+                $('div.description-section').removeClass('hidden');
             })
         });
 

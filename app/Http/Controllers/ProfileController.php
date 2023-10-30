@@ -83,6 +83,7 @@ class ProfileController extends Controller
 
 
             if (isset($request['experience'])) $input['experience'] = $request['experience'];
+            if (isset($request['skills'])) $input['skills'] = $request['skills'];
             if (isset($request['description'])) $input['description'] = $request['description'];
             $user->forceFill($input)->save();
         }

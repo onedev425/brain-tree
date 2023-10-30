@@ -15,7 +15,7 @@
                 </div>
 
                 <div class="col-span-6 flex flex-col my-2">
-                    <label class="font-bold my-3">{{ __('Phone number') }} <span class='text-red-500'>*</span></label>
+                    <label class="font-bold my-3">{{ __('Phone number') }}</label>
                     <input id="phone" name="phone" placeholder="{{ __('Your phone number') }}" class="border border-gray-500 p-2 rounded bg-inherit w-full" value="{{ auth()->user()->phone }}" />
                     @error('phone')<span class="text-red-500 font-medium block mt-1.5">{{ $message }}</span>@enderror
                 </div>
@@ -72,7 +72,7 @@
                     </div>
                     <div class="col-span-12 flex flex-col my-2">
                         <label class="font-bold my-3">{{ __('List your Skill here:') }}</label>
-                        <textarea id="skills" name="skills" class="border border-gray-500 p-2 rounded bg-inherit w-full" rows="3" >{{ auth()->user()->skill }}</textarea>
+                        <textarea id="skills" name="skills" class="border border-gray-500 p-2 rounded bg-inherit w-full" rows="3" >{{ auth()->user()->skills }}</textarea>
                     </div>
                     <div class="col-span-12 flex flex-col my-2">
                         <label class="font-bold my-3">{{ __('What are your goals for this course?') }}</label>
