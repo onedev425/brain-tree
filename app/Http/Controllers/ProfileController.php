@@ -63,7 +63,6 @@ class ProfileController extends Controller
         $validation_rules = array(
             'name'        => ['required', 'string', 'max:255'],
             'email'       => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
-            'phone'       => ['required', 'string', 'max:20'],
         );
 
         if ($user->hasRole('student')) {
