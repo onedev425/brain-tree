@@ -1,4 +1,18 @@
 <form action="{{ route('register') }}" method="POST" class="w-full">
+    <div class="mb-3 px-3 pt-3">
+        <div>{{ __('Register As,') }}</div>
+        <div class="inline-flex space-x-4">
+            <label class="py-4 rounded-lg flex items-center">
+                <input type="radio" name="role" id="opt_studio" class="form-radio h-4 w-4 text-blue-600" value="3" {{ old('role') == 3 ? 'checked' : '' }}>
+                <span class="ml-2 text-gray-700">{{ __('Student') }}</span>
+            </label>
+            <label class="py-4 rounded-lg flex items-center">
+                <input type="radio" name="role" id="opt_instructor" class="form-radio h-4 w-4 text-blue-600" value="2" {{ old('role') == 2 || old('role') == '' ? 'checked' : '' }}>
+                <span class="ml-2 text-gray-700">{{ __('Instructor') }}</span>
+            </label>
+
+        </div>
+    </div>
 
     <div class="block md:flex">
         <div class="w-full md:w-1/2 px-3">
@@ -74,21 +88,6 @@
                     <option value="{{$experience}}">{{$experience}} {{ $experience == 1 ? __('Year') : __('Years') }}</option>
                 @endforeach
             </select>
-        </div>
-    </div>
-
-    <div class="mb-3 px-3 pt-3">
-        <div>{{ __('Register As,') }}</div>
-        <div class="inline-flex space-x-4">
-            <label class="py-4 rounded-lg flex items-center">
-                <input type="radio" name="role" id="opt_studio" class="form-radio h-4 w-4 text-blue-600" value="3" {{ old('role') == 3 ? 'checked' : '' }}>
-                <span class="ml-2 text-gray-700">{{ __('Student') }}</span>
-            </label>
-            <label class="py-4 rounded-lg flex items-center">
-                <input type="radio" name="role" id="opt_instructor" class="form-radio h-4 w-4 text-blue-600" value="2" {{ old('role') == 2 || old('role') == '' ? 'checked' : '' }}>
-                <span class="ml-2 text-gray-700">{{ __('Instructor') }}</span>
-            </label>
-
         </div>
     </div>
 

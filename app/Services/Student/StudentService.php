@@ -328,29 +328,21 @@ class StudentService
     }
 
     /**
-     * Sync comment with wordpress
+     * Sync review with wordpress
      */
-    private function syncCommentCourseWithWP($wp_course_id, $course_feedback_id, $author, $content, $rating)
+    private function syncReviewCourseWithWP($wp_course_id, $rating)
     {
         $client = new Client();
 
         try {
-            $response = $client->request('POST',env('WP_API_SYNC_BASE_URL') . "/wp-json/sync-api/v1/comments", [
+            $response = $client->request('POST',env('WP_API_SYNC_BASE_URL') . "/wp-json/sync-api/v1/reviews", [
                 'form_params' => [
-                    'comment_post_ID' => $wp_course_id,
-                    'comment_author' => $author->name,
-                    'comment_author_email' => $author->email,
-                    'comment_author_avatar' => $author->profile_photo_path,
-                    'comment_content' => $content,
+                    'id' => $wp_course_id,
                     'rating' => $rating
                 ],
             ]);
             $responseBody = $response->getBody()->getContents();
             $data = json_decode($responseBody, true);
-
-            if (isset($data['wp_comment_id'])) {
-                CourseFeedback::where('id', $course_feedback_id)->update(['wp_comment_id' => $data['wp_comment_id']]);
-            }
         } catch(\Exception $e) {
             Log::error('An error occurred: ' . $e->getMessage(), [
                 'exception' => $e,
@@ -376,28 +368,20 @@ class StudentService
         }
     }
 
-    public function approveReview(array $review_ids, bool $is_approved)
+    public function updateReview(array $review_ids, bool $is_approved)
     {
         CourseFeedback::whereIn('id', $review_ids)->update(['is_approved' => $is_approved]);
 
         $course_feedbacks = CourseFeedback::whereIn('id', $review_ids)->get();
 
         foreach($course_feedbacks as $feedback) {
-            $student = User::find($feedback->student_id);
             $course = Course::find($feedback->course_id);
 
             if ($course->wp_course_id)
             {
-                $this->syncCommentCourseWithWP($course->wp_course_id, $feedback->id, $student, $feedback->content, $feedback->rate);
+                $this->syncReviewCourseWithWP($course->wp_course_id, $course->course_rate());
             }
         }
-    }
-
-    public function trashReview(array $review_ids)
-    {
-        $course_feedbacks = CourseFeedback::whereIn('id', $review_ids)->pluck('wp_comment_id')->toArray();
-
-        $this->removeCommentCourseWithWP($course_feedbacks);
     }
 
     private function syncMostPurchasedCourses()

@@ -106,14 +106,14 @@ class StudentCourseController extends Controller
         $review_ids = request('review_ids');
         $is_approved = request('is_approved');
 
-        $this->studentService->approveReview($review_ids, $is_approved);
+        $this->studentService->updateReview($review_ids, $is_approved);
     }
 
     public function review_trash(): void
     {
         $review_ids = request('review_ids');
 
-        $this->studentService->trashReview($review_ids);
+        $this->studentService->updateReview($review_ids, false);
     }
 
     public function question_complete(): bool

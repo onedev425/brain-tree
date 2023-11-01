@@ -118,20 +118,20 @@ class TeacherCourseController extends Controller
         $industry = Industry::find($course->industry_id);
 
         try {
-            if ($course->wp_course_id) {
-                $client->request('POST', env('WP_API_SYNC_BASE_URL') . "/wp-json/sync-api/v1/course/update", [
-                    'form_params' => [
-                        'id' => $course->wp_course_id,
-                        'title' => $course->title,
-                        'description' => $course->description,
-                        'post_excerpt' => $course->description,
-                        'category' => $industry->name,
-                        'cost' => $course->price,
-                        'post_status' => $isPubished ? 'publish' : 'draft',
-                        'featured_image' => $course->image,
-                    ],
-                ]);
-            }
+            $client->request('POST', env('WP_API_SYNC_BASE_URL') . "/wp-json/sync-api/v1/course/update", [
+                'form_params' => [
+                    'id' => $course->wp_course_id,
+                    'title' => $course->title,
+                    'description' => $course->description,
+                    'post_excerpt' => $course->description,
+                    'category' => $industry->name,
+                    'cost' => $course->price,
+                    'instructor' => $course->createdUser()->name,
+                    'post_status' => $isPubished ? 'publish' : 'draft',
+                    'featured_image' => $course->image,
+                    'rating' => $course->course_rate()
+                ],
+            ]);
         } catch(\Exception $e) {
             Log::error('An error occurred: ' . $e->getMessage(), [
                 'exception' => $e,
