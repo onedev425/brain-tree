@@ -77,8 +77,9 @@ class UserService
             'country_id'            => $record['role'] == 3 ? null : $record['country'],
             'language_id'           => $record['role'] == 3 ? null : $record['language'],
             'industry_id'           => $record['role'] == 3 ? null : $record['industry'],
-            'experience'           => $record['role'] == 3 ? null : $record['experience'],
-            'description'           => '',
+            'experience'            => $record['role'] == 3 ? null : $record['experience'],
+            'skills'                => $record['role'] == 3 ? null : $record['skills'],
+            'description'           => $record['role'] == 3 ? null : $record['description'],
         ];
 
         $user = $this->createUserAction->create($user_data);

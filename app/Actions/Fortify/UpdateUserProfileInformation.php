@@ -41,6 +41,7 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
             );
             if (isset($input['birthday'])) $input_values['birthday'] = $input['birthday'];
             if (isset($input['experience'])) $input_values['experience'] = $input['experience'];
+            if (isset($input['skills'])) $input_values['skills'] = $input['skills'];
             if (isset($input['description'])) $input_values['description'] = $input['description'];
 
             $user->forceFill($input_values)->save();
