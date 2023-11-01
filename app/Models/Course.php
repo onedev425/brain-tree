@@ -19,7 +19,7 @@ class Course extends Model
      */
     public function createdUser(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(User::class, 'created_by');
     }
 
     /**

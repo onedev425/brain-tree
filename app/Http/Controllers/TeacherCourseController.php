@@ -126,7 +126,7 @@ class TeacherCourseController extends Controller
                     'post_excerpt' => $course->description,
                     'category' => $industry->name,
                     'cost' => $course->price,
-                    'instructor' => $course->createdUser()->name,
+                    'instructor' => $course->assignedTeacher->name,
                     'post_status' => $isPubished ? 'publish' : 'draft',
                     'featured_image' => $course->image,
                     'rating' => $course->course_rate()
