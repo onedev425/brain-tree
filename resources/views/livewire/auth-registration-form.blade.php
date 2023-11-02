@@ -83,7 +83,7 @@
         <div class="col-span-6 flex flex-col px-3 experience-section {{ old('role') == 3 ? 'hidden' : '' }}">
             <label class="font-medium block px-1 mb-1">{{ __('Years of Experience') }} <span class='text-red-500'>*</span></label>
             <select id="experience" name="experience" class="w-full p-2 border rounded-md border-gray-400 focus:border-blue-500 bg-inherit">
-                @php ($experiences = ['1-3', '4-7', '8-10', '11-15'])
+                @php ($experiences = ['1-3', '4-7', '8-10', '11-15', '16-20', '12 and up'])
                 @foreach ($experiences as $experience)
                     <option value="{{$experience}}">{{$experience}} {{ $experience == 1 ? __('Year') : __('Years') }}</option>
                 @endforeach

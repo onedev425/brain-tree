@@ -1,9 +1,9 @@
 <div class="flex w-full relative">
     <x-loading-spinner/>
     <div class="card w-3/5 ml-auto relative overflow-hidden">
-        <div class="w-full absolute top-0 left-0 right-0 text-center p-4 bg-red-500 text-2xl font-bold text-white" >{{ __('Information') }}</div>
+        <div class="w-full absolute top-0 left-0 right-0 text-center p-4 bg-red-500 text-2xl font-bold text-white" >{{ $course->title }}</div>
         <div class="card-body pt-10 w-full h-full flex flex-col">
-            <span class="text-2xl font-bold">{{ $course->title }}</span>
+            <span class="text-2xl font-bold">{{ __('Course Description') }}</span>
             <div class="w-full text-lg pt-4 pb-4">
                 {{ $course->description }}
             </div>

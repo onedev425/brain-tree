@@ -49,14 +49,14 @@
                                 </x-select>
                             </div>
                             <div class="form-group mb-6">
-                                <label for="course_price" class="block mb-2 font-medium text-gray-900">{{ __('Pricing') }} ($)<span class="text-red-500">*</span> </label>
+                                <label for="course_price" class="block mb-2 font-medium text-gray-900">{{ __('Price') }} ($)<span class="text-red-500">*</span> </label>
                                 <input type="text" id="course_price" name="course_price" value="{{ $course->price }}" minlength="1" maxlength="10" class="shadow-sm border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="" required />
                                 @error('course_price')
                                 <span class="text-red-500">{{ $message }}</span>
                                 @enderror
                             </div>
                             <div class="form-group mb-6">
-                                <label for="course_pass_percent" class="block mb-2 font-medium text-gray-900">{{ __('Pass Percent') }} (%)<span class="text-red-500">*</span></label>
+                                <label for="course_pass_percent" class="block mb-2 font-medium text-gray-900">{{ __('Pass Percentage') }} (%)<span class="text-red-500">*</span></label>
                                 <input type="number" id="course_pass_percent" name="course_pass_percent" value="{{ $course->pass_percent }}" minlength="1" maxlength="3" max="100" class="shadow-sm border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="" required />
                                 @error('course_pass_percent')
                                 <span class="text-red-500">{{ $message }}</span>

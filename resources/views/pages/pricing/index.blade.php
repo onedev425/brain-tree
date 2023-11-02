@@ -1,8 +1,8 @@
 @extends('layouts.app')
 
-@section('title',  __('Pricing'))
+@section('title',  __('Purchases'))
 
-@section('page_heading',   __('Pricing'))
+@section('page_heading',   __('Purchases'))
 
 @section('content')
     @if (auth()->user()->hasRole('super-admin'))

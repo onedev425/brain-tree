@@ -120,7 +120,7 @@ class Menu extends Component
                 'icon'  => '<svg xmlns="http://www.w3.org/2000/svg" width="30.299" height="30.306" viewBox="0 0 30.299 30.306">
                               <path id="Icon_ionic-ios-pricetag" data-name="Icon ionic-ios-pricetag" d="M29.553,3.375H21.244a.978.978,0,0,0-.69.284L3.943,20.27a1.951,1.951,0,0,0,0,2.752l7.91,7.91a1.951,1.951,0,0,0,2.752,0l16.6-16.6a.978.978,0,0,0,.284-.69V5.322A1.938,1.938,0,0,0,29.553,3.375Zm-3.225,7.559A2.163,2.163,0,1,1,28.241,9.02,2.165,2.165,0,0,1,26.328,10.934Z" transform="translate(-2.194 -2.375)" fill="none" stroke="currentColor" stroke-width="2"/>
                             </svg>',
-                'text'  => 'Pricing',
+                'text'  => 'Purchases',
                 'route' => 'pricing.index',
                 'sub_routes' => ['pricing.index'],
                 'can' => 'pricing'

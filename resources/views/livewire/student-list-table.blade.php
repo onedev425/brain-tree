@@ -11,6 +11,7 @@
             <thead class="">
                 <th class="capitalize p-4 whitespace-nowrap text-left">{{ __('Name') }}</th>
                 <th class="capitalize p-4 whitespace-nowrap text-center">{{ __('Enrolled') }}</th>
+                <th class="capitalize p-4 whitespace-nowrap text-center">{{ __('Action') }}</th>
             </thead>
             <tbody class="">
                 @if ($students->isNotEmpty())
@@ -24,6 +25,21 @@
 
                             </td>
                             <td class="p-4 whitespace-nowrap">{{ date('m-d-Y', strtotime($student->created_at)) }}</td>
+                            <td class="p-4 whitespace-nowrap flex justify-center">
+                                <form action="{{ route('user.lock-account', $student) }}" method="POST">
+                                    @csrf
+                                    @method('post')
+                                    <input type="hidden" name="lock" value="{{ ! $student->locked }}" />
+                                    <button type="submit" class="{{ $student->locked ? 'bg-orange-400' : 'bg-red-500' }} px-3 py-1 text-white rounded mr-2">{{ $student->locked ? __('Activate') : __('Suspend') }}</button>
+                                </form>
+                                <form id="user_delete_form" action="{{ route('user.destroy', $student) }}" method="POST">
+                                    <button id="delete_user_button" class="bg-red-500 px-3 py-1 text-white rounded">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+                                    @method('delete')
+                                    @csrf
+                                </form>
+                            </td>
                         </tr>
                     @endforeach
                 @else
