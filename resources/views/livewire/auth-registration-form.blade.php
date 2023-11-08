@@ -13,6 +13,9 @@
 
         </div>
     </div>
+    <div class="flex justify-center items-center text-3xl font-bold mb-8 text-black">
+        {{ __('Application') }}
+    </div>
 
     <div class="block md:flex">
         <div class="w-full md:w-1/2 px-3">
