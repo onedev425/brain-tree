@@ -13,10 +13,11 @@
 
         </div>
     </div>
-    <div class="flex justify-center items-center text-3xl font-bold mb-8 text-black">
-        {{ __('Application') }}
-    </div>
-
+    @if (old('role') != 3)
+        <div class="application-label flex justify-center items-center text-2xl font-bold mb-8 text-black">
+            {{ __('Application') }}
+        </div>
+    @endif
     <div class="block md:flex">
         <div class="w-full md:w-1/2 px-3">
             <label for="" class="font-medium px-1 block mb-1">{{ __('Full name') }} <span class="text-red-500">*</span></label>
@@ -204,6 +205,7 @@
                 $('div.language-section').addClass('hidden');
                 $('div.skills-section').addClass('hidden');
                 $('div.description-section').addClass('hidden');
+                $('div.application-label').addClass('hidden');
             })
 
             $('#opt_instructor').on('click', function() {
@@ -214,6 +216,7 @@
                 $('div.language-section').removeClass('hidden');
                 $('div.skills-section').removeClass('hidden');
                 $('div.description-section').removeClass('hidden');
+                $('div.application-label').removeClass('hidden');
             })
         });
 
