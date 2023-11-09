@@ -10,11 +10,10 @@
                 <input type="radio" name="role" id="opt_instructor" class="form-radio h-4 w-4 text-blue-600" value="2" {{ old('role') == 2 || old('role') == '' ? 'checked' : '' }}>
                 <span class="ml-2 text-gray-700">{{ __('Instructor') }}</span>
             </label>
-
         </div>
     </div>
     @if (old('role') != 3)
-        <div class="application-label flex justify-center items-center text-2xl font-bold mb-8 text-black">
+        <div class="application-label flex justify-center items-center text-2xl font-bold mb-12 text-black">
             {{ __('Application') }}
         </div>
     @endif
