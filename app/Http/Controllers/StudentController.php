@@ -75,32 +75,26 @@ class StudentController extends Controller
         return view('pages.student.show', compact('student'));
     }
 
-    public function update(Request $request, User $user): RedirectResponse
+    public function update(Request $request, User $student): RedirectResponse
     {
         $input['name'] = $request['name'];
         $input['phone'] = $request->input('phone');
-        Log::info('Created the user successfully'.$request['email']);
-        Log::info('Created the user successfully11'.json_encode($user));
-        Log::info('Created the user successfully22'.json_encode($request));
+        $input['email'] = $request->input('email');
         $validation_rules = array(
             'name'        => ['required', 'string', 'max:255'],
-            'email'       => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
+            'email'       => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($student->id)],
         );
 
         $input['birthday'] = $request['birthday'];
         $validation_rules['birthday'] = ['required', 'string', 'max:20'];
         Validator::make($input, $validation_rules)->validate();
 
-        if ($request['email'] !== $user->email) {
-            $input['email'] = $request('email');
-        }
-
         $input['country_id'] = $request['country'];
         $input['language_id'] = $request['language'];
         $input['industry_id'] = $request['industry'];
 
-        $user->forceFill($input)->save();
+        $student->forceFill($input)->save();
 
-        return back()->with('success', 'The student profile updated successfully');
+        return redirect()->route('students.show', $student->id)->with('success', 'The student profile updated successfully');
     }
 }

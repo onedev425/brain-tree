@@ -19,10 +19,12 @@
                     <div class="text-xl">{{ __('Email') }}</div>
                     <div>{{ $user->email }}</div>
                 </div>
-                 <div class="flex items-start flex-col h-16 flex-wrap ml-8">
-                    <div class="text-xl">{{ __('Birthday') }}</div>
-                    <div>{{ $user->birthday }}</div>
-                </div>
+                @if ($user->hasRole('student'))
+                    <div class="flex items-start flex-col h-16 flex-wrap ml-8">
+                        <div class="text-xl">{{ __('Birthday') }}</div>
+                        <div>{{ $user->birthday }}</div>
+                    </div>
+                @endif
                 @if (!$user->hasRole('student'))
                     <div class="flex items-start flex-col h-16 flex-wrap ml-8">
                         <div class="text-xl">{{ __('Skills') }}</div>
@@ -31,10 +33,6 @@
                 @endif
             </div>
             <div class="flex flex-col w-full lg:w-fit mt-5 lg:mt-0 justify-around ml-5 h-48">
-                <div class="flex items-start flex-col h-16 flex-wrap ml-8">
-                    <div class="text-xl">{{ __('Country') }}</div>
-                    <div>{{ $user->country }}</div>
-                </div>
                  <div class="flex items-start flex-col h-16 flex-wrap ml-8">
                     <div class="text-xl">{{ __('Phone Number') }}</div>
                     <div>{{ $user->phone }}</div>

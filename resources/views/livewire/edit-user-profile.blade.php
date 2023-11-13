@@ -1,10 +1,8 @@
 <div class="card">
     <div class="card-body">
         <form action="{{  $user->hasRole('student') ? route('students.update', $user) : route('teachers.update', $user) }}" method="POST" enctype="multipart/form-data">
+            @method('PUT')
             @csrf
-            @if($user->id)
-                @method('PUT')
-            @endif
             <div class="md:grid grid-cols-12 gap-4">
                 <div class="col-span-12 flex flex-col my-2">
                     <label class="font-bold my-3">{{ __('Full name') }} <span class='text-red-500'>*</span></label>

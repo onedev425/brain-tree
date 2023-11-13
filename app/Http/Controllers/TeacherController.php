@@ -47,24 +47,22 @@ class TeacherController extends Controller
      */
     public function edit(User $teacher): View
     {
+        $this->authorize('view', [$teacher, 'teacher']);
         return view('pages.teacher.edit', compact('teacher'));
     }
 
-    public function update_teacher(Request $request, User $user)
+    public function update(Request $request, User $teacher)
     {
         $input['name'] = $request['name'];
         $input['phone'] = $request->input('phone');
+        $input['email'] = $request->input('email');
 
         $validation_rules = array(
             'name'        => ['required', 'string', 'max:255'],
-            'email'       => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
+            'email'       => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($teacher->id)],
         );
 
         Validator::make($input, $validation_rules)->validate();
-
-        if ($request['email'] !== $user->email) {
-            $input['email'] = $request->input('email');
-        }
 
         $input['country_id'] = $request['country'];
         $input['language_id'] = $request['language'];
@@ -72,8 +70,8 @@ class TeacherController extends Controller
         $input['experience'] = $request['experience'];
         $input['skills'] = $request['skills'];
         $input['description'] = $request['description'];
-        $user->forceFill($input)->save();
+        $teacher->forceFill($input)->save();
 
-        return back()->with('success', 'The instructor profile updated successfully');
+        return redirect()->route('teachers.show', $teacher->id)->with('success', 'The instructor profile updated successfully');
     }
 }
