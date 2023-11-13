@@ -79,12 +79,13 @@ Route::middleware('auth:sanctum', 'verified', 'App\Http\Middleware\PreventLockAc
             'destroy' => 'teacher.course.destroy',
         ]);
     });
-
+    Route::post('update_teacher', ['App\Http\Controllers\TeacherController', 'update_teacher'])->name('teacher.profile.update');
+    Route::post('update_student', ['App\Http\Controllers\StudentController', 'update_student'])->name('student.profile.update');
     //student routes
-    Route::resource('students', StudentController::class);
+    Route::resource('students', StudentController::class)->only(['index', 'show', 'edit', 'update']);
 
     //teacher routes
-    Route::resource('teachers', TeacherController::class)->only(['index', 'show']);
+    Route::resource('teachers', TeacherController::class)->only(['index', 'show', 'edit', 'update']);
 
     // industry routes
     Route::resource('industry', IndustryController::class);

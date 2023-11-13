@@ -7,6 +7,8 @@ use App\Services\Teacher\TeacherService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class TeacherController extends Controller
 {
@@ -40,4 +42,38 @@ class TeacherController extends Controller
         return view('pages.teacher.show', compact('teacher'));
     }
 
+    /**
+     * Edit the specified resource.
+     */
+    public function edit(User $teacher): View
+    {
+        return view('pages.teacher.edit', compact('teacher'));
+    }
+
+    public function update_teacher(Request $request, User $user)
+    {
+        $input['name'] = $request['name'];
+        $input['phone'] = $request->input('phone');
+
+        $validation_rules = array(
+            'name'        => ['required', 'string', 'max:255'],
+            'email'       => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
+        );
+
+        Validator::make($input, $validation_rules)->validate();
+
+        if ($request['email'] !== $user->email) {
+            $input['email'] = $request->input('email');
+        }
+
+        $input['country_id'] = $request['country'];
+        $input['language_id'] = $request['language'];
+        $input['industry_id'] = $request['industry'];
+        $input['experience'] = $request['experience'];
+        $input['skills'] = $request['skills'];
+        $input['description'] = $request['description'];
+        $user->forceFill($input)->save();
+
+        return back()->with('success', 'The instructor profile updated successfully');
+    }
 }
