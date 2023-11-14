@@ -1,6 +1,6 @@
-<div class="flex w-full relative">
+<div class="flex flex-col lg:flex-row w-full relative">
     <x-loading-spinner/>
-    <div class="card w-3/5 ml-auto relative overflow-hidden">
+    <div class="card w-full lg:w-3/5 ml-auto relative overflow-hidden">
         <div class="w-full absolute top-0 left-0 right-0 text-center p-4 bg-red-500 text-2xl font-bold uppercase text-white" >{{ $course->title }}</div>
         <div class="card-body pt-10 w-full h-full flex flex-col">
             <span class="text-2xl font-bold">{{ __('Course Description') }}</span>
@@ -64,7 +64,7 @@
             </div>
         </div>
     </div>
-    <div class="card w-1/4 ml-12 mr-auto p-4">
+    <div class="card w-full lg:w-1/4 lg:ml-12 mr-auto p-4">
         <div class="card-body flex flex-col">
             <img src="{{ $course->image }}" class="rounded-lg"/>
             <span class="mt-4 text-2xl font-bold">$ {{ $course->price }}</span>

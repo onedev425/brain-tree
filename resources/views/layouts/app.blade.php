@@ -36,14 +36,14 @@
         </a>
         <div x-data="{ menuOpen: window.innerWidth >=  1024 ? $persist(false) : false }">
             <livewire:layouts.header/>
-            <div class="md:flex md:flex-cols text-gray-900 bg-gray-100" >
+            <div class="lg:flex lg:flex-cols text-gray-900 bg-gray-100" >
                 <livewire:layouts.menu />
                 <div class="w-full">
-                    <div class="hidden text-xl uppercase text-white font-semibold p-3 md:px-8 md:text-2xl md:-mt-16 md:block lg:text-3xl lg:-mt-20">
+                    <div class="hidden truncate text-xl uppercase text-white font-semibold p-3 lg:px-8 lg:text-2xl lg:-mt-16 lg:block lg:text-3xl lg:-mt-20">
                         @yield('page_heading')
                     </div>
-                    <div class="beautify-scrollbar md:mt-1 lg:mt-3">
-                        <main class="p-3 md:px-8 md:py-4" id="main">
+                    <div class="beautify-scrollbar lg:mt-1 lg:mt-3">
+                        <main class="p-3 lg:px-8 lg:py-4" id="main">
                             @yield('content')
                         </main>
                     </div>
