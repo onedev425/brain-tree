@@ -5,7 +5,7 @@
             <i class="fa fa-bars" aria-hidden="true"></i>
         </button>
     </div>
-    <div class="w-4/5 text-xl ml-16 capitalize text-white font-semibold p-3 -mt-12 truncate">
+    <div class="w-4/5 uppercase text-xl ml-16 text-white font-semibold p-3 -mt-12 truncate">
         @yield('page_heading')
     </div>
 </div>
