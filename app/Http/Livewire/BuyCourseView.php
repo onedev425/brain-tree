@@ -16,6 +16,7 @@ class BuyCourseView extends Component
     public $questions;
     public $video_duration;
     public $showModal = false;
+    public $paypal_config;
 
     public function buyCourse()
     {
@@ -31,6 +32,8 @@ class BuyCourseView extends Component
 
     public function render()
     {
+        $config = config('paypal');
+        $this->paypal_config = $config['mode'] == 'sandbox' ? $config['sandbox'] : $config['live'];
         return view('livewire.buy-course-view');
     }
 }

@@ -137,7 +137,7 @@
         </div>
 
     </div>
-    <script src="https://www.paypal.com/sdk/js?client-id=AThEmAKnFG2Ar9HwwNZrwcaBPnydWmMAptRDTiB1tSQsCEnh7sgEA8ePom5jaJGpFpbrQd4sTsWtTocf"></script>
+    <script src="https://www.paypal.com/sdk/js?client-id={{$paypal_config['client_id']}}&disable-funding=paylater"></script>
     <script>
         window.paypal
             .Buttons({
