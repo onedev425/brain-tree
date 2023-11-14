@@ -39,7 +39,7 @@
             <div class="md:flex md:flex-cols text-gray-900 bg-gray-100" >
                 <livewire:layouts.menu />
                 <div class="w-full">
-                    <div class="hidden text-xl capitalize text-white font-semibold p-3 md:px-8 md:text-2xl md:-mt-16 md:block lg:text-3xl lg:-mt-20">
+                    <div class="hidden text-xl uppercase text-white font-semibold p-3 md:px-8 md:text-2xl md:-mt-16 md:block lg:text-3xl lg:-mt-20">
                         @yield('page_heading')
                     </div>
                     <div class="beautify-scrollbar md:mt-1 lg:mt-3">
