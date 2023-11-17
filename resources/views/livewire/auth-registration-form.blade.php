@@ -3,20 +3,18 @@
         <div>{{ __('Register As,') }}</div>
         <div class="inline-flex space-x-4">
             <label class="py-4 rounded-lg flex items-center">
-                <input type="radio" name="role" id="opt_studio" class="form-radio h-4 w-4 text-blue-600" value="3" {{ old('role') == 3 ? 'checked' : '' }}>
+                <input type="radio" name="role" id="opt_studio" class="form-radio h-4 w-4 text-blue-600" value="3" {{ old('role') == 3 || old('role') == '' ? 'checked' : '' }}>
                 <span class="ml-2 text-gray-700">{{ __('Student') }}</span>
             </label>
             <label class="py-4 rounded-lg flex items-center">
-                <input type="radio" name="role" id="opt_instructor" class="form-radio h-4 w-4 text-blue-600" value="2" {{ old('role') == 2 || old('role') == '' ? 'checked' : '' }}>
+                <input type="radio" name="role" id="opt_instructor" class="form-radio h-4 w-4 text-blue-600" value="2" {{ old('role') == 2 ? 'checked' : '' }}>
                 <span class="ml-2 text-gray-700">{{ __('Instructor') }}</span>
             </label>
         </div>
     </div>
-    @if (old('role') != 3)
         <div class="application-label flex justify-center items-center text-2xl font-bold mb-12 text-black">
             {{ __('Application') }}
         </div>
-    @endif
     <div class="block md:flex">
         <div class="w-full md:w-1/2 px-3">
             <label for="" class="font-medium px-1 block mb-1">{{ __('Full name') }} <span class="text-red-500">*</span></label>
@@ -61,11 +59,11 @@
                 @endforeach
             </select>
         </div>
-        <div class="col-span-6 flex flex-col px-3 country-list {{ old('role') == 3 ? 'hidden' : '' }}">
+        <div class="col-span-6 flex flex-col px-3 country-list {{ old('role') != 2 ? 'hidden' : '' }}">
             <label class="font-medium block px-1 mb-1">{{ __('Country') }} <span class='text-red-500'>*</span></label>
             <input type="text" id="country-iti" name="country-iti" class="w-full">
         </div>
-        <div class="col-span-6 flex flex-col px-3 category-section {{ old('role') == 3 ? 'hidden' : '' }}">
+        <div class="col-span-6 flex flex-col px-3 category-section {{ old('role') != 2 ? 'hidden' : '' }}">
             <label class="font-medium block px-1 mb-1">{{ __('Category') }} <span class='text-red-500'>*</span></label>
             <select id="industry" name="industry" class="w-full p-2 border rounded-md border-gray-400 focus:border-blue-500 bg-inherit">
                 @foreach ($industries as $industry)
@@ -74,7 +72,7 @@
             </select>
         </div>
 
-        <div class="col-span-6 flex flex-col px-3 language-section {{ old('role') == 3 ? 'hidden' : '' }}">
+        <div class="col-span-6 flex flex-col px-3 language-section {{ old('role') != 2 ? 'hidden' : '' }}">
             <label class="font-medium block px-1 mb-1">{{ __('Language') }} <span class='text-red-500'>*</span></label>
             <select id="language" name="language" class="w-full p-2 border rounded-md border-gray-400 focus:border-blue-500 bg-inherit">
                 @foreach ($languages as $language)
@@ -83,7 +81,7 @@
             </select>
         </div>
 
-        <div class="col-span-6 flex flex-col px-3 experience-section {{ old('role') == 3 ? 'hidden' : '' }}">
+        <div class="col-span-6 flex flex-col px-3 experience-section {{ old('role') != 2 ? 'hidden' : '' }}">
             <label class="font-medium block px-1 mb-1">{{ __('Years of Experience') }} <span class='text-red-500'>*</span></label>
             <select id="experience" name="experience" class="w-full p-2 border rounded-md border-gray-400 focus:border-blue-500 bg-inherit">
                 @php ($experiences = ['1-3', '4-7', '8-10', '11-15', '16-20', '21 and up'])
@@ -93,12 +91,12 @@
             </select>
         </div>
 
-        <div class="col-span-12 flex flex-col px-3 skills-section {{ old('role') == 3 ? 'hidden' : '' }}">
+        <div class="col-span-12 flex flex-col px-3 skills-section {{ old('role') != 2 ? 'hidden' : '' }}">
             <label class="font-medium block px-1 mb-1">{{ __('List your Skill here:') }}</label>
             <textarea id="skills" name="skills" class="border border-gray-500 p-2 rounded bg-inherit w-full" rows="3" ></textarea>
         </div>
 
-        <div class="col-span-12 flex flex-col px-3 mb-7 description-section {{ old('role') == 3 ? 'hidden' : '' }}">
+        <div class="col-span-12 flex flex-col px-3 mb-7 description-section {{ old('role') != 2 ? 'hidden' : '' }}">
             <label class="font-medium block px-1 mb-1">{{ __('What are your goals for this course?') }}</label>
             <textarea id="description" name="description" class="border border-gray-500 p-2 rounded bg-inherit w-full" rows="5" ></textarea>
         </div>
@@ -176,6 +174,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
     <script>
         $(document).ready(function() {
+            $('div.application-label').addClass('hidden');
             var input = document.querySelector("#country-iti");
             var iti = window.intlTelInput(input, {
                 separateDialCode: true,

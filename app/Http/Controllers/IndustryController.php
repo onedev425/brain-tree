@@ -8,6 +8,9 @@ use App\Services\Industry\IndustryService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
 use Illuminate\View\View;
+use GuzzleHttp\Client;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Log;
 
 class IndustryController extends Controller
 {
@@ -41,6 +44,17 @@ class IndustryController extends Controller
     public function store(StoreIndustryRequest $request): RedirectResponse
     {
         $this->industryService->storeIndustry($request->validated());
+        $client = new Client();
+
+        try {
+            $client->request('POST', env('WP_API_SYNC_BASE_URL') . "/wp-json/sync-api/v1/category/create", [
+                'form_params' => ['category' => $request['name']]
+            ]);
+        } catch(\Exception $e) {
+            Log::error('An error occurred: ' . $e->getMessage(), [
+                'exception' => $e,
+            ]);
+        }
 
         return redirect()->route('industry.index')->with('success', 'Industry Created Successfully');
     }
@@ -67,6 +81,20 @@ class IndustryController extends Controller
     public function update(StoreIndustryRequest $request, Industry $industry): RedirectResponse
     {
         $this->industryService->updateIndustry($industry, $request->validated());
+        $client = new Client();
+
+        try {
+            $client->request('POST', env('WP_API_SYNC_BASE_URL') . "/wp-json/sync-api/v1/category/update", [
+                'form_params' => [
+                    'category' => $industry->name,
+                    'new_category' => $request['name']
+                ]
+            ]);
+        } catch(\Exception $e) {
+            Log::error('An error occurred: ' . $e->getMessage(), [
+                'exception' => $e,
+            ]);
+        }
 
         return back()->with('success', 'Industry Updated Successfully');
     }
@@ -76,7 +104,19 @@ class IndustryController extends Controller
      */
     public function destroy(Industry $industry): RedirectResponse
     {
-        $this->industryService->deleteIndustry($industry);
+        try {
+            $this->industryService->deleteIndustry($industry);
+            $client = new Client();
+
+                $client->request('POST', env('WP_API_SYNC_BASE_URL') . "/wp-json/sync-api/v1/category/delete", [
+                    'form_params' => ['category' => $industry->name]
+                ]);
+        } catch(\Exception $e) {
+            Log::error('An error occurred: ' . $e->getMessage(), [
+                'exception' => $e,
+            ]);
+            return back()->with('danger', 'It\'s failed to delete the course because there is a course that is using an industry.');
+        }
 
         return back()->with('success', 'Industry Deleted Successfully');
     }
