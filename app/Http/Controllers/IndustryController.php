@@ -80,13 +80,14 @@ class IndustryController extends Controller
      */
     public function update(StoreIndustryRequest $request, Industry $industry): RedirectResponse
     {
+        $oldCategory = $industry->name;
         $this->industryService->updateIndustry($industry, $request->validated());
         $client = new Client();
 
         try {
             $client->request('POST', env('WP_API_SYNC_BASE_URL') . "/wp-json/sync-api/v1/category/update", [
                 'form_params' => [
-                    'category' => $industry->name,
+                    'category' => $oldCategory,
                     'new_category' => $request['name']
                 ]
             ]);
@@ -96,7 +97,7 @@ class IndustryController extends Controller
             ]);
         }
 
-        return back()->with('success', 'Industry Updated Successfully');
+        return redirect()->route('industry.index')->with('success', 'Industry Updated Successfully');
     }
 
     /**
