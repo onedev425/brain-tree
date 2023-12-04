@@ -12,7 +12,6 @@
 			<div x-data="{ open: false }" class="relative mr-5">
 				<div @click="open = !open" class="flex items-center cursor-pointer">
 					<div class="rounded-full overflow-hidden mr-2">
-						{{ $photo_path }}
 						<img src="{{ $photo_path == '' ? '/images/logo/avatar.png' : $photo_path }}" alt="Avatar" class="w-8 h-8 object-cover">
 					</div>
 					<span>{{ auth()->user()->name }}</span>
