@@ -60,7 +60,7 @@ class WPSync implements ShouldQueue
                         'category' => $industry->name,
                         'cost' => $course->price,
                         'instructor' => $course->assignedTeacher->name,
-                        'post_status' => $course->is_published,
+                        'post_status' => $course->is_published ? 'publish' : 'draft',
                         'featured_image' => $course->image,
                         'rating' => $course->course_rate(),
                         'duration' => $video_duration,
