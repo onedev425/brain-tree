@@ -1,25 +1,45 @@
-name: BraintreesPro deployment
-
+name: Braintreespro FTP deploy on push
 on:
-  push:
+  pull_request:
+    types:
+      - closed
     branches:
-      - master
-
+      - 'master'
 jobs:
-  deploy:
-    runs-on: self-hosted
-
+  web-deploy:
+    if: github.event.pull_request.merged == true
+    name: Deploy
+    runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Set up PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.2.6' # Adjust the PHP version as needed
-
-      - name: Install dependencies
-        run: composer install --no-dev --prefer-dist --optimize-autoloader
-
-      - name: Run Migrate
-        run: php artisan migrate
+    - name: Get latest code
+      uses: actions/checkout@v2
+    - name: Sync files
+      uses: SamKirkland/FTP-Deploy-Action@4.3.0
+      with:
+        server: ${{ vars.FTP_HOST }}
+        username: ${{ secrets.FTP_USER }}
+        password: ${{ secrets.FTP_PASSWORD }}
+        server-dir: ${{ vars.FTP_PATH }}
+        # Deletes ALL contents of server-dir, even items in excluded with exclude argument
+    - name: SSH update dependencies
+      uses: cross-the-world/ssh-pipeline@master
+      with:
+        host: ${{ vars.SSH_HOST }}
+        user: ${{ secrets.SSH_USER }}
+        pass: ${{secrets.SSH_PASSPHRASE}}
+        script: |
+          cd public_html/app
+          composer update --optimize-autoloader
+    - name: SSH migrate & cleanup
+      uses: cross-the-world/ssh-pipeline@master
+      with:
+        host: ${{ vars.SSH_HOST }}
+        user: ${{ secrets.SSH_USER }}
+        pass: ${{secrets.SSH_PASSPHRASE}}
+        script: |
+          cd public_html/app
+          php artisan config:clear
+          php artisan cache:clear
+          php artisan migrate
+          php artisan route:cache
+          php artisan view:clear
