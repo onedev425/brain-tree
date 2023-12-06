@@ -20,14 +20,16 @@ class WPSync implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
     protected User $user;
     protected $courses;
+    protected CourseService $courseService;
 
     /**
      * Create a new job instance.
      */
-    public function __construct($user, $courses)
+    public function __construct($user, $courses, $courseService)
     {
         $this->user = $user;
         $this->courses = $courses;
+        $this->courseService = $courseService;
     }
 
     /**

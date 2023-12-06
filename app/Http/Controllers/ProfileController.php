@@ -104,7 +104,7 @@ class ProfileController extends Controller
 
         if (!$user->hasRole('student')) {
             $courses = $this->courseService->getCourses('publish', $user);
-            WPSync::dispatch($user, $courses);
+            WPSync::dispatch($user, $courses, $this->courseService);
         }
 
         return back()->with('success', 'Your profile updated successfully');
