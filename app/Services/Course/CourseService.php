@@ -24,7 +24,7 @@ class CourseService
     {
         $course = Course::where('wp_course_id', $wp_id)->first();
 
-        return $course->id;
+        return $course ? $course->id : 0;
     }
 
     /**

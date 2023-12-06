@@ -126,7 +126,7 @@ class TeacherCourseController extends Controller
         $video_duration = is_null($video_duration) ? 0 : $this->courseService->convertDurationFromSeconds($video_duration);
 
         try {
-            $client->request('POST', env('WP_API_SYNC_BASE_URL') . "/wp-json/sync-api/v1/course/update", [
+            $response = $client->request('POST', env('WP_API_SYNC_BASE_URL') . "/wp-json/sync-api/v1/course/update", [
                 'form_params' => [
                     'id' => $course->wp_course_id,
                     'title' => $course->title,
@@ -144,6 +144,17 @@ class TeacherCourseController extends Controller
 
                 ],
             ]);
+
+            $responseBody = $response->getBody()->getContents();
+            $data = json_decode($responseBody, true);
+            $courseId = null;
+
+            if (isset($data['course_id'])) {
+                $courseId = $data['course_id'];
+                $course->forceFill([
+                    'wp_course_id' => $courseId
+                ])->save();
+            }
         } catch(\Exception $e) {
             Log::error('An error occurred: ' . $e->getMessage(), [
                 'exception' => $e,
