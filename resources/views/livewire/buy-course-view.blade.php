@@ -22,7 +22,7 @@
                                     </svg>
                                 </span>
                                 <span class="topic_info" data-uuid="{{ $uuid }}">{!! $topic['title'] !!}</span>
-                                <span class="ml-auto">{{ count($topic['lessons']) }} {{ __('Lectures') }}  • {{ $topic['duration'] }}</span>
+                                <span class="ml-auto">{{ count($topic['lessons']) }} {{ __('Lessons') }}  • {{ $topic['duration'] }}</span>
                             </a>
                             <div x-show="selected == '{{ $uuid }}'" class="flex-1 py-4 px-7">
                                 @foreach($topic['lessons'] as $lesson)
@@ -137,6 +137,12 @@
         </div>
 
     </div>
+    <style>
+        span#course_{{$course->id}}_rating::after {
+            width: {{ $course->rating_progress }};
+        }
+    </style>
+
     <script src="https://www.paypal.com/sdk/js?client-id={{$paypal_config['client_id']}}&disable-funding=paylater"></script>
     <script>
         window.paypal

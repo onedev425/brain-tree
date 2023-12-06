@@ -113,7 +113,7 @@
                                                 <span class="topic_info" data-uuid="{{$uuid}}">{!! $topic->description !!}</span>
                                             </div>
                                             <div class="flex mt-1.5">
-                                                <span class="text-sm text-gray-600">{{ count($topic->lessons) }} {{ __('Lectures') }}  • {{ $this->getTopicVideoDuration($topic) }}</span>
+                                                <span class="text-sm text-gray-600">{{ count($topic->lessons) }} {{ __('Lessons') }}  • {{ $this->getTopicVideoDuration($topic) }}</span>
                                             </div>
                                         </a>
                                     </div>

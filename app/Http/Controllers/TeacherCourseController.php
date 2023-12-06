@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Industry;
+use App\Models\Lesson;
 use App\Services\EmailService;
 use Illuminate\Http\RedirectResponse;
 use App\Services\Course\CourseService;
@@ -116,6 +117,13 @@ class TeacherCourseController extends Controller
     {
         $client = new Client();
         $industry = Industry::find($course->industry_id);
+        $lessons = $course->lessons()->get();
+        $questions = $course->questions()->get();
+
+        $video_duration = Lesson::selectRaw('SUM(video_duration) as total_duration')
+            ->where('course_id', $course->id)
+            ->value('total_duration');
+        $video_duration = is_null($video_duration) ? 0 : $this->courseService->convertDurationFromSeconds($video_duration);
 
         try {
             $client->request('POST', env('WP_API_SYNC_BASE_URL') . "/wp-json/sync-api/v1/course/update", [
@@ -129,7 +137,11 @@ class TeacherCourseController extends Controller
                     'instructor' => $course->assignedTeacher->name,
                     'post_status' => $isPubished ? 'publish' : 'draft',
                     'featured_image' => $course->image,
-                    'rating' => $course->course_rate()
+                    'rating' => $course->course_rate(),
+                    'duration' => $video_duration,
+                    'lessons' => count($lessons),
+                    'questions' => count($questions)
+
                 ],
             ]);
         } catch(\Exception $e) {

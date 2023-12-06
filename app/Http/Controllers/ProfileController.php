@@ -6,9 +6,23 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Bus;
+use Illuminate\Support\Facades\Log;
+use App\Services\Course\CourseService;
+use App\Models\Industry;
+use GuzzleHttp\Client;
+use App\Jobs\WPSync;
 
 class ProfileController extends Controller
 {
+    private CourseService $courseService;
+
+    public function __construct(CourseService $courseService)
+    {
+        $this->courseService = $courseService;
+        $this->authorizeResource(Course::class);
+    }
+
     public function update_avatar(Request $request)
     {
         $user = auth()->user();
@@ -69,6 +83,7 @@ class ProfileController extends Controller
             $input['birthday'] = $request['birthday'];
             $validation_rules['birthday'] = ['required', 'string', 'max:20'];
         }
+
         Validator::make($input, $validation_rules)->validate();
 
         if ($input['email'] !== $user->email &&
@@ -85,6 +100,11 @@ class ProfileController extends Controller
             if (isset($request['skills'])) $input['skills'] = $request['skills'];
             if (isset($request['description'])) $input['description'] = $request['description'];
             $user->forceFill($input)->save();
+        }
+
+        if (!$user->hasRole('student')) {
+            $courses = $this->courseService->getCourses('publish', $user);
+            WPSync::dispatch($user, $courses);
         }
 
         return back()->with('success', 'Your profile updated successfully');
