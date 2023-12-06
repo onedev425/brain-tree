@@ -14,6 +14,7 @@ use App\Models\Lesson;
 use App\Models\User;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Log;
+use App\Services\Course\CourseService;
 
 class WPSync implements ShouldQueue
 {
