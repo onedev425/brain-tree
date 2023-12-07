@@ -842,10 +842,10 @@
                     toastr.error('You need at least one topic and lesson.');
                     return false;
                 }
-                else if ($('div#quiz_list div.quiz_info').length == 0) {
-                    toastr.error('You need at least one question.');
-                    return false;
-                }
+                // else if ($('div#quiz_list div.quiz_info').length == 0) {
+                //     toastr.error('You need at least one question.');
+                //     return false;
+                // }
                 else {
                     let topic_list = [];
                     $.each($('div#topic_list span.topic_info'), function(index, topic_obj) {
