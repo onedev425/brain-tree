@@ -27,6 +27,14 @@ class TeacherCourseController extends Controller
     {
         $this->courseService = $courseService;
         $this->authorizeResource(Course::class);
+
+        $this->middleware(function($request, $next) {
+            if (auth()->user()->hasRole('student')) {
+                return redirect()->route('home');
+            }
+
+            return $next($request);
+        });
     }
 
     public function index(): View
