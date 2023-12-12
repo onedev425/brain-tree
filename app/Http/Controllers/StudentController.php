@@ -30,6 +30,14 @@ class StudentController extends Controller
     {
         $this->studentService = $studentService;
         $this->userService = $userService;
+
+        $this->middleware(function($request, $next) {
+            if (!auth()->user()->hasRole('student')) {
+                return redirect()->route('home');
+            }
+
+            return $next($request);
+        });
     }
 
     /**

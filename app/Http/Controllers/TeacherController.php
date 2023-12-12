@@ -17,6 +17,14 @@ class TeacherController extends Controller
     public function __construct(TeacherService $teacherService)
     {
         $this->teacherService = $teacherService;
+
+        $this->middleware(function($request, $next) {
+            if (auth()->user()->hasRole('student')) {
+                return redirect()->route('home');
+            }
+
+            return $next($request);
+        });
     }
 
     /**
