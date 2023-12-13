@@ -116,7 +116,7 @@ class IndustryController extends Controller
             Log::error('An error occurred: ' . $e->getMessage(), [
                 'exception' => $e,
             ]);
-            return back()->with('danger', 'It\'s failed to delete the course because there is a course that is using an industry.');
+            return back()->with('notify', 'It\'s failed to delete the course because there is a course that is using an industry.');
         }
 
         return back()->with('success', 'Industry Deleted Successfully');

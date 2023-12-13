@@ -107,7 +107,7 @@ class RegistrationController extends Controller
         if ($result == 'success')
             return redirect()->route('login')->with('success', __('Registration complete, you would receive an email to verify your account'));
         else
-            return back()->with('danger', __('Email sending failed: ') . $result);
+            return back()->with('notify', __('Email sending failed: ') . $result);
     }
 
     public function verification_resend(Request $request)
@@ -131,7 +131,7 @@ class RegistrationController extends Controller
         if ($result == 'success')
             return back()->with('status', __('Successfully sent Email!'));
         else
-            return back()->with('danger', __('Email sending failed: ') . $result);
+            return back()->with('notify', __('Email sending failed: ') . $result);
     }
 
     public function password_reset(Request $request)
@@ -174,7 +174,7 @@ class RegistrationController extends Controller
         if ($result == 'success')
             return back()->with('status', __('We have emailed the link to reset the password.'));
         else
-            return back()->with('danger', __('Email sending failed: ') . $result);
+            return back()->with('notify', __('Email sending failed: ') . $result);
     }
 
     public function password_update(Request $request)
@@ -185,7 +185,7 @@ class RegistrationController extends Controller
 
         $token_info = DB::table('password_resets')->where('token', $input['token'])->first();
         if (! $token_info) {
-            return back()->with('danger', __('This password reset token is invalid.'));
+            return back()->with('notify', __('This password reset token is invalid.'));
         }
 
         Validator::make($input, ['password' => ['required', 'string', new \Laravel\Fortify\Rules\Password, 'confirmed']])->validate();

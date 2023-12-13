@@ -93,10 +93,10 @@ class StudentCourseMainForm extends Component
                 if ($result == 'success')
                     return redirect()->away($payment_result['redirect_url']);
                 else
-                    return back()->with('danger', __('Email sending failed: ') . $result);
+                    return back()->with('notify', __('Email sending failed: ') . $result);
             }
             else
-                return back()->with('danger', __('Email sending failed: ') . $result);
+                return back()->with('notify', __('Email sending failed: ') . $result);
 
         }
         else

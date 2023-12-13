@@ -18,6 +18,7 @@ use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
+use Illuminate\Support\Facades\Validator;
 
 class TeacherCourseController extends Controller
 {
@@ -66,9 +67,18 @@ class TeacherCourseController extends Controller
 
     public function store(TeacherCourseStoreRequest $request): RedirectResponse
     {
+        $validator = Validator::make($request->all(), [
+            'course_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // 2MB limit (adjust as needed)
+        ]);
+
+        // Check if validation fails
+        if ($validator->fails()) {
+            return back()->with('notify', __('You exceeded file limit of 2mb.'));
+        }
+
         $data = $this->getCourseData($request);
         if ($data == []) {
-            return back()->with('danger', __('You need at least one topic and lesson.'));
+            return back()->with('notify', __('You need at least one topic and lesson.'));
         }
 
         if ( !array_key_exists('course_image', $data))
@@ -93,9 +103,18 @@ class TeacherCourseController extends Controller
 
     public function update(TeacherCourseStoreRequest $request, Course $course): RedirectResponse
     {
+        $validator = Validator::make($request->all(), [
+            'course_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // 2MB limit (adjust as needed)
+        ]);
+
+        // Check if validation fails
+        if ($validator->fails()) {
+            return back()->with('notify', __('You exceeded file limit of 2mb.'));
+        }
+
         $data = $this->getCourseData($request);
         if ($data == []) {
-            return back()->with('danger', __('You need at least one topic and lesson.'));
+            return back()->with('notify', __('You need at least one topic and lesson.'));
         }
 
         if ($request->hasFile('course_image') || $request['use_default_image'] == 1) {
@@ -192,7 +211,7 @@ class TeacherCourseController extends Controller
             return redirect()->route('teacher.course.index', $publish_result == 1 ? 'type=publish' : 'type=draft');
         }
         else
-            return back()->with('danger', __('Email sending failed: ') . $result);
+            return back()->with('notify', __('Email sending failed: ') . $result);
     }
 
     public function decline(Request $request, Course $course): RedirectResponse
@@ -214,7 +233,7 @@ class TeacherCourseController extends Controller
             return redirect()->route('teacher.course.index', 'type=draft');
         }
         else {
-            return back()->with('danger', __('Email sending failed: ') . $result);
+            return back()->with('notify', __('Email sending failed: ') . $result);
         }
     }
 

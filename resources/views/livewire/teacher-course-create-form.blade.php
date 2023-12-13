@@ -109,7 +109,7 @@
                                                             </span>
                                     <!--end::Remove-->
                                 </div>
-                                <div class="form-text">{{ __('Allowed file types: png, jpg, jpeg.') }}<br/>Max Size: 5MB, 1000 x 1000</div>
+                                <div class="form-text">{{ __('Allowed file types: png, jpg, jpeg.') }}<br/>Max Size: 2MB</div>
                             </div>
                         </div>
                     </div>

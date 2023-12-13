@@ -140,7 +140,7 @@ class AccountApplicationService
         if ($result == 'success')
             AccountStatusChanged::dispatch($applicant, $record['status'], $record['reason']);
         else
-            return back()->with('danger', __('Email sending failed: ') . $result);
+            return back()->with('notify', __('Email sending failed: ') . $result);
     }
 
     /**
