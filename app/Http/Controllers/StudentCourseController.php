@@ -21,14 +21,6 @@ class StudentCourseController extends Controller
         $this->courseService = $courseService;
         $this->studentService = $studentService;
         $this->authorizeResource(Course::class);
-
-        $this->middleware(function($request, $next) {
-            if (!auth()->user()->hasRole('student')) {
-                return redirect()->route('home');
-            }
-
-            return $next($request);
-        });
     }
 
     public function index(): View
@@ -62,6 +54,10 @@ class StudentCourseController extends Controller
 
     public function buy(Course $course): View
     {
+        if (!auth()->user()->hasRole('student')) {
+            return redirect()->route('dashboard');
+        }
+
         $data['course'] = $course;
         $data['topics'] = [];
         $data['lessons'] = [];
