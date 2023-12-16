@@ -74,7 +74,7 @@
                     <div class="card mt-2">
                         <div class="card-header mb-7">
                             <h3 class="text-xl md:text-2xl font-bold">
-                                {{ __('Featured Image') }}
+                                {{ __('Course Image') }}
                             </h3>
                         </div>
                         <div class="card-body">
@@ -235,7 +235,15 @@
                         </div>
                     </div>
                 </div>
-                <div class="ps-4 pb-4 min-w-96 lg:block xl:w-1/3 2xl:w-1/4" style="min-width: 400px"></div>
+                <div class="flex lg:flex ps-4 pb-4 min-w-96 lg:block xl:w-1/3 2xl:w-1/4" style="min-width: 400px">
+                    <button type="submit" id="save_course_button" class="mt-auto mb-6 py-3 px-8 inline-block text-center mb-3 rounded-lg leading-5 text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 hover:ring-0 hover:border-red-600 focus:bg-red-600 focus:border-red-600 focus:outline-none focus:ring-0">
+                        @if (auth()->user()->hasRole('super-admin'))
+                            {{ __('Save as draft') }}
+                        @else
+                            {{ __('Submit for Review') }}
+                        @endif
+                    </button>
+                </div>
             </div>
             <!-- end::Course Quiz -->
         </form>

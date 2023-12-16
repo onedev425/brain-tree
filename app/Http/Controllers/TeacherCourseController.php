@@ -28,14 +28,6 @@ class TeacherCourseController extends Controller
     {
         $this->courseService = $courseService;
         $this->authorizeResource(Course::class);
-
-        $this->middleware(function($request, $next) {
-            if (auth()->user()->hasRole('student')) {
-                return redirect()->route('home');
-            }
-
-            return $next($request);
-        });
     }
 
     public function index(): View
@@ -58,6 +50,13 @@ class TeacherCourseController extends Controller
 
     public function edit(Course $course): View
     {
+        $this->middleware(function($request, $next) {
+            if (auth()->user()->hasRole('student')) {
+                return redirect()->route('home');
+            }
+
+            return $next($request);
+        });
         $data['course'] = $course;
         $data['topics'] = $course->topics()->with('lessons')->get();
         $data['quizzes'] = $course->questions()->with('quiz_options')->get();
@@ -67,6 +66,13 @@ class TeacherCourseController extends Controller
 
     public function store(TeacherCourseStoreRequest $request): RedirectResponse
     {
+        $this->middleware(function($request, $next) {
+            if (auth()->user()->hasRole('student')) {
+                return redirect()->route('home');
+            }
+
+            return $next($request);
+        });
         $validator = Validator::make($request->all(), [
             'course_image' => 'image|mimes:jpeg,png,jpg,gif|max:2048', // 2MB limit (adjust as needed)
         ]);
@@ -103,6 +109,13 @@ class TeacherCourseController extends Controller
 
     public function update(TeacherCourseStoreRequest $request, Course $course): RedirectResponse
     {
+        $this->middleware(function($request, $next) {
+            if (auth()->user()->hasRole('student')) {
+                return redirect()->route('home');
+            }
+
+            return $next($request);
+        });
         $validator = Validator::make($request->all(), [
             'course_image' => 'image|mimes:jpeg,png,jpg,gif|max:2048', // 2MB limit (adjust as needed)
         ]);
@@ -133,6 +146,13 @@ class TeacherCourseController extends Controller
 
     public function destroy(Request $request, Course $course): RedirectResponse
     {
+        $this->middleware(function($request, $next) {
+            if (auth()->user()->hasRole('student')) {
+                return redirect()->route('home');
+            }
+
+            return $next($request);
+        });
         $course->delete();
         return redirect()->route('teacher.course.index', $request['is_published'] == 1 ? 'type=publish' : 'type=draft');
     }
@@ -142,6 +162,13 @@ class TeacherCourseController extends Controller
      */
     private function updateCourseWithWP($isPubished, Course $course)
     {
+        $this->middleware(function($request, $next) {
+            if (auth()->user()->hasRole('student')) {
+                return redirect()->route('home');
+            }
+
+            return $next($request);
+        });
         $client = new Client();
         $industry = Industry::find($course->industry_id);
         $lessons = $course->lessons()->get();
@@ -191,6 +218,13 @@ class TeacherCourseController extends Controller
 
     public function publish(Request $request, Course $course)
     {
+        $this->middleware(function($request, $next) {
+            if (auth()->user()->hasRole('student')) {
+                return redirect()->route('home');
+            }
+
+            return $next($request);
+        });
         $publish_result = $request['is_published'];
         $email_data = [
             'to' => $course->assignedTeacher->email,
@@ -216,6 +250,13 @@ class TeacherCourseController extends Controller
 
     public function decline(Request $request, Course $course): RedirectResponse
     {
+        $this->middleware(function($request, $next) {
+            if (auth()->user()->hasRole('student')) {
+                return redirect()->route('home');
+            }
+
+            return $next($request);
+        });
         $email_data = [
             'to' => $course->assignedTeacher->email,
             'subject' => __('Your course declined'),
