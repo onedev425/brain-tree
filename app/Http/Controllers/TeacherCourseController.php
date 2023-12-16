@@ -68,12 +68,12 @@ class TeacherCourseController extends Controller
     public function store(TeacherCourseStoreRequest $request): RedirectResponse
     {
         $validator = Validator::make($request->all(), [
-            'course_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // 2MB limit (adjust as needed)
+            'course_image' => 'image|mimes:jpeg,png,jpg,gif|max:2048', // 2MB limit (adjust as needed)
         ]);
 
         // Check if validation fails
         if ($validator->fails()) {
-            return back()->with('notify', __('You exceeded file limit of 2mb.'));
+            return back()->with('notify', __('You have exceeded  the max file size of (2mb)'));
         }
 
         $data = $this->getCourseData($request);
@@ -104,12 +104,12 @@ class TeacherCourseController extends Controller
     public function update(TeacherCourseStoreRequest $request, Course $course): RedirectResponse
     {
         $validator = Validator::make($request->all(), [
-            'course_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // 2MB limit (adjust as needed)
+            'course_image' => 'image|mimes:jpeg,png,jpg,gif|max:2048', // 2MB limit (adjust as needed)
         ]);
 
         // Check if validation fails
         if ($validator->fails()) {
-            return back()->with('notify', __('You exceeded file limit of 2mb.'));
+            return back()->with('notify', __('You have exceeded  the max file size of (2mb)'));
         }
 
         $data = $this->getCourseData($request);
