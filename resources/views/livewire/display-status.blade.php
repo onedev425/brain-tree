@@ -1,5 +1,5 @@
 <div>
-    <div class="fixed flex flex-col items-end bottom-2 right-2" id="status-display">
+    <div class="fixed flex flex-col items-end top-2 right-2" id="status-display">
         @if (session('notify'))
             <x-alert colour="bg-yellow-500" title="Warning" icon="fa fa-do-ban" dismissOnTimeout="true" >
                 {{ session('notify') }}
