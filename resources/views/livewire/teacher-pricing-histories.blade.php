@@ -18,10 +18,10 @@
             @if ($courses->isNotEmpty())
                 @foreach($courses as $course)
                     <tr class="border-t">
-                        <td class="p-4 whitespace-nowrap text-left">
+                        <td class="p-4 whitespace-nowrap text-left truncate">
                             <div class="flex">
                                 <img width="50" height="50" class="rounded-full" src="{{ $course->image }}" onerror="this.src='{{ asset('images/logo/course.jpg') }}'" />
-                                <span class="flex items-center gap-2 py-3 px-6">{{ $course->title }}</span>
+                                <span class="block items-center gap-2 py-3 px-6 truncate">{{ $course->title }}</span>
                             </div>
 
                         </td>
