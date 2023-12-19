@@ -31,7 +31,7 @@ class StudentCourseController extends Controller
     public function show(Course $course)
     {
         if (auth()->user()->hasRole('teacher')) {
-            return redirect()->route('dashboard');
+            return view('profile.show');
         }
 
         $available_courses = $this->studentService->getStudentPaidCourses('')->get();
@@ -55,7 +55,7 @@ class StudentCourseController extends Controller
     public function buy(Course $course): View
     {
         if (!auth()->user()->hasRole('student')) {
-            return redirect()->route('dashboard');
+            return view('profile.show');
         }
 
         $data['course'] = $course;

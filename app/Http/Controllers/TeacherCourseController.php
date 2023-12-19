@@ -52,7 +52,7 @@ class TeacherCourseController extends Controller
     {
         $this->middleware(function($request, $next) {
             if (auth()->user()->hasRole('student')) {
-                return redirect()->route('home');
+                return view('profile.show');
             }
 
             return $next($request);
