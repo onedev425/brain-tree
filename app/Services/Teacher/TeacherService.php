@@ -83,7 +83,7 @@ class TeacherService
         return $students;
     }
 
-    public function getSoldCourses(string $search)
+    public function getSoldCourses(string $search, string $fromDate, string $toDate)
     {
         $courses = Course::select('courses.*', 'student_courses.created_at AS purchase_at', 'users.name AS student_name')
             ->join('student_courses', 'courses.id', '=', 'student_courses.course_id')
@@ -91,6 +91,16 @@ class TeacherService
 
         if (auth()->user()->hasRole('teacher'))
             $courses = $courses->where('courses.assigned_id', auth()->user()->id);
+
+        // Filter by date range
+        if ($fromDate) {
+            $courses = $courses->whereDate('student_courses.created_at', '>=', $fromDate);
+        }
+
+        // Apply toDate filter if provided
+        if ($toDate) {
+            $courses = $courses->whereDate('student_courses.created_at', '<=', $toDate);
+        }
 
         if ($search != '')
             $courses = $courses->where(function ($query) use ($search) {

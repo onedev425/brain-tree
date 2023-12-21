@@ -15,7 +15,8 @@ class AdminPayout extends Component
     use WithPagination;
     public string $unique_id;
     public string $search = '';
-    public string $billing_period = '';
+    public string $fromDate = '';
+    public string $toDate = '';
     public int $per_page = 10;
     public $course_fee;
     public array $payout_amounts  = [];
@@ -24,7 +25,6 @@ class AdminPayout extends Component
     {
         $this->unique_id = $unique_id ?? Str::random(10);
         $this->per_page = $per_page;
-        $this->billing_period = date('Y-m', strtotime('last month'));
         $this->course_fee = PaymentFee::where('fee_type', 'teacher_course_fee')->first();
     }
 
@@ -54,7 +54,7 @@ class AdminPayout extends Component
     public function render()
     {
         $adminPricingService = app(AdminPricingService::class);
-        $teachers = $adminPricingService->getSoldCoursesOfTeacher($this->billing_period, $this->search);
+        $teachers = $adminPricingService->getSoldCoursesOfTeacher($this->fromDate, $this->toDate, $this->search);
         $teachers = $teachers->paginate(10);
 
         return view('livewire.admin-payout', [
