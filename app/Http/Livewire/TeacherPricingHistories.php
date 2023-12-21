@@ -11,6 +11,8 @@ class TeacherPricingHistories extends Component
     use WithPagination;
 
     public string $search = '';
+    public string $fromDate = '';
+    public string $toDate = '';
     private TeacherService $teacherService;
 
 
@@ -30,7 +32,7 @@ class TeacherPricingHistories extends Component
             $this->teacherService = app(TeacherService::class);
         }
 
-        $courses = $this->teacherService->getSoldCourses($this->search);
+        $courses = $this->teacherService->getSoldCourses($this->search, $this->fromDate, $this->toDate);
         $courses = $courses->paginate(10);
 
         return view('livewire.teacher-pricing-histories', [

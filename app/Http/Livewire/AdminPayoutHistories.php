@@ -12,14 +12,14 @@ class AdminPayoutHistories extends Component
     use WithPagination;
     public string $unique_id;
     public string $search = '';
-    public string $billing_period = '';
+    public string $fromDate = '';
+    public string $toDate = '';
     public int $per_page = 10;
 
     public function mount($unique_id = null, $per_page = 10)
     {
         $this->unique_id = $unique_id ?? Str::random(10);
         $this->per_page = $per_page;
-        $this->billing_period = date('Y-m', strtotime('last month'));
     }
 
     public function paginationView()
@@ -30,7 +30,7 @@ class AdminPayoutHistories extends Component
     public function render()
     {
         $adminPricingService = app(AdminPricingService::class);
-        $payout_histories = $adminPricingService->getPayoutHistories($this->billing_period, $this->search);
+        $payout_histories = $adminPricingService->getPayoutHistories($this->fromDate, $this->toDate, $this->search);
         $payout_histories = $payout_histories->paginate(10);
 
         return view('livewire.admin-payout-histories', [
