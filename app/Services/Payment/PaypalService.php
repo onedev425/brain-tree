@@ -1,12 +1,17 @@
 <?php
 namespace App\Services\Payment;
 
+use App\Models\User;
 use App\Models\Course;
+use App\Models\PayoutHistory;
 use App\Models\PaymentConnection;
 use App\Models\PaymentFee;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use Srmklive\PayPal\Services\PayPal as PayPalClient;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
+use Ramsey\Uuid\Uuid;
 
 class PaypalService
 {
@@ -130,6 +135,86 @@ class PaypalService
             }
         }
         return ['result' => 'error', 'redirect_url' => route('home'), 'id' => 0];
+    }
+
+    public function payoutSchedule() {
+        $users = User::where('payout_active', true)
+            ->whereDate('payout_at', '=', Carbon::today())
+            ->get();
+
+        $items = array();
+        $payout_list = array();
+        foreach ($users as $user) {
+            $teacher_id = $user->id;
+            $latest_payout = $user->latest_payout_history();
+            // Get earning amount in a month
+            $earning_price = Course::whereHas('payment_purchases', function ($query) use($teacher_id){
+            $query->where('created_at', '>=', isset($latest_payout) ? $latest_payout->created_at : '1970-01-01')
+                ->where('payment_status', '=', 'completed')
+                ->whereHas('course', function ($courseQuery) use ($teacher_id) {
+                    $courseQuery->where('assigned_id', $teacher_id);
+                });
+            })
+            ->get()
+            ->sum(function ($course) {
+                return $course->payment_purchases->sum('paid_amount');
+            });
+            $payment_connection = PaymentConnection::where('teacher_id', $user->id)->first();
+            $payout_amount = $earning_price * $user->fee_amount / 100;
+
+            if ($payment_connection && $payment_connection->paypal_account_id && $earning_price > 0) {
+                $senderItemId = Uuid::uuid4()->toString();
+                $item = [
+                    'recipient_type' => 'PAYPAL_ID',
+                    'amount' => [
+                        "value" => 10,
+                        "currency"=> "USD"
+                    ],
+                    "note" => "Monthly payout completed",
+                    "sender_item_id" => $senderItemId,
+                    "receiver" => $payment_connection->paypal_account_id
+                ];
+
+                $items[] = $item;
+                $payout_list[] = [
+                    'user_id' => $user->id,
+                    'amount' => $payout_amount
+                ];
+            }
+        }
+
+        if (count($items) > 0) {
+            $senderBatchHeader = [
+                "sender_batch_id" => "Payouts_".time().mt_rand(1000, 9999),
+                "email_subject" => "You have a payout from braintreespro",
+                "email_message" => "You have received a payout! Thanks or using braintreespro"
+            ];
+            $data = json_encode([
+                "sender_batch_header" => $senderBatchHeader,
+                "items" => $items
+            ], JSON_PRETTY_PRINT);
+
+            $provider = new PayPalClient();
+            $provider->setApiCredentials(config('paypal'));
+            $paypalToken = $provider->getAccessToken();
+            $provider->setAccessToken($paypalToken);
+
+            $response = $provider->createBatchPayout(json_decode($data, true));
+
+            if (!isset($response['error'])) {
+                foreach($payout_list as $payout) {
+                    $user = User::find($payout['user_id']);
+                    $user->payout_at = Carbon::now()->addDays(30);
+                    $user->last_paid_at = Carbon::now();
+                    $user->save();
+                    PayoutHistory::create([
+                        'teacher_id' => $payout['user_id'],
+                        'paid_amount' => $payout['amount'],
+                        'payment_status' => 'completed'
+                    ]);
+                }
+            }
+        }
     }
 
     public function PayoutToInstructor(int $teacher_id, int $course_amount, string $payee_account_id, int $amount): array

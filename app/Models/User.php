@@ -46,6 +46,10 @@ class User extends Authenticatable implements MustVerifyEmail
         'experience',
         'skills',
         'description',
+        'fee_amount',
+        'payout_at',
+        'last_paid_at',
+        'payout_active'
     ];
 
     /**
@@ -251,4 +255,15 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasMany(Course::class, 'assigned_id');
     }
+
+    public function payout_histories()
+    {
+        return $this->hasMany(PayoutHistory::class, 'teacher_id');
+    }
+
+    public function latest_payout_history()
+    {
+        return $this->payout_histories()->latest('created_at')->first();
+    }
+
 }
