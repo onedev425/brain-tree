@@ -1,30 +1,24 @@
 <div>
     <x-loading-spinner/>
-    <div class="flex items-center justify-between">
-        <div class="flex w-full items-center">
-            From: <input type="date" wire:model.sebounce.500ms="fromDate" class="ml-2 mr-4 border-2 rounded-md border-black px-2 py-1" onchange="filterByDate()"/>
-            To: <input type="date" wire:model.sebounce.500ms="toDate" class="ml-2 border-2 rounded-md border-black px-2 py-1" onchange="filterByDate()"/>
-        </div>
-        <div>
-            <input id="datatable-search-{{$unique_id}}" type="search" wire:model.sebounce.500ms="search"  placeholder="Search" class="border border-gray-300 rounded-l py-2 px-4"/>
-            <button class="bg-red-500 hover:bg-red-600 text-white rounded-r py-2 px-4 focus:outline-none focus:ring focus:border-red-300">
-                <i class="fas fa-search"></i>
-            </button>
-        </div>
+    <div class="flex items-center justify-end">
+        <input id="datatable-search-{{$unique_id}}" type="search" wire:model.sebounce.500ms="search"  placeholder="Search" class="border border-gray-300 rounded-l py-2 px-4"/>
+        <button class="bg-red-500 hover:bg-red-600 text-white rounded-r py-2 px-4 focus:outline-none focus:ring focus:border-red-300">
+            <i class="fas fa-search"></i>
+        </button>
     </div>
     <div class="overflow-x-scroll beautify-scrollbar text-center my-4 border rounded-lg">
         <table class="w-full table-auto">
             <thead class="">
             <th class="capitalize p-4 whitespace-nowrap text-left">{{ __('Instructor') }}</th>
             <th class="capitalize p-4 whitespace-nowrap text-center">{{ __('Courses') }}</th>
-            <th class="capitalize p-4 whitespace-nowrap text-center">{{ __('Total Amount') }}</th>
-            <th class="capitalize p-4 whitespace-nowrap text-center">{{ __('Payout Amount') }}</th>
+            <th class="capitalize p-4 whitespace-nowrap text-center">{{ __('Total Earning') }}</th>
+            <th class="capitalize p-4 whitespace-nowrap text-center">{{ __('Payout Fee') }}</th>
+            <th class="capitalize p-4 whitespace-nowrap text-center">{{ __('Payout At') }}</th>
             <th class="capitalize p-4 whitespace-nowrap text-center">{{ __('Action') }}</th>
             </thead>
             <tbody class="">
             @if ($teachers->isNotEmpty())
                 @foreach($teachers as $teacher)
-                    @php($this->payout_amounts[$teacher->id] = intval($teacher->course_amount * $this->course_fee->fee_value / 100))
                     <tr class="border-t">
                         <td class="p-4 whitespace-nowrap text-left">
                             <div class="flex">
@@ -33,10 +27,31 @@
                             </div>
                         </td>
                         <td class="p-4 whitespace-nowrap">{{ $teacher->courses }}</td>
-                        <td class="p-4 whitespace-nowrap">{{ $teacher->course_amount }}</td>
-                        <td class="p-4 whitespace-nowrap"><input type="number" name="payout_amount" class="border px-1.5 py-1.5 rounded-lg text-right" wire:model.defer="payout_amounts.{{ $teacher->id }}" /></td>
+                        <td class="p-4 whitespace-nowrap">{{ '$ ' . $teacher->earning_amount ?? 0 }}</td>
+                        <td class="p-4 whitespace-nowrap w-14">
+                            @if ($teacher_id == $teacher->id)
+                                <!-- Display input field when editing -->
+                                <input type="text" class="border border-gray-500 p-2 rounded bg-inherit w-10" wire:model.defer="fee_amount"> %
+                            @else
+                                <!-- Display fee amount when not editing -->
+                                {{ $teacher->fee_amount . '%' }}
+                            @endif
+                        </td>
+                        <td class="p-4 whitespace-nowrap w-40">
+                            @if ($teacher_id == $teacher->id)
+                                <!-- Display input field when editing -->
+                                <input type="date" class="border border-gray-500 p-2 rounded bg-inherit w-36" wire:model.defer="payout_at">
+                            @else
+                                <!-- Display fee amount when not editing -->
+                                {{ (new DateTime($teacher->payout_at))->format("m/d Y") }}
+                            @endif
+                        </td>
                         <td class="p-4 whitespace-nowrap">
-                            <x-button wire:click="payOut({{ $teacher->id }}, {{ $teacher->course_amount }})" class="text-purple-500">{{ __('Pay') }}</x-button>
+                            @if ($teacher_id == $teacher->id)
+                                <x-button class="text-purple-500" wire:click="savePayoutFee">{{ __('Save Fee') }}</x-button>
+                            @else
+                                <x-button class="text-purple-500" wire:click="updatePayoutFee('{{ $teacher->id }}', '{{ $teacher->fee_amount }}', '{{ $teacher->payout_at }}')">{{ __('Edit Fee') }}</x-button>
+                            @endif
                         </td>
                     </tr>
                 @endforeach

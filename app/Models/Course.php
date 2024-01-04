@@ -35,6 +35,11 @@ class Course extends Model
         return $this->hasMany(Topic::class);
     }
 
+    public function payment_purchases(): HasMany
+    {
+        return $this->hasMany(PaymentPurchase::class);
+    }
+
     public function lessons(): HasMany
     {
         return $this->hasMany(Lesson::class);

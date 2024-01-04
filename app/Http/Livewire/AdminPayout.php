@@ -2,13 +2,13 @@
 
 namespace App\Http\Livewire;
 
-use App\Models\PaymentFee;
 use App\Models\User;
 use App\Services\Admin\AdminPricingService;
 use App\Services\Payment\PaypalService;
 use Illuminate\Support\Str;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Illuminate\Support\Facades\Log;
 
 class AdminPayout extends Component
 {
@@ -18,14 +18,16 @@ class AdminPayout extends Component
     public string $fromDate = '';
     public string $toDate = '';
     public int $per_page = 10;
-    public $course_fee;
     public array $payout_amounts  = [];
+    public int $total_earning = 0;
+    public int $fee_amount = 0;
+    public int $teacher_id = -1;
+    public string $payout_at;
 
     public function mount($unique_id = null, $per_page = 10)
     {
         $this->unique_id = $unique_id ?? Str::random(10);
         $this->per_page = $per_page;
-        $this->course_fee = PaymentFee::where('fee_type', 'teacher_course_fee')->first();
     }
 
     public function paginationView()
@@ -33,32 +35,49 @@ class AdminPayout extends Component
         return 'components.datatable-pagination-links-view';
     }
 
-    public function payOut(int $teacher_id, int $course_amount)
-    {
-        $teacher = User::find($teacher_id);
-        $payee_account_id = $teacher->payment_connection->paypal_account_id;
-        $paypalService = new PaypalService();
-        $payment_result = $paypalService->PayoutToInstructor(
-            $teacher_id,
-            $course_amount,
-            $payee_account_id,
-            $this->payout_amounts[$teacher_id]
-        );
-
-        if ($payment_result['result'] == 'success')
-            return redirect()->away($payment_result['redirect_url']);
-        else
-            return redirect($payment_result['redirect_url'])->with('error', __('Something went wrong.'));
-    }
-
     public function render()
     {
         $adminPricingService = app(AdminPricingService::class);
-        $teachers = $adminPricingService->getSoldCoursesOfTeacher($this->fromDate, $this->toDate, $this->search);
+        $teachers = $adminPricingService->getSoldCoursesOfTeacher($this->search);
         $teachers = $teachers->paginate(10);
 
         return view('livewire.admin-payout', [
             'teachers' => $teachers,
         ]);
+    }
+
+    /**
+     * Allow the given user's role to be managed.
+     *
+     * @param  int  $teacher_id
+     * @return void
+     */
+    public function updatePayoutFee($teacher_id, $fee_amount, $payout_at)
+    {
+        $this->teacher_id = $teacher_id;
+        $this->fee_amount = $fee_amount;
+        $this->payout_at = date("Y-m-d", strtotime($payout_at));
+    }
+
+    /**
+     * Allow the given user's role to be managed.
+     *
+     * @param  int  $teacher_id
+     * @return void
+     */
+    public function savePayoutFee()
+    {
+        if ($this->teacher_id > 0) {
+            $user = User::find($this->teacher_id);
+
+            if ($user) {
+                $user->fee_amount = $this->fee_amount;
+                $user->payout_at = $this->payout_at;
+                $user->save();
+            }
+            $this->teacher_id = -1;
+            $this->fee_amount = -1;
+            $this->payout_at = now()->format("m/d Y");
+        }
     }
 }
