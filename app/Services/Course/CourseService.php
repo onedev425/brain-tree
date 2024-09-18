@@ -502,7 +502,14 @@ class CourseService
             ]);
 
             foreach($topic_info['lessons'] as $lesson_info) {
+                echo json_encode($lesson_info);
                 $duration = $this->getVideoLength($lesson_info['video_source'], $lesson_info['video_url']);
+                // Handle file upload
+                if (isset($lesson_info['attachment_file'])) {
+                    $file = $lesson_info->file('attachment_file');
+                    $path = $file->store('attachments', 'public'); // Store file in public/storage/attachments
+                }
+
                 $topic->lessons()->create([
                     'title' => $lesson_info['title'],
                     'description' => $lesson_info['description'],
@@ -511,6 +518,7 @@ class CourseService
                     'video_duration' => $duration,
                     'user_id' => auth()->user()->id,
                     'course_id' => $course->id,
+                    'attachment_file' => $path ?? null, // Save the file path if available
                 ]);
                 $total_duration += $duration;
                 $total_lessons += 1;
@@ -601,6 +609,11 @@ class CourseService
                 $duration = 0;
                 if ($lesson_info['id'] == 0) {
                     $duration = $this->getVideoLength($lesson_info['video_source'], $lesson_info['video_url']);
+                    // Handle file upload
+                    if (isset($lesson_info['attachment_file'])) {
+                        $file = $lesson_info->file('attachment_file');
+                        $path = $file->store('attachments', 'public'); // Store file in public/storage/attachments
+                    }
                     $topic->lessons()->create([
                         'title' => $lesson_info['title'],
                         'description' => $lesson_info['description'],
@@ -609,17 +622,25 @@ class CourseService
                         'video_duration' => $duration,
                         'user_id' => auth()->user()->id,
                         'course_id' => $course->id,
+                        'attachment_file' => $path ?? null, // Save the file path if available
                     ]);
                 }
                 else {
                     $duration = $this->getVideoLength($lesson_info['video_source'], $lesson_info['video_url']);
                     $lesson = Lesson::find($lesson_info['id']);
+                    // Handle file upload
+                    if (isset($lesson_info['attachment_file'])) {
+                        $file = $lesson_info->file('attachment_file');
+                        $path = $file->store('attachments', 'public'); // Store file in public/storage/attachments
+                    }
                     $lesson->fill([
                         'title' => $lesson_info['title'],
                         'description' => $lesson_info['description'],
                         'video_type' => $lesson_info['video_source'],
                         'video_link' => $lesson_info['video_url'],
                         'video_duration' => $duration,
+                        'attachment_file' => $path ?? null, // Save the file path if available
+
                     ]);
                     $lesson->save();
                 }

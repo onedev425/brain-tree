@@ -300,7 +300,22 @@
                     <label for="video_url" class="inline-block mb-2">{{ __('Video URL') }} <span class="text-red-500">*</span></label>
                     <input id="video_url" type="text" class="w-full leading-5 relative py-2 px-4 rounded text-gray-800 bg-white border border-gray-300 overflow-x-auto focus:outline-none focus:border-gray-400 focus:ring-0" required>
                 </div>
-
+                <div class="form-group flex-shrink max-w-full px-4 w-full md:w-1/2 mb-4">
+                    <label for="video_source" class="inline-block mb-2">{{ __('Resources') }} <span class="text-red-500">*</span></label>
+                    <div class="pb-4">
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" class="sr-only peer" name="quiz_active" {{ $course->quiz_active == 1 || ! $course->title ? 'checked' : '' }}/>
+                            <div class="w-7 h-3 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-green-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-red-600"></div>
+                            <!-- <span class="ml-8 text-sm font-medium text-gray-900">{{ __('Enable Quizzes') }}</span> -->
+                        </label>
+                    </div>
+                    <input id="attachment_file" name="attachment_file" type="file" >
+                    <label for="attachment" class="py-3 md:px-10 bg-zinc-700 text-white font-semibold border-transparent">Choose file</label>
+                </div>
+                <!-- <div class="form-group flex-shrink max-w-full px-4 w-full md:w-1/2 mb-4">
+                    <label for="attachment" class="inline-block mb-2">{{ __('Video URL') }} <span class="text-red-500">*</span></label>
+                    <input id="attachment_button" label="{{ __('Add file') }}" type="file" class="w-1/4 leading-5 relative py-2 px-4 rounded text-gray-800 bg-white border border-gray-300 overflow-x-auto focus:outline-none focus:border-gray-400 focus:ring-0" required>
+                </div> -->
                 <div class="form-group flex-shrink max-w-full px-4 w-full">
                     <x-button label="{{ __('Save') }}" type="submit" icon="" class="py-3 md:px-10 bg-red-700 text-white font-semibold border-transparent" />
                 </div>
@@ -781,6 +796,16 @@
             var lessonForm = document.getElementById('lesson_form');
             var pristine = new Pristine(lessonForm);
 
+            // pristine.addValidator(
+            //     document.querySelector('input#attachment_file'),
+            //     function (value, input) {
+            //         const file = input.files[0];
+            //         if (!file) return false; // Ensure a file is selected
+            //         // return file.type.startsWith('video/'); // Validate file type is video
+            //     },
+            //     // "Only video files are allowed"
+            // );
+
             lessonForm.addEventListener('submit', function(event) {
                 event.preventDefault(); // Prevent the default form submission
                 const valid = pristine.validate();
@@ -790,6 +815,12 @@
                     const lessonDescription = $('textarea#lesson_description').val();
                     const videoSource = $('select#video_source option:selected').val();
                     const videoURL = $('input#video_url').val();
+                    const attachment_file = $('#attachment_file')[0].files[0]; // Get the file object
+
+                    // if (attachment_file) {
+                    //     // Handle the file, e.g., upload it or process it here
+                    //     console.log("File uploaded:", attachment_file.name);
+                    // }
 
                     console.log(lessonDescription);
                     if ($('input[name=lesson_edit_flag]').val() == 'new') {
