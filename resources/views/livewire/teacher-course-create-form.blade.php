@@ -154,7 +154,7 @@
                                             <div class="flex-1 py-4 px-7">
                                                 @foreach($topic->lessons as $lesson)
                                                     <div class="flex pt-4 justify-between">
-                                                        <div class="lesson_info pt-1.5" data-lesson-id="{{ $lesson->id }}" data-description="{!! htmlspecialchars($lesson->description) !!}" data-video-source="{{ $lesson->video_type }}" data-video-url="{{ $lesson->video_link }}" data-uuid="{{ $uuid }}">{{ $lesson->title }}</div>
+                                                        <div class="lesson_info pt-1.5" data-lesson-id="{{ $lesson->id }}" data-description="{!! htmlspecialchars($lesson->description) !!}" data-video-source="{{ $lesson->video_type }}" data-video-url="{{ $lesson->video_link }}" data-attachment-file="{{ $lesson->attachment_file }}" data-uuid="{{ $uuid }}">{{ $lesson->title }}</div>
                                                         <div class="min-w-fit" >
                                                             <x-edit-icon-button class="edit_lesson_dialog_button"/>
                                                             <x-remove-icon-button class="remove_lesson_button"/>
@@ -477,6 +477,7 @@
                 $('textarea#lesson_description').val('');
                 $('select#video_source').val('');
                 $('input#video_url').val('');
+                $('input#attachment_file').val('');
             });
 
             $('body').on('click', '.edit_lesson_dialog_button', function(event) {
@@ -489,6 +490,7 @@
                 $('textarea#lesson_description').val($(lessonObject).attr('data-description'));
                 $('select#video_source').val($(lessonObject).attr('data-video-source'));
                 $('input#video_url').val($(lessonObject).attr('data-video-url'));
+                $('input#attchment_file').val($(lessonObject).attr('data-attachment-file'));
                 $('input[name=lesson_edit_flag]').val($(lessonObject).data('uuid'));
             });
 
@@ -507,7 +509,9 @@
             });
         });
 
-        // hide the overlay and the dialog
+        // hide the overlay and the dialog.
+
+
         function closeLessonDialog() {
             $('div#lesson_dialog').addClass('hidden');
             $('div#overlay').addClass('hidden');
@@ -809,18 +813,27 @@
             lessonForm.addEventListener('submit', function(event) {
                 event.preventDefault(); // Prevent the default form submission
                 const valid = pristine.validate();
-
+                const file = document.getElementById('attachment_file').files[0];
+                let fileData = null;
+                console.log("====",file)
+                if(file){
+                    const reader =new FileReader();
+                    reader.onload = function(e) {
+                        fileData = e.target.value;
+                    }
+                }
+                console.log(fileData)
                 if (valid) {
                     const lessonName = $('input#lesson_name').val();
                     const lessonDescription = $('textarea#lesson_description').val();
                     const videoSource = $('select#video_source option:selected').val();
                     const videoURL = $('input#video_url').val();
-                    const attachment_file = $('#attachment_file')[0].files[0]; // Get the file object
+                    const attachmentFile = fileData ?? null; 
 
-                    // if (attachment_file) {
-                    //     // Handle the file, e.g., upload it or process it here
-                    //     console.log("File uploaded:", attachment_file.name);
-                    // }
+                    if (attachmentFile) {
+                        // Handle the file, e.g., upload it or process it here
+                        console.log("File uploaded:", attachmentFile);
+                    }
 
                     console.log(lessonDescription);
                     if ($('input[name=lesson_edit_flag]').val() == 'new') {
@@ -828,7 +841,7 @@
                         const topicUuid = $('input[name=topic_uuid]').val();
                         const newLesson = `
                             <div class="flex pt-4 justify-between">
-                                <div class="lesson_info pt-1.5" data-lesson-id="0" data-description="${lessonDescription}" data-video-source="${videoSource}" data-video-url="${videoURL}" data-uuid="${uuid}">${lessonName}</div>
+                                <div class="lesson_info pt-1.5" data-lesson-id="0" data-description="${lessonDescription}" data-video-source="${videoSource}" data-video-url="${videoURL}" data-attachment-file="${attachmentFile}" data-uuid="${uuid}">${lessonName}</div>
                                 <div class="min-w-fit" >
                                     <x-edit-icon-button class="edit_lesson_dialog_button"/>
                                     <x-remove-icon-button class="remove_lesson_button"/>
@@ -846,6 +859,8 @@
                         $(lessonObject).attr('data-description', lessonDescription);
                         $(lessonObject).attr('data-video-source', videoSource);
                         $(lessonObject).attr('data-video-url', videoURL);
+                        $(lessonObject).attr('data-video-url', videoURL);
+                        $(lessonObject).attr('data-attachment-file', attachmentFile);
                     }
 
                     closeLessonDialog();
@@ -896,7 +911,9 @@
                                 description: $(lesson_obj).attr('data-description'),
                                 video_source: $(lesson_obj).attr('data-video-source'),
                                 video_url: $(lesson_obj).attr('data-video-url'),
+                                attachment_file: $(lesson_obj).attr('data-attachment-file'),
                             };
+                            console.log(lesson)
                             lesson_list.push(lesson);
                         });
                         const topic_info = {
@@ -925,6 +942,7 @@
                     $('input[name=use_default_image]').val(($('div#course_image_container').css('background-image') == 'none' || $('div#course_image_container').css('background-image') == '') ? 1 : 0);
                     $('input[name=topic_list]').val(JSON.stringify(topic_list));
                     $('input[name=quiz_list]').val(JSON.stringify(quiz_list));
+                    console.log(courseForm)
                     courseForm.submit();
                     return true;
                 }
@@ -1023,6 +1041,7 @@
     <script>
         $(document).ready(function() {
             $('button#save_course_button').on('click', function() {
+                // console.log($document);
                 $('input[name=is_published]').val(0);
             });
             $('button#publish_course_button').on('click', function() {

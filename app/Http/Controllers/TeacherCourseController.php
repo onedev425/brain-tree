@@ -309,6 +309,20 @@ class TeacherCourseController extends Controller
         $lesson_nums = 0;
         foreach($data['topic_list'] as $topic) {
             $lesson_nums += count($topic['lessons']);
+            if (isset($topic['lessons']['attachment_file'])) {
+                $base64FileData = $topic['lessons']['attachment_file'];  // The base64 file data
+                if (preg_match('/^data:\w+\/\w+;base64,/', $base64FileData)) {
+                    $base64FileData = preg_replace('/^data:\w+\/\w+;base64,/', '', $base64FileData);
+                    $fileData = base64_decode($base64FileData);
+                    $fileName = time();
+                    // Define the file path to save the file (you can use the original name or generate a unique one)
+                    $filePath = public_path('uploads/attachment' . $fileName);
+            
+                    // Save the file data to the server
+                    file_put_contents($filePath, $fileData);
+                    $topic['lessons']['attachment_file'] = asset('upload/attachment/' . $fileName);
+                }
+            }
         }
         if ($lesson_nums == 0) {
             return [];
@@ -324,6 +338,8 @@ class TeacherCourseController extends Controller
             if ($request['use_default_image'] == 1)
                 $data['course_image'] = asset('images/logo/course.jpg');
         }
+
+        
         return $data;
     }
 
