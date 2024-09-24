@@ -306,27 +306,105 @@ class TeacherCourseController extends Controller
         $data['quiz_active'] = isset($request['quiz_active']) ? 1 : 0;
         $data['is_published'] = $request['is_published'];
 
-        $lesson_nums = 0;
-        foreach($data['topic_list'] as $topic) {
-            $lesson_nums += count($topic['lessons']);
-            if (isset($topic['lessons']['attachment_file'])) {
-                $base64FileData = $topic['lessons']['attachment_file'];  // The base64 file data
-                if (preg_match('/^data:\w+\/\w+;base64,/', $base64FileData)) {
-                    $base64FileData = preg_replace('/^data:\w+\/\w+;base64,/', '', $base64FileData);
-                    $fileData = base64_decode($base64FileData);
-                    $fileName = time();
-                    // Define the file path to save the file (you can use the original name or generate a unique one)
-                    $filePath = public_path('uploads/attachment' . $fileName);
+        // $data['topic_list'] = json_decode($request['topic_list'], true);
+        // $data['quiz_list'] = json_decode($request['quiz_list'], true);
+        // $data['quiz_active'] = isset($request['quiz_active']) ? 1 : 0;
+        // $data['is_published'] = $request['is_published'];
+
+        // $lesson_nums = 0;
+        // foreach($data['topic_list'] as $topic) {
+        //     $lesson_nums += count($topic['lessons']);
+        //     $lessonId = 0;
+        //     foreach($topic['lessons'] as $lesson){
+        //         if($lesson['attachment_file']) {
+        //             $position = strpos($lesson['attachment_file'], '||');
+        //             $fileNameString = substr($lesson['attachment_file'], 0, $position);
+        //             // dd($data['topic_list']);
+        //             // dd($fileName);
+        //             $fileNamesArray = explode(',   ', $fileNameString); // Splits the string back into an array 
+        //             if ($request->hasFile('multiFiles'))  {
+        //                 foreach ($request->file('multiFiles') as $file){
+        //                     foreach($fileNamesArray as $fileName){
+        //                         if($fileName == $file->getClientOriginalName()){
+        //                             $saved_file_name = time() . '_' . $file->getClientOriginalName();
+        //                             $file->move(public_path('upload/course/attachment'), $saved_file_name);
+        //                             $data['topic_list'][$lessonId]['attachment_file'] = asset('upload/course/attachment' . $saved_file_name);
+        //                         }
+        //                     }
+        //                 }
+        //             }
+        //         }
+        //         $lessonId++;
+        //     }
             
-                    // Save the file data to the server
-                    file_put_contents($filePath, $fileData);
-                    $topic['lessons']['attachment_file'] = asset('upload/attachment/' . $fileName);
+        // }
+        // if ($lesson_nums == 0) {
+        //     return [];
+        // }
+
+        $lesson_nums = 0;
+
+        foreach ($data['topic_list'] as $topicId => $topic) {
+            $lesson_nums += count($topic['lessons']);
+            $lessonId = 0;
+
+            foreach ($topic['lessons'] as $lesson) {
+                if ($request->has('lessonAttachments')) {
+                    $lessonAttachments = json_decode($request->input('lessonAttachments'), true);
+                    // Explode file names into an array (no extra spaces)
+                    // Check if $lessonAttachments is set and if it contains the key
+                    if (isset($lessonAttachments[$lesson['title']])) {
+                        // Explode the string if it exists
+                        $fileNamesArray = explode(', ', $lessonAttachments[$lesson['title']]);
+                    } else {
+                        // Handle the case where the key does not exist
+                        $fileNamesArray = []; // or whatever default value makes sense
+                    }
+                    // Initialize tempFilePath
+                    $tempFilePath = '';
+                    // Check if files are uploaded
+                    if ($request->hasFile('multiFiles')) {
+                        foreach ($request->file('multiFiles') as $file) {
+                            // Loop through exploded file names array
+                            foreach ($fileNamesArray as $fileName) {
+                                if (trim($fileName) == $file->getClientOriginalName()) {
+                                    // Save the uploaded file with a unique name
+                                    $saved_file_name = time() . '_' . $file->getClientOriginalName();
+                    
+                                    try {
+                                        // Attempt to move the file
+                                        $file->move(public_path('upload/course/attachment'), $saved_file_name);
+                                    } catch (\Exception $e) {
+                                        // Catch any exception that occurs during the file move operation
+                                        \Log::error('File upload failed: ' . $e->getMessage());
+                                    }
+                    
+                                    // Construct the new file path
+                                    $newFilePath = asset('upload/course/attachment/' . $saved_file_name);
+                    
+                                    // Append or set the new file path
+                                    if (!empty($tempFilePath)) {
+                                        $tempFilePath .= "||" . $newFilePath;
+                                    } else {
+                                        $tempFilePath = $newFilePath;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    // Update the lesson's attachment_file after processing all files
+                    $data['topic_list'][$topicId]['lessons'][$lessonId]['attachment_file'] = $tempFilePath;
                 }
+                
+                $lessonId++; // Move to next lesson in the topic
             }
         }
+
+        // Return an empty array if no lessons are found
         if ($lesson_nums == 0) {
             return [];
         }
+
 
         if ($request->hasFile('course_image')) {
             $image = $request->file('course_image');

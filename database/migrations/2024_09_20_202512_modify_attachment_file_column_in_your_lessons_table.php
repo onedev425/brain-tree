@@ -6,25 +6,17 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
+    public function up()
     {
         Schema::table('lessons', function (Blueprint $table) {
-            $table->string('attachment_file')->nullable(); // Add the new column
+            $table->text('attachment_file')->change(); // Change the column to TEXT
         });
-
-        
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
         Schema::table('lessons', function (Blueprint $table) {
-            $table->dropColumn('attachment_file'); // Remove the column if the migration is rolled back
+            $table->string('attachment_file', 255)->change(); // Revert back to original if needed
         });
     }
 };

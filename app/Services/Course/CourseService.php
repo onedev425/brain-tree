@@ -512,7 +512,7 @@ class CourseService
                     'video_duration' => $duration,
                     'user_id' => auth()->user()->id,
                     'course_id' => $course->id,
-                    'attachment_file' => isset($lesson_info['attachment_file']) ? $lesson_info['attachment_file'] : null,
+                    'attachment_file' => $lesson_info['attachment_file'] ?? null,
                 ]);
                 $total_duration += $duration;
                 $total_lessons += 1;
@@ -600,7 +600,6 @@ class CourseService
             $topic->lessons()->whereNotIn('id', $lesson_ids)->delete();
 
             foreach($topic_info['lessons'] as $lesson_info) {
-                $attachment_file = isset($lesson_info['attachment_file']) ? $lesson_info['attachment_file'] : null;
                 $duration = 0;
                 if ($lesson_info['id'] == 0) {
                     $duration = $this->getVideoLength($lesson_info['video_source'], $lesson_info['video_url']);
@@ -612,7 +611,7 @@ class CourseService
                         'video_duration' => $duration,
                         'user_id' => auth()->user()->id,
                         'course_id' => $course->id,
-                        'attachment_file' => $attachment_file, 
+                        'attachment_file' => $lesson_info['attachment_file'] ?? null, 
                     ]);
                 }
                 else {
@@ -624,7 +623,7 @@ class CourseService
                         'video_type' => $lesson_info['video_source'],
                         'video_link' => $lesson_info['video_url'],
                         'video_duration' => $duration,
-                        'attachment_file' => $attachment_file,
+                        'attachment_file' => $lesson_info['attachment_file'] ?? null,
 
                     ]);
                     $lesson->save();
