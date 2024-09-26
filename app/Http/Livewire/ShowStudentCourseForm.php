@@ -18,16 +18,21 @@ class ShowStudentCourseForm extends Component
     public bool $passed_exam;
     private CourseService $courseService;
     
+    // public function mount(CourseService $courseService): void
+    // {
+    //     $this->courseService = $courseService;
+    // }
+
+    public function boot(CourseService $courseService)
+    {
+        $this->courseService = $courseService;
+    }
+    
     public function setTab($tab): void
     {
         $this->activeTab = $tab;
     }
 
-    public function mount(CourseService $courseService): void
-    {
-        $this->courseService = $courseService;
-    }
-    
     public function render()
     {
         return view('livewire.show-student-course-form');
