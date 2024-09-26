@@ -40,7 +40,7 @@ class CreateNewUser implements CreatesNewUsers
             'description' => $input['description'],
             'skills'      => $input['skills'],
             'experience'  => $input['experience'],
-            // 'fee_amount'  => 0,  //Inerted to fix bug when occured regiterd a new account.
+            'fee_amount'  => 0,  //Inerted to fix bug when occured regiterd a new account.
         ];
 
         $user = User::create($user_data);

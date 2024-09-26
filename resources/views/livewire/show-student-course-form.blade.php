@@ -12,6 +12,7 @@
                     </svg>
                 </a>
                 <h2 class="font-bold ml-3 text-lg">{{ $course->title }}</h2>
+                <h2 id="course_description" class="font-bold ml-3 text-lg" hidden>{{ $course->description }}</h2>
             </div>
         </div>
     </div>
@@ -222,15 +223,69 @@
                     </div>
                 </div>
                 <div id="lesson_section" class="col-span-7 p-6">
-                    <h1 id="lesson_title" class="text-xl font-bold mb-4"></h1>
-                    <div id="lesson_content" class="my-5"></div>
+                    <!-- <h1 id="lesson_title" class="text-xl font-bold mb-4"></h1> -->
+                    <!-- <div id="lesson_content" class="my-5"></div> -->
                     <div class="w-full mx-auto max-w-screen-lg">
                         <div class="aspect-w-16 aspect-h-9 flex justify-center">
-                            <iframe id="lesson_video" class="w-full lg:w-4/5 h-96" src="" frameborder="0" allowfullscreen></iframe>
+                            <iframe id="lesson_video" class="w-full lg:w-5/5 h-96" src="" frameborder="1" allowfullscreen></iframe>
+                        </div>
+                        <div class="block md:flex border-b-2 border-gray-300">
+                            <a href="javascript:;" wire:click="setTab('Description')" class="py-2 px-2 lg:px-4 w-full md:w-1/3 lg:w-1/4 text-center text-black cursor-pointer block font-semibold {{ $activeTab === 'Description' ? 'border-b-4 border-green-600' : '' }}" style="{{ $activeTab === 'Description' ? '' : 'opacity: .5' }}">
+                                {{ __('Description') }}
+                            </a>
+                            <a href="javascript:;" wire:click="setTab('Resources')" class="py-2 px-2 lg:px-4 w-full md:w-1/3 lg:w-1/4 text-center text-black cursor-pointer block font-semibold {{ $activeTab === 'Resources' ? 'border-b-4 border-green-600' : '' }}"  style="{{ $activeTab === 'Resources' ? '' : 'opacity: .5' }}">
+                                {{ __('Resources') }}
+                            </a>
+                            <a href="javascript:;" wire:click="setTab('Announcements')" class="py-2 px-2 lg:px-4 w-full md:w-1/3 lg:w-1/4 text-center text-black cursor-pointer block font-semibold {{ $activeTab === 'Announcements' ? 'border-b-4 border-green-600' : '' }}"  style="{{ $activeTab === 'Announcements' ? '' : 'opacity: .5' }}">
+                                {{ __('Announcements') }}
+                            </a>
+                            <a href="javascript:;" wire:click="setTab('Reviews')" class="py-2 px-2 lg:px-4 w-full md:w-1/3 lg:w-1/4 text-center text-black cursor-pointer block font-semibold {{ $activeTab === 'Reviews' ? 'border-b-4 border-green-600' : '' }}"  style="{{ $activeTab === 'Reviews' ? '' : 'opacity: .5' }}">
+                                {{ __('Reviews') }}
+                            </a>
                         </div>
                     </div>
+                    @if ($activeTab === 'Description')
+                        <div class="">
+                            <h3 class="py-4 text text-lg font-bold">{{ __('About This Course') }}</h3>
+                            <div id="lesson_description" class="my-4"></div>
+                            <h3 class="py-2 text-sm font-bold">{{ __('By The Numbers') }}</h3>
+                            <table class="w-full border-collapse">
+                                <tr>
+                                    <td id="lesson_students" class="p-2 text-left text-sm">{{ __('Students:') }}</td>
+                                    <td id="lesson_lectures" class="p-2 text-left text-sm">{{ __('Lectures:') }}</td>
+                                    <td id="lesson_quizzes" class="p-2 text-left text-sm">{{ __('Quizzes:') }}</td>
+                                </tr>
+                                <tr>
+                                    <td id="lesson_languages" class="p-2 text-left text-sm">{{ __('Languages:') }}</td>
+                                    <td id="lesson_video" class="p-2 text-left text-sm">{{ __('Video:') }}</td>
+                                </tr>
+                            </table>
 
-                    <div class="flex justify-end mt-10 {{ $passed_exam ? 'hidden' : '' }}">
+
+                        </div>
+                    @elseif ($activeTab === 'Resources')
+                        <div class="">
+                            <h3 class="py-2 text-sm font-bold">{{ __('Lesson Resources') }}</h3>
+                            <div class="my-4">
+                                
+                            </div>
+                        </div>                    
+                    @elseif ($activeTab === 'Announcements')                
+                        <div class="">
+                            <h3 class="py-2 text-sm font-bold">{{ __('Announcements') }}</h3>
+                            <div class="my-4">
+                                
+                            </div>
+                        </div>   
+                    @elseif ($activeTab === 'Reviews')
+                        <div class="">
+                            <h3 class="py-2 text-sm font-bold">{{ __('Student Feedback') }}</h3>
+                            <div class="my-4">
+                                
+                            </div>
+                        </div> 
+                    @endif
+                    <!-- <div class="flex justify-end mt-10 {{ $passed_exam ? 'hidden' : '' }}">
                         <h2 class="font-bold mr-3 text-lg">{{ __('Next') }}</h2>
                         <a id="next_lesson" href="javascript:;">
                             <svg xmlns="http://www.w3.org/2000/svg" width="32.975" height="24.718" viewBox="0 0 32.975 24.718">
@@ -240,7 +295,7 @@
                                 </g>
                             </svg>
                         </a>
-                    </div>
+                    </div> -->
 
                 </div>
 
@@ -320,9 +375,12 @@
             if ( ! $('div#lesson_quiz_section').hasClass('hidden') ) {
                 const lesson_obj = $('li.lesson-item:first').find('a');
                 $('div#quiz_section').addClass('hidden');
-                $('div#lesson_section h1#lesson_title').html($(lesson_obj).html());
+                // $('div#lesson_section h1#lesson_title').html($(lesson_obj).html());
                 $('div#lesson_section div#lesson_content').html($(lesson_obj).data('content'));
                 $('div#lesson_section iframe#lesson_video').attr('src', $(lesson_obj).data('video-url'));
+                $('div#lesson_section div#lesson_description').html($('h2#course_description').val());
+                console.log($('h2#course_description').val());
+                debugger
             }
 
             // clicked a lesson
@@ -331,9 +389,12 @@
                 $('div#quiz_section').addClass('hidden');
                 $('div#lesson_section').removeClass('hidden');
 
-                $('div#lesson_section h1#lesson_title').html($(lesson_obj).html());
+                // $('div#lesson_section h1#lesson_title').html($(lesson_obj).html());
                 $('div#lesson_section div#lesson_content').html($(lesson_obj).data('content'));
                 $('div#lesson_section iframe#lesson_video').attr('src', $(lesson_obj).data('video-url'));
+                $('div#lesson_section div#lesson_description').html($('h2#course_description').val());
+                console.log($('h2#course_description').val());
+                debugger
 
                 $('li.lesson-item').removeClass('active');
                 $('li.quiz-item').removeClass('active');

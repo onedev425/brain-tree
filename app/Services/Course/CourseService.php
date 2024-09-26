@@ -52,7 +52,7 @@ class CourseService
             ];
             $topics[] = $topic_info;
         }
-
+        dd($topic);
         return $topics;
     }
 
@@ -211,7 +211,6 @@ class CourseService
                 ->with('assignedTeacher')
                 ->get();
         }
-
         return $courses;
     }
 

@@ -371,7 +371,7 @@ class TeacherCourseController extends Controller
                     
                                     // Append or set the new file path
                                     if (!empty($tempFilePath)) {
-                                        $tempFilePath .= "||" . $newFilePath;
+                                        $tempFilePath .= ",  " . $newFilePath;
                                     } else {
                                         $tempFilePath = $newFilePath;
                                     }
@@ -403,8 +403,6 @@ class TeacherCourseController extends Controller
             if ($request['use_default_image'] == 1)
                 $data['course_image'] = asset('images/logo/course.jpg');
         }
-
-        
         return $data;
     }
 

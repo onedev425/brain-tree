@@ -11,17 +11,23 @@ use Livewire\Component;
 class ShowStudentCourseForm extends Component
 {
     public array $activeQuiz = [];
+    public string $activeTab = 'Resources';
     public Course $course;
     public Collection $topics;
     public Collection $quizzes;
     public bool $passed_exam;
     private CourseService $courseService;
+    
+    public function setTab($tab): void
+    {
+        $this->activeTab = $tab;
+    }
 
     public function mount(CourseService $courseService): void
     {
         $this->courseService = $courseService;
     }
-
+    
     public function render()
     {
         return view('livewire.show-student-course-form');
