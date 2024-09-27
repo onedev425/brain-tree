@@ -52,7 +52,6 @@ class CourseService
             ];
             $topics[] = $topic_info;
         }
-        dd($topic);
         return $topics;
     }
 

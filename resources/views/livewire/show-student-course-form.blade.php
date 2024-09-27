@@ -99,71 +99,55 @@
                 <div class="col-span-5 bg-neutral-300 p-6 pb-10">
                     <h1 class="text-xl font-bold mb-4">{{ __('Lessons') }}</h1>
                     <div id="topic_list" x-data="{selected:0000}">
-                        @foreach($topics as $topic_index => $topic)
-                            @php $uuid = $topic_index == 0 ? '0000' : Illuminate\Support\Str::uuid()->toString(); @endphp
-                            <div class="relative flex flex-wrap flex-col mb-2">
-                                <div class="border-b border-gray-200 mb-0 bg-gray-100 py-2 px-4 mt-2 rounded">
-                                    <div class="d-grid mb-0">
-                                        <a href="javascript:;" class="py-1 px-0 w-full rounded leading-5 font-medium flex justify-between focus:outline-none focus:ring-0" @click="selected !== '{{$uuid}}' ? selected = '{{$uuid}}' : selected = null">
-                                            <div class="flex mt-1.5">
-                                                        <span class="mr-3">
-                                                            <svg class="transform transition duration-500 -rotate-90" :class="{ 'rotate-0': selected == '{{$uuid}}' }" width="1rem" height="1rem" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                                              <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 01.708 0L8 10.293l5.646-5.647a.5.5 0 01.708.708l-6 6a.5.5 0 01-.708 0l-6-6a.5.5 0 010-.708z" clip-rule="evenodd"></path>
-                                                            </svg>
-                                                        </span>
-                                                <span class="topic_info" data-uuid="{{$uuid}}">{!! $topic->description !!}</span>
-                                            </div>
-                                            <div class="flex mt-1.5">
-                                                <span class="text-sm text-gray-600">{{ count($topic->lessons) }} {{ __('Lessons') }}  • {{ $this->getTopicVideoDuration($topic) }}</span>
-                                            </div>
-                                        </a>
+                    @foreach($topics as $topic_index => $topic)
+                    @php $uuid = $topic_index == 0 ? '0000' : Illuminate\Support\Str::uuid()->toString(); @endphp
+                    <div class="relative flex flex-wrap flex-col mb-2">
+                        <div class="border-b border-gray-200 mb-0 bg-gray-100 py-2 px-4 mt-2 rounded">
+                            <div class="d-grid mb-0">
+                                <a href="javascript:;" class="py-1 px-0 w-full rounded leading-5 font-medium flex justify-between focus:outline-none focus:ring-0 topic-item" 
+                                    data-lesson-count="{{ count($topic->lessons) }}" data-topic-description="{{$topic->description }}" data-topicvideo-duration="{{ $this->getTopicVideoDuration($topic) }}"
+                                    data-uuid="{{$uuid}}" 
+                                    @click="selected !== '{{$uuid}}' ? selected = '{{$uuid}}' : selected = null">
+                                    <div class="flex mt-1.5">
+                                        <span class="mr-3">
+                                            <svg class="transform transition duration-500 -rotate-90" :class="{ 'rotate-0': selected == '{{$uuid}}' }" width="1rem" height="1rem" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 01.708 0L8 10.293l5.646-5.647a.5.5 0 01.708.708l-6 6a.5.5 0 01-.708 0l-6-6a.5.5 0 010-.708z" clip-rule="evenodd"></path>
+                                            </svg>
+                                        </span>
+                                        <span class="topic_info">{!! $topic->description !!}</span>
                                     </div>
-                                </div>
-                                <div class="accordion p-3" x-show="selected == '{{$uuid}}'">
-                                    <ul>
-                                        @foreach($topic->lessons as $lesson_index => $lesson)
-                                            <li class="lesson-quiz-item lesson-item flex py-1 px-3 justify-between hover:bg-gray-200 hover:rounded-2xl {{ $this->isLessonCompleted($lesson->id) ? 'text-green-700' : '' }} {{ $topic_index == 0 && $lesson_index == 0 ? 'active' : '' }}">
-                                                <div class="flex">
-                                                    <span class="w-5">
-                                                        <svg class="mt-1" xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 333.000000 343.000000">
-                                                            <g transform="translate(0.000000,343.000000) scale(0.100000,-0.100000)"
-                                                            fill="#000000" stroke="none">
-                                                            <path d="M1780 2853 c-151 -25 -305 -132 -383 -266 -76 -129 -94 -306 -45
-                                                            -443 40 -114 109 -205 213 -281 l30 -22 -262 -1 -262 0 55 52 c36 34 67 77 92
-                                                            127 36 72 37 79 37 180 0 98 -2 111 -32 174 -128 270 -464 338 -678 136 -94
-                                                            -89 -135 -185 -135 -315 0 -125 55 -241 153 -321 l39 -33 -38 0 c-77 -1 -163
-                                                            -61 -182 -128 -4 -15 -7 -238 -7 -497 0 -469 0 -470 23 -512 12 -24 41 -55 64
-                                                            -70 l42 -28 795 -3 795 -2 50 24 c31 15 61 40 76 62 23 34 25 49 28 156 2 71
-                                                            8 118 14 118 5 0 124 -72 262 -160 278 -176 302 -185 351 -135 l25 24 0 536 0
-                                                            536 -25 24 c-48 49 -73 40 -345 -125 -136 -82 -254 -152 -263 -156 -15 -5 -17
-                                                            4 -17 89 0 53 -5 108 -11 124 -13 35 -55 80 -93 100 l-28 15 48 33 c286 193
-                                                            325 591 82 833 -121 121 -305 182 -468 155z m262 -160 c165 -78 266 -264 238
-                                                            -437 -22 -138 -109 -255 -235 -317 -66 -32 -75 -34 -175 -34 -86 1 -116 5
-                                                            -163 24 -66 26 -163 110 -200 174 -103 176 -60 411 98 537 88 70 151 90 275
-                                                            87 83 -2 103 -6 162 -34z m-1082 -218 c68 -35 109 -76 141 -141 73 -148 21
-                                                            -318 -121 -398 -50 -28 -63 -31 -145 -31 -74 0 -97 4 -132 23 -65 34 -110 78
-                                                            -138 137 -81 165 -3 356 172 421 51 19 177 13 223 -11z m1150 -785 c19 -19 20
-                                                            -33 20 -469 0 -413 -1 -450 -17 -470 l-18 -21 -780 0 -780 0 -17 21 c-17 19
-                                                            -18 57 -18 472 0 405 2 452 17 469 15 17 53 18 795 18 765 0 778 0 798 -20z
-                                                            m670 -466 c0 -240 -4 -434 -8 -432 -5 2 -122 75 -260 163 l-252 160 0 120 1
-                                                            120 252 152 c139 83 255 152 260 152 4 1 7 -195 7 -435z"/>
-                                                            </g>
-                                                        </svg>
-                                                    </span>
-                                                    <a href="javascript:;" class="ml-2" data-lesson-id="{{ $lesson->id }}" data-content="{!! htmlspecialchars($lesson->description) !!}" data-video-url="{{ $this->getVideoEmbedURL($lesson->video_type, $lesson->video_link) }}">{!! $lesson->title !!}</a>
-                                                </div>
-                                                <div class="text-sm w-20 text-right">{{ $this->getLessonVideoDuration($lesson->video_duration) }}</div>
-                                            </li>
-                                        @endforeach
-                                    </ul>
-                                </div>
+                                    <div class="flex mt-1.5">
+                                        <span class="text-sm text-gray-600 lesson-count">
+                                            {{ count($topic->lessons) }} {{ __('Lessons') }} • {{ $this->getTopicVideoDuration($topic) }}
+                                        </span>
+                                    </div>
+                                </a>
                             </div>
-                        @endforeach
+                        </div>
+                        <div class="accordion p-3" x-show="selected == '{{$uuid}}'">
+                            <ul>
+                                @foreach($topic->lessons as $lesson_index => $lesson)
+                                    <li class="lesson-quiz-item lesson-item flex py-1 px-3 justify-between hover:bg-gray-200 hover:rounded-2xl {{ $this->isLessonCompleted($lesson->id) ? 'text-green-700' : '' }} {{ $topic_index == 0 && $lesson_index == 0 ? 'active' : '' }}">
+                                        <div class="flex">
+                                            <span class="w-5">
+                                                <svg class="mt-1" xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 333.000000 343.000000">
+                                                    <!-- SVG content -->
+                                                </svg>
+                                            </span>
+                                            <a href="javascript:;" class="ml-2" data-lesson-id="{{ $lesson->id }}" data-attachment-file="{{ $lesson->attachment_file }}" data-content="{!! htmlspecialchars($lesson->description) !!}" data-video-url="{{ $this->getVideoEmbedURL($lesson->video_type, $lesson->video_link) }}">{!! $lesson->title !!}</a>
+                                        </div>
+                                        <div class="text-sm w-20 text-right">{{ $this->getLessonVideoDuration($lesson->video_duration) }}</div>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    </div>
+                @endforeach
                         <div class="relative flex flex-wrap flex-col mb-2">
                             <div class="border-b border-gray-200 mb-0 bg-gray-100 py-2 px-4 mt-2 rounded">
                                 <div class="d-grid mb-0">
-                                    <a href="javascript:;" class="py-1 px-0 w-full rounded leading-5 font-medium flex justify-between focus:outline-none focus:ring-0" @click="selected !== '9999' ? selected = '9999' : selected = null">
-                                        <div class="flex mt-1.5">
+                                    <a href="javascript:;" class="py-1 px-0 w-full rounded leading-5 font-medium flex justify-between focus:outline-none focus:ring-0" @click="selected !== '9999' ? selected = '9999' : selected = null" data-quizzes-count="{{ count($course->questions) }}" >
+                                    <div class="flex mt-1.5">
                                                 <span class="mr-3">
                                                     <svg class="transform transition duration-500 -rotate-90" :class="{ 'rotate-0': selected == '9999' }" width="1rem" height="1rem" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                                                       <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 01.708 0L8 10.293l5.646-5.647a.5.5 0 01.708.708l-6 6a.5.5 0 01-.708 0l-6-6a.5.5 0 010-.708z" clip-rule="evenodd"></path>
@@ -226,65 +210,118 @@
                     <!-- <h1 id="lesson_title" class="text-xl font-bold mb-4"></h1> -->
                     <!-- <div id="lesson_content" class="my-5"></div> -->
                     <div class="w-full mx-auto max-w-screen-lg">
-                        <div class="aspect-w-16 aspect-h-9 flex justify-center">
-                            <iframe id="lesson_video" class="w-full lg:w-5/5 h-96" src="" frameborder="1" allowfullscreen></iframe>
-                        </div>
-                        <div class="block md:flex border-b-2 border-gray-300">
-                            <a href="javascript:;" wire:click="setTab('Description')" class="py-2 px-2 lg:px-4 w-full md:w-1/3 lg:w-1/4 text-center text-black cursor-pointer block font-semibold {{ $activeTab === 'Description' ? 'border-b-4 border-green-600' : '' }}" style="{{ $activeTab === 'Description' ? '' : 'opacity: .5' }}">
-                                {{ __('Description') }}
-                            </a>
-                            <a href="javascript:;" wire:click="setTab('Resources')" class="py-2 px-2 lg:px-4 w-full md:w-1/3 lg:w-1/4 text-center text-black cursor-pointer block font-semibold {{ $activeTab === 'Resources' ? 'border-b-4 border-green-600' : '' }}"  style="{{ $activeTab === 'Resources' ? '' : 'opacity: .5' }}">
-                                {{ __('Resources') }}
-                            </a>
-                            <a href="javascript:;" wire:click="setTab('Announcements')" class="py-2 px-2 lg:px-4 w-full md:w-1/3 lg:w-1/4 text-center text-black cursor-pointer block font-semibold {{ $activeTab === 'Announcements' ? 'border-b-4 border-green-600' : '' }}"  style="{{ $activeTab === 'Announcements' ? '' : 'opacity: .5' }}">
-                                {{ __('Announcements') }}
-                            </a>
-                            <a href="javascript:;" wire:click="setTab('Reviews')" class="py-2 px-2 lg:px-4 w-full md:w-1/3 lg:w-1/4 text-center text-black cursor-pointer block font-semibold {{ $activeTab === 'Reviews' ? 'border-b-4 border-green-600' : '' }}"  style="{{ $activeTab === 'Reviews' ? '' : 'opacity: .5' }}">
-                                {{ __('Reviews') }}
-                            </a>
-                        </div>
+                    <div class="aspect-w-16 aspect-h-9 flex justify-center">
+                        <iframe id="lesson_video" class="w-full lg:w-5/5 h-96" src="" frameborder="1" allowfullscreen></iframe>
                     </div>
-                    @if ($activeTab === 'Description')
-                        <div class="">
+                    <div class="flex border-b-2 border-gray-300">
+                        <a href="javascript:;" onclick="setActiveTab('description')" class="py-2 px-2 lg:px-4 w-full text-center text-black cursor-pointer block font-semibold border-b-4 border-transparent active" id="tab-description">
+                            {{ __('Description') }}
+                        </a>
+                        <a href="javascript:;" onclick="setActiveTab('resources')" class="py-2 px-2 lg:px-4 w-full text-center text-black cursor-pointer block font-semibold border-b-4 border-transparent" id="tab-resources">
+                            {{ __('Resources') }}
+                        </a>
+                        <a href="javascript:;" onclick="setActiveTab('announcements')" class="py-2 px-2 lg:px-4 w-full text-center text-black cursor-pointer block font-semibold border-b-4 border-transparent" id="tab-announcements">
+                            {{ __('Announcements') }}
+                        </a>
+                        <a href="javascript:;" onclick="setActiveTab('reviews')" class="py-2 px-2 lg:px-4 w-full text-center text-black cursor-pointer block font-semibold border-b-4 border-transparent" id="tab-reviews">
+                            {{ __('Reviews') }}
+                        </a>
+                    </div>
+
+                    <div id="tab-content">
+                        <div id="content-description" class="tab-content hidden">
                             <h3 class="py-4 text text-lg font-bold">{{ __('About This Course') }}</h3>
-                            <div id="lesson_description" class="my-4"></div>
+                            <div id="topic_description" class="mt-0 mb-4"></div>
                             <h3 class="py-2 text-sm font-bold">{{ __('By The Numbers') }}</h3>
                             <table class="w-full border-collapse">
                                 <tr>
-                                    <td id="lesson_students" class="p-2 text-left text-sm">{{ __('Students:') }}</td>
-                                    <td id="lesson_lectures" class="p-2 text-left text-sm">{{ __('Lectures:') }}</td>
-                                    <td id="lesson_quizzes" class="p-2 text-left text-sm">{{ __('Quizzes:') }}</td>
+                                    <td id="lesson_students" class="p-2 text-left text-sm">{{ __('Students: ') }} {{count($course->course_students)}}</td>
+                                    <td id="lesson_lectures" class="p-2 text-left text-sm">{{ __('Lectures: ') }}<span id="lectures_count"></span></td>
+                                    <td id="lesson_quizzes" class="p-2 text-left text-sm">{{ __('Quizzes: ') }}<span id="quizzes_count">{{ count($course->questions) }}</span></td>
                                 </tr>
                                 <tr>
-                                    <td id="lesson_languages" class="p-2 text-left text-sm">{{ __('Languages:') }}</td>
-                                    <td id="lesson_video" class="p-2 text-left text-sm">{{ __('Video:') }}</td>
+                                    <td id="lesson_languages" class="p-2 text-left text-sm">{{ __('Languages: ') }}{{ __('English') }}</td>
+                                    <td id="lesson_video" class="p-2 text-left text-sm">{{ __('Video: ') }}<span id="topicvideo_duration"></span></td>
+                                </tr>
+                            </table>                        
+                        </div>
+                        <div id="content-resources" class="tab-content flex hidden gap-1 flex-col">
+                            <h3 class="py-4 text text-lg font-bold">{{ __('Lesson Resources') }}</h3>
+                            <div class="my-4" id="buttonContainer" class="flex flex-wrap gap-1">
+                                <!-- Buttons will be added here dynamically -->
+                            </div>
+                        </div>
+                        <div id="content-announcements" class="tab-content hidden">
+                            <h3 class="py-4 text text-lg font-bold">{{ __('Announcements') }}</h3>
+
+                            <!-- Announcements content goes here -->
+                        </div>
+                        <div id="content-reviews" class="tab-content hidden">
+                            <h3 class="py-4 text text-lg font-bold">{{ __('Student Feedback') }}</h3>
+                            <table class="w-full border-collapse">
+                                <tr class="flex w-full">
+                                    <td class="text-center flex-3 flex"> <!-- Centers the text inside the table cell -->
+                                        <div class="flex flex-col items-center justify-center gap-4">
+                                            <span class="text-orange-500 bg-white text-3xl px-2 mr-1 h-6 font-bold">
+                                                {{ number_format(round($course->course_rate(), 1), 1) }}
+                                            </span>
+                                            <span id="course_{{$course->id}}_rating" class="rating-progress mt-0.5 mr-2"></span>
+                                            <span class="p-2 text-center text-sm">{{__('COURSE RATING')}}</span>
+                                            @php($rating_progress = intval($course->course_rate() / 5 * 100) . '%' ?? 0)
+                                        </div>
+                                    </td>
+                                    <td class="flex-1">
+                                        <div class="p-4">
+                                            <div class="flex gap-3 item-center">
+                                                <div class="flex items-center" style="width: 80%;">
+                                                    <div class="bg-gray-500 h-2 rounded" style="width: {{$course->course_feedback_array()[1]}}%;"></div>
+                                                    <div class="bg-gray-100 h-2 rounded" style="width: {{100 - $course->course_feedback_array()[1]}}%;"></div>
+                                                </div>
+                                                <span id="course_{{$course->id}}_rating" class="w-100px  rating-progress mt-0.5 mr-2"></span>
+                                                <p>{{$course->course_feedback_array()[1]}}%</p>
+                                            </div>
+                                            <div class="flex gap-3 item-center">
+                                                <div class="flex items-center" style="width: 80%;">
+                                                    <div class="bg-gray-500 h-2 rounded" style="width: {{$course->course_feedback_array()[2]}}%;"></div>
+                                                    <div class="bg-gray-100 h-2 rounded" style="width: {{100 - $course->course_feedback_array()[2]}}%;"></div>
+                                                </div>
+                                                <span id="course_{{$course->id}}_rating" class="w-100px  rating-progress mt-0.5 mr-2"></span>
+                                                <p>{{$course->course_feedback_array()[2]}}%</p>
+                                            </div>
+                                            <div class="flex gap-3 item-center">
+                                                <div class="flex items-center" style="width: 80%;">
+                                                    <div class="bg-gray-500 h-2 rounded" style="width: {{$course->course_feedback_array()[3]}}%;"></div>
+                                                    <div class="bg-gray-100 h-2 rounded" style="width: {{100 - $course->course_feedback_array()[3]}}%;"></div>
+                                                </div>
+                                                <span id="course_{{$course->id}}_rating" class="w-100px  rating-progress mt-0.5 mr-2"></span>
+                                                <p>{{$course->course_feedback_array()[3]}}%</p>
+                                            </div>
+                                            <div class="flex gap-3 item-center">
+                                                <div class="flex items-center" style="width: 80%;">
+                                                    <div class="bg-gray-500 h-2 rounded" style="width: {{$course->course_feedback_array()[4]}}%;"></div>
+                                                    <div class="bg-gray-100 h-2 rounded" style="width: {{100 - $course->course_feedback_array()[4]}}%;"></div>
+                                                </div>
+                                                <span id="course_{{$course->id}}_rating" class="w-100px  rating-progress mt-0.5 mr-2"></span>
+                                                <p>{{$course->course_feedback_array()[4]}}%</p>
+                                            </div>
+                                            <div class="flex gap-3 item-center">
+                                                <div class="flex items-center" style="width: 80%;">
+                                                    <div class="bg-gray-500 h-2 rounded" style="width: {{$course->course_feedback_array()[5]}}%;"></div>
+                                                    <div class="bg-gray-100 h-2 rounded" style="width: {{100 - $course->course_feedback_array()[5]}}%;"></div>
+                                                </div>
+                                                <span id="course_{{$course->id}}_rating" class="w-100px  rating-progress mt-0.5 mr-2"></span>
+                                                <p>{{$course->course_feedback_array()[5]}}%</p>
+                                            </div>
+
+                                        </div>
+                                    </td>
                                 </tr>
                             </table>
 
-
                         </div>
-                    @elseif ($activeTab === 'Resources')
-                        <div class="">
-                            <h3 class="py-2 text-sm font-bold">{{ __('Lesson Resources') }}</h3>
-                            <div class="my-4">
-                                
-                            </div>
-                        </div>                    
-                    @elseif ($activeTab === 'Announcements')                
-                        <div class="">
-                            <h3 class="py-2 text-sm font-bold">{{ __('Announcements') }}</h3>
-                            <div class="my-4">
-                                
-                            </div>
-                        </div>   
-                    @elseif ($activeTab === 'Reviews')
-                        <div class="">
-                            <h3 class="py-2 text-sm font-bold">{{ __('Student Feedback') }}</h3>
-                            <div class="my-4">
-                                
-                            </div>
-                        </div> 
-                    @endif
+                    </div>
+                </div>
+                    
                     <!-- <div class="flex justify-end mt-10 {{ $passed_exam ? 'hidden' : '' }}">
                         <h2 class="font-bold mr-3 text-lg">{{ __('Next') }}</h2>
                         <a id="next_lesson" href="javascript:;">
@@ -365,9 +402,114 @@
         </div>
     </div>
 
+    <style>
+        span#course_{{$course->id}}_rating::after {
+            width: {{ $rating_progress }};
+        }
+    </style>
+
+    <script>
+        const getResourcesArray = function(array) {
+                return array.split(',  ');
+            }
+
+        // Function to dynamically create buttons
+        function displayAttachmentButtons(attachments) {
+            // Get the button container div
+            const container = $('#buttonContainer');
+            // Clear the container first in case buttons are already there
+            container.empty();
+            container.addClass('flex flex-wrap gap-1');
+            
+            // Loop through the attachment array
+            attachments.forEach(function(attachment) {
+                // Extract the file name from the URL
+                const fileNameWithPrefix = attachment.substring(attachment.lastIndexOf('/') + 1);
+                const fileNameWithoutPrefix = fileNameWithPrefix.substring(fileNameWithPrefix.indexOf('_') + 1); // Remove prefix before the underscore
+                
+                // Create a button element
+                const button = $('<button></button>')
+                    .addClass('flex items-center justify-between px-8 py-3 h-10 bg-gray-500 text-white text-xs rounded grow-0 mr-2') // Set styles for the button
+                    .html(`<i class="fas fa-download mr-2"></i><p>${fileNameWithoutPrefix}</p>`); // Add download icon and text
+
+                // Add click event to the button for downloading the file
+                button.on('click', function() {
+                    window.location.href = attachment; // Trigger the file download by setting the href to the file URL
+                });
+                
+                // Append the button to the container
+                container.append(button);
+            });
+        }
+
+        function setActiveTab(tab) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(function(content) {
+                content.classList.add('hidden');
+            });
+
+            // Remove active state from all tabs
+            document.querySelectorAll('a').forEach(function(tabLink) {
+                tabLink.classList.remove('border-green-600');
+                tabLink.classList.add('border-transparent');
+            });
+
+            // Show the active tab content
+            document.getElementById('content-' + tab).classList.remove('hidden');
+
+            // Set the active tab
+            const activeTab = document.getElementById('tab-' + tab);
+            activeTab.classList.add('border-green-600');
+            activeTab.classList.remove('border-transparent');
+        }
+
+        // Call this function to set the default tab
+        document.addEventListener('DOMContentLoaded', function() {
+            setActiveTab('description'); // Set "description" tab as default
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            var lecturesCountElement = document.getElementById('lectures_count');
+            var topicDescriptionElement = document.getElementById('topic_description');
+            var topicvideoDurationElement = document.getElementById('topicvideo_duration');
+            var topicItems = document.querySelectorAll('.topic-item');
+
+            // Set default values from the first topic on page load
+            if (topicItems.length > 0) {
+                var firstTopic = topicItems[0];  // Get the first topic item
+                var defaultLessonCount = firstTopic.getAttribute('data-lesson-count');
+                var defaultTopicDescription = firstTopic.getAttribute('data-topic-description');
+                var defaultTopicvideoDuration = firstTopic.getAttribute('data-topicvideo-duration');
+
+                // Set the default values on load
+                lecturesCountElement.innerText = defaultLessonCount;
+                topicDescriptionElement.innerText = defaultTopicDescription;
+                topicvideoDurationElement.innerText = defaultTopicvideoDuration;
+            }
+
+            // Add event listener to each topic item in the list
+            topicItems.forEach(function (item) {
+                item.addEventListener('click', function () {
+                    // Get the lesson count from the clicked topic's data attribute
+                    var lessonCount = this.getAttribute('data-lesson-count');
+                    var topicDescription = this.getAttribute('data-topic-description');
+                    var topicvideoDuration = this.getAttribute('data-topicvideo-duration');
+                    
+                    // Update the lectures count in the 'Lectures' field
+                    lecturesCountElement.innerText = lessonCount;
+                    topicDescriptionElement.innerText = topicDescription;
+                    topicvideoDurationElement.innerText = topicvideoDuration;
+
+                });
+            });
+        });
+
+
+    </script>
+
+
     <script>
         $(document).ready(function() {
-            // if student already took the exam, he can't take the exam anymore.
             if ($('button#sub_try_again_button').length > 0) {
                 $('li.quiz-item').removeClass('quiz-item hover:bg-gray-200 hover:rounded-2xl');
             }
@@ -379,8 +521,10 @@
                 $('div#lesson_section div#lesson_content').html($(lesson_obj).data('content'));
                 $('div#lesson_section iframe#lesson_video').attr('src', $(lesson_obj).data('video-url'));
                 $('div#lesson_section div#lesson_description').html($('h2#course_description').val());
-                console.log($('h2#course_description').val());
-                debugger
+                // Call the function with the attachment array
+                displayAttachmentButtons(getResourcesArray($(lesson_obj).data('attachment-file')));
+                // console.log(getResourcesArray($(lesson_obj).data('attachment-file')));
+                // debugger
             }
 
             // clicked a lesson
@@ -393,8 +537,10 @@
                 $('div#lesson_section div#lesson_content').html($(lesson_obj).data('content'));
                 $('div#lesson_section iframe#lesson_video').attr('src', $(lesson_obj).data('video-url'));
                 $('div#lesson_section div#lesson_description').html($('h2#course_description').val());
-                console.log($('h2#course_description').val());
-                debugger
+                displayAttachmentButtons(getResourcesArray($(lesson_obj).data('attachment-file')));
+
+                // console.log($('h2#course_description').val());
+                // debugger
 
                 $('li.lesson-item').removeClass('active');
                 $('li.quiz-item').removeClass('active');

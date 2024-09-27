@@ -555,7 +555,8 @@
 
                 const lessonObject = $(this).parent().prev();
                 const lessonName = $(lessonObject).html().trim(); // Get the lesson name
-
+                console.log(lessonObject);
+                debugger;
                 // Populate other fields
                 $('input#lesson_name').val(lessonName);
                 $('textarea#lesson_description').val($(lessonObject).attr('data-description'));

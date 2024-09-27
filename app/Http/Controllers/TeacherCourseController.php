@@ -293,42 +293,6 @@ class TeacherCourseController extends Controller
         $data['quiz_active'] = isset($request['quiz_active']) ? 1 : 0;
         $data['is_published'] = $request['is_published'];
 
-        // $data['topic_list'] = json_decode($request['topic_list'], true);
-        // $data['quiz_list'] = json_decode($request['quiz_list'], true);
-        // $data['quiz_active'] = isset($request['quiz_active']) ? 1 : 0;
-        // $data['is_published'] = $request['is_published'];
-
-        // $lesson_nums = 0;
-        // foreach($data['topic_list'] as $topic) {
-        //     $lesson_nums += count($topic['lessons']);
-        //     $lessonId = 0;
-        //     foreach($topic['lessons'] as $lesson){
-        //         if($lesson['attachment_file']) {
-        //             $position = strpos($lesson['attachment_file'], '||');
-        //             $fileNameString = substr($lesson['attachment_file'], 0, $position);
-        //             // dd($data['topic_list']);
-        //             // dd($fileName);
-        //             $fileNamesArray = explode(',   ', $fileNameString); // Splits the string back into an array 
-        //             if ($request->hasFile('multiFiles'))  {
-        //                 foreach ($request->file('multiFiles') as $file){
-        //                     foreach($fileNamesArray as $fileName){
-        //                         if($fileName == $file->getClientOriginalName()){
-        //                             $saved_file_name = time() . '_' . $file->getClientOriginalName();
-        //                             $file->move(public_path('upload/course/attachment'), $saved_file_name);
-        //                             $data['topic_list'][$lessonId]['attachment_file'] = asset('upload/course/attachment' . $saved_file_name);
-        //                         }
-        //                     }
-        //                 }
-        //             }
-        //         }
-        //         $lessonId++;
-        //     }
-            
-        // }
-        // if ($lesson_nums == 0) {
-        //     return [];
-        // }
-
         $lesson_nums = 0;
 
         foreach ($data['topic_list'] as $topicId => $topic) {

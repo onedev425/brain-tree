@@ -59,6 +59,37 @@ class Course extends Model
         return $this->course_feedback->avg('rate');
     }
 
+    public function course_feedback_array()
+    {
+        // Get the array of rates
+        $rawArray = $this->course_feedback->pluck('rate')->toArray();
+
+        // Initialize an array to hold the counts for rates 1 to 5
+        $array = array_fill(1, 5, 0); // Creates an array with keys 1 to 5 initialized to 0
+
+        // Iterate through the raw array to count occurrences
+        foreach ($rawArray as $rate) {
+            if (isset($array[$rate])) {
+                $array[$rate]++; // Increment the count for the given rate
+            }
+        }
+
+        // Calculate the total sum of counts
+        $sum = array_sum($array);
+
+        // Calculate the percentage for each rate
+        if ($sum > 0) { // Avoid division by zero
+            foreach ($array as $index => $count) {
+                $array[$index] = round(($count / $sum) * 100); // Calculate and round percentage
+            }
+        }
+
+        return $array; // Return the array of rounded percentages
+    }
+
+
+
+
     public function course_feedback_nums()
     {
         return $this->course_feedback->count();
