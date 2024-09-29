@@ -274,43 +274,43 @@
                                         <div class="p-4">
                                             <div class="flex gap-3 item-center">
                                                 <div class="flex items-center" style="width: 80%;">
-                                                    <div class="bg-gray-500 h-2 rounded" style="width: {{$course->course_feedback_array()[1]}}%;"></div>
-                                                    <div class="bg-gray-100 h-2 rounded" style="width: {{100 - $course->course_feedback_array()[1]}}%;"></div>
+                                                    <div class="bg-gray-500 h-2 rounded" style="width: {{$course->course_feedback_array()[5]}}%;"></div>
+                                                    <div class="bg-gray-100 h-2 rounded" style="width: {{100 - $course->course_feedback_array()[5]}}%;"></div>
                                                 </div>
-                                                <span id="course_{{$course->id}}_rating" class="w-100px  rating-progress mt-0.5 mr-2"></span>
-                                                <p>{{$course->course_feedback_array()[1]}}%</p>
-                                            </div>
-                                            <div class="flex gap-3 item-center">
-                                                <div class="flex items-center" style="width: 80%;">
-                                                    <div class="bg-gray-500 h-2 rounded" style="width: {{$course->course_feedback_array()[2]}}%;"></div>
-                                                    <div class="bg-gray-100 h-2 rounded" style="width: {{100 - $course->course_feedback_array()[2]}}%;"></div>
-                                                </div>
-                                                <span id="course_{{$course->id}}_rating" class="w-100px  rating-progress mt-0.5 mr-2"></span>
-                                                <p>{{$course->course_feedback_array()[2]}}%</p>
-                                            </div>
-                                            <div class="flex gap-3 item-center">
-                                                <div class="flex items-center" style="width: 80%;">
-                                                    <div class="bg-gray-500 h-2 rounded" style="width: {{$course->course_feedback_array()[3]}}%;"></div>
-                                                    <div class="bg-gray-100 h-2 rounded" style="width: {{100 - $course->course_feedback_array()[3]}}%;"></div>
-                                                </div>
-                                                <span id="course_{{$course->id}}_rating" class="w-100px  rating-progress mt-0.5 mr-2"></span>
-                                                <p>{{$course->course_feedback_array()[3]}}%</p>
+                                                <span id="star_five_rating" class="w-100px  rating-progress mt-0.5 mr-2"></span>
+                                                <p>{{$course->course_feedback_array()[5]}}%</p>
                                             </div>
                                             <div class="flex gap-3 item-center">
                                                 <div class="flex items-center" style="width: 80%;">
                                                     <div class="bg-gray-500 h-2 rounded" style="width: {{$course->course_feedback_array()[4]}}%;"></div>
                                                     <div class="bg-gray-100 h-2 rounded" style="width: {{100 - $course->course_feedback_array()[4]}}%;"></div>
                                                 </div>
-                                                <span id="course_{{$course->id}}_rating" class="w-100px  rating-progress mt-0.5 mr-2"></span>
+                                                <span id="star_four_rating" class="w-100px  rating-progress mt-0.5 mr-2"></span>
                                                 <p>{{$course->course_feedback_array()[4]}}%</p>
                                             </div>
                                             <div class="flex gap-3 item-center">
                                                 <div class="flex items-center" style="width: 80%;">
-                                                    <div class="bg-gray-500 h-2 rounded" style="width: {{$course->course_feedback_array()[5]}}%;"></div>
-                                                    <div class="bg-gray-100 h-2 rounded" style="width: {{100 - $course->course_feedback_array()[5]}}%;"></div>
+                                                    <div class="bg-gray-500 h-2 rounded" style="width: {{$course->course_feedback_array()[3]}}%;"></div>
+                                                    <div class="bg-gray-100 h-2 rounded" style="width: {{100 - $course->course_feedback_array()[3]}}%;"></div>
                                                 </div>
-                                                <span id="course_{{$course->id}}_rating" class="w-100px  rating-progress mt-0.5 mr-2"></span>
-                                                <p>{{$course->course_feedback_array()[5]}}%</p>
+                                                <span id="star_three_rating" class="w-100px  rating-progress mt-0.5 mr-2"></span>
+                                                <p>{{$course->course_feedback_array()[3]}}%</p>
+                                            </div>
+                                            <div class="flex gap-3 item-center">
+                                                <div class="flex items-center" style="width: 80%;">
+                                                    <div class="bg-gray-500 h-2 rounded" style="width: {{$course->course_feedback_array()[2]}}%;"></div>
+                                                    <div class="bg-gray-100 h-2 rounded" style="width: {{100 - $course->course_feedback_array()[2]}}%;"></div>
+                                                </div>
+                                                <span id="star_two_rating" class="w-100px  rating-progress mt-0.5 mr-2"></span>
+                                                <p>{{$course->course_feedback_array()[2]}}%</p>
+                                            </div>
+                                            <div class="flex gap-3 item-center">
+                                                <div class="flex items-center" style="width: 80%;">
+                                                    <div class="bg-gray-500 h-2 rounded" style="width: {{$course->course_feedback_array()[1]}}%;"></div>
+                                                    <div class="bg-gray-100 h-2 rounded" style="width: {{100 - $course->course_feedback_array()[1]}}%;"></div>
+                                                </div>
+                                                <span id="star_one_rating" class="w-100px  rating-progress mt-0.5 mr-2"></span>
+                                                <p>{{$course->course_feedback_array()[1]}}%</p>
                                             </div>
 
                                         </div>
@@ -405,6 +405,22 @@
     <style>
         span#course_{{$course->id}}_rating::after {
             width: {{ $rating_progress }};
+        }
+
+        span#star_five_rating::after {
+            width: 100%;
+
+        }span#star_four_rating::after {
+            width: 80%;
+
+        }span#star_three_rating::after {
+            width: 60%;
+
+        }span#star_two_rating::after {
+            width: 40%;
+
+        }span#star_one_rating::after {
+            width: 20%;
         }
     </style>
 
