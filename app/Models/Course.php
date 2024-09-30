@@ -63,7 +63,6 @@ class Course extends Model
     {
         // Get the array of rates
         $rawArray = $this->course_feedback->pluck('rate')->toArray();
-
         // Initialize an array to hold the counts for rates 1 to 5
         $array = array_fill(1, 5, 0); // Creates an array with keys 1 to 5 initialized to 0
 
@@ -86,9 +85,6 @@ class Course extends Model
 
         return $array; // Return the array of rounded percentages
     }
-
-
-
 
     public function course_feedback_nums()
     {

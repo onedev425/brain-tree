@@ -125,14 +125,16 @@
                             </div>
                         </div>
                         <div class="accordion p-3" x-show="selected == '{{$uuid}}'">
-                            <ul>
+                            <ul class="bg-gray-100">
                                 @foreach($topic->lessons as $lesson_index => $lesson)
-                                    <li class="lesson-quiz-item lesson-item flex py-1 px-3 justify-between hover:bg-gray-200 hover:rounded-2xl {{ $this->isLessonCompleted($lesson->id) ? 'text-green-700' : '' }} {{ $topic_index == 0 && $lesson_index == 0 ? 'active' : '' }}">
+                                    <li class="lesson-quiz-item lesson-item flex py-1 px-3 justify-between hover:bg-gray-200 {{ $this->isLessonCompleted($lesson->id) ? 'text-green-700' : '' }} {{ $topic_index == 0 && $lesson_index == 0 ? 'active' : '' }}">
                                         <div class="flex">
                                             <span class="w-5">
-                                                <svg class="mt-1" xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 333.000000 343.000000">
-                                                    <!-- SVG content -->
-                                                </svg>
+                                            <!-- <svg class="mt-1" xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M21 15V8a2 2 0 0 0-2-2h-4l-2-2H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10l2-2h4a2 2 0 0 0 2-2z"/>
+                                                <path d="M8 11h4M8 15h4"/>
+                                            </svg> -->
+                                            <i class="fas fa-video"></i>
                                             </span>
                                             <a href="javascript:;" class="ml-2" data-lesson-id="{{ $lesson->id }}" data-attachment-file="{{ $lesson->attachment_file }}" data-content="{!! htmlspecialchars($lesson->description) !!}" data-video-url="{{ $this->getVideoEmbedURL($lesson->video_type, $lesson->video_link) }}">{!! $lesson->title !!}</a>
                                         </div>
@@ -213,7 +215,7 @@
                     <div class="aspect-w-16 aspect-h-9 flex justify-center">
                         <iframe id="lesson_video" class="w-full lg:w-5/5 h-96" src="" frameborder="1" allowfullscreen></iframe>
                     </div>
-                    <div class="flex border-b-2 border-gray-300">
+                    <div class="overflow-hidden md:overflow-auto flex border-b-2 border-gray-300">
                         <a href="javascript:;" onclick="setActiveTab('description')" class="py-2 px-2 lg:px-4 w-full text-center text-black cursor-pointer block font-semibold border-b-4 border-transparent active" id="tab-description">
                             {{ __('Description') }}
                         </a>
@@ -272,45 +274,45 @@
                                     </td>
                                     <td class="flex-1">
                                         <div class="p-4">
-                                            <div class="flex gap-3 item-center">
-                                                <div class="flex items-center" style="width: 80%;">
+                                            <div class="flex gap-3 items-center">
+                                                <div class="hidden md:flex md:items-center" style="width: 80%;">
                                                     <div class="bg-gray-500 h-2 rounded" style="width: {{$course->course_feedback_array()[5]}}%;"></div>
                                                     <div class="bg-gray-100 h-2 rounded" style="width: {{100 - $course->course_feedback_array()[5]}}%;"></div>
                                                 </div>
-                                                <span id="star_five_rating" class="w-100px  rating-progress mt-0.5 mr-2"></span>
-                                                <p>{{$course->course_feedback_array()[5]}}%</p>
+                                                <span id="star_five_rating" class=" rating-progress mt-0.5 mr-2" style="min-width: 80px;"></span>
+                                                <p style="min-width: 40px;">{{$course->course_feedback_array()[5]}}%</p>
                                             </div>
-                                            <div class="flex gap-3 item-center">
-                                                <div class="flex items-center" style="width: 80%;">
+                                            <div class="flex gap-3 items-center">
+                                                <div class="hidden md:flex md:items-center" style="width: 80%;">
                                                     <div class="bg-gray-500 h-2 rounded" style="width: {{$course->course_feedback_array()[4]}}%;"></div>
                                                     <div class="bg-gray-100 h-2 rounded" style="width: {{100 - $course->course_feedback_array()[4]}}%;"></div>
                                                 </div>
-                                                <span id="star_four_rating" class="w-100px  rating-progress mt-0.5 mr-2"></span>
-                                                <p>{{$course->course_feedback_array()[4]}}%</p>
+                                                <span id="star_four_rating" class="rating-progress mt-0.5 mr-2" style="min-width: 80px;"></span>
+                                                <p style="min-width: 40px;">{{$course->course_feedback_array()[4]}}%</p>
                                             </div>
-                                            <div class="flex gap-3 item-center">
-                                                <div class="flex items-center" style="width: 80%;">
+                                            <div class="flex gap-3 items-center">
+                                                <div class="hidden md:flex md:items-center" style="width: 80%;">
                                                     <div class="bg-gray-500 h-2 rounded" style="width: {{$course->course_feedback_array()[3]}}%;"></div>
                                                     <div class="bg-gray-100 h-2 rounded" style="width: {{100 - $course->course_feedback_array()[3]}}%;"></div>
                                                 </div>
-                                                <span id="star_three_rating" class="w-100px  rating-progress mt-0.5 mr-2"></span>
-                                                <p>{{$course->course_feedback_array()[3]}}%</p>
+                                                <span id="star_three_rating" class="rating-progress mt-0.5 mr-2" style="min-width: 80px;"></span>
+                                                <p style="min-width: 40px;">{{$course->course_feedback_array()[3]}}%</p>
                                             </div>
-                                            <div class="flex gap-3 item-center">
-                                                <div class="flex items-center" style="width: 80%;">
+                                            <div class="flex gap-3 items-center">
+                                                <div class="hidden md:flex md:items-center" style="width: 80%;">
                                                     <div class="bg-gray-500 h-2 rounded" style="width: {{$course->course_feedback_array()[2]}}%;"></div>
                                                     <div class="bg-gray-100 h-2 rounded" style="width: {{100 - $course->course_feedback_array()[2]}}%;"></div>
                                                 </div>
-                                                <span id="star_two_rating" class="w-100px  rating-progress mt-0.5 mr-2"></span>
-                                                <p>{{$course->course_feedback_array()[2]}}%</p>
+                                                <span id="star_two_rating" class=" rating-progress mt-0.5 mr-2"  style="min-width: 80px;"></span>
+                                                <p style="min-width: 40px;">{{$course->course_feedback_array()[2]}}%</p>
                                             </div>
-                                            <div class="flex gap-3 item-center">
-                                                <div class="flex items-center" style="width: 80%;">
+                                            <div class="flex gap-3 items-center">
+                                                <div class="hidden md:flex md:items-center" style="width: 80%;">
                                                     <div class="bg-gray-500 h-2 rounded" style="width: {{$course->course_feedback_array()[1]}}%;"></div>
                                                     <div class="bg-gray-100 h-2 rounded" style="width: {{100 - $course->course_feedback_array()[1]}}%;"></div>
                                                 </div>
-                                                <span id="star_one_rating" class="w-100px  rating-progress mt-0.5 mr-2"></span>
-                                                <p>{{$course->course_feedback_array()[1]}}%</p>
+                                                <span id="star_one_rating" class="rating-progress mt-0.5 mr-2" style="min-width: 80px;"></span>
+                                                <p style="min-width: 40px;">{{$course->course_feedback_array()[1]}}%</p>
                                             </div>
 
                                         </div>
@@ -445,7 +447,7 @@
                 
                 // Create a button element
                 const button = $('<button></button>')
-                    .addClass('flex items-center justify-between px-8 py-3 h-10 bg-gray-500 text-white text-xs rounded grow-0 mr-2') // Set styles for the button
+                    .addClass('flex items-center justify-between px-8 py-3 h-10 bg-gray-100 text-dark text-xs rounded-md grow-0 mr-2 border border-gray-600') // Set styles for the button
                     .html(`<i class="fas fa-download mr-2"></i><p>${fileNameWithoutPrefix}</p>`); // Add download icon and text
 
                 // Add click event to the button for downloading the file
