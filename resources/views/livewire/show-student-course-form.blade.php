@@ -96,119 +96,132 @@
     <div id="lesson_quiz_section" class="card p-0">
         <div class="card-body">
             <div class="xl:grid grid-cols-12 gap-2 w-full">
-                <div class="col-span-5 bg-neutral-300 p-6 pb-10">
-                    <h1 class="text-xl font-bold mb-4">{{ __('Lessons') }}</h1>
-                    <div id="topic_list" x-data="{selected:0000}">
-                    @foreach($topics as $topic_index => $topic)
-                    @php $uuid = $topic_index == 0 ? '0000' : Illuminate\Support\Str::uuid()->toString(); @endphp
-                    <div class="relative flex flex-wrap flex-col mb-2">
-                        <div class="border-b border-gray-200 mb-0 bg-gray-100 py-2 px-4 mt-2 rounded">
-                            <div class="d-grid mb-0">
-                                <a href="javascript:;" class="py-1 px-0 w-full rounded leading-5 font-medium flex justify-between focus:outline-none focus:ring-0 topic-item" 
-                                    data-lesson-count="{{ count($topic->lessons) }}" data-topic-description="{{$topic->description }}" data-topicvideo-duration="{{ $this->getTopicVideoDuration($topic) }}"
-                                    data-uuid="{{$uuid}}" 
-                                    @click="selected !== '{{$uuid}}' ? selected = '{{$uuid}}' : selected = null">
-                                    <div class="flex mt-1.5">
-                                        <span class="mr-3">
-                                            <svg class="transform transition duration-500 -rotate-90" :class="{ 'rotate-0': selected == '{{$uuid}}' }" width="1rem" height="1rem" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                            <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 01.708 0L8 10.293l5.646-5.647a.5.5 0 01.708.708l-6 6a.5.5 0 01-.708 0l-6-6a.5.5 0 010-.708z" clip-rule="evenodd"></path>
-                                            </svg>
-                                        </span>
-                                        <span class="topic_info">{!! $topic->description !!}</span>
-                                    </div>
-                                    <div class="flex mt-1.5">
-                                        <span class="text-sm text-gray-600 lesson-count">
-                                            {{ count($topic->lessons) }} {{ __('Lessons') }} • {{ $this->getTopicVideoDuration($topic) }}
-                                        </span>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="accordion p-3" x-show="selected == '{{$uuid}}'">
-                            <ul class="bg-gray-100">
-                                @foreach($topic->lessons as $lesson_index => $lesson)
-                                    <li class="lesson-quiz-item lesson-item flex py-1 px-3 justify-between hover:bg-gray-200 {{ $this->isLessonCompleted($lesson->id) ? 'text-green-700' : '' }} {{ $topic_index == 0 && $lesson_index == 0 ? 'active' : '' }}">
-                                        <div class="flex">
-                                            <span class="w-5">
-                                            <!-- <svg class="mt-1" xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                <path d="M21 15V8a2 2 0 0 0-2-2h-4l-2-2H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10l2-2h4a2 2 0 0 0 2-2z"/>
-                                                <path d="M8 11h4M8 15h4"/>
-                                            </svg> -->
-                                            <i class="fas fa-video"></i>
-                                            </span>
-                                            <a href="javascript:;" class="ml-2" data-lesson-id="{{ $lesson->id }}" data-attachment-file="{{ $lesson->attachment_file }}" data-content="{!! htmlspecialchars($lesson->description) !!}" data-video-url="{{ $this->getVideoEmbedURL($lesson->video_type, $lesson->video_link) }}">{!! $lesson->title !!}</a>
-                                        </div>
-                                        <div class="text-sm w-20 text-right">{{ $this->getLessonVideoDuration($lesson->video_duration) }}</div>
-                                    </li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    </div>
-                @endforeach
+                <!-- <div class="relative"> -->
+                    <!-- <div id="leftDrawer" class=" fixed top-0 left-0 h-full w-64 bg-gray-200 shadow-lg transform -translate-x-full transition-transform duration-300 ease-in-out">                 -->
+                    <div id="leftDrawer"  class="relative col-span-5 bg-neutral-300 bg-white rounded-xl p-6 pb-10 transform -translate-x-full transition-transform duration-300 ease-in-out">
+                        <h1 class="text-xl font-bold mb-4">{{ __('Lessons') }}</h1>
+                        <button id="drawerToggle" class="p-2 bg-blue-500" style="position: absolute; top:15px; right:20px; font-size:20px; font-weight:600">X</button>
+                        <div id="topic_list" x-data="{selected:0000}">
+                        @foreach($topics as $topic_index => $topic)
+                        @php $uuid = $topic_index == 0 ? '0000' : Illuminate\Support\Str::uuid()->toString(); @endphp
                         <div class="relative flex flex-wrap flex-col mb-2">
                             <div class="border-b border-gray-200 mb-0 bg-gray-100 py-2 px-4 mt-2 rounded">
                                 <div class="d-grid mb-0">
-                                    <a href="javascript:;" class="py-1 px-0 w-full rounded leading-5 font-medium flex justify-between focus:outline-none focus:ring-0" @click="selected !== '9999' ? selected = '9999' : selected = null" data-quizzes-count="{{ count($course->questions) }}" >
-                                    <div class="flex mt-1.5">
-                                                <span class="mr-3">
-                                                    <svg class="transform transition duration-500 -rotate-90" :class="{ 'rotate-0': selected == '9999' }" width="1rem" height="1rem" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                                      <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 01.708 0L8 10.293l5.646-5.647a.5.5 0 01.708.708l-6 6a.5.5 0 01-.708 0l-6-6a.5.5 0 010-.708z" clip-rule="evenodd"></path>
-                                                    </svg>
-                                                </span>
-                                            <span class="topic_info" data-uuid="9999">{{ __('Final Quiz') }}</span>
+                                    <a href="javascript:;" class="py-1 px-0 w-full rounded leading-5 font-medium flex justify-between focus:outline-none focus:ring-0 topic-item" 
+                                        data-lesson-count="{{ count($topic->lessons) }}" data-topic-description="{{$topic->description }}" data-topicvideo-duration="{{ $this->getTopicVideoDuration($topic) }}"
+                                        data-uuid="{{$uuid}}" 
+                                        @click="selected !== '{{$uuid}}' ? selected = '{{$uuid}}' : selected = null">
+                                        <div class="flex mt-1.5">
+                                            <span class="mr-3">
+                                                <svg class="transform transition duration-500 -rotate-90" :class="{ 'rotate-0': selected == '{{$uuid}}' }" width="1rem" height="1rem" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 01.708 0L8 10.293l5.646-5.647a.5.5 0 01.708.708l-6 6a.5.5 0 01-.708 0l-6-6a.5.5 0 010-.708z" clip-rule="evenodd"></path>
+                                                </svg>
+                                            </span>
+                                            <span class="topic_info">{!! $topic->description !!}</span>
                                         </div>
                                         <div class="flex mt-1.5">
-                                            <span class="text-sm text-gray-600">{{ count($course->questions) }} {{ count($course->questions) == 1 ? __('Quiz') : __('Quizzes') }}</span>
+                                            <span class="text-sm text-gray-600 lesson-count">
+                                                {{ count($topic->lessons) }} {{ __('Lessons') }} • {{ $this->getTopicVideoDuration($topic) }}
+                                            </span>
                                         </div>
                                     </a>
                                 </div>
                             </div>
-                            <div class="accordion p-3" x-show="selected == '9999'">
-                                <ul>
-                                    @php
-                                        $questions = $course->questions()->with('quiz_options')->get();
-                                        $prev_quiz_processed = $this->isAllLessonCompleted($course);
-                                    @endphp
-                                    @foreach($questions as $question)
-                                        @php
-                                            $quiz_option_id = [];
-                                            $quiz_option_text = [];
-                                            foreach($question->quiz_options as $quiz_option) {
-                                                $quiz_option_id[] = $quiz_option->id;
-                                                $quiz_option_text[] = $quiz_option->description;
-                                            }
-                                        @endphp
-                                        <li class="lesson-quiz-item {{ $prev_quiz_processed ? 'quiz-item hover:bg-gray-200 hover:rounded-2xl' : '' }} flex py-1 px-3 justify-between {{ $this->isQuestionCompleted($question->id) ? 'text-green-700' : '' }}">
+                            <div class="accordion outline-1" x-show="selected == '{{$uuid}}'">
+                                <ul class="bg-white" style="border-width: 0px 1px 1px 1px; border-color: #c6c6c6; border-radius: 6px">
+                                    @foreach($topic->lessons as $lesson_index => $lesson)
+                                        <li class="lesson-quiz-item lesson-item flex py-1 px-3 justify-between hover:bg-gray-200 {{ $this->isLessonCompleted($lesson->id) ? 'text-green-700' : '' }} {{ $topic_index == 0 && $lesson_index == 0 ? 'active' : '' }}">
                                             <div class="flex">
                                                 <span class="w-5">
-                                                    <svg class="mt-1" xmlns="http://www.w3.org/2000/svg" width="19.313" height="19.313" viewBox="0 0 19.313 19.313">
-                                                        <g transform="translate(-8.2 -8.2)">
-                                                            <g transform="translate(8.2 8.2)" fill="currentColor">
-                                                                <path d="M-160.144-250.487a9.656,9.656,0,0,1-9.656-9.656,9.656,9.656,0,0,1,9.656-9.656,9.656,9.656,0,0,1,9.656,9.656,9.656,9.656,0,0,1-9.656,9.656Zm0-18.262a8.639,8.639,0,0,0-8.606,8.606,8.639,8.639,0,0,0,8.606,8.606,8.639,8.639,0,0,0,8.606-8.606,8.613,8.613,0,0,0-8.606-8.606Z" transform="translate(169.8 269.8)"/>
-                                                                <path d="M-153.56-256.48a2.9,2.9,0,0,1,.646-1.091,3.159,3.159,0,0,1,1.05-.687,3.841,3.841,0,0,1,1.414-.242,3.754,3.754,0,0,1,1.172.2,3.719,3.719,0,0,1,.97.525,2.264,2.264,0,0,1,.646.848,2.637,2.637,0,0,1,.242,1.172,2.629,2.629,0,0,1-.364,1.414,6.008,6.008,0,0,1-.929,1.131l-.727.727a1.531,1.531,0,0,0-.4.525,1.339,1.339,0,0,0-.162.606,4.675,4.675,0,0,0-.04.848h-.929a3.04,3.04,0,0,1,.081-.929,3,3,0,0,1,.283-.848,4.1,4.1,0,0,1,.525-.727c.242-.242.485-.485.808-.768a2.765,2.765,0,0,0,.687-.848,1.958,1.958,0,0,0,.283-1.051,1.809,1.809,0,0,0-.162-.808,3.662,3.662,0,0,0-.444-.646,1.3,1.3,0,0,0-.687-.4,2.612,2.612,0,0,0-.808-.162,2.7,2.7,0,0,0-1.05.2,1.82,1.82,0,0,0-.768.566,2.138,2.138,0,0,0-.444.848,2.563,2.563,0,0,0-.121.97h-.929a3,3,0,0,1,.162-1.374Zm2.424,7.071H-150v1.131h-1.131Z" transform="translate(160.226 263.066)"/>
-                                                            </g>
-                                                        </g>
-                                                    </svg>
+                                                <!-- <svg class="mt-1" xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path d="M21 15V8a2 2 0 0 0-2-2h-4l-2-2H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10l2-2h4a2 2 0 0 0 2-2z"/>
+                                                    <path d="M8 11h4M8 15h4"/>
+                                                </svg> -->
+                                                <i class="fas fa-video"></i>
                                                 </span>
-                                                <a href="javascript:;" class="ml-2" data-question-id="{{ $question->id }}" data-description="{!! htmlspecialchars($question->description) !!}" data-question-option-ids="{{ json_encode($quiz_option_id) }}" data-question-options="{{ json_encode($quiz_option_text) }}">{{ $question->name }}</a>
+                                                <a href="javascript:;" class="ml-2" data-lesson-id="{{ $lesson->id }}" data-attachment-file="{{ $lesson->attachment_file }}" data-content="{!! htmlspecialchars($lesson->description) !!}" data-video-url="{{ $this->getVideoEmbedURL($lesson->video_type, $lesson->video_link) }}">{!! $lesson->title !!}</a>
                                             </div>
-                                            <div class="text-sm">{{ $question->points }} {{ __('Points') }}</div>
+                                            <div class="text-sm w-20 text-right">{{ $this->getLessonVideoDuration($lesson->video_duration) }}</div>
                                         </li>
-                                        @php
-                                            $prev_quiz_processed = $this->isQuestionCompleted($question->id);
-                                        @endphp
                                     @endforeach
                                 </ul>
-                                @if ($prev_quiz_processed && ! $passed_exam)
-                                    <div class="flex justify-end mt-4">
-                                        <x-button id="sub_try_again_button" label="{{ __('Try Again') }}" icon="" class="py-1 md:px-4 bg-red-700 text-white font-semibold border-transparent" />
+                            </div>
+                        </div>
+                    @endforeach
+                            <div class="relative flex flex-wrap flex-col mb-2">
+                                <div class="border-b border-gray-200 mb-0 bg-gray-100 py-2 px-4 mt-2 rounded">
+                                    <div class="d-grid mb-0">
+                                        <a href="javascript:;" class="py-1 px-0 w-full rounded leading-5 font-medium flex justify-between focus:outline-none focus:ring-0" @click="selected !== '9999' ? selected = '9999' : selected = null" data-quizzes-count="{{ count($course->questions) }}" >
+                                        <div class="flex mt-1.5">
+                                                    <span class="mr-3">
+                                                        <svg class="transform transition duration-500 -rotate-90" :class="{ 'rotate-0': selected == '9999' }" width="1rem" height="1rem" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                        <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 01.708 0L8 10.293l5.646-5.647a.5.5 0 01.708.708l-6 6a.5.5 0 01-.708 0l-6-6a.5.5 0 010-.708z" clip-rule="evenodd"></path>
+                                                        </svg>
+                                                    </span>
+                                                <span class="topic_info" data-uuid="9999">{{ __('Final Quiz') }}</span>
+                                            </div>
+                                            <div class="flex mt-1.5">
+                                                <span class="text-sm text-gray-600">{{ count($course->questions) }} {{ count($course->questions) == 1 ? __('Quiz') : __('Quizzes') }}</span>
+                                            </div>
+                                        </a>
                                     </div>
-                                @endif
+                                </div>
+                                <div class="accordion p-3" x-show="selected == '9999'">
+                                    <ul>
+                                        @php
+                                            $questions = $course->questions()->with('quiz_options')->get();
+                                            $prev_quiz_processed = $this->isAllLessonCompleted($course);
+                                        @endphp
+                                        @foreach($questions as $question)
+                                            @php
+                                                $quiz_option_id = [];
+                                                $quiz_option_text = [];
+                                                foreach($question->quiz_options as $quiz_option) {
+                                                    $quiz_option_id[] = $quiz_option->id;
+                                                    $quiz_option_text[] = $quiz_option->description;
+                                                }
+                                            @endphp
+                                            <li class="lesson-quiz-item {{ $prev_quiz_processed ? 'quiz-item hover:bg-gray-200 hover:rounded-2xl' : '' }} flex py-1 px-3 justify-between {{ $this->isQuestionCompleted($question->id) ? 'text-green-700' : '' }}">
+                                                <div class="flex">
+                                                    <span class="w-5">
+                                                        <svg class="mt-1" xmlns="http://www.w3.org/2000/svg" width="19.313" height="19.313" viewBox="0 0 19.313 19.313">
+                                                            <g transform="translate(-8.2 -8.2)">
+                                                                <g transform="translate(8.2 8.2)" fill="currentColor">
+                                                                    <path d="M-160.144-250.487a9.656,9.656,0,0,1-9.656-9.656,9.656,9.656,0,0,1,9.656-9.656,9.656,9.656,0,0,1,9.656,9.656,9.656,9.656,0,0,1-9.656,9.656Zm0-18.262a8.639,8.639,0,0,0-8.606,8.606,8.639,8.639,0,0,0,8.606,8.606,8.639,8.639,0,0,0,8.606-8.606,8.613,8.613,0,0,0-8.606-8.606Z" transform="translate(169.8 269.8)"/>
+                                                                    <path d="M-153.56-256.48a2.9,2.9,0,0,1,.646-1.091,3.159,3.159,0,0,1,1.05-.687,3.841,3.841,0,0,1,1.414-.242,3.754,3.754,0,0,1,1.172.2,3.719,3.719,0,0,1,.97.525,2.264,2.264,0,0,1,.646.848,2.637,2.637,0,0,1,.242,1.172,2.629,2.629,0,0,1-.364,1.414,6.008,6.008,0,0,1-.929,1.131l-.727.727a1.531,1.531,0,0,0-.4.525,1.339,1.339,0,0,0-.162.606,4.675,4.675,0,0,0-.04.848h-.929a3.04,3.04,0,0,1,.081-.929,3,3,0,0,1,.283-.848,4.1,4.1,0,0,1,.525-.727c.242-.242.485-.485.808-.768a2.765,2.765,0,0,0,.687-.848,1.958,1.958,0,0,0,.283-1.051,1.809,1.809,0,0,0-.162-.808,3.662,3.662,0,0,0-.444-.646,1.3,1.3,0,0,0-.687-.4,2.612,2.612,0,0,0-.808-.162,2.7,2.7,0,0,0-1.05.2,1.82,1.82,0,0,0-.768.566,2.138,2.138,0,0,0-.444.848,2.563,2.563,0,0,0-.121.97h-.929a3,3,0,0,1,.162-1.374Zm2.424,7.071H-150v1.131h-1.131Z" transform="translate(160.226 263.066)"/>
+                                                                </g>
+                                                            </g>
+                                                        </svg>
+                                                    </span>
+                                                    <a href="javascript:;" class="ml-2" data-question-id="{{ $question->id }}" data-description="{!! htmlspecialchars($question->description) !!}" data-question-option-ids="{{ json_encode($quiz_option_id) }}" data-question-options="{{ json_encode($quiz_option_text) }}">{{ $question->name }}</a>
+                                                </div>
+                                                <div class="text-sm">{{ $question->points }} {{ __('Points') }}</div>
+                                            </li>
+                                            @php
+                                                $prev_quiz_processed = $this->isQuestionCompleted($question->id);
+                                            @endphp
+                                        @endforeach
+                                    </ul>
+                                    @if ($prev_quiz_processed && ! $passed_exam)
+                                        <div class="flex justify-end mt-4">
+                                            <x-button id="sub_try_again_button" label="{{ __('Try Again') }}" icon="" class="py-1 md:px-4 bg-red-700 text-white font-semibold border-transparent" />
+                                        </div>
+                                    @endif
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div id="lesson_section" class="col-span-7 p-6">
+                <!-- </div> -->
+                
+                <div id="lesson_section" class="relative col-span-7 p-6">
+                    <div id="toggle_lessons" class="flex justify-end mt-10 hidden" style="position: absolute; top:10px;">
+                        <a href="#" class="flex items-center px-4 py-2 bg-gray-500 text-white rounded">
+                            <span>Lessons</span>
+                            <svg class="ml-2 w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </a>
+                    </div>
                     <!-- <h1 id="lesson_title" class="text-xl font-bold mb-4"></h1> -->
                     <!-- <div id="lesson_content" class="my-5"></div> -->
                     <div class="w-full mx-auto max-w-screen-lg">
@@ -264,11 +277,11 @@
                                 <tr class="flex w-full">
                                     <td class="text-center flex-3 flex"> <!-- Centers the text inside the table cell -->
                                         <div class="flex flex-col items-center justify-center gap-4">
-                                            <span class="text-orange-500 bg-white text-3xl px-2 mr-1 h-6 font-bold">
+                                            <span class="text-orange-500 bg-white text-3xl px-2 mr-1 h-6 font-bold" style="color:orange">
                                                 {{ number_format(round($course->course_rate(), 1), 1) }}
                                             </span>
-                                            <span id="course_{{$course->id}}_rating" class="rating-progress mt-0.5 mr-2"></span>
-                                            <span class="p-2 text-center text-sm">{{__('COURSE RATING')}}</span>
+                                            <span id="course_{{$course->id}}_rating" class="rating-progress mt-0.5 mr-2" style="scale:1.5"></span>
+                                            <span class="p-2 text-center text-sm" style="color:orange">{{__('COURSE RATING')}}</span>
                                             @php($rating_progress = intval($course->course_rate() / 5 * 100) . '%' ?? 0)
                                         </div>
                                     </td>
@@ -426,6 +439,54 @@
         }
     </style>
 
+<div id="toggle_lessons" class="flex justify-end mt-10 hidden" style="position: absolute; top:10px;">
+    <button class="bg-gray-800 text-white px-4 py-2 rounded">Lessons</button>
+</div>
+
+<div id="toggle_lessons" class="flex justify-end mt-10 hidden" style="position: absolute; top:10px;">
+    <button class="bg-gray-800 text-white px-4 py-2 rounded">Lessons</button>
+</div>
+
+    <script>
+        // Get the necessary elements
+        const drawerToggle = document.getElementById('drawerToggle');
+        const leftDrawer = document.getElementById('leftDrawer');
+        const lessonSection = document.getElementById('lesson_section');
+        const toggleLessonsButton = document.getElementById('toggle_lessons');
+
+        // Toggle drawer and show/hide the "toggle lessons" button
+        drawerToggle.addEventListener('click', function () {
+            // Toggle the visibility of the left drawer
+            leftDrawer.classList.toggle('hidden');
+
+            // Replace class on lesson section
+            if (leftDrawer.classList.contains('hidden')) {
+                lessonSection.classList.replace('col-span-7', 'col-span-12');
+            } else {
+                lessonSection.classList.replace('col-span-12', 'col-span-7');
+            }
+
+            // Show the "toggle lessons" button when the drawer is hidden
+            if (leftDrawer.classList.contains('hidden')) {
+                toggleLessonsButton.classList.remove('hidden'); // Show the button
+            } else {
+                toggleLessonsButton.classList.add('hidden');   // Hide the button
+            }
+        });
+
+        // Add event listener for the "toggle lessons" button
+        toggleLessonsButton.addEventListener('click', function () {
+            // Hide the "toggle lessons" button
+            toggleLessonsButton.classList.add('hidden');
+
+            // Show the left drawer and update the lesson section layout
+            leftDrawer.classList.remove('hidden');
+            lessonSection.classList.replace('col-span-12', 'col-span-7');
+        });
+    </script>
+
+
+
     <script>
         const getResourcesArray = function(array) {
                 return array.split(',  ');
@@ -444,19 +505,21 @@
                 // Extract the file name from the URL
                 const fileNameWithPrefix = attachment.substring(attachment.lastIndexOf('/') + 1);
                 const fileNameWithoutPrefix = fileNameWithPrefix.substring(fileNameWithPrefix.indexOf('_') + 1); // Remove prefix before the underscore
-                
-                // Create a button element
-                const button = $('<button></button>')
-                    .addClass('flex items-center justify-between px-8 py-3 h-10 bg-gray-100 text-dark text-xs rounded-md grow-0 mr-2 border border-gray-600') // Set styles for the button
-                    .html(`<i class="fas fa-download mr-2"></i><p>${fileNameWithoutPrefix}</p>`); // Add download icon and text
+                if(attachment !== "") {
+                    // Create a button element
+                    const button = $('<button></button>')
+                        .addClass('flex items-center justify-between px-8 py-3 h-10 bg-gray-100 text-dark text-xs rounded-md grow-0 mr-2 border border-gray-600') // Set styles for the button
+                        .html(`<i class="fas fa-download mr-2"></i><p>${fileNameWithoutPrefix}</p>`); // Add download icon and text
 
-                // Add click event to the button for downloading the file
-                button.on('click', function() {
-                    window.location.href = attachment; // Trigger the file download by setting the href to the file URL
-                });
+                    // Add click event to the button for downloading the file
+                    button.on('click', function() {
+                        window.location.href = attachment; // Trigger the file download by setting the href to the file URL
+                    });
+                    
+                    // Append the button to the container
+                    container.append(button);
+                }
                 
-                // Append the button to the container
-                container.append(button);
             });
         }
 
