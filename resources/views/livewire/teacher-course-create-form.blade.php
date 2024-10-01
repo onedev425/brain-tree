@@ -8,6 +8,8 @@
             <input type="hidden" name="topic_list">
             <input type="hidden" name="quiz_list">
             <input type="hidden" name="is_published">
+            <input type="file" id="attachment_file_buffer" name="multiFiles[]" multiple hidden>
+            <input type="text" id="lessonAttachments" name='lessonAttachments' hidden>
             <input type="hidden" name="use_default_image">
             <div class="float-right my-3">
 {{--                <button type="submit" id="publish_course_button" class="py-3 px-8 inline-block text-center mb-3 rounded-lg leading-5 text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 hover:ring-0 hover:border-red-600 focus:bg-red-600 focus:border-red-600 focus:outline-none focus:ring-0">--}}
@@ -50,7 +52,7 @@
                             </div>
                             <div class="form-group mb-6">
                                 <label for="course_price" class="block mb-2 font-medium text-gray-900">{{ __('Price') }} ($)<span class="text-red-500">*</span> </label>
-                                <input type="text" id="course_price" name="course_price" value="{{ $course->price }}" minlength="1" maxlength="10" class="shadow-sm border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="" required />
+                                <input type="number" id="course_price" name="course_price" value="{{ $course->price }}" minlength="1" maxlength="10" class="shadow-sm border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="" required />
                                 @error('course_price')
                                 <span class="text-red-500">{{ $message }}</span>
                                 @enderror
@@ -154,7 +156,7 @@
                                             <div class="flex-1 py-4 px-7">
                                                 @foreach($topic->lessons as $lesson)
                                                     <div class="flex pt-4 justify-between">
-                                                        <div class="lesson_info pt-1.5" data-lesson-id="{{ $lesson->id }}" data-description="{!! htmlspecialchars($lesson->description) !!}" data-video-source="{{ $lesson->video_type }}" data-video-url="{{ $lesson->video_link }}" data-uuid="{{ $uuid }}">{{ $lesson->title }}</div>
+                                                        <div class="lesson_info pt-1.5" data-lesson-id="{{ $lesson->id }}" data-description="{!! htmlspecialchars($lesson->description) !!}" data-video-source="{{ $lesson->video_type }}" data-video-url="{{ $lesson->video_link }}" data-attachment-file="{{ $lesson->attachment_file }}" data-uuid="{{ $uuid }}">{{ $lesson->title }}</div>
                                                         <div class="min-w-fit" >
                                                             <x-edit-icon-button class="edit_lesson_dialog_button"/>
                                                             <x-remove-icon-button class="remove_lesson_button"/>
@@ -300,7 +302,27 @@
                     <label for="video_url" class="inline-block mb-2">{{ __('Video URL') }} <span class="text-red-500">*</span></label>
                     <input id="video_url" type="text" class="w-full leading-5 relative py-2 px-4 rounded text-gray-800 bg-white border border-gray-300 overflow-x-auto focus:outline-none focus:border-gray-400 focus:ring-0" required>
                 </div>
-
+                
+                <div class="form-group flex-shrink max-w-full px-4 w-full mb-4">
+                    <div class="flex gap-4 mb-2">
+                        <label for="attachment" class="inline-block">Resources</label>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" class="sr-only peer" id="resources_active" name="resources_active" checked/>
+                        <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-green-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600"></div>
+                        <span class="ml-3 text-sm font-medium text-gray-900"></span>
+                    </label>
+                    </div>
+                    <div class="w-full flex gap-2">
+                        <input id="attachment_display" type="text" class="flex-1 leading-5 relative py-2 px-4 rounded text-gray-800 bg-white border border-gray-300 overflow-x-auto focus:outline-none focus:border-gray-400 focus:ring-0" readonly>
+                        <label for="attachment_file" class=" max-w-[250px]  min-w-[250px] flex items-center px-4 py-3 gap-3 rounded-xl bg-gray-600 border border-gray-300 border-dashed bg-gray-50 cursor-pointer">
+                            <div class="space-y-2">
+                                <h4 class="text-base font-semibold text-white">Add file</h4>
+                            </div>
+                            <input type="file" id="attachment_file" name="attachment_multi_file" multiple hidden/>
+                        </label>
+                    </div> 
+                </div>
+                
                 <div class="form-group flex-shrink max-w-full px-4 w-full">
                     <x-button label="{{ __('Save') }}" type="submit" icon="" class="py-3 md:px-10 bg-red-700 text-white font-semibold border-transparent" />
                 </div>
@@ -403,7 +425,68 @@
             imageContainer.parentNode.classList.add('image-input-empty');
             //Livewire.emit('courseImageChanged', false, '');
         });
+
     </script>
+
+<script>
+    // Handle attachment file uploading
+    const attachmentInput = document.getElementById('attachment_file');
+    const attachmentInputBuffer = document.getElementById('attachment_file_buffer');
+    const attachmentDisplay = $('input#attachment_display'); // Select display input using jQuery
+
+    attachmentInput.addEventListener('change', function() {
+        const files = this.files; // Get selected files
+
+        // Create a new DataTransfer object to manage files
+        const dataTransfer = new DataTransfer();
+
+        // Add existing files from attachmentInputBuffer
+        for (let i = 0; i < attachmentInputBuffer.files.length; i++) {
+            dataTransfer.items.add(attachmentInputBuffer.files[i]);
+        }
+
+        let fileNames = [];
+        // Add newly selected files and collect their names
+        for (let i = 0; i < files.length; i++) {
+            dataTransfer.items.add(files[i]);
+            fileNames.push(files[i].name);
+        }
+        
+        // Display the file names in the attachmentDisplay
+        const existingDisplayText = attachmentDisplay.val().trim();
+        const newDisplayText = fileNames.join(', '); // Join file names with comma and spaces
+
+        // Append new file names if there are existing names in the display
+        const updatedDisplayText = existingDisplayText
+            ? `${existingDisplayText}, ${newDisplayText}`
+            : newDisplayText;
+
+        attachmentDisplay.val(updatedDisplayText); // Update the display
+
+        // Update the attachmentInputBuffer with the new file list
+        attachmentInputBuffer.files = dataTransfer.files;
+
+        // // Get values from form inputs
+        // const lessonName = $('input#lesson_name').val().trim(); // Use lesson name as key
+
+        // // Check if lessonName and updatedDisplayText are valid
+        // if (lessonName && updatedDisplayText) {
+        //     // Retrieve existing lessonAttachments from localStorage, or initialize an empty object if not allocated
+        //     let lessonAttachments = localStorage.getItem('lessonAttachments');
+        //     lessonAttachments = lessonAttachments ? JSON.parse(lessonAttachments) : {};
+
+        //     // Update or add the lessonName key with the updatedDisplayText value
+        //     lessonAttachments[lessonName] = updatedDisplayText;
+
+        //     // Save the updated lessonAttachments object back to localStorage
+        //     localStorage.setItem('lessonAttachments', JSON.stringify(lessonAttachments));
+
+        // } else {
+        //     console.log("Lesson name or display value is missing.");
+        // }
+    });
+</script>
+
 
     <script>
         // handle the Topic Dialog
@@ -462,6 +545,7 @@
                 $('textarea#lesson_description').val('');
                 $('select#video_source').val('');
                 $('input#video_url').val('');
+                $('input#attachment_display').val('');
             });
 
             $('body').on('click', '.edit_lesson_dialog_button', function(event) {
@@ -470,12 +554,27 @@
                 $('div#overlay').removeClass('hidden');
 
                 const lessonObject = $(this).parent().prev();
-                $('input#lesson_name').val($(lessonObject).html());
+                const lessonName = $(lessonObject).html().trim(); // Get the lesson name
+                console.log(lessonObject);
+                debugger;
+                // Populate other fields
+                $('input#lesson_name').val(lessonName);
                 $('textarea#lesson_description').val($(lessonObject).attr('data-description'));
                 $('select#video_source').val($(lessonObject).attr('data-video-source'));
                 $('input#video_url').val($(lessonObject).attr('data-video-url'));
                 $('input[name=lesson_edit_flag]').val($(lessonObject).data('uuid'));
+
+                // Retrieve the lessonAttachments from localStorage
+                let lessonAttachments = localStorage.getItem('lessonAttachments');
+                lessonAttachments = lessonAttachments ? JSON.parse(lessonAttachments) : {};
+
+                // Get the attachment file for the specific lessonName from lessonAttachments
+                const attachmentFile = lessonAttachments[lessonName] || ''; // Default to an empty string if no attachment found
+
+                // Populate the attachment file input field with the data from localStorage
+                $('input#attachment_display').val(attachmentFile);
             });
+
 
             $('body').on('click', '.remove_lesson_button', function(event) {
                 event.preventDefault();
@@ -492,7 +591,9 @@
             });
         });
 
-        // hide the overlay and the dialog
+        // hide the overlay and the dialog.
+
+
         function closeLessonDialog() {
             $('div#lesson_dialog').addClass('hidden');
             $('div#overlay').addClass('hidden');
@@ -710,7 +811,20 @@
     </script>
 
     <script>
+        document.getElementById('resources_active').addEventListener('change', function() {
+            const attachmentDisplay = $('input#attachment_display');
+            const addFileButton = $('input#attachment_file');
+            
+            if (this.checked) {
+                addFileButton.prop('disabled', false); 
+            } else {
+                attachmentDisplay.val('');
+                addFileButton.prop('disabled', true);            
+            }
+        });
+    </script>
 
+    <script>
         const topicValidation = function () {
             var topicForm = document.getElementById('topic_form');
             var pristine = new Pristine(topicForm);
@@ -783,21 +897,41 @@
 
             lessonForm.addEventListener('submit', function(event) {
                 event.preventDefault(); // Prevent the default form submission
-                const valid = pristine.validate();
+
+                const valid = pristine.validate(); // Form validation
+
+                const attachmentDisplay = $('input#attachment_display'); // Select display input using jQuery
 
                 if (valid) {
-                    const lessonName = $('input#lesson_name').val();
+                    const lessonName = $('input#lesson_name').val().trim();
                     const lessonDescription = $('textarea#lesson_description').val();
                     const videoSource = $('select#video_source option:selected').val();
                     const videoURL = $('input#video_url').val();
+                    const attachmentFile = attachmentDisplay.val().trim() || null;
+    
+                    // Check if lessonName and attachmentFile are valid
+                    if (lessonName && attachmentFile) {
+                        // Retrieve existing lessonAttachments from localStorage, or initialize an empty object if not allocated
+                        let lessonAttachments = localStorage.getItem('lessonAttachments');
+                        lessonAttachments = lessonAttachments ? JSON.parse(lessonAttachments) : {};
 
-                    console.log(lessonDescription);
+                        // Update or add the lessonName key with the attachmentFile value
+                        lessonAttachments[lessonName] = attachmentFile;
+
+                        // Save the updated lessonAttachments object back to localStorage
+                        localStorage.setItem('lessonAttachments', JSON.stringify(lessonAttachments));
+                        $('input#lessonAttachments').val(JSON.stringify(lessonAttachments));
+
+                    } else {
+                        console.log("Lesson name or display value is missing.");
+                    }
+
                     if ($('input[name=lesson_edit_flag]').val() == 'new') {
                         const uuid = generateUUID();
                         const topicUuid = $('input[name=topic_uuid]').val();
                         const newLesson = `
                             <div class="flex pt-4 justify-between">
-                                <div class="lesson_info pt-1.5" data-lesson-id="0" data-description="${lessonDescription}" data-video-source="${videoSource}" data-video-url="${videoURL}" data-uuid="${uuid}">${lessonName}</div>
+                                <div class="lesson_info pt-1.5" data-lesson-id="0" data-description="${lessonDescription}" data-video-source="${videoSource}" data-video-url="${videoURL}" data-uuid="${uuid}" data-attachment-file="${attachmentFile}" >${lessonName}</div>
                                 <div class="min-w-fit" >
                                     <x-edit-icon-button class="edit_lesson_dialog_button"/>
                                     <x-remove-icon-button class="remove_lesson_button"/>
@@ -811,10 +945,13 @@
                     else {
                         const uuid = $('input[name=lesson_edit_flag]').val();
                         const lessonObject = $('div.lesson_info[data-uuid="' + uuid + '"]');
+
                         $(lessonObject).html(lessonName);
                         $(lessonObject).attr('data-description', lessonDescription);
                         $(lessonObject).attr('data-video-source', videoSource);
                         $(lessonObject).attr('data-video-url', videoURL);
+                        $(lessonObject).attr('data-attachment-file', attachmentFile);
+
                     }
 
                     closeLessonDialog();
@@ -859,13 +996,20 @@
                     $.each($('div#topic_list span.topic_info'), function(index, topic_obj) {
                         let lesson_list = [];
                         $.each($(topic_obj).parent().parent().parent().parent().next().find('div.lesson_info'), function(index, lesson_obj) {
+                            let lessonAttachments = localStorage.getItem('lessonAttachments');
+                            lessonAttachments = lessonAttachments ? JSON.parse(lessonAttachments) : {};
+                            // Get the lesson object (assuming lesson_obj is defined)
+                            const lessonName = $(lesson_obj).html();  // Get the lesson title for use as a key
+                            const attachmentFile = lessonAttachments[lessonName] || null;  // Use null if not found
                             const lesson = {
                                 id: $(lesson_obj).attr('data-lesson-id'),
                                 title: $(lesson_obj).html(),
                                 description: $(lesson_obj).attr('data-description'),
                                 video_source: $(lesson_obj).attr('data-video-source'),
                                 video_url: $(lesson_obj).attr('data-video-url'),
+                                attachment_file: attachmentFile,
                             };
+                            
                             lesson_list.push(lesson);
                         });
                         const topic_info = {
@@ -873,9 +1017,11 @@
                             title: $(topic_obj).html(),
                             lessons: lesson_list
                         }
+                        
                         topic_list.push(topic_info);
                     });
-
+                    // console.log(topic_list)
+                    // debugger
                     let quiz_list = [];
                     $.each($('div.quiz_info'), function(index, quiz_obj) {
                         const quiz = {
@@ -894,6 +1040,8 @@
                     $('input[name=use_default_image]').val(($('div#course_image_container').css('background-image') == 'none' || $('div#course_image_container').css('background-image') == '') ? 1 : 0);
                     $('input[name=topic_list]').val(JSON.stringify(topic_list));
                     $('input[name=quiz_list]').val(JSON.stringify(quiz_list));
+                    // console.log(courseForm);
+                    // debugger;
                     courseForm.submit();
                     return true;
                 }
@@ -991,7 +1139,46 @@
 
     <script>
         $(document).ready(function() {
+            // Wait for the DOM to be fully loaded
+            document.addEventListener('DOMContentLoaded', function() {
+                // Iterate over each lesson div
+                document.querySelectorAll('.lesson_info').forEach(function(lesson) {
+                    // Get the lesson title (which will be the key)
+                    const lessonName = lesson.textContent.trim();
+
+                    // Get the attachment file data (which will be the value)
+                    const attachmentFile = lesson.getAttribute('data-attachment-file');
+
+                    // Check if the title and attachment file are valid
+                    if (lessonName && attachmentFile) {
+                        // Split the attachment file by ',  '
+                        let attachments = attachmentFile.split(',  ');
+
+                        // Remove the prefix (anything before the first underscore) for each attachment
+                        attachments = attachments.map(function(file) {
+                            const underscoreIndex = file.indexOf('_');
+                            return underscoreIndex !== -1 ? file.substring(underscoreIndex + 1) : file; // Remove prefix before the underscore
+                        });
+
+                        // Combine the cleaned-up attachment names back into a string
+                        const cleanedAttachmentFile = attachments.join(',  ');
+
+                        // Retrieve existing lessonAttachments from localStorage, or initialize an empty object if not allocated
+                        let lessonAttachments = localStorage.getItem('lessonAttachments');
+                        lessonAttachments = lessonAttachments ? JSON.parse(lessonAttachments) : {};
+
+                        // Save the lesson's cleaned attachment file using the lesson title as the key
+                        lessonAttachments[lessonName] = cleanedAttachmentFile;
+
+                        // Save the updated lessonAttachments object back to localStorage
+                        localStorage.setItem('lessonAttachments', JSON.stringify(lessonAttachments));
+                    }
+                });
+            });
+
+            
             $('button#save_course_button').on('click', function() {
+                // console.log($document);
                 $('input[name=is_published]').val(0);
             });
             $('button#publish_course_button').on('click', function() {

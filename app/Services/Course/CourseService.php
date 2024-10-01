@@ -52,7 +52,6 @@ class CourseService
             ];
             $topics[] = $topic_info;
         }
-
         return $topics;
     }
 
@@ -211,7 +210,6 @@ class CourseService
                 ->with('assignedTeacher')
                 ->get();
         }
-
         return $courses;
     }
 
@@ -503,6 +501,7 @@ class CourseService
 
             foreach($topic_info['lessons'] as $lesson_info) {
                 $duration = $this->getVideoLength($lesson_info['video_source'], $lesson_info['video_url']);
+
                 $topic->lessons()->create([
                     'title' => $lesson_info['title'],
                     'description' => $lesson_info['description'],
@@ -511,6 +510,7 @@ class CourseService
                     'video_duration' => $duration,
                     'user_id' => auth()->user()->id,
                     'course_id' => $course->id,
+                    'attachment_file' => $lesson_info['attachment_file'] ?? null,
                 ]);
                 $total_duration += $duration;
                 $total_lessons += 1;
@@ -609,6 +609,7 @@ class CourseService
                         'video_duration' => $duration,
                         'user_id' => auth()->user()->id,
                         'course_id' => $course->id,
+                        'attachment_file' => $lesson_info['attachment_file'] ?? null, 
                     ]);
                 }
                 else {
@@ -620,6 +621,8 @@ class CourseService
                         'video_type' => $lesson_info['video_source'],
                         'video_link' => $lesson_info['video_url'],
                         'video_duration' => $duration,
+                        'attachment_file' => $lesson_info['attachment_file'] ?? null,
+
                     ]);
                     $lesson->save();
                 }

@@ -5,7 +5,6 @@ use App\Models\User;
 use App\Models\Course;
 use App\Models\PayoutHistory;
 use App\Models\PaymentConnection;
-use App\Models\PaymentFee;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use Srmklive\PayPal\Services\PayPal as PayPalClient;
@@ -62,50 +61,8 @@ class PaypalService
         ]);
     }
 
-    public function payToCourse(Course $course): array
-    {
-        $course_fee = PaymentFee::all()->where('fee_type', 'teacher_course_fee')->first();
-
-        $provider = new PayPalClient();
-        $provider->setApiCredentials(config('paypal'));
-        $paypalToken = $provider->getAccessToken();
-        $provider->setAccessToken($paypalToken);
-        $response = $provider->createOrder([
-            "intent" => "CAPTURE",
-            "application_context" => [
-                "return_url" => route('paypal.callback', 'payer=teacher&course=' . $course->id),
-                "cancel_url" => route('paypal.cancel', 'payer=teacher&course=' . $course->id),
-            ],
-            "purchase_units" => [
-                [
-                    'amount' => [
-                        'currency_code' => 'USD',
-                        'value' => $course_fee->fee_value,
-                    ],
-                ],
-
-            ]
-        ]);
-
-        if (isset($response['id']) && $response['id'] != null) {
-            foreach ($response['links'] as $links) {
-                if ($links['rel'] == 'approve') {
-                    return ['result' => 'success', 'redirect_url' => $links['href']];
-                }
-            }
-        }
-
-        $course->is_published = false;
-        $course->is_paid = false;
-        $course->save();
-        return ['result' => 'error', 'redirect_url' => route('home')];
-    }
-
-
     public function buyCourse(Course $course): array
     {
-        $course_fee = PaymentFee::all()->where('fee_type', 'student_course_fee_percent')->first();
-
         $provider = new PayPalClient();
         $provider->setApiCredentials(config('paypal'));
         $paypalToken = $provider->getAccessToken();

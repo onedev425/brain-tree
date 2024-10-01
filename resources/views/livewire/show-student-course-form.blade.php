@@ -12,6 +12,7 @@
                     </svg>
                 </a>
                 <h2 class="font-bold ml-3 text-lg">{{ $course->title }}</h2>
+                <h2 id="course_description" class="font-bold ml-3 text-lg" hidden>{{ $course->description }}</h2>
             </div>
         </div>
     </div>
@@ -95,142 +96,246 @@
     <div id="lesson_quiz_section" class="card p-0">
         <div class="card-body">
             <div class="xl:grid grid-cols-12 gap-2 w-full">
-                <div class="col-span-5 bg-neutral-300 p-6 pb-10">
-                    <h1 class="text-xl font-bold mb-4">{{ __('Lessons') }}</h1>
-                    <div id="topic_list" x-data="{selected:0000}">
+                <!-- <div class="relative"> -->
+                    <!-- <div id="leftDrawer" class=" fixed top-0 left-0 h-full w-64 bg-gray-200 shadow-lg transform -translate-x-full transition-transform duration-300 ease-in-out">                 -->
+                    <div id="leftDrawer"  class="relative col-span-5 bg-neutral-300 bg-white rounded-xl p-6 pb-10 transform -translate-x-full transition-transform duration-300 ease-in-out">
+                        <h1 class="text-xl font-bold mb-4">{{ __('Lessons') }}</h1>
+                        <button id="drawerToggle" class="p-2 bg-blue-500" style="position: absolute; top:15px; right:20px; font-size:20px; font-weight:600">X</button>
+                        <div id="topic_list" x-data="{selected:0000}">
                         @foreach($topics as $topic_index => $topic)
-                            @php $uuid = $topic_index == 0 ? '0000' : Illuminate\Support\Str::uuid()->toString(); @endphp
-                            <div class="relative flex flex-wrap flex-col mb-2">
-                                <div class="border-b border-gray-200 mb-0 bg-gray-100 py-2 px-4 mt-2 rounded">
-                                    <div class="d-grid mb-0">
-                                        <a href="javascript:;" class="py-1 px-0 w-full rounded leading-5 font-medium flex justify-between focus:outline-none focus:ring-0" @click="selected !== '{{$uuid}}' ? selected = '{{$uuid}}' : selected = null">
-                                            <div class="flex mt-1.5">
-                                                        <span class="mr-3">
-                                                            <svg class="transform transition duration-500 -rotate-90" :class="{ 'rotate-0': selected == '{{$uuid}}' }" width="1rem" height="1rem" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                                              <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 01.708 0L8 10.293l5.646-5.647a.5.5 0 01.708.708l-6 6a.5.5 0 01-.708 0l-6-6a.5.5 0 010-.708z" clip-rule="evenodd"></path>
-                                                            </svg>
-                                                        </span>
-                                                <span class="topic_info" data-uuid="{{$uuid}}">{!! $topic->description !!}</span>
-                                            </div>
-                                            <div class="flex mt-1.5">
-                                                <span class="text-sm text-gray-600">{{ count($topic->lessons) }} {{ __('Lessons') }}  • {{ $this->getTopicVideoDuration($topic) }}</span>
-                                            </div>
-                                        </a>
-                                    </div>
-                                </div>
-                                <div class="accordion p-3" x-show="selected == '{{$uuid}}'">
-                                    <ul>
-                                        @foreach($topic->lessons as $lesson_index => $lesson)
-                                            <li class="lesson-quiz-item lesson-item flex py-1 px-3 justify-between hover:bg-gray-200 hover:rounded-2xl {{ $this->isLessonCompleted($lesson->id) ? 'text-green-700' : '' }} {{ $topic_index == 0 && $lesson_index == 0 ? 'active' : '' }}">
-                                                <div class="flex">
-                                                    <span class="w-5">
-                                                        <svg class="mt-1" xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 333.000000 343.000000">
-                                                            <g transform="translate(0.000000,343.000000) scale(0.100000,-0.100000)"
-                                                            fill="#000000" stroke="none">
-                                                            <path d="M1780 2853 c-151 -25 -305 -132 -383 -266 -76 -129 -94 -306 -45
-                                                            -443 40 -114 109 -205 213 -281 l30 -22 -262 -1 -262 0 55 52 c36 34 67 77 92
-                                                            127 36 72 37 79 37 180 0 98 -2 111 -32 174 -128 270 -464 338 -678 136 -94
-                                                            -89 -135 -185 -135 -315 0 -125 55 -241 153 -321 l39 -33 -38 0 c-77 -1 -163
-                                                            -61 -182 -128 -4 -15 -7 -238 -7 -497 0 -469 0 -470 23 -512 12 -24 41 -55 64
-                                                            -70 l42 -28 795 -3 795 -2 50 24 c31 15 61 40 76 62 23 34 25 49 28 156 2 71
-                                                            8 118 14 118 5 0 124 -72 262 -160 278 -176 302 -185 351 -135 l25 24 0 536 0
-                                                            536 -25 24 c-48 49 -73 40 -345 -125 -136 -82 -254 -152 -263 -156 -15 -5 -17
-                                                            4 -17 89 0 53 -5 108 -11 124 -13 35 -55 80 -93 100 l-28 15 48 33 c286 193
-                                                            325 591 82 833 -121 121 -305 182 -468 155z m262 -160 c165 -78 266 -264 238
-                                                            -437 -22 -138 -109 -255 -235 -317 -66 -32 -75 -34 -175 -34 -86 1 -116 5
-                                                            -163 24 -66 26 -163 110 -200 174 -103 176 -60 411 98 537 88 70 151 90 275
-                                                            87 83 -2 103 -6 162 -34z m-1082 -218 c68 -35 109 -76 141 -141 73 -148 21
-                                                            -318 -121 -398 -50 -28 -63 -31 -145 -31 -74 0 -97 4 -132 23 -65 34 -110 78
-                                                            -138 137 -81 165 -3 356 172 421 51 19 177 13 223 -11z m1150 -785 c19 -19 20
-                                                            -33 20 -469 0 -413 -1 -450 -17 -470 l-18 -21 -780 0 -780 0 -17 21 c-17 19
-                                                            -18 57 -18 472 0 405 2 452 17 469 15 17 53 18 795 18 765 0 778 0 798 -20z
-                                                            m670 -466 c0 -240 -4 -434 -8 -432 -5 2 -122 75 -260 163 l-252 160 0 120 1
-                                                            120 252 152 c139 83 255 152 260 152 4 1 7 -195 7 -435z"/>
-                                                            </g>
-                                                        </svg>
-                                                    </span>
-                                                    <a href="javascript:;" class="ml-2" data-lesson-id="{{ $lesson->id }}" data-content="{!! htmlspecialchars($lesson->description) !!}" data-video-url="{{ $this->getVideoEmbedURL($lesson->video_type, $lesson->video_link) }}">{!! $lesson->title !!}</a>
-                                                </div>
-                                                <div class="text-sm w-20 text-right">{{ $this->getLessonVideoDuration($lesson->video_duration) }}</div>
-                                            </li>
-                                        @endforeach
-                                    </ul>
-                                </div>
-                            </div>
-                        @endforeach
+                        @php $uuid = $topic_index == 0 ? '0000' : Illuminate\Support\Str::uuid()->toString(); @endphp
                         <div class="relative flex flex-wrap flex-col mb-2">
                             <div class="border-b border-gray-200 mb-0 bg-gray-100 py-2 px-4 mt-2 rounded">
                                 <div class="d-grid mb-0">
-                                    <a href="javascript:;" class="py-1 px-0 w-full rounded leading-5 font-medium flex justify-between focus:outline-none focus:ring-0" @click="selected !== '9999' ? selected = '9999' : selected = null">
+                                    <a href="javascript:;" class="py-1 px-0 w-full rounded leading-5 font-medium flex justify-between focus:outline-none focus:ring-0 topic-item" 
+                                        data-lesson-count="{{ count($topic->lessons) }}" data-topic-description="{{$topic->description }}" data-topicvideo-duration="{{ $this->getTopicVideoDuration($topic) }}"
+                                        data-uuid="{{$uuid}}" 
+                                        @click="selected !== '{{$uuid}}' ? selected = '{{$uuid}}' : selected = null">
                                         <div class="flex mt-1.5">
-                                                <span class="mr-3">
-                                                    <svg class="transform transition duration-500 -rotate-90" :class="{ 'rotate-0': selected == '9999' }" width="1rem" height="1rem" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                                      <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 01.708 0L8 10.293l5.646-5.647a.5.5 0 01.708.708l-6 6a.5.5 0 01-.708 0l-6-6a.5.5 0 010-.708z" clip-rule="evenodd"></path>
-                                                    </svg>
-                                                </span>
-                                            <span class="topic_info" data-uuid="9999">{{ __('Final Quiz') }}</span>
+                                            <span class="mr-3">
+                                                <svg class="transform transition duration-500 -rotate-90" :class="{ 'rotate-0': selected == '{{$uuid}}' }" width="1rem" height="1rem" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 01.708 0L8 10.293l5.646-5.647a.5.5 0 01.708.708l-6 6a.5.5 0 01-.708 0l-6-6a.5.5 0 010-.708z" clip-rule="evenodd"></path>
+                                                </svg>
+                                            </span>
+                                            <span class="topic_info">{!! $topic->description !!}</span>
                                         </div>
                                         <div class="flex mt-1.5">
-                                            <span class="text-sm text-gray-600">{{ count($course->questions) }} {{ count($course->questions) == 1 ? __('Quiz') : __('Quizzes') }}</span>
+                                            <span class="text-sm text-gray-600 lesson-count">
+                                                {{ count($topic->lessons) }} {{ __('Lessons') }} • {{ $this->getTopicVideoDuration($topic) }}
+                                            </span>
                                         </div>
                                     </a>
                                 </div>
                             </div>
-                            <div class="accordion p-3" x-show="selected == '9999'">
-                                <ul>
-                                    @php
-                                        $questions = $course->questions()->with('quiz_options')->get();
-                                        $prev_quiz_processed = $this->isAllLessonCompleted($course);
-                                    @endphp
-                                    @foreach($questions as $question)
-                                        @php
-                                            $quiz_option_id = [];
-                                            $quiz_option_text = [];
-                                            foreach($question->quiz_options as $quiz_option) {
-                                                $quiz_option_id[] = $quiz_option->id;
-                                                $quiz_option_text[] = $quiz_option->description;
-                                            }
-                                        @endphp
-                                        <li class="lesson-quiz-item {{ $prev_quiz_processed ? 'quiz-item hover:bg-gray-200 hover:rounded-2xl' : '' }} flex py-1 px-3 justify-between {{ $this->isQuestionCompleted($question->id) ? 'text-green-700' : '' }}">
-                                            <div class="flex">
+                            <div class="accordion outline-1" x-show="selected == '{{$uuid}}'">
+                                <ul class="bg-white" style="border-width: 0px 1px 1px 1px; border-color: #c6c6c6; border-radius: 6px">
+                                    @foreach($topic->lessons as $lesson_index => $lesson)
+                                        <li class="lesson-quiz-item lesson-item flex py-1 px-3 justify-between hover:bg-gray-200 {{ $this->isLessonCompleted($lesson->id) ? 'text-green-700' : '' }} {{ $topic_index == 0 && $lesson_index == 0 ? 'active' : '' }}">
+                                            <div class="flex items-center">
                                                 <span class="w-5">
-                                                    <svg class="mt-1" xmlns="http://www.w3.org/2000/svg" width="19.313" height="19.313" viewBox="0 0 19.313 19.313">
-                                                        <g transform="translate(-8.2 -8.2)">
-                                                            <g transform="translate(8.2 8.2)" fill="currentColor">
-                                                                <path d="M-160.144-250.487a9.656,9.656,0,0,1-9.656-9.656,9.656,9.656,0,0,1,9.656-9.656,9.656,9.656,0,0,1,9.656,9.656,9.656,9.656,0,0,1-9.656,9.656Zm0-18.262a8.639,8.639,0,0,0-8.606,8.606,8.639,8.639,0,0,0,8.606,8.606,8.639,8.639,0,0,0,8.606-8.606,8.613,8.613,0,0,0-8.606-8.606Z" transform="translate(169.8 269.8)"/>
-                                                                <path d="M-153.56-256.48a2.9,2.9,0,0,1,.646-1.091,3.159,3.159,0,0,1,1.05-.687,3.841,3.841,0,0,1,1.414-.242,3.754,3.754,0,0,1,1.172.2,3.719,3.719,0,0,1,.97.525,2.264,2.264,0,0,1,.646.848,2.637,2.637,0,0,1,.242,1.172,2.629,2.629,0,0,1-.364,1.414,6.008,6.008,0,0,1-.929,1.131l-.727.727a1.531,1.531,0,0,0-.4.525,1.339,1.339,0,0,0-.162.606,4.675,4.675,0,0,0-.04.848h-.929a3.04,3.04,0,0,1,.081-.929,3,3,0,0,1,.283-.848,4.1,4.1,0,0,1,.525-.727c.242-.242.485-.485.808-.768a2.765,2.765,0,0,0,.687-.848,1.958,1.958,0,0,0,.283-1.051,1.809,1.809,0,0,0-.162-.808,3.662,3.662,0,0,0-.444-.646,1.3,1.3,0,0,0-.687-.4,2.612,2.612,0,0,0-.808-.162,2.7,2.7,0,0,0-1.05.2,1.82,1.82,0,0,0-.768.566,2.138,2.138,0,0,0-.444.848,2.563,2.563,0,0,0-.121.97h-.929a3,3,0,0,1,.162-1.374Zm2.424,7.071H-150v1.131h-1.131Z" transform="translate(160.226 263.066)"/>
-                                                            </g>
-                                                        </g>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="17" viewBox="244 3761 20 17">
+                                                        <path d="M262 3771.31v2.46l-2.233-1.44 2.233-1.23v.21Zm-6 3.6c0 .57-.448 1.03-1 1.03h-8c-.552 0-1-.46-1-1.03v-4.12c0-.57.448-1.03 1-1.03h8c.552 0 1 .46 1 1.03v4.12Zm-7.89-9.79c.552 0 1 .46 1 1.03 0 .57-.448 1.03-1 1.03-.551 0-1-.46-1-1.03 0-.57.449-1.03 1-1.03Zm5-2.06c1.103 0 2 .92 2 2.06 0 1.14-.897 2.06-2 2.06-1.102 0-2-.92-2-2.06 0-1.14.898-2.06 2-2.06Zm9.36 5.11-4.47 2.87v-1.8c0-1.01-.62-1.84-1.548-2.02.357-.62.617-1.33.617-2.1 0-2.27-1.77-4.12-3.979-4.12-1.617 0-2.991.99-3.622 2.42a2.873 2.873 0 0 0-1.363-.36c-1.657 0-2.997 1.38-2.997 3.09 0 .43.004.84.159 1.21-.697.33-1.267 1.04-1.267 1.88v6.18c0 1.14 1.062 2.58 2.167 2.58h10c1.104 0 1.833-1.44 1.833-2.58v-1.79l4.47 2.87c.667.43 1.53-.06 1.53-.87v-6.59c0-.81-.863-1.3-1.53-.87Z" fill-rule="evenodd" data-name="video_camera_round-[#964]"/>
                                                     </svg>
                                                 </span>
-                                                <a href="javascript:;" class="ml-2" data-question-id="{{ $question->id }}" data-description="{!! htmlspecialchars($question->description) !!}" data-question-option-ids="{{ json_encode($quiz_option_id) }}" data-question-options="{{ json_encode($quiz_option_text) }}">{{ $question->name }}</a>
+                                                <a href="javascript:;" class="ml-2" data-lesson-id="{{ $lesson->id }}" data-attachment-file="{{ $lesson->attachment_file }}" data-content="{!! htmlspecialchars($lesson->description) !!}" data-video-url="{{ $this->getVideoEmbedURL($lesson->video_type, $lesson->video_link) }}">{!! $lesson->title !!}</a>
                                             </div>
-                                            <div class="text-sm">{{ $question->points }} {{ __('Points') }}</div>
+                                            <div class="text-sm w-20 text-right">{{ $this->getLessonVideoDuration($lesson->video_duration) }}</div>
                                         </li>
-                                        @php
-                                            $prev_quiz_processed = $this->isQuestionCompleted($question->id);
-                                        @endphp
                                     @endforeach
                                 </ul>
-                                @if ($prev_quiz_processed && ! $passed_exam)
-                                    <div class="flex justify-end mt-4">
-                                        <x-button id="sub_try_again_button" label="{{ __('Try Again') }}" icon="" class="py-1 md:px-4 bg-red-700 text-white font-semibold border-transparent" />
+                            </div>
+                        </div>
+                    @endforeach
+                            <div class="relative flex flex-wrap flex-col mb-2">
+                                <div class="border-b border-gray-200 mb-0 bg-gray-100 py-2 px-4 mt-2 rounded">
+                                    <div class="d-grid mb-0">
+                                        <a href="javascript:;" class="py-1 px-0 w-full rounded leading-5 font-medium flex justify-between focus:outline-none focus:ring-0" @click="selected !== '9999' ? selected = '9999' : selected = null" data-quizzes-count="{{ count($course->questions) }}" >
+                                        <div class="flex mt-1.5">
+                                                    <span class="mr-3">
+                                                        <svg class="transform transition duration-500 -rotate-90" :class="{ 'rotate-0': selected == '9999' }" width="1rem" height="1rem" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                        <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 01.708 0L8 10.293l5.646-5.647a.5.5 0 01.708.708l-6 6a.5.5 0 01-.708 0l-6-6a.5.5 0 010-.708z" clip-rule="evenodd"></path>
+                                                        </svg>
+                                                    </span>
+                                                <span class="topic_info" data-uuid="9999">{{ __('Final Quiz') }}</span>
+                                            </div>
+                                            <div class="flex mt-1.5">
+                                                <span class="text-sm text-gray-600">{{ count($course->questions) }} {{ count($course->questions) == 1 ? __('Quiz') : __('Quizzes') }}</span>
+                                            </div>
+                                        </a>
                                     </div>
-                                @endif
+                                </div>
+                                <div class="accordion p-3" x-show="selected == '9999'">
+                                    <ul>
+                                        @php
+                                            $questions = $course->questions()->with('quiz_options')->get();
+                                            $prev_quiz_processed = $this->isAllLessonCompleted($course);
+                                        @endphp
+                                        @foreach($questions as $question)
+                                            @php
+                                                $quiz_option_id = [];
+                                                $quiz_option_text = [];
+                                                foreach($question->quiz_options as $quiz_option) {
+                                                    $quiz_option_id[] = $quiz_option->id;
+                                                    $quiz_option_text[] = $quiz_option->description;
+                                                }
+                                            @endphp
+                                            <li class="lesson-quiz-item {{ $prev_quiz_processed ? 'quiz-item hover:bg-gray-200 hover:rounded-2xl' : '' }} flex py-1 px-3 justify-between {{ $this->isQuestionCompleted($question->id) ? 'text-green-700' : '' }}">
+                                                <div class="flex">
+                                                    <span class="w-5">
+                                                        <svg class="mt-1" xmlns="http://www.w3.org/2000/svg" width="19.313" height="19.313" viewBox="0 0 19.313 19.313">
+                                                            <g transform="translate(-8.2 -8.2)">
+                                                                <g transform="translate(8.2 8.2)" fill="currentColor">
+                                                                    <path d="M-160.144-250.487a9.656,9.656,0,0,1-9.656-9.656,9.656,9.656,0,0,1,9.656-9.656,9.656,9.656,0,0,1,9.656,9.656,9.656,9.656,0,0,1-9.656,9.656Zm0-18.262a8.639,8.639,0,0,0-8.606,8.606,8.639,8.639,0,0,0,8.606,8.606,8.639,8.639,0,0,0,8.606-8.606,8.613,8.613,0,0,0-8.606-8.606Z" transform="translate(169.8 269.8)"/>
+                                                                    <path d="M-153.56-256.48a2.9,2.9,0,0,1,.646-1.091,3.159,3.159,0,0,1,1.05-.687,3.841,3.841,0,0,1,1.414-.242,3.754,3.754,0,0,1,1.172.2,3.719,3.719,0,0,1,.97.525,2.264,2.264,0,0,1,.646.848,2.637,2.637,0,0,1,.242,1.172,2.629,2.629,0,0,1-.364,1.414,6.008,6.008,0,0,1-.929,1.131l-.727.727a1.531,1.531,0,0,0-.4.525,1.339,1.339,0,0,0-.162.606,4.675,4.675,0,0,0-.04.848h-.929a3.04,3.04,0,0,1,.081-.929,3,3,0,0,1,.283-.848,4.1,4.1,0,0,1,.525-.727c.242-.242.485-.485.808-.768a2.765,2.765,0,0,0,.687-.848,1.958,1.958,0,0,0,.283-1.051,1.809,1.809,0,0,0-.162-.808,3.662,3.662,0,0,0-.444-.646,1.3,1.3,0,0,0-.687-.4,2.612,2.612,0,0,0-.808-.162,2.7,2.7,0,0,0-1.05.2,1.82,1.82,0,0,0-.768.566,2.138,2.138,0,0,0-.444.848,2.563,2.563,0,0,0-.121.97h-.929a3,3,0,0,1,.162-1.374Zm2.424,7.071H-150v1.131h-1.131Z" transform="translate(160.226 263.066)"/>
+                                                                </g>
+                                                            </g>
+                                                        </svg>
+                                                    </span>
+                                                    <a href="javascript:;" class="ml-2" data-question-id="{{ $question->id }}" data-description="{!! htmlspecialchars($question->description) !!}" data-question-option-ids="{{ json_encode($quiz_option_id) }}" data-question-options="{{ json_encode($quiz_option_text) }}">{{ $question->name }}</a>
+                                                </div>
+                                                <div class="text-sm">{{ $question->points }} {{ __('Points') }}</div>
+                                            </li>
+                                            @php
+                                                $prev_quiz_processed = $this->isQuestionCompleted($question->id);
+                                            @endphp
+                                        @endforeach
+                                    </ul>
+                                    @if ($prev_quiz_processed && ! $passed_exam)
+                                        <div class="flex justify-end mt-4">
+                                            <x-button id="sub_try_again_button" label="{{ __('Try Again') }}" icon="" class="py-1 md:px-4 bg-red-700 text-white font-semibold border-transparent" />
+                                        </div>
+                                    @endif
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div id="lesson_section" class="col-span-7 p-6">
-                    <h1 id="lesson_title" class="text-xl font-bold mb-4"></h1>
-                    <div id="lesson_content" class="my-5"></div>
+                <!-- </div> -->
+                
+                <div id="lesson_section" class="relative col-span-7 p-6">
+                    <div id="toggle_lessons" class="flex justify-end mt-10 hidden" style="position: absolute; top:10px;">
+                        <a href="#" class="flex items-center px-4 py-2 bg-gray-500 text-white rounded">
+                            <span>Lessons</span>
+                            <svg class="ml-2 w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </a>
+                    </div>
+                    <!-- <h1 id="lesson_title" class="text-xl font-bold mb-4"></h1> -->
+                    <!-- <div id="lesson_content" class="my-5"></div> -->
                     <div class="w-full mx-auto max-w-screen-lg">
-                        <div class="aspect-w-16 aspect-h-9 flex justify-center">
-                            <iframe id="lesson_video" class="w-full lg:w-4/5 h-96" src="" frameborder="0" allowfullscreen></iframe>
-                        </div>
+                    <div class="aspect-w-16 aspect-h-9 flex justify-center">
+                        <iframe id="lesson_video" class="w-full lg:w-5/5 h-96" src="" frameborder="1" allowfullscreen></iframe>
+                    </div>
+                    <div class="overflow-hidden md:overflow-auto flex border-b-2 border-gray-300">
+                        <a href="javascript:;" onclick="setActiveTab('description')" class="py-2 px-2 lg:px-4 w-full text-center text-black cursor-pointer block font-semibold border-b-4 border-transparent active" id="tab-description">
+                            {{ __('Description') }}
+                        </a>
+                        <a href="javascript:;" onclick="setActiveTab('resources')" class="py-2 px-2 lg:px-4 w-full text-center text-black cursor-pointer block font-semibold border-b-4 border-transparent" id="tab-resources">
+                            {{ __('Resources') }}
+                        </a>
+                        <a href="javascript:;" onclick="setActiveTab('announcements')" class="py-2 px-2 lg:px-4 w-full text-center text-black cursor-pointer block font-semibold border-b-4 border-transparent" id="tab-announcements">
+                            {{ __('Announcements') }}
+                        </a>
+                        <a href="javascript:;" onclick="setActiveTab('reviews')" class="py-2 px-2 lg:px-4 w-full text-center text-black cursor-pointer block font-semibold border-b-4 border-transparent" id="tab-reviews">
+                            {{ __('Reviews') }}
+                        </a>
                     </div>
 
-                    <div class="flex justify-end mt-10 {{ $passed_exam ? 'hidden' : '' }}">
+                    <div id="tab-content">
+                        <div id="content-description" class="tab-content hidden">
+                            <h3 class="py-4 text text-lg font-bold">{{ __('About This Course') }}</h3>
+                            <div id="topic_description" class="mt-0 mb-4"></div>
+                            <h3 class="py-2 text-sm font-bold">{{ __('By The Numbers') }}</h3>
+                            <table class="w-full border-collapse">
+                                <tr>
+                                    <td id="lesson_students" class="p-2 text-left text-sm">{{ __('Students: ') }} {{count($course->course_students)}}</td>
+                                    <td id="lesson_lectures" class="p-2 text-left text-sm">{{ __('Lectures: ') }}<span id="lectures_count"></span></td>
+                                    <td id="lesson_quizzes" class="p-2 text-left text-sm">{{ __('Quizzes: ') }}<span id="quizzes_count">{{ count($course->questions) }}</span></td>
+                                </tr>
+                                <tr>
+                                    <td id="lesson_languages" class="p-2 text-left text-sm">{{ __('Languages: ') }}{{ __('English') }}</td>
+                                    <td id="lesson_video" class="p-2 text-left text-sm">{{ __('Video: ') }}<span id="topicvideo_duration"></span></td>
+                                </tr>
+                            </table>                        
+                        </div>
+                        <div id="content-resources" class="tab-content flex hidden gap-1 flex-col">
+                            <h3 class="py-4 text text-lg font-bold">{{ __('Lesson Resources') }}</h3>
+                            <div class="my-4" id="buttonContainer" class="flex flex-wrap gap-1">
+                                <!-- Buttons will be added here dynamically -->
+                            </div>
+                        </div>
+                        <div id="content-announcements" class="tab-content hidden">
+                            <h3 class="py-4 text text-lg font-bold">{{ __('Announcements') }}</h3>
+
+                            <!-- Announcements content goes here -->
+                        </div>
+                        <div id="content-reviews" class="tab-content hidden">
+                            <h3 class="py-4 text text-lg font-bold">{{ __('Student Feedback') }}</h3>
+                            <table class="w-full border-collapse">
+                                <tr class="flex w-full">
+                                    <td class="text-center flex-3 flex"> <!-- Centers the text inside the table cell -->
+                                        <div class="flex flex-col items-center justify-center gap-4">
+                                            <span class="text-orange-500 bg-white text-3xl px-2 mr-1 h-6 font-bold" style="color:orange">
+                                                {{ number_format(round($course->course_rate(), 1), 1) }}
+                                            </span>
+                                            <span id="course_{{$course->id}}_rating" class="rating-progress mt-0.5 mr-2" style="scale:1.5"></span>
+                                            <span class="p-2 text-center text-sm" style="color:orange">{{__('COURSE RATING')}}</span>
+                                            @php($rating_progress = intval($course->course_rate() / 5 * 100) . '%' ?? 0)
+                                        </div>
+                                    </td>
+                                    <td class="flex-1">
+                                        <div class="p-4">
+                                            <div class="flex gap-3 items-center">
+                                                <div class="hidden md:flex md:items-center" style="width: 80%;">
+                                                    <div class="bg-gray-500 h-2 rounded" style="width: {{$course->course_feedback_array()[5]}}%;"></div>
+                                                    <div class="bg-gray-100 h-2 rounded" style="width: {{100 - $course->course_feedback_array()[5]}}%;"></div>
+                                                </div>
+                                                <span id="star_five_rating" class=" rating-progress mt-0.5 mr-2" style="min-width: 80px;"></span>
+                                                <p style="min-width: 40px;">{{$course->course_feedback_array()[5]}}%</p>
+                                            </div>
+                                            <div class="flex gap-3 items-center">
+                                                <div class="hidden md:flex md:items-center" style="width: 80%;">
+                                                    <div class="bg-gray-500 h-2 rounded" style="width: {{$course->course_feedback_array()[4]}}%;"></div>
+                                                    <div class="bg-gray-100 h-2 rounded" style="width: {{100 - $course->course_feedback_array()[4]}}%;"></div>
+                                                </div>
+                                                <span id="star_four_rating" class="rating-progress mt-0.5 mr-2" style="min-width: 80px;"></span>
+                                                <p style="min-width: 40px;">{{$course->course_feedback_array()[4]}}%</p>
+                                            </div>
+                                            <div class="flex gap-3 items-center">
+                                                <div class="hidden md:flex md:items-center" style="width: 80%;">
+                                                    <div class="bg-gray-500 h-2 rounded" style="width: {{$course->course_feedback_array()[3]}}%;"></div>
+                                                    <div class="bg-gray-100 h-2 rounded" style="width: {{100 - $course->course_feedback_array()[3]}}%;"></div>
+                                                </div>
+                                                <span id="star_three_rating" class="rating-progress mt-0.5 mr-2" style="min-width: 80px;"></span>
+                                                <p style="min-width: 40px;">{{$course->course_feedback_array()[3]}}%</p>
+                                            </div>
+                                            <div class="flex gap-3 items-center">
+                                                <div class="hidden md:flex md:items-center" style="width: 80%;">
+                                                    <div class="bg-gray-500 h-2 rounded" style="width: {{$course->course_feedback_array()[2]}}%;"></div>
+                                                    <div class="bg-gray-100 h-2 rounded" style="width: {{100 - $course->course_feedback_array()[2]}}%;"></div>
+                                                </div>
+                                                <span id="star_two_rating" class=" rating-progress mt-0.5 mr-2"  style="min-width: 80px;"></span>
+                                                <p style="min-width: 40px;">{{$course->course_feedback_array()[2]}}%</p>
+                                            </div>
+                                            <div class="flex gap-3 items-center">
+                                                <div class="hidden md:flex md:items-center" style="width: 80%;">
+                                                    <div class="bg-gray-500 h-2 rounded" style="width: {{$course->course_feedback_array()[1]}}%;"></div>
+                                                    <div class="bg-gray-100 h-2 rounded" style="width: {{100 - $course->course_feedback_array()[1]}}%;"></div>
+                                                </div>
+                                                <span id="star_one_rating" class="rating-progress mt-0.5 mr-2" style="min-width: 80px;"></span>
+                                                <p style="min-width: 40px;">{{$course->course_feedback_array()[1]}}%</p>
+                                            </div>
+
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+
+                        </div>
+                    </div>
+                </div>
+                    
+                    <!-- <div class="flex justify-end mt-10 {{ $passed_exam ? 'hidden' : '' }}">
                         <h2 class="font-bold mr-3 text-lg">{{ __('Next') }}</h2>
                         <a id="next_lesson" href="javascript:;">
                             <svg xmlns="http://www.w3.org/2000/svg" width="32.975" height="24.718" viewBox="0 0 32.975 24.718">
@@ -240,7 +345,7 @@
                                 </g>
                             </svg>
                         </a>
-                    </div>
+                    </div> -->
 
                 </div>
 
@@ -310,9 +415,183 @@
         </div>
     </div>
 
+    <style>
+        span#course_{{$course->id}}_rating::after {
+            width: {{ $rating_progress }};
+        }
+
+        span#star_five_rating::after {
+            width: 100%;
+
+        }span#star_four_rating::after {
+            width: 80%;
+
+        }span#star_three_rating::after {
+            width: 60%;
+
+        }span#star_two_rating::after {
+            width: 40%;
+
+        }span#star_one_rating::after {
+            width: 20%;
+        }
+    </style>
+
+<div id="toggle_lessons" class="flex justify-end mt-10 hidden" style="position: absolute; top:10px;">
+    <button class="bg-gray-800 text-white px-4 py-2 rounded">Lessons</button>
+</div>
+
+<div id="toggle_lessons" class="flex justify-end mt-10 hidden" style="position: absolute; top:10px;">
+    <button class="bg-gray-800 text-white px-4 py-2 rounded">Lessons</button>
+</div>
+
+    <script>
+        // Get the necessary elements
+        const drawerToggle = document.getElementById('drawerToggle');
+        const leftDrawer = document.getElementById('leftDrawer');
+        const lessonSection = document.getElementById('lesson_section');
+        const toggleLessonsButton = document.getElementById('toggle_lessons');
+
+        // Toggle drawer and show/hide the "toggle lessons" button
+        drawerToggle.addEventListener('click', function () {
+            // Toggle the visibility of the left drawer
+            leftDrawer.classList.toggle('hidden');
+
+            // Replace class on lesson section
+            if (leftDrawer.classList.contains('hidden')) {
+                lessonSection.classList.replace('col-span-7', 'col-span-12');
+            } else {
+                lessonSection.classList.replace('col-span-12', 'col-span-7');
+            }
+
+            // Show the "toggle lessons" button when the drawer is hidden
+            if (leftDrawer.classList.contains('hidden')) {
+                toggleLessonsButton.classList.remove('hidden'); // Show the button
+            } else {
+                toggleLessonsButton.classList.add('hidden');   // Hide the button
+            }
+        });
+
+        // Add event listener for the "toggle lessons" button
+        toggleLessonsButton.addEventListener('click', function () {
+            // Hide the "toggle lessons" button
+            toggleLessonsButton.classList.add('hidden');
+
+            // Show the left drawer and update the lesson section layout
+            leftDrawer.classList.remove('hidden');
+            lessonSection.classList.replace('col-span-12', 'col-span-7');
+        });
+    </script>
+
+
+
+    <script>
+        const getResourcesArray = function(array) {
+                return array.split(',  ');
+            }
+
+        // Function to dynamically create buttons
+        function displayAttachmentButtons(attachments) {
+            // Get the button container div
+            const container = $('#buttonContainer');
+            // Clear the container first in case buttons are already there
+            container.empty();
+            container.addClass('flex flex-wrap gap-1');
+            
+            // Loop through the attachment array
+            attachments.forEach(function(attachment) {
+                // Extract the file name from the URL
+                const fileNameWithPrefix = attachment.substring(attachment.lastIndexOf('/') + 1);
+                const fileNameWithoutPrefix = fileNameWithPrefix.substring(fileNameWithPrefix.indexOf('_') + 1); // Remove prefix before the underscore
+                if(attachment !== "") {
+                    // Create a button element
+                    const button = $('<button></button>')
+                        .addClass('flex items-center justify-between px-8 py-3 h-10 bg-gray-100 text-dark text-xs rounded-md grow-0 mr-2 border border-gray-600') // Set styles for the button
+                        .html(`<svg xmlns="http://www.w3.org/2000/svg" width="14" height="19" viewBox="1046.218 779.609 14.497 18.933" class="mr-2">
+                                <path d="M1046.515 794.992v-3.106c0-.245.2-.444.444-.444h1.479c.244 0 .443.2.443.444v3.106c0 .654.53 1.183 1.184 1.183h7.1c.654 0 1.183-.529 1.183-1.183v-3.106c0-.245.2-.444.444-.444h1.479c.244 0 .443.2.443.444v3.106a3.55 3.55 0 0 1-3.55 3.55h-7.1a3.55 3.55 0 0 1-3.55-3.55Zm7.432-1.738 6.213-6.213c.554-.554.166-1.516-.629-1.516h-3.55v-5.029a.885.885 0 0 0-.887-.887h-3.55a.885.885 0 0 0-.888.887v5.03h-3.55c-.794 0-1.183.96-.628 1.515l6.212 6.213a.895.895 0 0 0 1.257 0Z" fill-rule="evenodd" data-name="Icon awesome-sign-in-alt"/>
+                            </svg><p style="font-size:14px">${fileNameWithoutPrefix}</p>`); // Add download icon and text
+
+
+                    // Add click event to the button for downloading the file
+                    button.on('click', function() {
+                        window.location.href = attachment; // Trigger the file download by setting the href to the file URL
+                    });
+                    
+                    // Append the button to the container
+                    container.append(button);
+                }
+                
+            });
+        }
+
+        function setActiveTab(tab) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(function(content) {
+                content.classList.add('hidden');
+            });
+
+            // Remove active state from all tabs
+            document.querySelectorAll('a').forEach(function(tabLink) {
+                tabLink.classList.remove('border-green-600');
+                tabLink.classList.add('border-transparent');
+            });
+
+            // Show the active tab content
+            document.getElementById('content-' + tab).classList.remove('hidden');
+
+            // Set the active tab
+            const activeTab = document.getElementById('tab-' + tab);
+            activeTab.classList.add('border-green-600');
+            activeTab.classList.remove('border-transparent');
+        }
+
+        // Call this function to set the default tab
+        document.addEventListener('DOMContentLoaded', function() {
+            setActiveTab('description'); // Set "description" tab as default
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            var lecturesCountElement = document.getElementById('lectures_count');
+            var topicDescriptionElement = document.getElementById('topic_description');
+            var topicvideoDurationElement = document.getElementById('topicvideo_duration');
+            var topicItems = document.querySelectorAll('.topic-item');
+
+            // Set default values from the first topic on page load
+            if (topicItems.length > 0) {
+                var firstTopic = topicItems[0];  // Get the first topic item
+                var defaultLessonCount = firstTopic.getAttribute('data-lesson-count');
+                var defaultTopicDescription = firstTopic.getAttribute('data-topic-description');
+                var defaultTopicvideoDuration = firstTopic.getAttribute('data-topicvideo-duration');
+
+                // Set the default values on load
+                lecturesCountElement.innerText = defaultLessonCount;
+                topicDescriptionElement.innerText = defaultTopicDescription;
+                topicvideoDurationElement.innerText = defaultTopicvideoDuration;
+            }
+
+            // Add event listener to each topic item in the list
+            topicItems.forEach(function (item) {
+                item.addEventListener('click', function () {
+                    // Get the lesson count from the clicked topic's data attribute
+                    var lessonCount = this.getAttribute('data-lesson-count');
+                    var topicDescription = this.getAttribute('data-topic-description');
+                    var topicvideoDuration = this.getAttribute('data-topicvideo-duration');
+                    
+                    // Update the lectures count in the 'Lectures' field
+                    lecturesCountElement.innerText = lessonCount;
+                    topicDescriptionElement.innerText = topicDescription;
+                    topicvideoDurationElement.innerText = topicvideoDuration;
+
+                });
+            });
+        });
+
+
+    </script>
+
+
     <script>
         $(document).ready(function() {
-            // if student already took the exam, he can't take the exam anymore.
             if ($('button#sub_try_again_button').length > 0) {
                 $('li.quiz-item').removeClass('quiz-item hover:bg-gray-200 hover:rounded-2xl');
             }
@@ -320,9 +599,14 @@
             if ( ! $('div#lesson_quiz_section').hasClass('hidden') ) {
                 const lesson_obj = $('li.lesson-item:first').find('a');
                 $('div#quiz_section').addClass('hidden');
-                $('div#lesson_section h1#lesson_title').html($(lesson_obj).html());
+                // $('div#lesson_section h1#lesson_title').html($(lesson_obj).html());
                 $('div#lesson_section div#lesson_content').html($(lesson_obj).data('content'));
                 $('div#lesson_section iframe#lesson_video').attr('src', $(lesson_obj).data('video-url'));
+                $('div#lesson_section div#lesson_description').html($('h2#course_description').val());
+                // Call the function with the attachment array
+                displayAttachmentButtons(getResourcesArray($(lesson_obj).data('attachment-file')));
+                // console.log(getResourcesArray($(lesson_obj).data('attachment-file')));
+                // debugger
             }
 
             // clicked a lesson
@@ -331,9 +615,14 @@
                 $('div#quiz_section').addClass('hidden');
                 $('div#lesson_section').removeClass('hidden');
 
-                $('div#lesson_section h1#lesson_title').html($(lesson_obj).html());
+                // $('div#lesson_section h1#lesson_title').html($(lesson_obj).html());
                 $('div#lesson_section div#lesson_content').html($(lesson_obj).data('content'));
                 $('div#lesson_section iframe#lesson_video').attr('src', $(lesson_obj).data('video-url'));
+                $('div#lesson_section div#lesson_description').html($('h2#course_description').val());
+                displayAttachmentButtons(getResourcesArray($(lesson_obj).data('attachment-file')));
+
+                // console.log($('h2#course_description').val());
+                // debugger
 
                 $('li.lesson-item').removeClass('active');
                 $('li.quiz-item').removeClass('active');
