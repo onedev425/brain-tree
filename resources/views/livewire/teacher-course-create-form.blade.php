@@ -926,8 +926,6 @@
                         console.log("Lesson name or display value is missing.");
                     }
 
-                    // attachmentDisplay.val('');
-
                     if ($('input[name=lesson_edit_flag]').val() == 'new') {
                         const uuid = generateUUID();
                         const topicUuid = $('input[name=topic_uuid]').val();

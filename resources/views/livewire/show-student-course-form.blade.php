@@ -131,13 +131,11 @@
                                 <ul class="bg-white" style="border-width: 0px 1px 1px 1px; border-color: #c6c6c6; border-radius: 6px">
                                     @foreach($topic->lessons as $lesson_index => $lesson)
                                         <li class="lesson-quiz-item lesson-item flex py-1 px-3 justify-between hover:bg-gray-200 {{ $this->isLessonCompleted($lesson->id) ? 'text-green-700' : '' }} {{ $topic_index == 0 && $lesson_index == 0 ? 'active' : '' }}">
-                                            <div class="flex">
+                                            <div class="flex items-center">
                                                 <span class="w-5">
-                                                <!-- <svg class="mt-1" xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                    <path d="M21 15V8a2 2 0 0 0-2-2h-4l-2-2H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10l2-2h4a2 2 0 0 0 2-2z"/>
-                                                    <path d="M8 11h4M8 15h4"/>
-                                                </svg> -->
-                                                <i class="fas fa-video"></i>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="17" viewBox="244 3761 20 17">
+                                                        <path d="M262 3771.31v2.46l-2.233-1.44 2.233-1.23v.21Zm-6 3.6c0 .57-.448 1.03-1 1.03h-8c-.552 0-1-.46-1-1.03v-4.12c0-.57.448-1.03 1-1.03h8c.552 0 1 .46 1 1.03v4.12Zm-7.89-9.79c.552 0 1 .46 1 1.03 0 .57-.448 1.03-1 1.03-.551 0-1-.46-1-1.03 0-.57.449-1.03 1-1.03Zm5-2.06c1.103 0 2 .92 2 2.06 0 1.14-.897 2.06-2 2.06-1.102 0-2-.92-2-2.06 0-1.14.898-2.06 2-2.06Zm9.36 5.11-4.47 2.87v-1.8c0-1.01-.62-1.84-1.548-2.02.357-.62.617-1.33.617-2.1 0-2.27-1.77-4.12-3.979-4.12-1.617 0-2.991.99-3.622 2.42a2.873 2.873 0 0 0-1.363-.36c-1.657 0-2.997 1.38-2.997 3.09 0 .43.004.84.159 1.21-.697.33-1.267 1.04-1.267 1.88v6.18c0 1.14 1.062 2.58 2.167 2.58h10c1.104 0 1.833-1.44 1.833-2.58v-1.79l4.47 2.87c.667.43 1.53-.06 1.53-.87v-6.59c0-.81-.863-1.3-1.53-.87Z" fill-rule="evenodd" data-name="video_camera_round-[#964]"/>
+                                                    </svg>
                                                 </span>
                                                 <a href="javascript:;" class="ml-2" data-lesson-id="{{ $lesson->id }}" data-attachment-file="{{ $lesson->attachment_file }}" data-content="{!! htmlspecialchars($lesson->description) !!}" data-video-url="{{ $this->getVideoEmbedURL($lesson->video_type, $lesson->video_link) }}">{!! $lesson->title !!}</a>
                                             </div>
@@ -509,7 +507,10 @@
                     // Create a button element
                     const button = $('<button></button>')
                         .addClass('flex items-center justify-between px-8 py-3 h-10 bg-gray-100 text-dark text-xs rounded-md grow-0 mr-2 border border-gray-600') // Set styles for the button
-                        .html(`<i class="fas fa-download mr-2"></i><p>${fileNameWithoutPrefix}</p>`); // Add download icon and text
+                        .html(`<svg xmlns="http://www.w3.org/2000/svg" width="14" height="19" viewBox="1046.218 779.609 14.497 18.933" class="mr-2">
+                                <path d="M1046.515 794.992v-3.106c0-.245.2-.444.444-.444h1.479c.244 0 .443.2.443.444v3.106c0 .654.53 1.183 1.184 1.183h7.1c.654 0 1.183-.529 1.183-1.183v-3.106c0-.245.2-.444.444-.444h1.479c.244 0 .443.2.443.444v3.106a3.55 3.55 0 0 1-3.55 3.55h-7.1a3.55 3.55 0 0 1-3.55-3.55Zm7.432-1.738 6.213-6.213c.554-.554.166-1.516-.629-1.516h-3.55v-5.029a.885.885 0 0 0-.887-.887h-3.55a.885.885 0 0 0-.888.887v5.03h-3.55c-.794 0-1.183.96-.628 1.515l6.212 6.213a.895.895 0 0 0 1.257 0Z" fill-rule="evenodd" data-name="Icon awesome-sign-in-alt"/>
+                            </svg><p style="font-size:14px">${fileNameWithoutPrefix}</p>`); // Add download icon and text
+
 
                     // Add click event to the button for downloading the file
                     button.on('click', function() {
