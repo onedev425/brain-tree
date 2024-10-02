@@ -105,7 +105,7 @@
                         @foreach($topics as $topic_index => $topic)
                         @php $uuid = $topic_index == 0 ? '0000' : Illuminate\Support\Str::uuid()->toString(); @endphp
                         <div class="relative flex flex-wrap flex-col mb-2">
-                            <div class="border-b border-gray-200 mb-0 bg-gray-100 py-2 px-4 mt-2 rounded">
+                            <div class="border-b border-gray-200 mb-0 bg-gray-100 py-2 px-4 mt-2 rounded" style="max-width: 100%;">
                                 <div class="d-grid mb-0">
                                     <a href="javascript:;" class="py-1 px-0 w-full rounded leading-5 font-medium flex justify-between focus:outline-none focus:ring-0 topic-item" 
                                         data-lesson-count="{{ count($topic->lessons) }}" data-topic-description="{{$topic->description }}" data-topicvideo-duration="{{ $this->getTopicVideoDuration($topic) }}"
@@ -127,19 +127,19 @@
                                     </a>
                                 </div>
                             </div>
-                            <div class="accordion outline-1" x-show="selected == '{{$uuid}}'">
+                            <div class="accordion outline-1" style="max-width:100%;" x-show="selected == '{{$uuid}}'">
                                 <ul class="bg-white" style="border-width: 0px 1px 1px 1px; border-color: #c6c6c6; border-radius: 6px">
                                     @foreach($topic->lessons as $lesson_index => $lesson)
                                         <li class="lesson-quiz-item lesson-item flex py-1 px-3 justify-between hover:bg-gray-200 {{ $this->isLessonCompleted($lesson->id) ? 'text-green-700' : '' }} {{ $topic_index == 0 && $lesson_index == 0 ? 'active' : '' }}">
-                                            <div class="flex items-center">
+                                            <div class="flex items-center overflow-hidden" style="max-width: 80%;">
                                                 <span class="w-5">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="17" viewBox="244 3761 20 17">
                                                         <path d="M262 3771.31v2.46l-2.233-1.44 2.233-1.23v.21Zm-6 3.6c0 .57-.448 1.03-1 1.03h-8c-.552 0-1-.46-1-1.03v-4.12c0-.57.448-1.03 1-1.03h8c.552 0 1 .46 1 1.03v4.12Zm-7.89-9.79c.552 0 1 .46 1 1.03 0 .57-.448 1.03-1 1.03-.551 0-1-.46-1-1.03 0-.57.449-1.03 1-1.03Zm5-2.06c1.103 0 2 .92 2 2.06 0 1.14-.897 2.06-2 2.06-1.102 0-2-.92-2-2.06 0-1.14.898-2.06 2-2.06Zm9.36 5.11-4.47 2.87v-1.8c0-1.01-.62-1.84-1.548-2.02.357-.62.617-1.33.617-2.1 0-2.27-1.77-4.12-3.979-4.12-1.617 0-2.991.99-3.622 2.42a2.873 2.873 0 0 0-1.363-.36c-1.657 0-2.997 1.38-2.997 3.09 0 .43.004.84.159 1.21-.697.33-1.267 1.04-1.267 1.88v6.18c0 1.14 1.062 2.58 2.167 2.58h10c1.104 0 1.833-1.44 1.833-2.58v-1.79l4.47 2.87c.667.43 1.53-.06 1.53-.87v-6.59c0-.81-.863-1.3-1.53-.87Z" fill-rule="evenodd" data-name="video_camera_round-[#964]"/>
                                                     </svg>
                                                 </span>
-                                                <a href="javascript:;" class="ml-2" data-lesson-id="{{ $lesson->id }}" data-attachment-file="{{ $lesson->attachment_file }}" data-content="{!! htmlspecialchars($lesson->description) !!}" data-video-url="{{ $this->getVideoEmbedURL($lesson->video_type, $lesson->video_link) }}">{!! $lesson->title !!}</a>
+                                                <a href="javascript:;" class="ml-2"  style="display: inline-block; max-width:80%; white-space: nowrap; overflow:hidden; text-overflow:ellipsis;" data-lesson-id="{{ $lesson->id }}" data-attachment-file="{{ $lesson->attachment_file }}" data-content="{!! htmlspecialchars($lesson->description) !!}" data-video-url="{{ $this->getVideoEmbedURL($lesson->video_type, $lesson->video_link) }}">{!! $lesson->title !!}</a>
                                             </div>
-                                            <div class="text-sm w-20 text-right">{{ $this->getLessonVideoDuration($lesson->video_duration) }}</div>
+                                            <p class="text-sm text-right">{{ $this->getLessonVideoDuration($lesson->video_duration) }}</p>
                                         </li>
                                     @endforeach
                                 </ul>
@@ -487,7 +487,7 @@
 
     <script>
         const getResourcesArray = function(array) {
-                return array.split(',  ');
+                return array.split(', ');
             }
 
         // Function to dynamically create buttons
@@ -514,8 +514,20 @@
 
                     // Add click event to the button for downloading the file
                     button.on('click', function() {
-                        window.location.href = attachment; // Trigger the file download by setting the href to the file URL
+                        // Create a temporary anchor element
+                        var a = document.createElement('a');
+                        a.href = attachment;  // Set the file URL
+                        a.download = fileNameWithoutPrefix;
+                        // Append the anchor to the body (necessary to trigger the download in some browsers)
+                        document.body.appendChild(a);
+
+                        // Trigger the click event on the anchor to start the download
+                        a.click();
+
+                        // Remove the anchor from the DOM after the download starts
+                        document.body.removeChild(a);
                     });
+
                     
                     // Append the button to the container
                     container.append(button);
