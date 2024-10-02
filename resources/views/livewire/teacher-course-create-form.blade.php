@@ -155,6 +155,7 @@
                                         <div x-show="selected == '{{ $uuid }}'">
                                             <div class="flex-1 py-4 px-7">
                                                 @foreach($topic->lessons as $lesson)
+                                                    @php $uuid = Illuminate\Support\Str::uuid()->toString() @endphp
                                                     <div class="flex pt-4 justify-between">
                                                         <div class="lesson_info pt-1.5" data-lesson-id="{{ $lesson->id }}" data-description="{!! htmlspecialchars($lesson->description) !!}" data-video-source="{{ $lesson->video_type }}" data-video-url="{{ $lesson->video_link }}" data-attachment-file="{{ $lesson->attachment_file }}" data-uuid="{{ $uuid }}">{{ $lesson->title }}</div>
                                                         <div class="min-w-fit" >
@@ -466,24 +467,6 @@
         // Update the attachmentInputBuffer with the new file list
         attachmentInputBuffer.files = dataTransfer.files;
 
-        // // Get values from form inputs
-        // const lessonName = $('input#lesson_name').val().trim(); // Use lesson name as key
-
-        // // Check if lessonName and updatedDisplayText are valid
-        // if (lessonName && updatedDisplayText) {
-        //     // Retrieve existing lessonAttachments from localStorage, or initialize an empty object if not allocated
-        //     let lessonAttachments = localStorage.getItem('lessonAttachments');
-        //     lessonAttachments = lessonAttachments ? JSON.parse(lessonAttachments) : {};
-
-        //     // Update or add the lessonName key with the updatedDisplayText value
-        //     lessonAttachments[lessonName] = updatedDisplayText;
-
-        //     // Save the updated lessonAttachments object back to localStorage
-        //     localStorage.setItem('lessonAttachments', JSON.stringify(lessonAttachments));
-
-        // } else {
-        //     console.log("Lesson name or display value is missing.");
-        // }
     });
 </script>
 
@@ -554,25 +537,25 @@
                 $('div#overlay').removeClass('hidden');
 
                 const lessonObject = $(this).parent().prev();
-                const lessonName = $(lessonObject).html().trim(); // Get the lesson name
-                console.log(lessonObject);
-                debugger;
-                // Populate other fields
-                $('input#lesson_name').val(lessonName);
+                $('input#lesson_name').val($(lessonObject).html());
                 $('textarea#lesson_description').val($(lessonObject).attr('data-description'));
                 $('select#video_source').val($(lessonObject).attr('data-video-source'));
                 $('input#video_url').val($(lessonObject).attr('data-video-url'));
                 $('input[name=lesson_edit_flag]').val($(lessonObject).data('uuid'));
+                $('input#attachment_display').val($(lessonObject).attr('data-attachment-file'));
 
-                // Retrieve the lessonAttachments from localStorage
-                let lessonAttachments = localStorage.getItem('lessonAttachments');
-                lessonAttachments = lessonAttachments ? JSON.parse(lessonAttachments) : {};
+                // if ($(lessonObject).attr('data-attachment-file') !== null && $(lessonObject).attr('data-attachment-file') !== undefined) {
+                //     let attachments = $(lessonObject).attr('data-attachment-file').split(',  '); // Split by comma
+                //     // Remove the prefix (anything before the first underscore) for each attachment
+                //     attachments = attachments.map(function(file) {
+                //         file = file.trim(); // Remove any extra spaces
+                //         const underscoreIndex = file.indexOf('_');
+                //         return underscoreIndex !== -1 ? file.substring(underscoreIndex + 1) : file; // Remove prefix before the underscore
+                //     });
+                //     let attachmentString = attachments.join(',  '); // Join without extra spaces
+                //     $('input#attachment_display').val(attachmentString);
+                // }
 
-                // Get the attachment file for the specific lessonName from lessonAttachments
-                const attachmentFile = lessonAttachments[lessonName] || ''; // Default to an empty string if no attachment found
-
-                // Populate the attachment file input field with the data from localStorage
-                $('input#attachment_display').val(attachmentFile);
             });
 
 
@@ -903,28 +886,27 @@
                 const attachmentDisplay = $('input#attachment_display'); // Select display input using jQuery
 
                 if (valid) {
-                    const lessonName = $('input#lesson_name').val().trim();
+                    const lessonName = $('input#lesson_name').val();
                     const lessonDescription = $('textarea#lesson_description').val();
                     const videoSource = $('select#video_source option:selected').val();
                     const videoURL = $('input#video_url').val();
-                    const attachmentFile = attachmentDisplay.val().trim() || null;
-    
+                    const attachmentFile = attachmentDisplay.val() || null;      
                     // Check if lessonName and attachmentFile are valid
-                    if (lessonName && attachmentFile) {
-                        // Retrieve existing lessonAttachments from localStorage, or initialize an empty object if not allocated
-                        let lessonAttachments = localStorage.getItem('lessonAttachments');
-                        lessonAttachments = lessonAttachments ? JSON.parse(lessonAttachments) : {};
+                    // if (lessonName && attachmentFile) {
+                    //     // Retrieve existing lessonAttachments from localStorage, or initialize an empty object if not allocated
+                    //     let lessonAttachments = localStorage.getItem('lessonAttachments');
+                    //     lessonAttachments = lessonAttachments ? JSON.parse(lessonAttachments) : {};
 
-                        // Update or add the lessonName key with the attachmentFile value
-                        lessonAttachments[lessonName] = attachmentFile;
+                    //     // Update or add the lessonName key with the attachmentFile value
+                    //     lessonAttachments[lessonName] = attachmentFile;
 
-                        // Save the updated lessonAttachments object back to localStorage
-                        localStorage.setItem('lessonAttachments', JSON.stringify(lessonAttachments));
-                        $('input#lessonAttachments').val(JSON.stringify(lessonAttachments));
+                    //     // Save the updated lessonAttachments object back to localStorage
+                    //     localStorage.setItem('lessonAttachments', JSON.stringify(lessonAttachments));
+                    //     $('input#lessonAttachments').val(JSON.stringify(lessonAttachments));
 
-                    } else {
-                        console.log("Lesson name or display value is missing.");
-                    }
+                    // } else {
+                    //     console.log("Lesson name or display value is missing.");
+                    // }
 
                     if ($('input[name=lesson_edit_flag]').val() == 'new') {
                         const uuid = generateUUID();
@@ -951,7 +933,6 @@
                         $(lessonObject).attr('data-video-source', videoSource);
                         $(lessonObject).attr('data-video-url', videoURL);
                         $(lessonObject).attr('data-attachment-file', attachmentFile);
-
                     }
 
                     closeLessonDialog();
@@ -996,18 +977,18 @@
                     $.each($('div#topic_list span.topic_info'), function(index, topic_obj) {
                         let lesson_list = [];
                         $.each($(topic_obj).parent().parent().parent().parent().next().find('div.lesson_info'), function(index, lesson_obj) {
-                            let lessonAttachments = localStorage.getItem('lessonAttachments');
-                            lessonAttachments = lessonAttachments ? JSON.parse(lessonAttachments) : {};
-                            // Get the lesson object (assuming lesson_obj is defined)
-                            const lessonName = $(lesson_obj).html();  // Get the lesson title for use as a key
-                            const attachmentFile = lessonAttachments[lessonName] || null;  // Use null if not found
+                            // let lessonAttachments = localStorage.getItem('lessonAttachments');
+                            // lessonAttachments = lessonAttachments ? JSON.parse(lessonAttachments) : {};
+                            // // Get the lesson object (assuming lesson_obj is defined)
+                            // const lessonName = $(lesson_obj).html();  // Get the lesson title for use as a key
+                            // const attachmentFile = lessonAttachments[lessonName] || null;  // Use null if not found
                             const lesson = {
                                 id: $(lesson_obj).attr('data-lesson-id'),
                                 title: $(lesson_obj).html(),
                                 description: $(lesson_obj).attr('data-description'),
                                 video_source: $(lesson_obj).attr('data-video-source'),
                                 video_url: $(lesson_obj).attr('data-video-url'),
-                                attachment_file: attachmentFile,
+                                attachment_file: $(lesson_obj).attr('data-attachment-file'),
                             };
                             
                             lesson_list.push(lesson);
@@ -1020,8 +1001,6 @@
                         
                         topic_list.push(topic_info);
                     });
-                    // console.log(topic_list)
-                    // debugger
                     let quiz_list = [];
                     $.each($('div.quiz_info'), function(index, quiz_obj) {
                         const quiz = {
@@ -1040,8 +1019,6 @@
                     $('input[name=use_default_image]').val(($('div#course_image_container').css('background-image') == 'none' || $('div#course_image_container').css('background-image') == '') ? 1 : 0);
                     $('input[name=topic_list]').val(JSON.stringify(topic_list));
                     $('input[name=quiz_list]').val(JSON.stringify(quiz_list));
-                    // console.log(courseForm);
-                    // debugger;
                     courseForm.submit();
                     return true;
                 }
@@ -1139,44 +1116,6 @@
 
     <script>
         $(document).ready(function() {
-            // Wait for the DOM to be fully loaded
-            document.addEventListener('DOMContentLoaded', function() {
-                // Iterate over each lesson div
-                document.querySelectorAll('.lesson_info').forEach(function(lesson) {
-                    // Get the lesson title (which will be the key)
-                    const lessonName = lesson.textContent.trim();
-
-                    // Get the attachment file data (which will be the value)
-                    const attachmentFile = lesson.getAttribute('data-attachment-file');
-
-                    // Check if the title and attachment file are valid
-                    if (lessonName && attachmentFile) {
-                        // Split the attachment file by ',  '
-                        let attachments = attachmentFile.split(',  ');
-
-                        // Remove the prefix (anything before the first underscore) for each attachment
-                        attachments = attachments.map(function(file) {
-                            const underscoreIndex = file.indexOf('_');
-                            return underscoreIndex !== -1 ? file.substring(underscoreIndex + 1) : file; // Remove prefix before the underscore
-                        });
-
-                        // Combine the cleaned-up attachment names back into a string
-                        const cleanedAttachmentFile = attachments.join(',  ');
-
-                        // Retrieve existing lessonAttachments from localStorage, or initialize an empty object if not allocated
-                        let lessonAttachments = localStorage.getItem('lessonAttachments');
-                        lessonAttachments = lessonAttachments ? JSON.parse(lessonAttachments) : {};
-
-                        // Save the lesson's cleaned attachment file using the lesson title as the key
-                        lessonAttachments[lessonName] = cleanedAttachmentFile;
-
-                        // Save the updated lessonAttachments object back to localStorage
-                        localStorage.setItem('lessonAttachments', JSON.stringify(lessonAttachments));
-                    }
-                });
-            });
-
-            
             $('button#save_course_button').on('click', function() {
                 // console.log($document);
                 $('input[name=is_published]').val(0);
