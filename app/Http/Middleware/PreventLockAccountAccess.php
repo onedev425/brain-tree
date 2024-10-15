@@ -22,6 +22,7 @@ class PreventLockAccountAccess
 
             return back()->with('danger', __('This Account was suspended. If this is an error, contact the administrator.'));
         }
+        
 
         return $next($request);
     }

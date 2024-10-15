@@ -245,7 +245,7 @@
                         <div id="content-description" class="tab-content hidden">
                             <h3 class="py-4 text text-lg font-bold">{{ __('About This Course') }}</h3>
                             <div id="topic_description" class="mt-0 mb-4"></div>
-                            <h3 class="py-2 text-sm font-bold">{{ __('By The Numbers') }}</h3>
+                            <h3 class="py-2 text-sm font-bold">{{ __('Course Overview') }}</h3>
                             <table class="w-full border-collapse">
                                 <tr>
                                     <td id="lesson_students" class="p-2 text-left text-sm">{{ __('Students: ') }} {{count($course->course_students)}}</td>
@@ -264,9 +264,26 @@
                                 <!-- Buttons will be added here dynamically -->
                             </div>
                         </div>
-                        <div id="content-announcements" class="tab-content hidden">
+                        <div id="content-announcements" class="tab-content hidden ">
                             <h3 class="py-4 text text-lg font-bold">{{ __('Announcements') }}</h3>
-
+                            <table>
+                                @foreach($course->announcements as $announcement)
+                                    <div class="announcement-item border-b-2 border-gray-300">
+                                        <!-- Title -->
+                                        <h3 class="py-0 text text-base font-bold content-wrap overflow-hidden">{{ $announcement->title }}</h3>
+                                        <!-- Content -->
+                                        <div class="p-2 text-left text-sm content-wrap overflow-hidden">{{ $announcement->content }}</div>
+                                        <!-- Attachment (Image) -->
+                                        @if(!empty($announcement->attachment_file))
+                                            <div class="mt-2 max-w-[70%]">
+                                                <img src="{{ $announcement->attachment_file }}" alt="Attachment" class="max-w-full h-auto" style="max-width:70%;"/>
+                                            </div>
+                                        @endif
+                                        <!-- Separator Line -->
+                                        <div class="underline mt-4"></div>
+                                    </div>
+                                @endforeach
+                            </table>
                             <!-- Announcements content goes here -->
                         </div>
                         <div id="content-reviews" class="tab-content hidden">
@@ -604,6 +621,21 @@
 
     <script>
         $(document).ready(function() {
+            $('div.flex.flex-row.md\\:font-lg.font-medium.items-center.h-20.text-white.w-full.md\\:h-20.bg-green-700').hide();
+
+            $('aside.w-full.bg-white.beautify-scrollbar.text-black.overflow-scroll')
+                .append(`
+                    <form id="logout_form" action="{{route('logout')}}" class="block px-4 py-2 flex justify-end" method="POST">
+                        @csrf
+                        <button name="logout_button" class="flex items-center text-gray-800 hover:bg-gray-200">
+                            <i class="fas fa-sign-out-alt mr-2"></i> <!-- FontAwesome logout icon -->
+                            {{ __('Logout') }}
+                        </button>
+                    </form>
+                `);
+
+            
+
             if ($('button#sub_try_again_button').length > 0) {
                 $('li.quiz-item').removeClass('quiz-item hover:bg-gray-200 hover:rounded-2xl');
             }

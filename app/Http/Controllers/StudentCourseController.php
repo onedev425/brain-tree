@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Course;
 use App\Models\CourseFeedback;
 use App\Models\Lesson;
+use App\Models\Announcement;
 use App\Services\Course\CourseService;
 use App\Services\Student\StudentService;
 use App\Services\EmailService;
@@ -44,12 +45,24 @@ class StudentCourseController extends Controller
         }
         if (! $is_buy_course) return redirect()->route('student.course.buy', $course->id);
 
+        // Append announcements
+        $course->announcements = $this->course_announcements($course->id);
+
         $data['course'] = $course;
         $data['topics'] = $course->topics()->with('lessons')->get();
         $data['quizzes'] = $course->questions()->with('quiz_options')->get();
         $data['passed_exam'] = $this->courseService->isPassedFromCourseExam($course);
 
         return view('pages.student-course.show', $data);
+    }
+
+    // In Course.php model or relevant controller
+    public function course_announcements($courseId)
+    {
+        // Retrieve announcements for the given course ID
+        return Announcement::where('course_id', $courseId)
+            ->select('title', 'content', 'attachment_file') // Select only the necessary fields
+            ->get();
     }
 
     public function buy(Course $course): View

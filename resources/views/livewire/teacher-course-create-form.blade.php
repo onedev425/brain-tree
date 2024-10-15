@@ -891,22 +891,7 @@
                     const videoSource = $('select#video_source option:selected').val();
                     const videoURL = $('input#video_url').val();
                     const attachmentFile = attachmentDisplay.val() || null;      
-                    // Check if lessonName and attachmentFile are valid
-                    // if (lessonName && attachmentFile) {
-                    //     // Retrieve existing lessonAttachments from localStorage, or initialize an empty object if not allocated
-                    //     let lessonAttachments = localStorage.getItem('lessonAttachments');
-                    //     lessonAttachments = lessonAttachments ? JSON.parse(lessonAttachments) : {};
-
-                    //     // Update or add the lessonName key with the attachmentFile value
-                    //     lessonAttachments[lessonName] = attachmentFile;
-
-                    //     // Save the updated lessonAttachments object back to localStorage
-                    //     localStorage.setItem('lessonAttachments', JSON.stringify(lessonAttachments));
-                    //     $('input#lessonAttachments').val(JSON.stringify(lessonAttachments));
-
-                    // } else {
-                    //     console.log("Lesson name or display value is missing.");
-                    // }
+                    
 
                     if ($('input[name=lesson_edit_flag]').val() == 'new') {
                         const uuid = generateUUID();
@@ -977,11 +962,7 @@
                     $.each($('div#topic_list span.topic_info'), function(index, topic_obj) {
                         let lesson_list = [];
                         $.each($(topic_obj).parent().parent().parent().parent().next().find('div.lesson_info'), function(index, lesson_obj) {
-                            // let lessonAttachments = localStorage.getItem('lessonAttachments');
-                            // lessonAttachments = lessonAttachments ? JSON.parse(lessonAttachments) : {};
-                            // // Get the lesson object (assuming lesson_obj is defined)
-                            // const lessonName = $(lesson_obj).html();  // Get the lesson title for use as a key
-                            // const attachmentFile = lessonAttachments[lessonName] || null;  // Use null if not found
+                            
                             const lesson = {
                                 id: $(lesson_obj).attr('data-lesson-id'),
                                 title: $(lesson_obj).html(),

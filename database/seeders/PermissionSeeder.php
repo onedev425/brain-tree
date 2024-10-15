@@ -94,6 +94,9 @@ class PermissionSeeder extends Seeder
             'name' => 'pricing',
         ]);
         Permission::firstOrCreate([
+            'name' => 'announcements',
+        ]);
+        Permission::firstOrCreate([
             'name' => 'settings',
         ]);
         Permission::firstOrCreate([
@@ -142,6 +145,7 @@ class PermissionSeeder extends Seeder
             'marks',
             'pricing',
             'settings',
+            'announcements',
         ]);
 
         //assign permissions to student

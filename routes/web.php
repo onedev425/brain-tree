@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AnnouncementController;
 
 /*
 |--------------------------------------------------------------------------
@@ -77,6 +78,19 @@ Route::middleware('auth:sanctum', 'verified', 'App\Http\Middleware\PreventLockAc
             'edit' => 'teacher.course.edit',
             'update' => 'teacher.course.update',
             'destroy' => 'teacher.course.destroy',
+        ]);
+    });
+
+    //Teacher Announcements routes
+    Route::prefix('teacher')->group(function () {
+        Route::resource('announcement', AnnouncementController::class)->names([
+            'index' => 'teacher.announcement.index',
+            'create' => 'teacher.announcement.create',
+            'store' => 'teacher.announcement.store',
+            'show' => 'teacher.announcement.show',
+            'edit' => 'teacher.announcement.edit',
+            'update' => 'teacher.announcement.update',
+            'destroy' => 'teacher.announcement.destroy',
         ]);
     });
 
