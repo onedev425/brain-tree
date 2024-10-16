@@ -144,11 +144,11 @@ class Menu extends Component
                 'icon'  => '<svg xmlns="http://www.w3.org/2000/svg" width="28.331" height="26.441" viewBox="99 731.78 28.331 26.441">
                                 <g data-name="announcement-svgrepo-com">
                                     <path d="M100.26 737.851h5.278v10.424h-5.278a1.26 1.26 0 0 1-1.26-1.26v-7.904c0-.696.564-1.26 1.26-1.26Z"
-                                        stroke-linejoin="round" stroke-linecap="round" stroke-width="1.5" stroke="#000" fill="transparent" data-name="Path 178" />
+                                        stroke-linejoin="round" stroke-linecap="round" stroke-width="1.5" stroke="currentColor" fill="transparent" data-name="Path 178" />
                                     <path d="M105.538 748.275v-10.424s2.752.063 7.331 0c4.58-.063 9.94-2.96 13.422-5.92a.63.63 0 0 1 1.04.472v21.346a.63.63 0 0 1-1.015.497c-2.242-1.763-7.822-5.706-13.226-5.87-3.162-.1-5.72-.1-7.552-.1Z"
-                                        stroke-linejoin="round" stroke-linecap="round" stroke-width="1.5" stroke="#000" fill="transparent" data-name="Path 179" />
+                                        stroke-linejoin="round" stroke-linecap="round" stroke-width="1.5" stroke="currentColor" fill="transparent" data-name="Path 179" />
                                     <path d="M107.68 758.22h-3.024a1.26 1.26 0 0 1-1.26-1.259l-.63-8.68h5.543l.63 8.68a1.26 1.26 0 0 1-1.26 1.26Z"
-                                        stroke-linejoin="round" stroke-linecap="round" stroke-width="1.5" stroke="#000" fill="transparent" data-name="Path 180" />
+                                        stroke-linejoin="round" stroke-linecap="round" stroke-width="1.5" stroke="currentColor" fill="transparent" data-name="Path 180" />
                                 </g>
                             </svg>',
                 'text'  => 'Announcements',
