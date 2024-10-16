@@ -74,7 +74,7 @@
                 <th class="capitalize p-4 whitespace-nowrap text-left">{{ __('Action') }}</th>
             </thead>
             <tbody class="text-left">
-            @if ($announcements->isNotEmpty())
+            @if (!empty($announcements))
                 @foreach($announcements as $announcement)
                     <tr class="border-t border-b-1 border-black" style="border-bottom:solid; border-bottom-width:1px;">
                         <td class="p-4 whitespace-nowrap text-left truncate">
@@ -159,27 +159,24 @@
             const announcementId = $(this).parent().data('id');
             console.log(announcementId);
 
-            // Confirm deletion
-            if (confirm('Are you sure you want to delete this announcement?')) {
-                // Create a delete form dynamically
-                const deleteForm = $('<form>', {
-                    'method': 'POST',
-                    'action': "{{ route('teacher.announcement.destroy', ':id') }}".replace(':id', announcementId),
-                    'style': 'display: none;'
-                });
+            // Create a delete form dynamically
+            const deleteForm = $('<form>', {
+                'method': 'POST',
+                'action': "{{ route('teacher.announcement.destroy', ':id') }}".replace(':id', announcementId),
+                'style': 'display: none;'
+            });
 
-                // Add CSRF token
-                deleteForm.append('@csrf');
+            // Add CSRF token
+            deleteForm.append('@csrf');
 
-                // Add DELETE method input
-                deleteForm.append('<input name="_method" type="hidden" value="DELETE">');
+            // Add DELETE method input
+            deleteForm.append('<input name="_method" type="hidden" value="DELETE">');
 
-                // Append the form to the body
-                $('body').append(deleteForm);
+            // Append the form to the body
+            $('body').append(deleteForm);
 
-                // Submit the form
-                deleteForm.submit();
-            }
+            // Submit the form
+            deleteForm.submit();
         });
 
 
