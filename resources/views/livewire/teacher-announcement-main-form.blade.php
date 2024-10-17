@@ -67,7 +67,7 @@
     </div>
     <div class="overflow-x-scroll beautify-scrollbar text-center my-4 border rounded-2xl">
         <table class="w-full table-auto bg-white">
-            <thead class="border-b-1 border-black">
+            <thead class="border-b-1 border-black" style="border-bottom:solid; border-bottom-width:1px;">
                 <th class="capitalize p-4 whitespace-nowrap text-left">{{ __('Announcement') }}</th>
                 <th class="capitalize p-4 whitespace-nowrap text-left">{{ __('Course') }}</th>
                 <th class="capitalize p-4 whitespace-nowrap text-left">{{ __('Created') }}</th>
@@ -94,7 +94,7 @@
                 @endforeach
             @else
                 <tr>
-                    <td class="p-4 capitalize" colspan="100%">{{ __('No data to show') }}</td>
+                    <td class="p-4 capitalize" colspan="100%" style="border-bottom:solid; border-bottom-width:1px;">{{ __('No data to show') }}</td>
                 </tr>
             @endif
             </tbody>
