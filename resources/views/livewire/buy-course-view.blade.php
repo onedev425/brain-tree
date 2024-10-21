@@ -68,12 +68,14 @@
         <div class="card-body flex flex-col">
             <img src="{{ $course->image }}" class="rounded-lg"/>
             <span class="mt-4 text-2xl font-bold">$ {{ $course->price }}</span>
-
-
-            <div x-data="{ open: false }">
+            <div x-data="{ open: false, isPurchased: {{ $course->is_buy_course ? 'true' : 'false' }} }">
                 <!-- Button trigger modal -->
-
-                <x-button @click="open = true" class="flex items-center justify-center w-full !bg-red-500 font-semibold border-transparent" >
+                <x-button 
+                    @click="open = true" 
+                    class="flex items-center justify-center w-full font-semibold border-transparent"
+                    x-bind:class="isPurchased ? 'bg-gray-500 cursor-not-allowed' : '!bg-red-500'" 
+                    x-bind:disabled="isPurchased"
+                >                   
                     <svg class="mr-2" xmlns="http://www.w3.org/2000/svg" width="19.514" height="17.346" viewBox="0 0 19.514 17.346">
                         <path id="Icon_awesome-shopping-cart" data-name="Icon awesome-shopping-cart" d="M17.892,10.208l1.6-7.047a.813.813,0,0,0-.793-.993H5.394L5.083.65a.813.813,0,0,0-.8-.65H.813A.813.813,0,0,0,0,.813v.542a.813.813,0,0,0,.813.813H3.181L5.561,13.8a1.9,1.9,0,1,0,2.271.29h7.1a1.9,1.9,0,1,0,2.155-.353l.187-.822a.813.813,0,0,0-.793-.993H7.39l-.222-1.084H17.1A.813.813,0,0,0,17.892,10.208Z" fill="#fff"/>
                     </svg>

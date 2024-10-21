@@ -1,6 +1,6 @@
 <form action="{{ route('register') }}" method="POST" class="w-full">
     <div class="mb-3 px-3 pt-3">
-        <div>{{ __('Register As,') }}</div>
+        <div>{{ __('Register as,') }}</div>
         <div class="inline-flex space-x-4">
             <label class="py-4 rounded-lg flex items-center">
                 <input type="radio" name="role" id="opt_studio" class="form-radio h-4 w-4 text-blue-600" value="3" {{ old('role') == 3 || old('role') == '' ? 'checked' : '' }}>

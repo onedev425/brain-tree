@@ -71,6 +71,17 @@ class StudentCourseController extends Controller
             return view('profile.show');
         }
 
+        $available_courses = $this->studentService->getStudentPaidCourses('')->get();
+        $is_buy_course = false;
+        foreach($available_courses as $available_course) {
+            if ($course->id == $available_course->id) {
+                $is_buy_course = true;
+                break;
+            }
+        }
+        // Append is buy flag
+        $course->is_buy_course = $is_buy_course;
+
         $data['course'] = $course;
         $data['topics'] = [];
         $data['lessons'] = [];
